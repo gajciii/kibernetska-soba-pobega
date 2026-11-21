@@ -1,6 +1,6 @@
 # Operacija 404: Kdo je vdrl v šolski sistem?
 
-Slovenska izobraževalna spletna igra za pare srednješolcev. Osem zaporednih nalog povezuje Cezarjevo šifro, kodiranja, phishing, predvidljiva gesla, metapodatke, omrežni promet in strežniške dnevnike, domene ter binarni zapis. Dokazi, lokalne ilustracije in delujoči pretvorniki so v aplikaciji; za igranje niso potrebni zunanji računi ali spletna orodja. Šola Most in vsi predstavljeni podatki so izmišljeni učni primeri.
+Slovenska izobraževalna spletna igra za pare srednješolcev. Vmesnik igralca nagovarja v ednini tudi pri delu v paru. Osem zaporednih nalog povezuje Cezarjevo šifro, kodiranja, phishing, predvidljiva gesla, metapodatke, omrežni promet in strežniške dnevnike, domene ter binarni zapis. Dokazi, lokalne ilustracije in delujoči pretvorniki so v aplikaciji; za igranje niso potrebni zunanji računi ali spletna orodja. Šola Most in vsi predstavljeni podatki so izmišljeni učni primeri.
 
 **Avtorica: Gaja Gujt.** Projekt je objavljen pod [licenco MIT](LICENSE), s [standardnim besedilom licence MIT](https://opensource.org/license/mit). Kopija za povezavo v nogi spletne strani je v `public/license.txt`. Vključena pisava IBM Plex Mono ohranja svojo [licenco SIL Open Font License](public/fonts/OFL.txt); odvisnosti ohranjajo svoje licence.
 

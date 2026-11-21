@@ -42,9 +42,9 @@ export default function ConverterWorkbench({ stage }: { stage: StageContent }) {
     setConversionNotice('');
     setToolError('');
     const errors: FieldErrors = {};
-    if (!method) errors.method = 'Izberita kodiranje.';
-    if (!input.length) errors.input = 'Vnesita besedilo za pretvorbo.';
-    if (!direction) errors.direction = 'Izberita smer pretvorbe.';
+    if (!method) errors.method = 'Izberi kodiranje.';
+    if (!input.length) errors.input = 'Vnesi besedilo za pretvorbo.';
+    if (!direction) errors.direction = 'Izberi smer pretvorbe.';
     setFieldErrors(errors);
     if (errors.method || errors.input || errors.direction) {
       if (errors.method) methodRef.current?.focus();
@@ -57,9 +57,9 @@ export default function ConverterWorkbench({ stage }: { stage: StageContent }) {
       setResult(convertText(input, method, direction));
     } catch (failure) {
       if (manualSetup) {
-        setConversionNotice('S temi nastavitvami zapisa ni mogoče pretvoriti. Preverita prepis in namig v zgodbi.');
+        setConversionNotice('S temi nastavitvami zapisa ni mogoče pretvoriti. Preveri prepis in namig v zgodbi.');
       } else {
-        setToolError(failure instanceof Error ? failure.message : 'Pretvorba ni uspela. Preverita vnos.');
+        setToolError(failure instanceof Error ? failure.message : 'Pretvorba ni uspela. Preveri vnos.');
       }
     }
   }
@@ -69,7 +69,7 @@ export default function ConverterWorkbench({ stage }: { stage: StageContent }) {
       <div className="workbench-field">
         <label htmlFor={`${uid}-encoding`}>Kodiranje</label>
         <div className="workbench-select-wrap"><select id={`${uid}-encoding`} ref={methodRef} value={method} aria-invalid={!!fieldErrors.method} aria-describedby={fieldErrors.method ? `${uid}-method-error` : undefined} onChange={event => { setMethod(event.target.value as EncodingMethod | ''); invalidate('method'); }}>
-          <option value="">Izberita kodiranje</option>{methods.map(item => <option value={item.id} key={item.id}>{item.label}</option>)}
+          <option value="">Izberi kodiranje</option>{methods.map(item => <option value={item.id} key={item.id}>{item.label}</option>)}
         </select></div>
         {fieldErrors.method && <p id={`${uid}-method-error`} className="workbench-field-error" role="alert">{fieldErrors.method}</p>}
       </div>
@@ -81,7 +81,7 @@ export default function ConverterWorkbench({ stage }: { stage: StageContent }) {
       <div className="workbench-field">
         <label htmlFor={`${uid}-direction`}>Smer pretvorbe</label>
         <div className="workbench-select-wrap"><select id={`${uid}-direction`} ref={directionRef} value={direction} aria-invalid={!!fieldErrors.direction} aria-describedby={fieldErrors.direction ? `${uid}-direction-error` : undefined} onChange={event => { setDirection(event.target.value as ConversionDirection | ''); invalidate('direction'); }}>
-          <option value="">Izberita smer pretvorbe</option><option value="encode">Kodiranje – besedilo v zapis</option><option value="decode">Dekodiranje – zapis v besedilo</option>
+          <option value="">Izberi smer pretvorbe</option><option value="encode">Kodiranje – besedilo v zapis</option><option value="decode">Dekodiranje – zapis v besedilo</option>
         </select></div>
         {fieldErrors.direction && <p id={`${uid}-direction-error`} className="workbench-field-error" role="alert">{fieldErrors.direction}</p>}
       </div>

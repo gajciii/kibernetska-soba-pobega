@@ -126,7 +126,7 @@ test('vseh osem stopenj, lokalni pripomočki, nadaljevanje in zaključek', async
   await input.fill(evidence); // Par sam prekopira celoten dokaz iz uvoda.
   await direction.selectOption('decode');
   await page.getByLabel('Odgovor', { exact: true }).fill('moj vnos');
-  const neutralFailure = 'S temi nastavitvami zapisa ni mogoče pretvoriti. Preverita prepis in namig v zgodbi.';
+  const neutralFailure = 'S temi nastavitvami zapisa ni mogoče pretvoriti. Preveri prepis in namig v zgodbi.';
   for (const wrongMethod of ['base64', 'binary', 'decimal']) {
     await method.selectOption(wrongMethod);
     await convert.click();
@@ -328,7 +328,7 @@ test('vseh osem stopenj, lokalni pripomočki, nadaljevanje in zaključek', async
   for (const name of ['luka.jpg', 'luna.jpg', 'smucanje.jpg']) await expect(page.getByRole('button', { name: `Odpri datoteko ${name}`, exact: true })).toHaveCount(0);
   await expect(page.locator('.task-instruction')).toContainText('Ob kateri uri je bila fotografija dejansko posneta? Odgovori v obliki HH:MM.');
   await expect(page.getByLabel('Čas posnetka', { exact: true })).toHaveAttribute('placeholder', 'HH:MM');
-  await expect(inspector).toContainText('Izberita fotografijo iz mape.');
+  await expect(inspector).toContainText('Izberi fotografijo iz mape.');
   await page.screenshot({ path: `.local/qa-${testInfo.project.name}-photo-folder.png`, fullPage: true });
   await page.getByRole('button', { name: 'Odpri datoteko ucilnica.jpg', exact: true }).click();
   await expect(inspector.getByRole('img')).toHaveAttribute('src', '/evidence/ucilnica.jpg');
@@ -340,7 +340,7 @@ test('vseh osem stopenj, lokalni pripomočki, nadaljevanje in zaključek', async
   await fileSearch.fill('obvestilo');
   await expect(files).toHaveCount(1);
   await expect(page.locator('#metadata')).toHaveCount(0);
-  await expect(inspector).toContainText('Izberita fotografijo iz mape.');
+  await expect(inspector).toContainText('Izberi fotografijo iz mape.');
   await page.getByRole('button', { name: 'Odpri datoteko obvestilo.png', exact: true }).click();
   await expect(inspector.getByRole('img')).toHaveAttribute('src', '/evidence/obvestilo.png');
   await page.getByRole('button', { name: 'Poglej metapodatke', exact: true }).click();

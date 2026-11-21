@@ -66,7 +66,7 @@ export default function CaesarWorkbench() {
   const selectedResult = selected === null ? null : alphabet[wrap(selected - shift)];
 
   return <section className="cw-workbench" data-testid="caesar-workbench" aria-label="Ročni pripomoček za premikanje abecede">
-    <div className="cw-introduction"><h2>Premakni abecedo</h2><p>Izberita črko zgoraj in preberita njeno preslikavo spodaj.</p></div>
+    <div className="cw-introduction"><h2>Premakni abecedo</h2><p>Izberi črko zgoraj in preberi njeno preslikavo spodaj.</p></div>
     <div className="cw-shift-controls" aria-label="Nastavitev premika">
       <button type="button" className="cw-move-button" onClick={() => move(1)} aria-label="Premakni črke za eno mesto nazaj"><span>Nazaj</span><small>−1 po abecedi</small></button>
       <div className="cw-shift-position"><span>Trenutni premik</span><strong data-testid="caesar-shift" aria-live="polite" aria-atomic="true">{describeShift(shift)}</strong></div>
@@ -82,9 +82,9 @@ export default function CaesarWorkbench() {
         </tbody>
       </table>
     </div>
-    {overflows && <p className="cw-scroll-note">Vrstici pomaknita vodoravno.</p>}
+    {overflows && <p className="cw-scroll-note">Vrstici pomakni vodoravno.</p>}
     <div className="cw-result-row">
-      <div className="cw-single-mapping" role="status" aria-live="polite" aria-atomic="true"><span>{selected === null ? 'Preslikava ene črke' : 'Izbrana črka po premiku'}</span><strong data-testid="caesar-mapping">{selected === null ? 'Izberita črko zgoraj.' : `${alphabet[selected]} → ${selectedResult}`}</strong></div>
+      <div className="cw-single-mapping" role="status" aria-live="polite" aria-atomic="true"><span>{selected === null ? 'Preslikava ene črke' : 'Izbrana črka po premiku'}</span><strong data-testid="caesar-mapping">{selected === null ? 'Izberi črko zgoraj.' : `${alphabet[selected]} → ${selectedResult}`}</strong></div>
       <button type="button" className="cw-reset-button" onClick={reset} disabled={shift === 0}>Ponastavi premik</button>
     </div>
   </section>;

@@ -17,16 +17,16 @@ function assertUnicode(text: string): void {
     const code = text.charCodeAt(index);
     if (code >= 0xd800 && code <= 0xdbff) {
       const next = text.charCodeAt(index + 1);
-      if (!(next >= 0xdc00 && next <= 0xdfff)) throw new Error('Besedilo vsebuje neveljaven znak Unicode. Preverita kopirani vnos.');
+      if (!(next >= 0xdc00 && next <= 0xdfff)) throw new Error('Besedilo vsebuje neveljaven znak Unicode. Preveri kopirani vnos.');
       index += 1;
     } else if (code >= 0xdc00 && code <= 0xdfff) {
-      throw new Error('Besedilo vsebuje neveljaven znak Unicode. Preverita kopirani vnos.');
+      throw new Error('Besedilo vsebuje neveljaven znak Unicode. Preveri kopirani vnos.');
     }
   }
 }
 
 function textBytes(text: string): Uint8Array {
-  if (!text.length) throw new Error('Najprej vnesita besedilo za kodiranje.');
+  if (!text.length) throw new Error('Najprej vnesi besedilo za kodiranje.');
   assertUnicode(text);
   return new TextEncoder().encode(text);
 }
@@ -36,7 +36,7 @@ function decodeBytes(bytes: Uint8Array, method: string): string {
     // BOM je del podatkov, zato se pri povratni pretvorbi ne izgubi.
     return new TextDecoder('utf-8', { fatal: true, ignoreBOM: true }).decode(bytes);
   } catch {
-    throw new Error(`${method} ne vsebuje veljavnega besedila UTF-8. Preverita zaporedje bajtov; pripomoček je namenjen besedilu.`);
+    throw new Error(`${method} ne vsebuje veljavnega besedila UTF-8. Preveri zaporedje bajtov; pripomoček je namenjen besedilu.`);
   }
 }
 
@@ -80,10 +80,10 @@ export function textToBinary(text: string): string {
 /** HEX sprejme neprekinjen niz parov ali pare, ločene z belim prostorom. */
 export function hexToText(text: string): string {
   const value = text.trim();
-  if (!value) throw new Error('Najprej vnesita zapis HEX.');
-  if (/[^0-9a-f\s]/iu.test(value)) throw new Error('Zapis HEX lahko vsebuje samo števke 0–9 in črke A–F. Pare lahko ločita s presledki; predpone 0x ne dodajajta.');
+  if (!value) throw new Error('Najprej vnesi zapis HEX.');
+  if (/[^0-9a-f\s]/iu.test(value)) throw new Error('Zapis HEX lahko vsebuje samo števke 0–9 in črke A–F. Pare lahko ločiš s presledki; predpone 0x ne dodajaj.');
   const groups = /\s/u.test(value) ? value.split(/\s+/u) : value.match(/.{1,2}/gu)!;
-  if (groups.some((group) => group.length !== 2)) throw new Error('Vsak bajt HEX potrebuje natanko dva znaka. Uporabita pare, ločene s presledki, ali neprekinjen niz celih parov.');
+  if (groups.some((group) => group.length !== 2)) throw new Error('Vsak bajt HEX potrebuje natanko dva znaka. Uporabi pare, ločene s presledki, ali neprekinjen niz celih parov.');
   return decodeBytes(Uint8Array.from(groups, (group) => Number.parseInt(group, 16)), 'Zapis HEX');
 }
 
@@ -93,13 +93,13 @@ export function textToHex(text: string): string {
 
 /** URL-komponenta: plus ostane plus; presledek kodiramo kot %20. */
 export function decodeUrlText(text: string): string {
-  if (!text.length) throw new Error('Najprej vnesita zapis z odstotkovnim kodiranjem URL.');
+  if (!text.length) throw new Error('Najprej vnesi zapis z odstotkovnim kodiranjem URL.');
   assertUnicode(text);
   if (/%(?![0-9a-f]{2})/iu.test(text)) throw new Error('Za vsakim znakom % morata biti natanko dve šestnajstiški števki, na primer %20.');
   try {
     return decodeURIComponent(text);
   } catch {
-    throw new Error('Zapis URL ne vsebuje veljavnega besedila UTF-8. Preverita zaporedje odstotkovno zapisanih bajtov.');
+    throw new Error('Zapis URL ne vsebuje veljavnega besedila UTF-8. Preveri zaporedje odstotkovno zapisanih bajtov.');
   }
 }
 
@@ -110,10 +110,10 @@ export function encodeUrlText(text: string): string {
 
 export function decimalToText(text: string): string {
   const value = text.trim();
-  if (!value) throw new Error('Najprej vnesita decimalne bajte, ločene s presledki.');
+  if (!value) throw new Error('Najprej vnesi decimalne bajte, ločene s presledki.');
   const groups = value.split(/\s+/u);
   if (groups.some((group) => !/^\d{1,3}$/u.test(group) || Number(group) > 255)) {
-    throw new Error('Vsak decimalni bajt mora biti celo število od 0 do 255. Števila ločita s presledki ali novimi vrsticami.');
+    throw new Error('Vsak decimalni bajt mora biti celo število od 0 do 255. Števila loči s presledki ali novimi vrsticami.');
   }
   return decodeBytes(Uint8Array.from(groups, Number), 'Decimalni zapis');
 }
@@ -124,7 +124,7 @@ export function textToDecimal(text: string): string {
 
 /** Ena pretvorba brez samodejnega prepoznavanja ali reševanja učnih nalog. */
 export function convertText(text: string, method: EncodingMethod, direction: ConversionDirection): string {
-  if (direction !== 'encode' && direction !== 'decode') throw new Error('Izberita smer pretvorbe.');
+  if (direction !== 'encode' && direction !== 'decode') throw new Error('Izberi smer pretvorbe.');
   const conversions: Record<EncodingMethod, { encode: (input: string) => string; decode: (input: string) => string }> = {
     base64: { encode: encodeBase64, decode: decodeBase64 },
     hex: { encode: textToHex, decode: hexToText },
@@ -132,7 +132,7 @@ export function convertText(text: string, method: EncodingMethod, direction: Con
     url: { encode: encodeUrlText, decode: decodeUrlText },
     decimal: { encode: textToDecimal, decode: decimalToText },
   };
-  if (!Object.hasOwn(conversions, method)) throw new Error('Izberita podprto kodiranje.');
+  if (!Object.hasOwn(conversions, method)) throw new Error('Izberi podprto kodiranje.');
   const conversion = conversions[method];
   return conversion[direction](text);
 }

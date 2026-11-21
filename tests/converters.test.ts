@@ -105,7 +105,7 @@ describe('odstotkovno kodiranje URL', () => {
   it.each(['%FF', '%C4', '%C0%80', '%ED%A0%80'])('zavrne neveljavne kodirane bajte UTF-8: %s', (input) => {
     expect(() => decodeUrlText(input)).toThrow('veljavnega besedila UTF-8');
   });
-  it('zahteva vnos za dekodiranje', () => { expect(() => decodeUrlText('')).toThrow('Najprej vnesita'); });
+  it('zahteva vnos za dekodiranje', () => { expect(() => decodeUrlText('')).toThrow('Najprej vnesi'); });
 });
 
 describe('decimalni bajti', () => {
@@ -140,7 +140,7 @@ describe('skupni pretvornik in več korakov', () => {
     expect(convertText(firstResult, 'base64', 'decode')).toBe(original);
   });
   it.each(methods)('%s zavrne prazen vnos pri kodiranju', (method) => {
-    expect(() => convertText('', method, 'encode')).toThrow('Najprej vnesita');
+    expect(() => convertText('', method, 'encode')).toThrow('Najprej vnesi');
   });
   it.each(methods)('%s ne zamenja neveljavnih osamljenih nadomestnih znakov z drugim znakom', (method) => {
     expect(() => convertText('\uD800', method, 'encode')).toThrow('Unicode');

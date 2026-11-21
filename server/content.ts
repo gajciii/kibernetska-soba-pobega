@@ -9,14 +9,14 @@ const stages: StageContent[] = [
     title: 'Razbij skrivno sporočilo',
     topic: 'Cezarjeva šifra',
     kind: 'caesar',
-    intro: 'Med sledmi nenavadnega prenosa iz šolskega sistema sta našla datoteko sporocilo.txt. Njen šifrirani zapis skriva kodo za prvi del preiskovalne mape. Avtor si je trik izposodil od Julija Cezarja. Prejemnik je njegovo zaupno sporočilo razbral tako, da je vsako črko premaknil za tri mesta nazaj. Enako naredita z vajino sledjo: po abecedi A–Z se pomikajta v levo, pred A pa nadaljujta pri Z.',
+    intro: 'Med sledmi nenavadnega prenosa iz šolskega sistema najdeš datoteko sporocilo.txt. Njen šifrirani zapis skriva kodo za prvi del preiskovalne mape. Avtor si je trik izposodil od Julija Cezarja. Prejemnik je njegovo zaupno sporočilo razbral tako, da je vsako črko premaknil za tri mesta nazaj. Enako naredi s svojo sledjo: po abecedi A–Z se pomikaj v levo, pred A pa nadaljuj pri Z.',
     question: 'Z abecednim pripomočkom razvozlaj sporočilo. V polje za odgovor vnesi samo besedo, ki jo sporočilo določi kot kodo.',
     evidence: 'NRGD MH PRVW',
-    note: 'Uporabljamo abecedo A–Z brez šumnikov. Premik in smer razberi iz zgodbe, nato črke primerjaj s pomočjo abecednega pripomočka. Presledke in ločila ohrani.',
+    note: 'Uporabljaj abecedo A–Z brez šumnikov. Premik in smer razberi iz zgodbe, nato črke primerjaj s pomočjo abecednega pripomočka. Presledke in ločila ohrani.',
     investigations: [
       { id: 'arhiv', title: 'Izvor: začasna mapa', text: 'Zapis je bil najden v datoteki sporocilo.txt. Njeno ime opisuje vrsto datoteke in ni geslo.' },
       { id: 'razmiki', title: 'Ohranjen prepis', text: 'Pri prepisu so bili ohranjeni vsi presledki in vrstni red znakov. Rezultat bi moral biti smiselno sporočilo s tremi besedami.' },
-      { id: 'abeceda', title: 'Opomba ob zapisu', text: 'Uporabljena je latinica A–Z. Ko pri premiku pridemo pred A, nadaljujemo z Z; številke in ločila pustimo pri miru.' },
+      { id: 'abeceda', title: 'Opomba ob zapisu', text: 'Uporabljena je latinica A–Z. Ko pri premiku prideš pred A, nadaljuj z Z; številke in ločila pusti pri miru.' },
     ],
   },
   {
@@ -24,7 +24,7 @@ const stages: StageContent[] = [
     title: 'Kaj se skriva za čudnimi znaki?',
     topic: 'Kodiranja',
     kind: 'encoding',
-    intro: 'Po nenavadnem prenosu je v arhivu ostala datoteka obvestilo.dat. Med zapiski skrbnika sta našla stavek: »Kar gre skozi moj sistem, nosi dve preobleki. Zunanja pozna šestnajst znakov, pod njo pa se skriva abeceda štiriinšestdesetih.« Preostanek zapiska manjka. Morda prav ta datoteka skriva sled do naslednje preiskovalne mape.',
+    intro: 'Po nenavadnem prenosu je v arhivu ostala datoteka obvestilo.dat. Med zapiski skrbnika najdeš stavek: »Kar gre skozi moj sistem, nosi dve preobleki. Zunanja pozna šestnajst znakov, pod njo pa se skriva abeceda štiriinšestdesetih.« Preostanek zapiska manjka. Morda prav ta datoteka skriva sled do naslednje preiskovalne mape.',
     question: 'Prekopiraj dokaz v pretvornik in odkrij sporočilo. Vnesi samo kodo naslednje mape.',
     evidence: '55 46 4A 46 54 6B 39 54 49 46 70 42 51 6B 56 4D 52 56 70 46 54 69 34 67 53 30 39 45 51 53 42 4F 51 56 4E 4D 52 55 52 4F 53 6B 55 67 54 55 46 51 52 54 6F 67 55 30 39 57 51 53 34 3D',
     note: 'Najprej dekodiraj zunanji zapis. Celoten vmesni rezultat ročno prekopiraj v vhod, nato izberi kodiranje notranjega zapisa in znova dekodiraj. Poskusi v pretvorniku ne štejejo kot oddaje odgovora.',
@@ -80,10 +80,10 @@ const stages: StageContent[] = [
         sender: 'Šolska IT podpora <podpora@most-preverjanje.example>',
         recipient: 'Luka Kovač <luka.kovac@most.si>',
         time: '09:57',
-        preview: 'Zaznali smo težavo z vašim računom. Odzovite se v 10 minutah.',
+        preview: 'Zaznali smo težavo s tvojim računom. Odzovi se v 10 minutah.',
         replyTo: 'podpora@most-preverjanje.example',
-        subject: 'NUJNO: vaš račun bo čez 10 minut blokiran',
-        body: 'Pozdravljeni, Luka Kovač, zaznali smo težavo z vašim šolskim računom. V naslednjih 10 minutah odprite spodnjo povezavo ter vnesite geslo in enkratno prijavno kodo, sicer bo račun blokiran.',
+        subject: 'NUJNO: tvoj račun bo čez 10 minut blokiran',
+        body: 'Pozdravljen, Luka Kovač, zaznali smo težavo s tvojim šolskim računom. V naslednjih 10 minutah odpri spodnjo povezavo ter vnesi geslo in enkratno prijavno kodo, sicer bo račun blokiran.',
         linkLabel: 'Preveri šolski račun',
         linkUrl: 'https://most.si.preveri-racun.example/prijava',
       },
@@ -188,7 +188,7 @@ const stages: StageContent[] = [
     title: 'Kdo je dostopal do skrivne datoteke?',
     topic: 'Dnevniki',
     kind: 'logs',
-    intro: 'V računalniški učilnici je pouk tekel kot običajno, v ozadju pa je nekdo prenesel dokument /zaupno/nacrt.pdf. Med odpiranjem spletnih strani, prijavami in prenosi nastaja omrežni promet: izmenjava podatkov med napravami v majhnih delih, imenovanih paketi. Šolski skrbnik je shranil del tega prometa in pripadajoče strežniške dnevnike. Med številnimi vrsticami se skriva sled uporabljenega računa. Iskalnik v pregledovalniku vama lahko pomaga zožiti izbor; ime datoteke je dobro izhodišče.',
+    intro: 'V računalniški učilnici je pouk tekel kot običajno, v ozadju pa je nekdo prenesel dokument /zaupno/nacrt.pdf. Med odpiranjem spletnih strani, prijavami in prenosi nastaja omrežni promet: izmenjava podatkov med napravami v majhnih delih, imenovanih paketi. Šolski skrbnik je shranil del tega prometa in pripadajoče strežniške dnevnike. Med številnimi vrsticami se skriva sled uporabljenega računa. Iskalnik v pregledovalniku ti lahko pomaga zožiti izbor; ime datoteke je dobro izhodišče.',
     question: 'Kateri uporabniški račun je bil uporabljen za uspešen prenos iskane datoteke?',
     note: 'Simulacija • 20. 11. 2026, lokalni časi. Paketni pregled je pripravljen izbor dogodkov, ne celoten zajem. Šifriran promet TLS sam ne razkrije uporabniškega računa ali poti datoteke. Povezave do ločenega aplikacijskega dnevnika so vnaprej pripravljena učna korelacija; aplikacija ne zajema prometa in ne pošilja pravih zahtev. DOWNLOAD = prenos, VIEW = ogled, SUCCESS = uspešno, DENIED = zavrnjeno, LOGIN = prijava, LOGOUT = odjava.',
     logs: [
@@ -238,7 +238,7 @@ const stages: StageContent[] = [
       { number: 26, time: '10:44:08.442', source: '10.0.0.5', destination: '10.0.0.11', protocol: 'TLS', length: 1434, info: 'TLS 1.3 · šifrirani aplikacijski podatki', detail: 'Povezani zapis dopolnjuje omrežni dokaz s potjo datoteke. Podatka nismo razbrali iz šifriranega paketa.', logTime: '10:44:08' },
       { number: 27, time: '10:44:39.833', source: '10.0.0.10', destination: '10.0.0.5', protocol: 'TLS', length: 306, info: 'TLS 1.3 · šifrirani aplikacijski podatki', detail: 'Krajša izmenjava v obstoječi povezavi. Pomen dejanja preveri v aplikacijskem dnevniku.', logTime: '10:44:39' },
       { number: 28, time: '10:45:12.208', source: '10.0.0.5', destination: '10.0.0.17', protocol: 'TLS', length: 1434, info: 'TLS 1.3 · šifrirani aplikacijski podatki', detail: 'Šifrirani odziv strežnika. Ločeni aplikacijski zapis omogoča primerjavo računa, dejanja, poti datoteke in rezultata.', logTime: '10:45:12' },
-      { number: 29, time: '10:45:12.212', source: '10.0.0.17', destination: '10.0.0.5', protocol: 'TCP', length: 66, info: '53417 → 443 · ACK', detail: 'Potrditev prejema paketa. Ne razkriva uporabniškega računa ali poti datoteke; za te podatke potrebujemo aplikacijski dnevnik.' },
+      { number: 29, time: '10:45:12.212', source: '10.0.0.17', destination: '10.0.0.5', protocol: 'TCP', length: 66, info: '53417 → 443 · ACK', detail: 'Potrditev prejema paketa. Ne razkriva uporabniškega računa ali poti datoteke; za te podatke je potreben aplikacijski dnevnik.' },
       { number: 30, time: '10:45:44.440', source: '10.0.0.11', destination: '10.0.0.5', protocol: 'TLS', length: 310, info: 'TLS 1.3 · šifrirani aplikacijski podatki', detail: 'Še ena kratka šifrirana izmenjava. Velikost sporočila ni dokaz njegove vsebine.', logTime: '10:45:44' },
       { number: 31, time: '10:46:03.516', source: '10.0.0.17', destination: '10.0.0.5', protocol: 'TLS', length: 308, info: 'TLS 1.3 · šifrirani aplikacijski podatki', detail: 'Zaključni aplikacijski dogodek je dokumentiran ločeno. TLS-preplet sam ne izpisuje imen računov.', logTime: '10:46:03' },
       { number: 32, time: '10:46:03.532', source: '10.0.0.17', destination: '10.0.0.5', protocol: 'TCP', length: 66, info: '53417 → 443 · FIN, ACK', detail: 'Zaključevanje povezave TCP. Omrežni konec povezave in aplikacijska odjava sta različna pojma; v tem primeru sta časovno blizu.' },
@@ -255,7 +255,7 @@ const stages: StageContent[] = [
     topic: 'Domene',
     kind: 'domains',
     intro: 'Po prenosu datoteke nacrt.pdf je skrbnik med šestimi obiski šolske prijave našel tudi povezavo do domnevnega arhiva šolskih načrtov. Povsod isti logotip in enak zaslon, a videz lahko zavede. Sled se skriva v URL-ju, spletnem naslovu: pri teh primerih je gostitelj del za https:// in pred naslednjo poševnico. Šola uporablja most.si in ucilnica.most.si. Ponaredki lahko njeno ime postavijo v tujo poddomeno ali pot, dodatek za vprašajem pa je parameter. Katera tuja domena se skriva za eno od teh povezav?',
-    question: 'V zgodovini izberita eno ponarejeno povezavo. Kateri tuji domeni pripada? Vpišita samo domeno, brez https:// in poti.',
+    question: 'V zgodovini izberi eno ponarejeno povezavo. Kateri tuji domeni pripada? Vpiši samo domeno, brez https:// in poti.',
     note: 'Zgodovina vsebuje šest pripravljenih naslovov. Prikaz prijavne strani ostane enak; spreminja se naslovna vrstica. Noben naslov se ne odpre v omrežju in obrazec ne zbira prijavnih podatkov.',
     choices: [
       { id: 'A', label: 'https://most.si/prijava' },
@@ -285,7 +285,7 @@ const stages: StageContent[] = [
     note: 'Vsako skupino osmih bitov loči s presledkom ali novo vrstico. Pomagaš si lahko tudi s tabelo ASCII za črke A–Z.',
     investigations: [
       { id: 'glava', title: 'Glava izvoza: 5 bajtov', text: 'Izvoz vsebuje pet skupin po osem bitov. Med skupinami so samo ločilni presledki; ti niso znaki končnega sporočila.' },
-      { id: 'format', title: 'Dogovorjeni format: ASCII', text: 'V tem učnem izvozu vsak bajt predstavlja en znak ASCII. Sporočilo je zapisano brez šumnikov. Za druga besedila bi morali preveriti, katero znakovno kodiranje uporabljajo.' },
+      { id: 'format', title: 'Dogovorjeni format: ASCII', text: 'V tem učnem izvozu vsak bajt predstavlja en znak ASCII. Sporočilo je zapisano brez šumnikov. Pri drugih besedilih je treba preveriti, katero znakovno kodiranje uporabljajo.' },
       { id: 'vrstni-red', title: 'Kontrolna opomba', text: 'Skupine beri od leve proti desni. Biti in črke niso premešani; iskana je ena beseda, ne vsota binarnih števil.' },
     ],
   },
@@ -294,13 +294,13 @@ const stages: StageContent[] = [
 export const stageSummaries: StageSummary[] = stages.map(({ id, title, topic }) => ({ id, title, topic }));
 
 const hints: Record<number, [string, string]> = {
-  1: ['V zgodbi poišči, kako je prejemnik razbral Cezarjevo sporočilo. Enak premik uporabi za vajin dokaz.', 'Pri dešifriranju se premakni za tri mesta nazaj: N postane K. Isto preslikavo uporabi za vse črke.'],
+  1: ['V zgodbi poišči, kako je prejemnik razbral Cezarjevo sporočilo. Enak premik uporabi za svoj dokaz.', 'Pri dešifriranju se premakni za tri mesta nazaj: N postane K. Isto preslikavo uporabi za vse črke.'],
   2: ['Upoštevaj vrstni red: najprej zunanji zapis s šestnajstimi znaki v parih, nato notranji z naborom štiriinšestdesetih znakov.', 'Najprej dekodiraj Šestnajstiško (HEX). Celoten rezultat ročno prekopiraj v vhod, izberi Base64 in ponovno dekodiraj. Odgovor je samo koda naslednje mape.'],
   3: ['Primerjaj dejanski naslov pošiljatelja in cilj povezave z domeno most.si. Ime, ki ga prepoznaš, samo po sebi še ni dokaz pristnosti.', 'Primerjaj zahteve sporočil: eno združuje tuji domeni, grožnjo takojšnje blokade in zahtevo po geslu ter enkratni kodi.'],
   4: ['Katera javna podatka bi si lastnik zlahka zapomnil in ju združil? Pri priporočilih razmisli tudi o ponavljanju gesel med računi.', 'Poveži ime psičke in letnico v opisu profila v eno besedo. Nato izberi priporočila za dolžino, različna gesla, upravljalnik in dodatno zaščito prijave.'],
   5: ['Med slikami poišči hodnik z rdečim nahrbtnikom in odpri njegove metapodatke. Čas poznejše spremembe ni nujno čas fotografiranja.', 'Pri datoteki hodnik.jpg primerjaj polji Čas nastanka posnetka in Čas spremembe. V odgovor prepiši uro in minute iz prvega.'],
-  6: ['V iskalnik »Besedilni filter« vnesita ime iskane datoteke. Pri preostalih paketih primerjajta povezane strežniške zapise: uspešen prenos ni isto kot ogled ali zavrnjen poskus.', 'V ločenem aplikacijskem dnevniku poišči vrstico, v kateri so hkrati DOWNLOAD, /zaupno/nacrt.pdf in SUCCESS.'],
-  7: ['Preberita celotnega gostitelja med https:// in prvo naslednjo poševnico ter ga primerjajta s potrjenima šolskima gostiteljema. Sam pojav imena most.si še ne potrjuje pripadnosti šoli.', 'Če je most.si na začetku daljšega gostitelja, preverita, katere tuje domene je poddomena. Če je za poševnico, je del poti. Vnesita tujo domeno izbranega ponaredka, brez poddomene most.si ali poti.'],
+  6: ['V iskalnik »Besedilni filter« vnesi ime iskane datoteke. Pri preostalih paketih primerjaj povezane strežniške zapise: uspešen prenos ni isto kot ogled ali zavrnjen poskus.', 'V ločenem aplikacijskem dnevniku poišči vrstico, v kateri so hkrati DOWNLOAD, /zaupno/nacrt.pdf in SUCCESS.'],
+  7: ['Preberi celotnega gostitelja med https:// in prvo naslednjo poševnico ter ga primerjaj s potrjenima šolskima gostiteljema. Sam pojav imena most.si še ne potrjuje pripadnosti šoli.', 'Če je most.si na začetku daljšega gostitelja, preveri, katere tuje domene je poddomena. Če je za poševnico, je del poti. Vnesi tujo domeno izbranega ponaredka, brez poddomene most.si ali poti.'],
   8: ['Vsaka skupina osmih bitov predstavlja en znak ASCII. Pretvori vseh pet skupin v istem vrstnem redu.', 'Prva skupina 01001011 predstavlja črko K. Preostale skupine pretvori v istem vrstnem redu.'],
 };
 
@@ -311,8 +311,8 @@ const explanations: Record<number, string> = {
   4: 'Ime ljubljenčka in rojstna letnica sta javna in predvidljiva gradnika. Dodan klicaj ali preprosta zamenjava črke z znakom tega ne odpravita. Boljša izbira so dolga, naključna in za vsak račun različna gesla; pri ustvarjanju ter shranjevanju pomaga upravljalnik gesel. Večfaktorska prijava doda zaščito računa, ne spremeni pa šibkega gesla v močno. Ta vaja ne razkriva Lukovega pravega gesla in ne dokazuje, kaj je bilo uporabljeno pri incidentu.',
   5: 'Rdeč nahrbtnik na hodniku je pomagal prepoznati pravo fotografijo med drugimi slikami. Polje Čas nastanka posnetka beleži 10:42:17, polje Čas spremembe pa 11:15:00. Poznejše urejanje ali ponovno shranjevanje lahko spremeni čas datoteke, zato 11:15 ne pomeni nujno časa fotografiranja. Sam zapis spremembe ne pove, kaj je bilo spremenjeno. Metapodatki lahko manjkajo ali so spremenjeni; so sled za preverjanje, ne nezmotljiv dokaz.',
   6: 'Paketni pregled in aplikacijski dnevnik sta različna vira. Šifrirani TLS-paketi ne razkrijejo računa ali poti; tukaj je njuna povezava pripravljena učna korelacija. Ločen dnevniški zapis ob 10:45:12 potrjuje uspešen prenos /zaupno/nacrt.pdf z računom ucenec17. Zavrnjen prenos, uspešen ogled, prenos druge datoteke in TCP ACK niso enak dokaz. Zapis potrjuje uporabo računa, sam pa ne dokazuje, katera oseba je bila za tipkovnico.',
-  7: 'Domnevni arhiv na most.si.arhiv-nacrtov.example pripada tuji domeni arhiv-nacrtov.example; most.si je le njena zavajajoča poddomena. Podobno zapisani most-si.example je druga tuja domena. Pri prijava.example/most.si/prijava pa je tuja domena prijava.example, šolsko ime je samo del poti. Potrjena gostitelja sta most.si in ucilnica.most.si; dodatek ?jezik=sl ne spremeni gostitelja. Izbiro ponaredka sta utemeljila z njegovo tujo domeno. Kopirana podoba in HTTPS sama ne potrjujeta pripadnosti šoli. Razčlenitev velja za te naslove; registrirana domena ni vedno sestavljena iz zadnjih dveh delov.',
-  8: 'Binarni zapis je način predstavitve podatkov. V tem primeru pet bajtov predstavlja pet znakov ASCII. Šele ta dogovor daje številom pomen črk; druga kodiranja lahko iste bajte razložijo drugače. Ta primer ni šifriranje. Odprla sta končno preiskovalno mapo.',
+  7: 'Domnevni arhiv na most.si.arhiv-nacrtov.example pripada tuji domeni arhiv-nacrtov.example; most.si je le njena zavajajoča poddomena. Podobno zapisani most-si.example je druga tuja domena. Pri prijava.example/most.si/prijava pa je tuja domena prijava.example, šolsko ime je samo del poti. Potrjena gostitelja sta most.si in ucilnica.most.si; dodatek ?jezik=sl ne spremeni gostitelja. Izbira ponaredka je utemeljena z njegovo tujo domeno. Kopirana podoba in HTTPS sama ne potrjujeta pripadnosti šoli. Razčlenitev velja za te naslove; registrirana domena ni vedno sestavljena iz zadnjih dveh delov.',
+  8: 'Binarni zapis je način predstavitve podatkov. V tem primeru pet bajtov predstavlja pet znakov ASCII. Šele ta dogovor daje številom pomen črk; druga kodiranja lahko iste bajte razložijo drugače. Ta primer ni šifriranje. Končna preiskovalna mapa je odprta.',
 };
 
 const feedback: Record<number, string> = {
@@ -322,7 +322,7 @@ const feedback: Record<number, string> = {
   4: 'Izbor priporočil še ni pravilen. Preveri, ali izbrani ukrepi zmanjšajo predvidljivost in ponovno uporabo gesel ter bolje zaščitijo račun.',
   5: 'Še ni pravilno. Preveri fotografijo hodnika z rdečim nahrbtnikom in loči nastanek posnetka od poznejše spremembe datoteke. Odgovori v obliki HH:MM.',
   6: 'Še ni pravilno. Podatke poišči v povezanem aplikacijskem zapisu. Hkrati preveri dejanje, natančno pot datoteke in rezultat; ogled ter zavrnjen prenos ne zadostujeta.',
-  7: 'Še ni pravilno. Izberita ponarejeno povezavo in vnesita tujo domeno, ki ji pripada. Ne prepisujta celotnega URL-ja, zavajajoče poddomene most.si ali poti.',
+  7: 'Še ni pravilno. Izberi ponarejeno povezavo in vnesi tujo domeno, ki ji pripada. Ne prepisuj celotnega URL-ja, zavajajoče poddomene most.si ali poti.',
   8: 'Še ni pravilno. Preveri vseh pet osembitnih skupin in vrstni red črk v rezultatu pretvorbe.',
 };
 
@@ -396,12 +396,12 @@ export function validateAnswer(id: number, answer: unknown): boolean {
 export const finale: Finale = {
   title: 'Preiskava zaključena',
   findings: [
-    'Prepoznala sta sumljivo sporočilo in lažno domeno.',
-    'Iz prikazanih metapodatkov sta razbrala čas nastanka fotografije: 10:42.',
-    'V dnevniku sta našla uspešen prenos datoteke /zaupno/nacrt.pdf z računom ucenec17.',
-    'Odklenila sta končno poročilo in opravila vseh osem stopenj.',
+    'Sumljivo sporočilo in lažna domena sta prepoznana.',
+    'Iz prikazanih metapodatkov je razbran čas nastanka fotografije: 10:42.',
+    'V dnevniku je potrjen uspešen prenos datoteke /zaupno/nacrt.pdf z računom ucenec17.',
+    'Končno poročilo je odklenjeno in vseh osem stopenj je opravljenih.',
   ],
-  limitation: 'Dokazi potrjujejo uporabo računa, ne identitete osebe za tipkovnico. Ne dokazujejo, da je lastnik računa storilec, da je bilo prav izbrano učno geslo uporabljeno za vdor ali da poznamo celoten potek napada.',
+  limitation: 'Dokazi potrjujejo uporabo računa, ne identitete osebe za tipkovnico. Ne dokazujejo, da je lastnik računa storilec, da je bilo prav izbrano učno geslo uporabljeno za vdor ali da je znan celoten potek napada.',
   topics: stageSummaries.map(({ id, topic }) => id === 2 ? 'Kodiranja (HEX in Base64)' : topic),
   discussion: [
     'Kateri podatek je bil najbolj prepričljiv dokaz in kakšne so njegove omejitve?',

@@ -10,11 +10,11 @@ import type { SessionView } from '../shared/types.js';
 
 const hashToken = (token: string) => createHash('sha256').update(token).digest('hex');
 class HttpError extends Error { constructor(public status: number, message: string) { super(message); } }
-const started = (row: SessionRow): SessionView => { if (!row.progress) throw new HttpError(409, 'Najprej začnite preiskavo.'); return row.progress; };
+const started = (row: SessionRow): SessionView => { if (!row.progress) throw new HttpError(409, 'Najprej začni preiskavo.'); return row.progress; };
 function allowed(row: SessionRow, id: number) {
   const session = started(row);
   if (!getStage(id)) throw new HttpError(404, 'Ta stopnja ne obstaja.');
-  if (id > session.currentStage) throw new HttpError(403, 'Stopnja je zaklenjena. Najprej rešite prejšnjo nalogo.');
+  if (id > session.currentStage) throw new HttpError(403, 'Stopnja je zaklenjena. Najprej reši prejšnjo nalogo.');
   return session;
 }
 const hintsFor = (session: SessionView, id: number) => (session.hints[id] || []).map(index => ({ index, text: getHint(id, index)! }));
@@ -42,7 +42,7 @@ export function createApp(pool: pg.Pool, config: AppConfig) {
     let row: SessionRow | undefined;
     if (token && /^[a-f0-9]{64}$/.test(token)) row = (await pool.query<SessionRow>('SELECT * FROM game_sessions WHERE token_hash=$1 AND expires_at > now()', [hashToken(token)])).rows[0];
     if (!row && req.method === 'GET' && req.path === '/session') row = await createSession(res);
-    if (!row) throw new HttpError(401, 'Seja je potekla. Osvežite stran in začnite preiskavo.');
+    if (!row) throw new HttpError(401, 'Seja je potekla. Osveži stran in začni preiskavo.');
     res.locals.row = row;
     if (req.method !== 'GET' && req.method !== 'HEAD') {
       const token = req.get('X-CSRF-Token') || '';
@@ -50,7 +50,7 @@ export function createApp(pool: pg.Pool, config: AppConfig) {
       const originAllowed = !origin || origin === config.origin;
       const provided = Buffer.from(token);
       const expected = Buffer.from(row.csrf);
-      if (!originAllowed || req.get('Sec-Fetch-Site') === 'cross-site' || provided.length !== expected.length || !timingSafeEqual(provided, expected)) throw new HttpError(403, 'Zahteve ni mogoče potrditi. Osvežite stran in poskusite znova.');
+      if (!originAllowed || req.get('Sec-Fetch-Site') === 'cross-site' || provided.length !== expected.length || !timingSafeEqual(provided, expected)) throw new HttpError(403, 'Zahteve ni mogoče potrditi. Osveži stran in poskusi znova.');
       if (!req.is('application/json')) throw new HttpError(415, 'Zahteva mora vsebovati JSON.');
     }
     next();
@@ -101,11 +101,11 @@ export function createApp(pool: pg.Pool, config: AppConfig) {
   app.post('/api/stages/:id/hints', async (req, res) => {
     const id = Number(req.params.id);
     const index: unknown = req.body?.index;
-    if (index !== 1 && index !== 2) throw new HttpError(400, 'Izberite prvi ali drugi namig.');
+    if (index !== 1 && index !== 2) throw new HttpError(400, 'Izberi prvi ali drugi namig.');
     const result = await changeSession(pool, res.locals.row.token_hash, row => {
       const session = allowed(row, id);
       const seen = session.hints[id] ||= [];
-      if (index === 2 && !seen.includes(1)) throw new HttpError(409, 'Najprej odprite prvi namig.');
+      if (index === 2 && !seen.includes(1)) throw new HttpError(409, 'Najprej odpri prvi namig.');
       if (!seen.includes(index)) { seen.push(index); session.hintCount += 1; }
       return { hints: hintsFor(session, id), session };
     });
@@ -113,7 +113,7 @@ export function createApp(pool: pg.Pool, config: AppConfig) {
   });
   app.get('/api/finale', (_req, res) => {
     const session = started(res.locals.row);
-    if (!session.completedAt || session.solved.length !== 8) throw new HttpError(403, 'Končna mapa je še zaklenjena. Rešite vseh osem stopenj.');
+    if (!session.completedAt || session.solved.length !== 8) throw new HttpError(403, 'Končna mapa je še zaklenjena. Reši vseh osem stopenj.');
     res.json({ finale, session });
   });
   app.post('/api/reset', async (_req, res) => {
@@ -123,13 +123,13 @@ export function createApp(pool: pg.Pool, config: AppConfig) {
   });
   app.use('/api', (_req, _res) => { throw new HttpError(404, 'Ta zahteva ne obstaja.'); });
   app.use(express.static(resolve('dist/client'), { index: 'index.html', dotfiles: 'deny', etag: true }));
-  app.use((_req, res) => res.status(404).type('text').send('Stran ne obstaja. Vrnite se na začetek preiskave.'));
+  app.use((_req, res) => res.status(404).type('text').send('Stran ne obstaja. Vrni se na začetek preiskave.'));
   app.use((error: unknown, _req: express.Request, res: express.Response, _next: express.NextFunction) => {
     if (error instanceof HttpError) { res.status(error.status).json({ error: error.message }); return; }
     if (error instanceof SyntaxError) { res.status(400).json({ error: 'Vsebina zahteve ni veljaven JSON.' }); return; }
     if ((error as { type?: string })?.type === 'entity.too.large') { res.status(413).json({ error: 'Vnos je predolg.' }); return; }
     console.error('Zahteva ni uspela:', error instanceof Error ? error.name : 'Neznana napaka');
-    res.status(503).json({ error: 'Strežnik trenutno ni dosegljiv. Vnos obdržite in poskusite znova.' });
+    res.status(503).json({ error: 'Strežnik trenutno ni dosegljiv. Vnos obdrži in poskusi znova.' });
   });
   return app;
 }

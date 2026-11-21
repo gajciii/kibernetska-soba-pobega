@@ -2,7 +2,7 @@
 
 To je gradivo za izvajalko. Vsebuje rešitve in ni del javne aplikacije. Ne premakni ga v `public/` ali `dist/client/`. V javnem repozitoriju je izvorna koda skupaj z rešitvami seveda dostopna; za igro uporabljaj naslov aplikacije.
 
-Delavnica je izmišljena izobraževalna simulacija za srednješolce. Dvojica uporablja en računalnik in isti brskalnik, brez registracije in zunanjih spletnih orodij. Igralca sta preiskovalca dogodka na šoli Most. Varnostna ekipa je zavarovala digitalne sledi, osem ugank pa odklepa zaključni spis.
+Delavnica je izmišljena izobraževalna simulacija za srednješolce. Dvojica uporablja en računalnik in isti brskalnik, brez registracije in zunanjih spletnih orodij. Vmesnik igralca nagovarja v ednini tudi pri delu v paru; ta vodič opisuje izvedbo delavnice z dvojicami. Igralca sta preiskovalca dogodka na šoli Most. Varnostna ekipa je zavarovala digitalne sledi, osem ugank pa odklepa zaključni spis.
 
 ## Pred izvedbo
 
@@ -33,7 +33,7 @@ Vsako nalogo uvede kratka zgodba, ki dokaze poveže s preiskavo. Pri nalogah 3�
 
 **Opomba za izvajalko:** ime datoteke ni koda; presledki in vrstni red omogočajo preverjanje smiselnosti treh besed. Če dobita drug rezultat, naj primerjata smer šifriranja s smerjo dešifriranja. Številke in ločila se ne spreminjajo.
 
-- Namig 1: »V zgodbi poišči, kako je prejemnik razbral Cezarjevo sporočilo. Enak premik uporabi za vajin dokaz.«
+- Namig 1: »V zgodbi poišči, kako je prejemnik razbral Cezarjevo sporočilo. Enak premik uporabi za svoj dokaz.«
 - Namig 2: »Pri dešifriranju se premakni za tri mesta nazaj: N postane K. Isto preslikavo uporabi za vse črke.«
 
 **Učni cilj:** iz zgodbe izluščiti podatek, ročno povezati šifrirane in izvirne črke ter razumeti stalni premik in obratno smer. Takšna šifra je primerna za osnove, ne za sodobno varovanje podatkov.
@@ -139,7 +139,7 @@ Pravilen račun je **`ucenec17`**: ob **10:45:12** je z IP `10.0.0.17` izvedel `
 
 Primerjaj tri pogoje hkrati: prenos, prava datoteka in uspeh. `ucenec12` je imel prenos zavrnjen (`DENIED`, **paket 17**, 10:41:23), `ucenec08` je opravil ogled (`VIEW`, **paket 21**, 10:42:31), `ucenec05` pa uspešno prenesel drugo datoteko (`/javno/urnik.pdf`, paket 26, 10:44:08). Dodani dogodki vključujejo javne dokumente, prijave in odjave. Nobeden ne spremeni edinega pravilnega odgovora.
 
-- Namig 1: »V iskalnik »Besedilni filter« vnesita ime iskane datoteke. Pri preostalih paketih primerjajta povezane strežniške zapise: uspešen prenos ni isto kot ogled ali zavrnjen poskus.«
+- Namig 1: »V iskalnik »Besedilni filter« vnesi ime iskane datoteke. Pri preostalih paketih primerjaj povezane strežniške zapise: uspešen prenos ni isto kot ogled ali zavrnjen poskus.«
 - Namig 2: »V ločenem aplikacijskem dnevniku poišči vrstico, v kateri so hkrati DOWNLOAD, /zaupno/nacrt.pdf in SUCCESS.«
 
 **Učni cilj:** povezovati več virov in pogojev ter razlikovati omrežni prenos od aplikacijskega dogodka. Šifriran promet TLS sam ne razkrije računa ali poti datoteke. Povezavo med paketom in dnevnikom je vnaprej pripravila učna preiskovalna ekipa; v resnični preiskavi samo ujemanje časa ne bi nujno zadostovalo. ACK potrjuje prejem na ravni TCP, ne dovoljenja aplikacije; HTTP 200 v tem izboru se nanaša na javni `/status`, ne na zaupni dokument. ARP uporablja strojne naslove, vključno z oddajnim `ff:ff:ff:ff:ff:ff`. Aplikacija ne zajema dejanskega prometa in ne pošilja učnih zahtev v omrežje. Dnevnik potrjuje uporabo računa, ne identitete osebe za tipkovnico.
@@ -157,7 +157,7 @@ Po prenosu `nacrt.pdf` je skrbnik med šestimi zapisi obiskov šolske prijave na
 | 5 | `https://prijava.example/most.si/prijava` | Ponaredek: `most.si` je samo del poti na gostitelju `prijava.example`. |
 | 6 | `https://most.si/prijava?jezik=sl` | Pravi šolski naslov; parameter ne spremeni gostitelja. |
 
-Navodilo se glasi: »V zgodovini izberita eno ponarejeno povezavo. Kateri tuji domeni pripada? Vpišita samo domeno, brez https:// in poti.« Par izbere **eno** ponarejeno povezavo in v polje **Tuja domena** vpiše pripadajoči odgovor:
+Navodilo se glasi: »V zgodovini izberi eno ponarejeno povezavo. Kateri tuji domeni pripada? Vpiši samo domeno, brez https:// in poti.« Par izbere **eno** ponarejeno povezavo in v polje **Tuja domena** vpiše pripadajoči odgovor:
 
 - Tretja povezava: **`arhiv-nacrtov.example`**.
 - Četrta povezava: **`most-si.example`**.
@@ -165,8 +165,8 @@ Navodilo se glasi: »V zgodovini izberita eno ponarejeno povezavo. Kateri tuji d
 
 Izbrana povezava in vnesena domena se morata ujemati. Celoten URL, šolska domena ali tuja domena druge povezave ne zadostujejo. Prva, druga in šesta povezava so prave, zato z njimi naloge ni mogoče rešiti. Zadostuje ena pravilno utemeljena izbira. Naslovi ostanejo lokalno učno gradivo, brez odpiranja zunanjih strani ali prijavnih poskusov.
 
-- Namig 1: »Preberita celotnega gostitelja med https:// in prvo naslednjo poševnico ter ga primerjajta s potrjenima šolskima gostiteljema. Sam pojav imena most.si še ne potrjuje pripadnosti šoli.«
-- Namig 2: »Če je most.si na začetku daljšega gostitelja, preverita, katere tuje domene je poddomena. Če je za poševnico, je del poti. Vnesita tujo domeno izbranega ponaredka, brez poddomene most.si ali poti.«
+- Namig 1: »Preberi celotnega gostitelja med https:// in prvo naslednjo poševnico ter ga primerjaj s potrjenima šolskima gostiteljema. Sam pojav imena most.si še ne potrjuje pripadnosti šoli.«
+- Namig 2: »Če je most.si na začetku daljšega gostitelja, preveri, katere tuje domene je poddomena. Če je za poševnico, je del poti. Vnesi tujo domeno izbranega ponaredka, brez poddomene most.si ali poti.«
 
 **Učni cilj:** brati celoten gostitelj, ločiti domeno od poddomene, poti in parametrov ter odločitev o ponaredku utemeljiti z njegovo domeno. Kopirana podoba in HTTPS ne potrjujeta pripadnosti šoli. Šolsko ime kjerkoli v URL-ju ni dovolj. Ne učimo pravila, da je registrirana domena vedno sestavljena iz zadnjih dveh delov; razlaga velja za konkretne prikazane naslove. Pri drugih URL-jih se lahko pojavijo še vrata, uporabniški podatki ali drugačna zgradba.
 

@@ -41,7 +41,7 @@ export function MetadataDesk({ artifacts }: { artifacts: EvidenceArtifact[] }) {
       <section className="artifact-inspector" aria-label="Pregled izbrane datoteke">{selected ? <>
         <div className="artifact-toolbar"><div><span>Izbrana datoteka</span><h4 ref={headingRef} tabIndex={-1}>{selected.name}</h4><small>{selected.size}</small></div><button type="button" onClick={() => setProperties(previous => !previous)} aria-expanded={properties} aria-controls="artifact-view">{properties ? 'Poglej predogled' : 'Poglej metapodatke'}</button></div>
         <div id="artifact-view">{properties ? <div id="metadata" className="artifact-properties"><h5>Lastnosti datoteke</h5><dl>{selected.metadata.split('\n').filter(line => line.includes(':')).map((line, index) => { const colon = line.indexOf(':'); return <div key={index}><dt>{line.slice(0, colon).trim()}</dt><dd>{line.slice(colon + 1).trim()}</dd></div>; })}</dl></div> : <figure className="artifact-photo"><img src={assetUrl(selected.preview)} alt={selected.alt}/><figcaption>{selected.description}</figcaption></figure>}</div>
-      </> : <div className="artifact-empty"><FileIcon name="image"/><h4>Predogled datoteke</h4><p>Izberita fotografijo iz mape.</p></div>}</section>
+      </> : <div className="artifact-empty"><FileIcon name="image"/><h4>Predogled datoteke</h4><p>Izberi fotografijo iz mape.</p></div>}</section>
     </div>
     <footer className="file-status"><span role="status">{query.trim() ? `${filtered.length} od ${artifacts.length} datotek` : `${artifacts.length} datotek`}</span><span>{selected ? `Izbrano: ${selected.name}` : 'Ni izbrane datoteke'}</span></footer>
   </div>;

@@ -24,7 +24,7 @@ function canUseCursorLight(): boolean {
 }
 
 function TitleLines() {
-  return <><span className="landing-title-main">Operacija <span>404.</span></span><span className="landing-title-sub">Sledi so tu. Povežita jih.</span></>;
+  return <><span className="landing-title-main">Operacija <span>404.</span></span><span className="landing-title-sub">Sledi so tu. Poveži jih.</span></>;
 }
 
 /** Dekorativna svetloba ne prekriva kontrol in nikoli ne skriva osnovnega naslova. */
@@ -81,14 +81,14 @@ export default function Landing({ session, busy, onStart, onContinue, onReset, h
         <h1 className="landing-title" ref={headingRef} tabIndex={-1}><TitleLines/></h1>
         {cursorLight && <div className="landing-title landing-title-light" aria-hidden="true"><TitleLines/></div>}
       </div>
-      <p className="landing-story">Na šoli Most so zaznali sumljiv prenos datoteke.<br className="landing-desktop-break"/> Odprita preiskovalno mapo in sledita digitalnim dokazom.</p>
+      <p className="landing-story">Na šoli Most so zaznali sumljiv prenos datoteke.<br className="landing-desktop-break"/> Odpri preiskovalno mapo in sledi digitalnim dokazom.</p>
       {session ? <div className="landing-resume">
-        <p>{session.teamName ? `${session.teamName} · ` : ''}Vajina preiskovalna mapa je shranjena.</p>
+        <p>{session.teamName ? `${session.teamName} · ` : ''}Tvoja preiskovalna mapa je shranjena.</p>
         <button type="button" className="landing-start-button" disabled={busy} onClick={onContinue}>{busy ? 'Odpiranje …' : session.completedAt ? 'Odpri zaključeno preiskavo' : 'Nadaljuj preiskavo'}</button>
         <button type="button" className="landing-reset-button" disabled={busy} onClick={onReset}>Začni novo preiskavo</button>
       </div> : <form className="landing-start-form" onSubmit={event => { event.preventDefault(); void onStart(name); }}>
         <label htmlFor="landing-team-name">Ime ekipe <span>(neobvezno)</span></label>
-        <div className="landing-start-controls"><input id="landing-team-name" value={name} onChange={event => setName(event.target.value)} maxLength={60} placeholder="Vajino preiskovalno ime" autoComplete="off"/><button className="landing-start-button" disabled={busy}>{busy ? 'Odpiranje …' : 'Začni preiskavo'}</button></div>
+        <div className="landing-start-controls"><input id="landing-team-name" value={name} onChange={event => setName(event.target.value)} maxLength={60} placeholder="Tvoje preiskovalno ime" autoComplete="off"/><button className="landing-start-button" disabled={busy}>{busy ? 'Odpiranje …' : 'Začni preiskavo'}</button></div>
         <p className="landing-save-note">Brez registracije. Napredek se shrani v tem brskalniku.</p>
       </form>}
       <ul className="landing-facts" aria-label="O delavnici"><li><strong>8</strong> izzivov</li><li>Delo v paru</li><li><strong>45–60</strong> minut</li></ul>
