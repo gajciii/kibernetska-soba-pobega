@@ -8,7 +8,7 @@ Delavnica je izmišljena izobraževalna simulacija za srednješolce. Dvojica upo
 
 Odpri aplikacijo na računalnikih in preveri dostop do strežnika. Vsaka dvojica potrebuje svoj profil brskalnika oziroma svoj računalnik. Dva zavihka istega profila delita isto sejo. Če se pari pri računalniku zamenjajo, naj novi par potrdi ponastavitev prejšnje igre.
 
-Preizkusi en celoten prehod. Nastavitev `APP_ORIGIN`, varen piškotek in HTTPS morajo ustrezati dejanskemu naslovu. Aplikacija potrebuje povezavo s svojim strežnikom, vsi dokazi in pripomočki pa ostanejo na istem spletnem mestu. Ne zahteva resničnega gesla, fotografije ali osebnih podatkov dijakov. Ime ekipe je neobvezno; priporočene so izmišljene oznake.
+Preizkusi en celoten prehod. Nastavitev `APP_ORIGIN`, varen piškotek in HTTPS morajo ustrezati dejanskemu naslovu. Aplikacija potrebuje povezavo s svojim strežnikom, vsi dokazi in pripomočki pa ostanejo na istem spletnem mestu. Ne zahteva resničnega gesla, fotografije ali osebnih podatkov dijakov. Ime ekipe je neobvezno; priporočene so izmišljene oznake. Predstavitev dokazov je razširjena z izbiranjem sporočil, datotek in paketov. Odgovori so ostali enaki, zato obstoječe shranjene seje ostajajo veljavne.
 
 ## Predlog poteka: 45–60 minut
 
@@ -27,6 +27,8 @@ Preizkusi en celoten prehod. Nastavitev `APP_ORIGIN`, varen piškotek in HTTPS m
 
 **Dokaz:** `NRGD MH PRVW`. Cezarjeva šifra uporablja A–Z brez šumnikov in premik 3. V pripomočku naj nastavita premik 3 in dešifrirata nazaj. Rezultat je `KODA JE MOST`; koda je **`MOST`**. Sprejet je tudi celoten stavek, ne glede na velikost črk in odvečne presledke.
 
+**Pregled dokazov:** trije razširljivi zapiski opisujejo izvor datoteke, ohranjen prepis in dogovorjeno abecedo. Uporabita jih za preverjanje rezultata, ne kot dodatne uganke. Ime `sporocilo.txt` ni koda; presledki in vrstni red omogočajo preverjanje smiselnosti treh besed. V pripomočku lahko poskusita tudi drugačen premik in primerjata rezultat.
+
 - Namig 1: »Vsako črko premakni za enako število mest.«
 - Namig 2: »Pri dešifriranju se premakni za 3 mesta nazaj: N postane K.«
 
@@ -34,16 +36,20 @@ Preizkusi en celoten prehod. Nastavitev `APP_ORIGIN`, varen piškotek in HTTPS m
 
 ## 2. Kaj se skriva za čudnimi znaki?
 
-**Dokaz:** `S09EQTogU09WQQ==`. Pripomoček Base64 vrne `KODA: SOVA`; koda je **`SOVA`**. Sprejet je tudi celoten zapis, ne glede na velikost črk in odvečne presledke.
+**Dokaz:** `S09EQTogU09WQQ==`. Laboratorij kodiranj ponuja Base64, šestnajstiški, binarni, URL in decimalni zapis. Začetna navodila ustrezne metode ne povedo: par primerja nabor znakov ter končna znaka `=` in izbere Base64. Pretvorba vrne `KODA: SOVA`; koda je **`SOVA`**. Sprejet je tudi celoten zapis, ne glede na velikost črk in odvečne presledke.
 
-- Namig 1: »Poišči pripomoček za dekodiranje Base64.«
-- Namig 2: »Po dekodiranju je iskana beseda za dvopičjem.«
+- Namig 1: »Oglej si nabor znakov in zaključna znaka =. Katera metoda v laboratoriju uporablja tak zapis?«
+- Namig 2: »Izberi Base64. Po dekodiranju je iskana beseda za dvopičjem.«
 
-**Učni cilj:** razlikovati kodiranje od šifriranja. Za dekodiranje Base64 ne potrebujemo skrivnega ključa in Base64 ne zagotavlja zaupnosti. Naključnemu videzu zapisa ne pripisujemo varnosti.
+**Pregled dokazov:** trije zapiski pojasnijo izvor `.dat`, nabor znakov in pričakovani besedilni rezultat. Končnica ne določa kodiranja. Neuspešen poskus v pripomočku ne poveča števila oddanih odgovorov.
+
+**Učni cilj:** izbrati pretvorbo na podlagi značilnosti zapisa in smiselnosti rezultata ter razlikovati kodiranje od šifriranja. Za dekodiranje Base64 ne potrebujemo skrivnega ključa in Base64 ne zagotavlja zaupnosti. Naključnemu videzu zapisa ne pripisujemo varnosti.
 
 ## 3. Poišči phishing sporočilo
 
-Šolska domena v učnem primeru je `sola.example`. Pravilen izbor je **sporočilo B** in **najmanj dva** od teh opozorilnih znakov, brez napačnih:
+Šolska domena v učnem primeru je `sola.example`. Predal vsebuje **sedem sporočil A–G**: knjižnični opomnik, lažno IT-zahtevo, mentorsko obvestilo, načrtovano IT-vzdrževanje, pomembno spremembo učilnice, pričakovano priponko fotografskega krožka in jedilnik. Izbira sporočila odpre podrobnosti s prejemnikom, časom, dejanskim pošiljateljem in morebitnimi dodatnimi naslovi ali priponko. Povezave in priponke so elementi simulacije.
+
+Pravilen izbor je **sporočilo B** in **najmanj dva** od teh opozorilnih znakov, brez napačnih:
 
 - Domena pošiljatelja se ne ujema s šolsko domeno: `podpora@sola-preverjanje.example`.
 - Povezava vodi na drugo domeno: `https://sola.example.preveri-racun.example/prijava`.
@@ -52,14 +58,14 @@ Preizkusi en celoten prehod. Nastavitev `APP_ORIGIN`, varen piškotek in HTTPS m
 
 »Sporočilo vsebuje pozdrav« in »Sporočilo uporablja HTTPS« sta **napačna razloga**. Izbor B z enim razlogom ne zadostuje; prav tako ne zadostujeta dva pravilna razloga, če je označen še napačen.
 
-- Namig 1: »Primerjaj dejanski naslov pošiljatelja in povezave z domeno sola.example.«
-- Namig 2: »Preveri tudi, ali sporočilo zahteva hiter odziv in občutljive prijavne podatke.«
+- Namig 1: »Odpri podrobnosti sporočil. Primerjaj dejanski naslov pošiljatelja in povezave z domeno sola.example.«
+- Namig 2: »Primerjaj zahteve sporočil: eno združuje tuji domeni, grožnjo takojšnje blokade in zahtevo po geslu ter enkratni kodi.«
 
-**Učni cilj:** pregledati dejanskega pošiljatelja, cilj povezave, zahteve in okoliščine. Prikazno ime ni dokaz pristnosti. HTTPS šifrira povezavo, vendar sam ne potrjuje legitimnosti spletnega mesta. A in C sta v tem omejenem primeru običajni sporočili; to ni splošno jamstvo, da je vsako sporočilo s šolsko domeno varno.
+**Učni cilj:** pregledati dejanskega pošiljatelja, cilj povezave, zahteve in okoliščine. Prikazno ime ni dokaz pristnosti. HTTPS šifrira povezavo, vendar sam ne potrjuje legitimnosti spletnega mesta. V tem pripravljenem primeru je samo B phishing. Pomembno obvestilo E in pričakovana priponka F sama po sebi nista opozorilo; tudi ujemajoča se domena pa v resničnem svetu ne jamči varnosti.
 
 ## 4. Ugotovi predvidljivo geslo
 
-Učni profil Nika (`@nika_ucni_profil`) vsebuje »Letnik 2009.« in »Moja psička Luna je danes spet ukradla vso pozornost.« Pravilen izbor je **A: `Luna2009!`**.
+Učni profil Nika (`@nika_ucni_profil`) vsebuje **pet javnih objav** o fotografiji, hobijih, projektu, letniku in psički. Par lahko pomembne objave pripne oziroma označi za primerjavo. Dve relevantni objavi ostajata »Letnik 2009.« in »Moja psička Luna je danes spet ukradla vso pozornost.« Pravilen izbor je **A: `Luna2009!`**. Označevanje objav je pripomoček, ne dodaten pogoj za napredovanje.
 
 - Namig 1: »Poglej, katere osebne podatke lahko prebere vsak obiskovalec profila.«
 - Namig 2: »Primerjaj ime psičke in letnico rojstva s ponujenimi gesli.«
@@ -68,7 +74,7 @@ Učni profil Nika (`@nika_ucni_profil`) vsebuje »Letnik 2009.« in »Moja psič
 
 ## 5. Fotografija skriva namig
 
-Lokalna ilustracija in metapodatki so jasno označena simulacija. Ob »Poglej metapodatke« se pokaže:
+Pregledovalnik vsebuje **tri datoteke**. Na začetku ni izbrana nobena: par naj izbere `hodnik.jpg`, nato uporabi »Poglej metapodatke«. Izpis je urejen v poimenovana polja. Za zahtevano fotografijo so vrednosti:
 
 ```text
 FileName: hodnik.jpg
@@ -79,25 +85,29 @@ ModifyDate: 2026:11:20 11:15:00
 
 Pravilen odgovor je **`10:42`**. Dovoljeni sta tudi obliki `10.42` in `10:42:17`. `11:15` je čas spremembe datoteke in ne čas nastanka posnetka.
 
-- Namig 1: »V izpisu sta čas nastanka posnetka in čas spremembe datoteke.«
-- Namig 2: »Poišči podatek DateTimeOriginal.«
+Drugi datoteki sta `ucilnica.jpg` (nastanek ob 08:16:09, sprememba ob 08:25:44) in `obvestilo.png` (nastanek posnetka zaslona ob 09:51:06, sprememba ob 10:03:28, brez polja `DateTimeOriginal`). Njuni časi niso odgovor na vprašanje o hodniku. Vsi trije izpisi in lokalne ilustracije so jasno označeni učni primeri; aplikacija ne bere resničnega EXIF-a.
+
+- Namig 1: »Preveri, da je izbrana datoteka hodnik.jpg. V njenem izpisu loči čas nastanka posnetka od časa spremembe datoteke.«
+- Namig 2: »V metapodatkih hodnik.jpg poišči DateTimeOriginal in prepiši samo uro ter minute.«
 
 **Učni cilj:** brati pravo polje in upoštevati pomen metapodatkov. Časovni odmik je izpisan; ni treba preračunavati v UTC. Metapodatki lahko manjkajo ali so spremenjeni, zato sami niso nezmotljiv dokaz.
 
 ## 6. Kdo je dostopal do skrivne datoteke?
 
-V »Simuliranem strežniškem dnevniku« so lokalni časi z dne 20. 11. 2026. Pravilen račun je **`ucenec17`**: ob **10:45:12** je z IP `10.0.0.17` izvedel `DOWNLOAD` datoteke `/zaupno/nacrt.pdf` z rezultatom `SUCCESS`.
+Forenzični pregledovalnik vsebuje **32 simuliranih paketov** in **16 ločenih zapisov aplikacijskega dnevnika**. Vsi dogodki so z dne 20. 11. 2026; časi so lokalni. Paketni izbor vključuje ARP, DNS, TCP, TLS in HTTP ter ni celoten zajem povezav. Par filtrira prikaz, izbere paket ter odpre njegove podrobnosti in morebitno povezavo z aplikacijskim zapisom. Pomagajo tudi zapiski o protokolih, korelaciji in omejitvah dokazov.
 
-Primerjaj tri pogoje hkrati: prenos, prava datoteka in uspeh. `ucenec12` je imel prenos zavrnjen (`DENIED`), `ucenec08` je opravil ogled (`VIEW`), `ucenec05` pa uspešno prenesel drugo datoteko (`/javno/urnik.pdf`). Tabela omogoča filtriranje in izbiro vrstice za podrobnosti.
+Pravilen račun je **`ucenec17`**: ob **10:45:12** je z IP `10.0.0.17` izvedel `DOWNLOAD` datoteke `/zaupno/nacrt.pdf` z rezultatom `SUCCESS`. S tem zapisom je v učnem primeru povezan **paket 28**. Omrežna vrstica kaže šifriran odziv s strežnika `10.0.0.5` proti `10.0.0.17`; račun, dejanje, pot in rezultat izvirajo iz ločenega dnevnika.
 
-- Namig 1: »Iščeš uspešen prenos točno določene datoteke, ne njen ogled.«
-- Namig 2: »Poišči vrstico, v kateri so hkrati DOWNLOAD, /zaupno/nacrt.pdf in SUCCESS.«
+Primerjaj tri pogoje hkrati: prenos, prava datoteka in uspeh. `ucenec12` je imel prenos zavrnjen (`DENIED`, **paket 17**, 10:41:23), `ucenec08` je opravil ogled (`VIEW`, **paket 21**, 10:42:31), `ucenec05` pa uspešno prenesel drugo datoteko (`/javno/urnik.pdf`, paket 26, 10:44:08). Dodani dogodki vključujejo javne dokumente, prijave in odjave. Nobeden ne spremeni edinega pravilnega odgovora.
 
-**Učni cilj:** povezovati več pogojev in razlikovati dogodek od njegovega rezultata. To je simuliran strežniški dnevnik z uporabniškimi računi, dejanji in potmi, ne običajen Wiresharkov zajem šifriranega prometa HTTPS. Dnevnik potrjuje uporabo računa, ne identitete osebe za tipkovnico.
+- Namig 1: »Odpri povezani aplikacijski zapis pri paketu TLS. Šifriran paket sam ne pove računa. Iščeš uspešen prenos točno določene datoteke, ne njen ogled.«
+- Namig 2: »V ločenem aplikacijskem dnevniku poišči vrstico, v kateri so hkrati DOWNLOAD, /zaupno/nacrt.pdf in SUCCESS.«
+
+**Učni cilj:** povezovati več virov in pogojev ter razlikovati omrežni prenos od aplikacijskega dogodka. Šifriran promet TLS sam ne razkrije računa ali poti datoteke. Povezavo med paketom in dnevnikom je vnaprej pripravila učna preiskovalna ekipa; v resnični preiskavi samo ujemanje časa ne bi nujno zadostovalo. ACK potrjuje prejem na ravni TCP, ne dovoljenja aplikacije; HTTP 200 v tem izboru se nanaša na javni `/status`, ne na zaupni dokument. ARP uporablja strojne naslove, vključno z oddajnim `ff:ff:ff:ff:ff:ff`. Aplikacija ne zajema dejanskega prometa in ne pošilja učnih zahtev v omrežje. Dnevnik potrjuje uporabo računa, ne identitete osebe za tipkovnico.
 
 ## 7. Najdi ponarejeno spletno stran
 
-Potrjena domena šole v tem primeru je `sola.example`. Pravilen izbor je **C**:
+Potrjena domena šole v tem primeru je `sola.example`. Pregledovalnik vsebuje tri simulirane zavihke. Par preklaplja med njimi, razčleni protokol, gostitelja in pot ter posebej označi izbrani naslov. Povezave ostanejo neaktivne. Podporni zapiski vsebujejo šolski imenik, primerjavo enakega videza strani in omejitev oznake HTTPS. Pravilen izbor je **C**:
 
 ```text
 https://sola.example.prijava-varno.example/prijava
@@ -112,10 +122,10 @@ Po rešitvi razčleni konkretni naslov: protokol `https`, gostitelj `sola.exampl
 
 ## 8. Računalnik govori v ničlah in enicah
 
-**Dokaz:** `01001011 01001100 01001010 01010101 01000011`. Pretvornik in referenčna tabela ASCII pokažeta **`KLJUC`**. Sprejet je tudi `KLJUČ`, ne glede na velikost črk in robne presledke.
+**Dokaz:** `01001011 01001100 01001010 01010101 01000011`. Pretvornik in referenčna tabela ASCII pokažeta **`KLJUC`**. Sprejet je tudi `KLJUČ`, ne glede na velikost črk in robne presledke. Trije razširljivi zapiski dopolnjujejo dokaz: izvoz vsebuje pet bajtov, uporablja ASCII in ohranja vrstni red. Presledki med skupinami so ločila in ne del končnega sporočila.
 
-- Namig 1: »Vsaka skupina osmih bitov predstavlja en znak.«
-- Namig 2: »Prva skupina 01001011 predstavlja črko K.«
+- Namig 1: »Primerjaj pet skupin z glavo izvoza. Vsaka skupina osmih bitov predstavlja en znak ASCII.«
+- Namig 2: »Prva skupina 01001011 predstavlja črko K. Preostale skupine pretvori v istem vrstnem redu.«
 
 **Učni cilj:** razumeti binarno predstavitev znakov in osembitne skupine. Pretvornik sprejme presledke ali nove vrstice, nepravilne skupine pa pojasni z napako. Ta primer ni šifriranje. Pravilen odgovor odpre finale; devete uganke ni.
 

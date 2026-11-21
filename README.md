@@ -1,6 +1,6 @@
 # Operacija 404: Kdo je vdrl v šolski sistem?
 
-Slovenska izobraževalna spletna igra za pare srednješolcev. Osem zaporednih nalog povezuje Cezarjevo šifro, Base64, phishing, predvidljiva gesla, metapodatke, strežniške dnevnike, domene in binarni zapis. Dokazi, lokalne ilustracije in delujoči pretvorniki so v aplikaciji; za igranje niso potrebni zunanji računi ali spletna orodja. Šola Most in vsi predstavljeni podatki so izmišljeni učni primeri.
+Slovenska izobraževalna spletna igra za pare srednješolcev. Osem zaporednih nalog povezuje Cezarjevo šifro, kodiranja, phishing, predvidljiva gesla, metapodatke, omrežni promet in strežniške dnevnike, domene ter binarni zapis. Dokazi, lokalne ilustracije in delujoči pretvorniki so v aplikaciji; za igranje niso potrebni zunanji računi ali spletna orodja. Šola Most in vsi predstavljeni podatki so izmišljeni učni primeri.
 
 ## Lokalni zagon
 
@@ -21,6 +21,16 @@ Na macOS lahko uporabiš nameščeni PostgreSQL/Homebrew, na Linuxu distribucijs
 Odpri `http://localhost:5173`. Vite posreduje `/api` lokalnemu Expressu na vratih 3000. Po spremembi razvojnega porta ali izvora uskladi tudi `APP_ORIGIN` in razvojni proxy. Za začetek zadostuje »Začni preiskavo«; ime ekipe je neobvezno.
 
 Vmesnik uporablja črno podlago čez cel zaslon, lokalno monospace tipografijo, minimalno glavo in nogo ter desni seznam izzivov s povezanimi pikami, številkami in naslovi. Naslov vsake naloge ima svetlobni poudarek, ki sledi kazalcu; idejo je navdihnil način »The Real Dark« na [pankajtanwar.in](https://www.pankajtanwar.in/). Osnovno besedilo naslova, navodila, dokazi in kontrolniki so ves čas berljivi. Na dotik, ob zmanjšanem gibanju ali brez podpore za masko je naslov enakomerno osvetljen. Po kliku »Začni preiskavo« se odpre neposredno prva naloga; dodatnega uvodnega koraka ni.
+
+Izzivi uporabljajo interaktivne delovne površine:
+
+- Cezarjeva šifra ima primerjavo abeced in zapiske; pretvorbe podpirajo Base64, HEX, binarno, odstotkovno kodiranje URL in decimalne bajte. Kodiranje in dekodiranje uporabljata UTF-8, rezultat pa je mogoče prenesti nazaj v vhod za naslednji korak.
+- Poštni predal vsebuje sedem sporočil, iskanje, stanje prebranosti, pregled glave, priponk in neaktivnih naslovov. Odpiranje sporočila je ločeno od izbire odgovora.
+- Javni profil ima pet objav in beležnico izbranih sledi. Mapa dokazov vsebuje tri datoteke s predogledi in ločenim pregledom metapodatkov.
+- Pregledovalnik v slogu [Wiresharkovega vmesnika](https://www.wireshark.org/docs/wsug_html_chunked/ChapterUsing.html) vsebuje 32 učnih paketov, filtre, podrobnosti in povezave do ločenih aplikacijskih dnevnikov. Ne izvaja zajema, dešifriranja TLS ali omrežnih zahtev do prikazanih naslovov.
+- Simuliran brskalnik omogoča primerjavo treh zavihkov, razčlenitev celotnega gostitelja in ločeno označitev ponarejenega naslova. Binarna naloga vključuje še tabelo ASCII.
+
+Filtri, odprti dokazi in beležnica veljajo za trenutni ogled naloge; oddane rešitve, poskusi in razkriti namigi se shranjujejo v PostgreSQL. Pravila pravilnih odgovorov so ostala združljiva s prvotno različico igre.
 
 | Ukaz | Namen |
 | --- | --- |
@@ -171,12 +181,12 @@ Potrditi mora domeno in produkcijsko vejo, pripraviti strežnik, Node.js in traj
 
 Preverjeno 21. 11. 2026 z Node.js 24.22.3 in lokalnim PostgreSQL 14.17:
 
-- 70 enotskih in integracijskih testov je uspelo v dejanski bazi PostgreSQL.
-- 20 testov Playwright je uspelo: po 10 v Chromiumu in dejanskem Microsoft Edge Stable 158.0.4370.33 na macOS, pri 1440 × 1000 in 390 × 844. Pokriti so vseh osem stopenj, pretvorniki, napake, namigi, finale, nadaljevanje po dejanskem ponovnem zagonu brskalnika, potrditev ponastavitve in ohranitev vnosa ob napaki omrežja. Preverjeni so tudi desni seznam povezanih stopenj, svetlobni učinek na naslovih ter prikaz na dotik in ob zmanjšanem gibanju.
+- 142 testov pretvornikov, vsebine in API-ja je uspelo; integracijski testi uporabljajo dejansko bazo PostgreSQL.
+- 24 testov Playwright je uspelo: po 12 v Chromiumu in dejanskem Microsoft Edge Stable 158.0.4370.33 na macOS, pri 1440 × 1000 in 390 × 844. Pokriti so vseh osem stopenj, pretvorniki, napake, namigi, finale, nadaljevanje po dejanskem ponovnem zagonu brskalnika, potrditev ponastavitve in ohranitev vnosa ob napaki omrežja. Preverjeni so tudi desni seznam povezanih stopenj, svetlobni učinek na naslovih ter prikaz na dotik in ob zmanjšanem gibanju. Razširjeni preizkusi pokrivajo poštno iskanje in izbiro neodvisno od branja, prazne filtre, povezane dnevnike, menjavo datotek, beležnico, spletne zavihke ter več zaporednih pretvorb z ohranjenim vhodom.
 - Med celotno igro ni bilo zahtev na zunanje izvore ali napak JavaScript. Preverjeni so tipkovnični premik šifre, začetni fokus potrditvenega okna, prehajanje med gumboma s Tab/Shift+Tab, zaprtje z Escape in vrnitev fokusa na odpiralni gumb ter odsotnost vodoravnega prelivanja strani; dnevnik se pomika znotraj svoje tabele. Vrnitev fokusa je bila popravljena po preizkusu v Edge.
 - Čista namestitev `npm ci`, lint, TypeScript, produkcijski build in `bash -n` za objavno skripto so uspeli. `npm run check:client` je del builda in preverja odsotnost ključev rešitev, vodiča in source map iz javnega paketa.
 - Ukaz za varnostno kopijo je izdelal arhiv PostgreSQL; `pg_restore --list` je potrdil njegovo berljivo vsebino.
-- Vizualno so pregledani posnetki namiznega in ozkega vmesnika ter Edgeovega dnevnika. Vgrajeni predogled odjemalca ni bil na voljo; brskalniški testi in posnetki so bili izvedeni lokalno. Edge na Windows, Safari, Firefox, bralnik zaslona in povezava s produkcijskim strežnikom še niso preverjeni; Linux preverjanje obeh brskalnikov je pripravljeno v GitHub workflowu.
+- Vizualno so pregledani posnetki namiznega in ozkega vmesnika ter Edgeovega dnevnika. Vgrajeni predogled odjemalca ni bil na voljo; brskalniški testi in posnetki so bili izvedeni lokalno. Edge na Windows, Safari, Firefox, bralnik zaslona in povezava s produkcijskim strežnikom še niso preverjeni; Linux preverjanje obeh brskalnikov je vključeno v GitHub workflowu.
 
 Avtomatski testi pokrivajo pretvornike z učnimi in dodatnimi vhodi, strežniške odgovore vseh nalog, napačne odgovore in zahtevane razlike pri phishingu, času fotografije in dnevniku. Integracijski testi preverijo zaklenjene naloge, napredek, namige, ponovno odprtje baze, dve ločeni ekipi, ponastavitev, zaporedno odklepanje in finale. Podrobnosti so v `tests/`.
 

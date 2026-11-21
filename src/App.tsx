@@ -1,7 +1,9 @@
 import { useCallback, useEffect, useRef, useState } from 'react';
 import type { FormEvent, ReactNode } from 'react';
-import type { AnswerResponse, Bootstrap, Finale, LogRow, SessionView, StageContent, StageResponse, StageSummary } from '../shared/types';
-import { binaryToText, caesarDecrypt, decodeBase64 } from '../shared/converters';
+import type { AnswerResponse, Bootstrap, Finale, SessionView, StageContent, StageResponse, StageSummary } from '../shared/types';
+import ConverterWorkbench from './ConverterWorkbench';
+import { Mailbox, TrafficViewer } from './InvestigationViewers';
+import { BrowserDesk, InvestigationNotes, MetadataDesk, ProfileDesk } from './EvidenceDesks';
 import SpotlightTitle from './SpotlightTitle';
 
 type IconName = 'lock' | 'check' | 'clock' | 'folder' | 'key' | 'mail' | 'shield' | 'image' | 'terminal' | 'globe' | 'bulb' | 'reset' | 'close';
@@ -222,12 +224,13 @@ function Stage({ data, session, csrf, busy, setBusy, onSession, onData, onNext, 
     <div className="stage-breadcrumb"><span>OPERACIJA 404</span><span>/</span><span>Stopnja {stage.id} od 8</span>{data.solved && <span className="solved-badge"><Icon name="check" size={14}/>Rešeno</span>}</div>
     <div className="stage-title-row"><span className="stage-icon"><Icon name={stageIcons[stage.id - 1]} size={28}/></span><div><span className="eyebrow">{stage.topic}</span><SpotlightTitle key={stage.id} title={stage.title} headingRef={headingRef}/></div></div>
     <p className="stage-intro">{stage.intro}</p>
-    <div className="stage-layout">
+    <div className={`stage-layout ${['phishing', 'password', 'metadata', 'logs', 'domains'].includes(stage.kind) ? 'stage-layout--workspace' : ''}`}>
       <div className="evidence-column">
         <section className="panel evidence-panel" aria-labelledby="evidence-title"><div className="panel-top"><h2 id="evidence-title"><Icon name="folder"/>Dokazno gradivo</h2><span className="file-id">DOKAZ {String(stage.id).padStart(2, '0')}</span></div>
-          <div className="panel-body"><Evidence stage={stage} answer={answer} setAnswer={setAnswer} solved={data.solved}/></div>
+          <div className="panel-body"><Evidence stage={stage} answer={answer} setAnswer={setAnswer} disabled={data.solved || busy}/></div>
         </section>
-        {['caesar', 'base64', 'binary'].includes(stage.kind) && <Converter stage={stage}/>}
+        {['caesar', 'base64', 'binary'].includes(stage.kind) && <ConverterWorkbench stage={stage}/>}
+        {stage.investigations && <InvestigationNotes notes={stage.investigations}/>}
         {data.solved && stage.kind === 'domains' && <DomainBreakdown stage={stage}/>}
       </div>
       <div className="action-column">
@@ -252,39 +255,19 @@ function Stage({ data, session, csrf, busy, setBusy, onSession, onData, onNext, 
   </>;
 }
 
-function Evidence({ stage, answer, setAnswer, solved }: { stage: StageContent; answer: string; setAnswer: (s: string) => void; solved: boolean }) {
-  const [metadataOpen, setMetadataOpen] = useState(false);
+function Evidence({ stage, answer, setAnswer, disabled }: { stage: StageContent; answer: string; setAnswer: (s: string) => void; disabled: boolean }) {
+  const isWorkspace = ['phishing', 'password', 'metadata', 'logs', 'domains'].includes(stage.kind);
   return <>
-    {stage.note && <p className="evidence-note">{stage.note}</p>}
+    {stage.note && !isWorkspace && <p className="evidence-note">{stage.note}</p>}
+    {stage.kind === 'phishing' && <p className="evidence-note">Potrjena šolska domena: <code>sola.example</code>. Primerjajta dejanske naslove z njo.</p>}
     {stage.evidence && <div className="code-evidence"><span className="eyebrow">{stage.kind === 'caesar' ? 'ZAŠIFRIRANO SPOROČILO' : stage.kind === 'base64' ? 'NAJDENI ZAPIS' : 'BINARNO SPOROČILO'}</span><code>{stage.evidence}</code><span className="code-decoration" aria-hidden="true">[ ZAVAROVAN DOKAZ ]</span></div>}
-    {stage.kind === 'phishing' && <fieldset className="mailbox"><legend className="sr-only">Izberi sumljivo sporočilo</legend><div className="mailbox-label"><Icon name="mail"/>Šolski e-poštni predal <span>3 sporočila</span></div>{stage.mails?.map(mail => <label className={`mail-card ${answer === mail.id ? 'selected' : ''}`} key={mail.id}><div className="mail-heading"><input type="radio" name="mail" value={mail.id} checked={answer === mail.id} onChange={() => setAnswer(mail.id)} disabled={solved}/><strong>Sporočilo {mail.id}</strong></div><span className="mail-sender">{mail.sender}</span><h3>{mail.subject}</h3><p>{mail.body}</p>{mail.linkUrl && <div className="simulated-link"><span>{mail.linkLabel}</span><small>Dejanski naslov povezave · neaktivno</small><code>{mail.linkUrl}</code></div>}</label>)}</fieldset>}
-    {stage.kind === 'password' && <><div className="profile"><div className="profile-heading"><div className="avatar" aria-hidden="true">N</div><div><h3>{stage.profile?.name}</h3><span>{stage.profile?.username}</span></div><span className="profile-badge">UČNI PROFIL</span></div><div className="profile-posts">{stage.profile?.posts.map((post, index) => <div className="profile-post" key={post}><div className={`post-illustration ${index === 1 ? 'pet' : ''}`} aria-hidden="true">{index === 0 ? <svg viewBox="0 0 180 110"><circle cx="125" cy="30" r="15" fill="#f8dc99"/><path d="M20 90 65 30l40 60" fill="#6d77bd"/><path d="m80 90 35-46 45 46" fill="#90c5c1"/><path d="M52 48 65 30l13 20-12-5Z" fill="#e1eaf5"/></svg> : <svg viewBox="0 0 180 110"><ellipse cx="90" cy="96" rx="45" ry="7" fill="#1e3048"/><path d="M65 41Q38 14 42 65l21 6m52-30q27-27 23 24l-21 6" fill="#b58066"/><path d="M60 40q30-20 60 0v35q-30 35-60 0Z" fill="#e7b998"/><circle cx="76" cy="57" r="4" fill="#162b40"/><circle cx="104" cy="57" r="4" fill="#162b40"/><path d="m83 70 7 7 7-7Z" fill="#162b40"/><path d="M90 77v8m0 0-8-3m8 3 8-3" stroke="#162b40" fill="none" strokeWidth="2"/></svg>}</div><p>{post}</p></div>)}</div></div><Choices choices={stage.choices ?? []} answer={answer} setAnswer={setAnswer} disabled={solved}/></>}
-    {stage.kind === 'metadata' && <><figure className="photo-evidence"><img src={`${base}hodnik.svg`} alt="Ilustracija praznega šolskega hodnika"/><figcaption>hodnik.jpg · lokalna ilustracija · simulacija metapodatkov</figcaption></figure><button className="secondary" onClick={() => setMetadataOpen(!metadataOpen)} aria-expanded={metadataOpen} aria-controls="metadata"><Icon name="image"/>{metadataOpen ? 'Skrij metapodatke' : 'Poglej metapodatke'}</button>{metadataOpen && <div id="metadata" className="metadata"><span className="eyebrow">SIMULIRAN IZPIS METAPODATKOV</span><pre>{stage.metadata}</pre></div>}</>}
-    {stage.kind === 'logs' && <Logs rows={stage.logs ?? []}/>}
-    {stage.kind === 'domains' && <Choices choices={stage.choices ?? []} answer={answer} setAnswer={setAnswer} disabled={solved} domains/>}
+    {stage.kind === 'phishing' && <Mailbox mails={stage.mails ?? []} answer={answer} onAnswer={setAnswer} disabled={disabled}/>}
+    {stage.kind === 'password' && <ProfileDesk stage={stage} answer={answer} onAnswer={setAnswer} disabled={disabled}/>}
+    {stage.kind === 'metadata' && <MetadataDesk artifacts={stage.artifacts ?? []}/>}
+    {stage.kind === 'logs' && <TrafficViewer packets={stage.packets ?? []} logs={stage.logs ?? []}/>}
+    {stage.kind === 'domains' && <BrowserDesk choices={stage.choices ?? []} answer={answer} onAnswer={setAnswer} disabled={disabled}/>}
+    {stage.note && isWorkspace && <details className="evidence-context"><summary>O izvoru dokazov in simulaciji</summary><p>{stage.note}</p></details>}
   </>;
-}
-
-function Choices({ choices, answer, setAnswer, disabled, domains = false }: { choices: { id: string; label: string }[]; answer: string; setAnswer: (s: string) => void; disabled: boolean; domains?: boolean }) {
-  return <fieldset className={`choices ${domains ? 'domain-choices' : ''}`}><legend>{domains ? 'Preglejta naslovne vrstice' : 'Katero geslo je najbolj predvidljivo?'}</legend>{choices.map(choice => <label className={`choice ${answer === choice.id ? 'selected' : ''}`} key={choice.id}><span className="choice-top"><input type="radio" name="choice" value={choice.id} checked={answer === choice.id} onChange={() => setAnswer(choice.id)} disabled={disabled}/><strong>Možnost {choice.id}</strong>{domains && <span className="browser-dots" aria-hidden="true"><i/><i/><i/></span>}</span><code className={domains ? 'address' : 'password'}>{domains && <Icon name="lock" size={16}/>}<span>{choice.label}</span></code></label>)}</fieldset>;
-}
-
-function Logs({ rows }: { rows: LogRow[] }) {
-  const [query, setQuery] = useState(''); const [selected, setSelected] = useState<LogRow | null>(null);
-  const filtered = rows.filter(row => Object.values(row).join(' ').toLocaleLowerCase('sl').includes(query.toLocaleLowerCase('sl').trim()));
-  return <div className="logs"><h3>Simuliran strežniški dnevnik</h3><p className="muted">20. 11. 2026 · lokalni časi</p><label htmlFor="log-search">Išči po vseh poljih dnevnika</label><input id="log-search" type="search" value={query} onChange={e => setQuery(e.target.value)} placeholder="Npr. dogodek, račun ali datoteka"/><p className="table-help">Za podrobnosti izberita čas dogodka. Na ozkem zaslonu tabelo pomaknita vstran.</p><div className="table-scroll" tabIndex={0} role="region" aria-label="Dnevnik, vodoravno pomična tabela"><table><thead><tr><th scope="col">Čas</th><th scope="col">IP</th><th scope="col">Uporabniški račun</th><th scope="col">Dogodek</th><th scope="col">Datoteka</th><th scope="col">Rezultat</th></tr></thead><tbody>{filtered.map(row => <tr key={row.time} className={selected?.time === row.time ? 'selected-row' : ''}><td><button className="log-row-button" onClick={() => setSelected(row)} aria-pressed={selected?.time === row.time} aria-label={`Podrobnosti dogodka ob ${row.time}`}>{row.time}</button></td><td>{row.ip}</td><td>{row.account}</td><td>{row.event}</td><td>{row.file}</td><td><span className={`log-status ${row.result === 'DENIED' ? 'denied' : ''}`}>{row.result}</span></td></tr>)}</tbody></table></div><p className="muted filter-count" role="status">Prikazano: {filtered.length} od {rows.length} dogodkov</p>{selected && <div className="log-detail"><h4>Podrobnosti dogodka ob {selected.time}</h4><dl>{Object.entries({ 'IP': selected.ip, 'Račun': selected.account, 'Dogodek': selected.event, 'Datoteka': selected.file, 'Rezultat': selected.result }).map(([label, value]) => <div key={label}><dt>{label}</dt><dd><code>{value}</code></dd></div>)}</dl></div>}<dl className="legend"><div><dt>DOWNLOAD</dt><dd>prenos datoteke</dd></div><div><dt>VIEW</dt><dd>ogled datoteke</dd></div><div><dt>SUCCESS</dt><dd>uspešno dejanje</dd></div><div><dt>DENIED</dt><dd>zavrnjen dostop</dd></div><div><dt>LOGIN / LOGOUT</dt><dd>prijava / odjava</dd></div></dl></div>;
-}
-
-function Converter({ stage }: { stage: StageContent }) {
-  const [input, setInput] = useState(stage.evidence ?? ''); const [shift, setShift] = useState(0); const [output, setOutput] = useState(''); const [error, setError] = useState('');
-  const title = stage.kind === 'caesar' ? 'Cezarjev dešifrirnik' : stage.kind === 'base64' ? 'Dekodirnik Base64' : 'Binarni pretvornik';
-  const button = stage.kind === 'caesar' ? 'Dešifriraj' : stage.kind === 'base64' ? 'Dekodiraj Base64' : 'Pretvori v besedilo';
-  function convert(e: FormEvent) {
-    e.preventDefault(); setError(''); setOutput('');
-    try { setOutput(stage.kind === 'caesar' ? caesarDecrypt(input, shift) : stage.kind === 'base64' ? decodeBase64(input) : binaryToText(input)); }
-    catch (e) { setError((e as Error).message); }
-  }
-  return <section className="panel converter"><div className="panel-top"><h2><Icon name="terminal"/>{title}</h2><span className="tool-label">PRIPOMOČEK</span></div><div className="panel-body"><form onSubmit={convert}><label htmlFor="converter-input">{stage.kind === 'binary' ? 'Osembitne skupine, ločene s presledki ali novimi vrsticami' : 'Besedilo za pretvorbo'}</label><textarea id="converter-input" value={input} onChange={e => setInput(e.target.value)} rows={stage.kind === 'binary' ? 3 : 2} maxLength={10000} spellCheck={false}/>{stage.kind === 'caesar' && <div className="shift-control"><label htmlFor="shift">Premik nazaj po abecedi A–Z <strong>{shift}</strong></label><input id="shift" type="range" min="0" max="25" value={shift} onChange={e => setShift(Number(e.target.value))}/><div className="range-labels"><span>0 · brez premika</span><span>25</span></div></div>}<button className="secondary" type="submit">{button}</button></form>{error && <p className="converter-error" role="alert">{error}</p>}{output && <div className="converter-result" role="status"><span className="eyebrow">REZULTAT PRETVORBE</span><output>{output}</output><small>Preberita sporočilo in vnesita iskano kodo.</small></div>}{stage.kind === 'binary' && <details className="ascii"><summary>Referenčna tabela ASCII · črke A–Z</summary><div className="ascii-grid">{Array.from({ length: 26 }, (_, index) => <div key={index}><strong>{String.fromCharCode(65 + index)}</strong><code>{(65 + index).toString(2).padStart(8, '0')}</code></div>)}</div></details>}</div></section>;
 }
 
 function DomainBreakdown({ stage }: { stage: StageContent }) {

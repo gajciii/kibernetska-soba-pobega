@@ -11,8 +11,40 @@ export interface SessionView {
 }
 export interface Bootstrap { csrfToken: string; session: SessionView | null; stages: StageSummary[] }
 export interface Choice { id: string; label: string }
-export interface Mail { id: string; sender: string; subject: string; body: string; linkLabel?: string; linkUrl?: string }
+export interface Mail {
+  id: string;
+  sender: string;
+  recipient: string;
+  time: string;
+  preview: string;
+  subject: string;
+  body: string;
+  replyTo?: string;
+  attachment?: string;
+  linkLabel?: string;
+  linkUrl?: string;
+}
 export interface LogRow { time: string; ip: string; account: string; event: string; file: string; result: string }
+export interface TrafficPacket {
+  number: number;
+  time: string;
+  source: string;
+  destination: string;
+  protocol: 'ARP' | 'DNS' | 'TCP' | 'TLS' | 'HTTP';
+  length: number;
+  info: string;
+  detail: string;
+  logTime?: string;
+}
+export interface InvestigationNote { id: string; title: string; text: string }
+export interface EvidenceArtifact {
+  id: string;
+  name: string;
+  kind: 'photo' | 'document' | 'image';
+  size: string;
+  description: string;
+  metadata: string;
+}
 export interface StageContent extends StageSummary {
   intro: string;
   question: string;
@@ -23,6 +55,9 @@ export interface StageContent extends StageSummary {
   reasons?: Choice[];
   mails?: Mail[];
   logs?: LogRow[];
+  packets?: TrafficPacket[];
+  investigations?: InvestigationNote[];
+  artifacts?: EvidenceArtifact[];
   profile?: { name: string; username: string; posts: string[] };
   metadata?: string;
 }
