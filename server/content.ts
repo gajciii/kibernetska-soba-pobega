@@ -39,7 +39,7 @@ const stages: StageContent[] = [
     title: 'Poišči phishing sporočilo',
     topic: 'Phishing',
     kind: 'phishing',
-    intro: 'Varnostna ekipa je zavarovala poštni predal Luke Kovača, dijaka šole Most. Med knjižničnimi opomniki, dogovori in šolskimi obvestili je tudi sporočilo, ki se morda le izdaja za znanega pošiljatelja. Lukov naslov je luka.kovac@most.si; tudi šola uporablja domeno most.si. Sedem sporočil ponuja sedem različnih zgodb.',
+    intro: 'Varnostna ekipa je zavarovala poštni predal Luke Kovača, dijaka šole Most. Med knjižničnimi opomniki, dogovori in šolskimi obvestili je tudi sporočilo, ki se morda le izdaja za znanega pošiljatelja. Lukin naslov je luka.kovac@most.si, šola uporablja domeno most.si. Preglej sedem sporočil in označi sumljivega, da napreduješ.',
     question: 'Katero sporočilo je phishing? Utemelji izbiro.',
     note: 'Izmišljena šola uporablja domeno most.si. Vsa sporočila so z dne 20. 11. 2026, časi so lokalni. Predal, priponke in povezave so neaktivna učna simulacija. Prikazno ime, nujnost ali sama prisotnost priponke še ne zadoščajo za sklep.',
     mails: [
