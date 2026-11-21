@@ -146,18 +146,23 @@ Primerjaj tri pogoje hkrati: prenos, prava datoteka in uspeh. `ucenec12` je imel
 
 ## 7. Najdi ponarejeno spletno stran
 
-Potrjena domena šole v tem primeru je `most.si`. Pregledovalnik vsebuje tri simulirane zavihke. Par preklaplja med njimi, razčleni protokol, gostitelja in pot ter posebej označi izbrani naslov. Povezave ostanejo neaktivne. Pravilen izbor je **C**:
+Skrbnik je zavaroval šest zapisov zgodovine obiskov šolske prijave. Pri vsakem je podoba portala enaka; spreminja se naslovna vrstica. Uvod pojasni URL, pri teh primerih prepoznavanje domene za `https://` in pred prvo naslednjo poševnico ter pomen poti in parametrov. Potrjena šolska gostitelja sta `most.si` in `ucilnica.most.si`.
 
-```text
-https://most.si.prijava-varno.example/prijava
-```
+| Zapis | Naslov | Presoja |
+| --- | --- | --- |
+| 1 | `https://most.si/prijava` | Pravi šolski naslov. |
+| 2 | `https://ucilnica.most.si/prijava` | Prava šolska učilnica. |
+| 3 | `https://most.si.prijava-varno.example/prijava` | Ponaredek: `most.si` je del poddomene tuje domene `prijava-varno.example`. |
+| 4 | `https://most-si.example/prijava` | Ponaredek: podobno ime pripada drugi domeni. |
+| 5 | `https://prijava.example/most.si/prijava` | Ponaredek: `most.si` je samo del poti na gostitelju `prijava.example`. |
+| 6 | `https://most.si/prijava?jezik=sl` | Pravi šolski naslov; parameter ne spremeni gostitelja. |
 
-Po rešitvi razčleni konkretni naslov: protokol `https`, gostitelj `most.si.prijava-varno.example`, pot `/prijava`. Naslov pripada domeni **`prijava-varno.example`**; `most.si` je tukaj le zavajajoči del pred njo. A uporablja šolsko domeno, B (`ucilnica.most.si`) pa njeno poddomeno.
+Par v zgodovini izbere **eno** ponarejeno povezavo — tretjo, četrto ali peto — in jo ročno popravi. Sprejeta cilja sta **`https://most.si/prijava`** ali **`https://ucilnica.most.si/prijava`**, tudi z neobveznim dodatkom **`?jezik=sl`**. Sam izbor ponaredka ne zadostuje; potreben je pravilen celoten URL. Prav tako prepis pravega naslova ob izbrani prvi, drugi ali šesti povezavi ne reši naloge, saj par ni izbral ponaredka. Popravljanje vseh treh ni potrebno. Naslovi ostanejo lokalno učno gradivo, brez odpiranja zunanjih strani ali prijavnih poskusov.
 
-- Namig 1: »Ime šole se lahko pojavi tudi v poddomeni druge domene.«
-- Namig 2: »Pri enem naslovu se za most.si pojavi še .prijava-varno.example.«
+- Namig 1: »Primerjajta celotno domeno med https:// in prvo naslednjo poševnico s potrjenima šolskima gostiteljema. Šolsko ime se lahko pojavi tudi v tuji poddomeni ali poti.«
+- Namig 2: »Izberita naslov z drugo domeno in ga ročno popravita. Šolska prijava je na poti /prijava pri most.si ali ucilnica.most.si. Dodatek ?jezik=sl samo določa jezik.«
 
-**Učni cilj:** brati celoten gostitelj in razlikovati domeno od poddomene ter poti. HTTPS ne naredi strani samodejno zaupanja vredne. Ne učimo pravila, da je registrirana domena vedno sestavljena iz zadnjih dveh delov: domena in javne pripone se v resničnih primerih razlikujejo. Obravnavaj konkretne prikazane učne naslove.
+**Učni cilj:** brati celoten gostitelj, ločiti domeno od poddomene, poti in parametrov ter ročno obnoviti naslov potrjene prijave. Kopirana podoba in HTTPS ne potrjujeta pripadnosti šoli. Šolsko ime kjerkoli v URL-ju ni dovolj. Ne učimo pravila, da je registrirana domena vedno sestavljena iz zadnjih dveh delov; razlaga velja za konkretne prikazane naslove. Pri drugih URL-jih se lahko pojavijo še vrata, uporabniški podatki ali drugačna zgradba.
 
 ## 8. Računalnik govori v ničlah in enicah
 

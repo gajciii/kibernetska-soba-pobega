@@ -50,7 +50,8 @@ async function start(client = team, teamName?: string): Promise<SessionView> {
 
 const correctAnswers: unknown[] = [
   'MOST', 'SOVA', { message: 'B', reasons: ['domain', 'link'] },
-  { recommendations: ['long', 'unique', 'manager', 'mfa'] }, '10:42', 'ucenec17', 'C', 'KLJUC',
+  { recommendations: ['long', 'unique', 'manager', 'mfa'] }, '10:42', 'ucenec17',
+  { sourceId: 'C', url: 'https://most.si/prijava' }, 'KLJUC',
 ];
 
 async function solveThrough(end: number, client = team) {
@@ -266,6 +267,71 @@ describe('potek igre, namigi in shranjevanje', () => {
     }
     const transfer = await post(team, '/api/stages/6/answer', { answer: ' UCENEC17 ' }).expect(200);
     expect(transfer.body.correct).toBe(true);
+  });
+
+  it('odklene osmo stopnjo šele po izbiri ponarejenega izvora in pravilnem ročnem popravku URL-ja', async () => {
+    await start();
+    await solveThrough(6);
+    const failures: unknown[] = [
+      ...['A', 'B', 'F'].map(sourceId => ({ sourceId, url: 'https://most.si/prijava' })),
+      { sourceId: 'C', url: 'http://most.si/prijava' },
+      { sourceId: 'D', url: 'https://most.si.prijava-varno.example/prijava' },
+      { sourceId: 'E', url: 'https://ucilnica.most.si/druga-pot' },
+      'C',
+    ];
+    for (const answer of failures) {
+      const rejected = await post(team, '/api/stages/7/answer', { answer }).expect(200);
+      expect(rejected.body.correct).toBe(false);
+      expect(rejected.body.explanation).toBeUndefined();
+      expect(rejected.body.session.solved).toEqual([1, 2, 3, 4, 5, 6]);
+      expect(rejected.body.session.currentStage).toBe(7);
+      await team.agent.get('/api/stages/8').expect(403);
+    }
+    await post(team, '/api/stages/8/answer', { answer: 'KLJUC' }).expect(403);
+    const unsolved = await team.agent.get('/api/stages/7').expect(200);
+    expect(unsolved.body.solved).toBe(false);
+    expect(unsolved.body.explanation).toBeUndefined();
+
+    const repaired = await post(team, '/api/stages/7/answer', {
+      answer: { sourceId: 'D', url: ' https://UCILNICA.MOST.SI/prijava?jezik=sl ' },
+    }).expect(200);
+    expect(repaired.body.correct).toBe(true);
+    expect(repaired.body.explanation).toBeTruthy();
+    expect(repaired.body.session.solved).toEqual([1, 2, 3, 4, 5, 6, 7]);
+    expect(repaired.body.session.currentStage).toBe(8);
+    expect(repaired.body.session.attempts[7]).toBe(failures.length + 1);
+    expect(repaired.body.session.completedAt).toBeNull();
+    await team.agent.get('/api/stages/8').expect(200);
+    const reload = await team.agent.get('/api/stages/7').expect(200);
+    expect(reload.body.solved).toBe(true);
+    expect(reload.body.explanation).toBe(repaired.body.explanation);
+    const persisted = await team.agent.get('/api/session').expect(200);
+    expect(persisted.body.session).toEqual(repaired.body.session);
+  });
+
+  it('ohrani sedmo stopnjo, rešeno s starim odgovorom, brez ponovnega preverjanja ali štetja poskusa', async () => {
+    await start();
+    await solveThrough(6);
+    const before = await team.agent.get('/api/session').expect(200);
+    const legacy: SessionView = {
+      ...before.body.session,
+      solved: [1, 2, 3, 4, 5, 6, 7],
+      currentStage: 8,
+      attempts: { ...before.body.session.attempts, 7: 1 },
+    };
+    const tokenHash = createHash('sha256').update(team.cookie.split('=')[1]).digest('hex');
+    // Stara različica je shranila le napredek, brez objekta popravljenega URL-ja.
+    await pool.query('UPDATE game_sessions SET progress=$1 WHERE token_hash=$2', [JSON.stringify(legacy), tokenHash]);
+    const stage = await team.agent.get('/api/stages/7').expect(200);
+    expect(stage.body.solved).toBe(true);
+    expect(stage.body.explanation).toBeTruthy();
+    for (const answer of ['C', { sourceId: 'A', url: 'ni-url' }]) {
+      const repeated = await post(team, '/api/stages/7/answer', { answer }).expect(200);
+      expect(repeated.body.correct).toBe(true);
+      expect(repeated.body.explanation).toBe(stage.body.explanation);
+      expect(repeated.body.session).toEqual(legacy);
+    }
+    await team.agent.get('/api/stages/8').expect(200);
   });
 
   it('pred priporočili zahteva ročno geslo in do zaključka obeh delov ne odklene pete naloge', async () => {
