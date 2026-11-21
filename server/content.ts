@@ -24,8 +24,8 @@ const stages: StageContent[] = [
     title: 'Kaj se skriva za čudnimi znaki?',
     topic: 'Kodiranja',
     kind: 'encoding',
-    intro: 'V izvozu šolskega sistema sta našla obvestilo o nenavadnem prenosu, skrito v dveh zaporednih zapisih. Ob njem piše: »Najprej odstrani zunanji ovoj: uporablja šestnajst znakov 0–9 in A–F, urejenih v pare. Nato razberi notranjega: njegov nabor šteje štiriinšestdeset znakov — velike in male črke, števke ter + in /. Znak = na koncu je lahko dopolnilo.« Prvi rezultat torej še ni sporočilo; kodo naslednje mape razkrije druga pretvorba.',
-    question: 'Prekopiraj zapis v pretvornik in razberi obe plasti v vrstnem redu iz zgodbe. Vnesi samo kodo naslednje mape.',
+    intro: 'Po nenavadnem prenosu je v arhivu ostala datoteka obvestilo.dat. Med zapiski skrbnika sta našla stavek: »Kar gre skozi moj sistem, nosi dve preobleki. Zunanja pozna šestnajst znakov, pod njo pa se skriva abeceda štiriinšestdesetih.« Preostanek zapiska manjka. Morda prav ta datoteka skriva sled do naslednje preiskovalne mape.',
+    question: 'Prekopiraj dokaz v pretvornik in odkrij sporočilo. Vnesi samo kodo naslednje mape.',
     evidence: '55 46 4A 46 54 6B 39 54 49 46 70 42 51 6B 56 4D 52 56 70 46 54 69 34 67 53 30 39 45 51 53 42 4F 51 56 4E 4D 52 55 52 4F 53 6B 55 67 54 55 46 51 52 54 6F 67 55 30 39 57 51 53 34 3D',
     note: 'Najprej dekodiraj zunanji zapis. Celoten vmesni rezultat ročno prekopiraj v vhod, nato izberi kodiranje notranjega zapisa in znova dekodiraj. Poskusi v pretvorniku ne štejejo kot oddaje odgovora.',
     investigations: [

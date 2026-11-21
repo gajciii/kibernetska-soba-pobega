@@ -48,7 +48,7 @@ Vsaka naloga ima eno kratko navodilo in delovni pripomoček. Polje oziroma izbir
 55 46 4A 46 54 6B 39 54 49 46 70 42 51 6B 56 4D 52 56 70 46 54 69 34 67 53 30 39 45 51 53 42 4F 51 56 4E 4D 52 55 52 4F 53 6B 55 67 54 55 46 51 52 54 6F 67 55 30 39 57 51 53 34 3D
 ```
 
-Zgodba zapis poveže z zavarovanim izvozom šolskih sistemskih obvestil in pove, da ima **dve plasti**. Zunanja uporablja **šestnajst znakov, 0–9 in A–F, v parih**; notranja nabor **štiriinšestdesetih znakov** in morebitno končno dopolnilo `=`. Znak `=` ni eden od 64 znakov osnovnega nabora. Postopka je treba uporabiti v tem vrstnem redu, brez samodejnega prenosa rezultatov:
+Zgodba predstavi datoteko `obvestilo.dat` in nepopoln skrbnikov zapis o **dveh preoblekah**: zunanja pozna **šestnajst znakov**, pod njo pa je abeceda **štiriinšestdesetih**. Besedi »zunanja« in »pod njo« namigujeta na vrstni red. Uvod ne našteva dovoljenih znakov, ne razloži dopolnila in ne pove korakov pretvorbe; neposrednejša pomoč je v namigih. Reševanje poteka brez samodejnega prenosa rezultatov:
 
 1. Izbereta **Šestnajstiško (HEX)** in dekodiranje. Prvi rezultat je še vedno kodiran zapis:
 
