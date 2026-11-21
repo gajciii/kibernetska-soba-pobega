@@ -15,7 +15,7 @@ type LandingProps = {
 };
 
 function TitleLines() {
-  return <><span className="landing-title-main">Operacija <span>404.</span></span><span className="landing-title-sub">Sledi so tu. Poveži jih.</span></>;
+  return <><span className="landing-title-main">Operacija <span>404.</span></span><span className="landing-title-sub">Vsaka skrivnost pusti sled.</span></>;
 }
 
 export default function Landing({ session, nextStartAt, now, busy, onStart, onContinue, onReset, headingRef }: LandingProps) {
@@ -42,14 +42,14 @@ export default function Landing({ session, nextStartAt, now, busy, onStart, onCo
     void onStart(trimmed);
   }
 
-  return <main id="main" className="landing" data-testid="landing">
+  return <main id="main" className="landing landing-home" data-testid="landing">
     <div className="landing-content">
       <p className="landing-eyebrow">KIBERNETSKA SOBA POBEGA</p>
       <div className="landing-title-wrap ambient-heading" data-ambient-heading>
         <h1 className="landing-title" ref={headingRef} tabIndex={-1}><TitleLines/></h1>
         <div className="landing-title ambient-heading-light" aria-hidden="true"><TitleLines/></div>
       </div>
-      <p className="landing-story">Na šoli Piramida so zaznali sumljiv prenos zaupnega načrta.<br className="landing-desktop-break"/> Kateri šolski projekt je ogrožen? Odpri preiskovalno mapo in odkrij njegovo kodno ime.</p>
+      <p className="landing-story">Nekdo je iz arhiva šole Piramida prenesel zaupni načrt. Sledi vodijo skozi sporočila, fotografije in skrite zapise. Odpri preiskavo in odkrij, kateri projekt je ogrožen.</p>
       {session && namedSession ? <div className="landing-resume">
         <p><strong>{session.teamName}</strong> · Shranjena preiskava</p>
         <button type="button" className="landing-start-button" disabled={busy} onClick={onContinue}>{busy ? 'Odpiranje …' : session.completedAt ? 'Odpri zaključeno preiskavo' : 'Nadaljuj preiskavo'}</button>

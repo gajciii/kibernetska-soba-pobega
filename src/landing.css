@@ -93,7 +93,6 @@
   .landing-title { font-size: clamp(3.5rem, 10vw, 5.4rem); }
   .landing-title-sub { margin-top: .65em; font-size: .48em; }
   .landing-story { margin: 1.8rem 0 2rem; font-size: 1rem; }
-  .landing-desktop-break { display: none; }
   .landing-start-form { max-width: 540px; }
   .landing .landing-start-button { padding-left: 1.2rem; padding-right: 1.2rem; }
   .landing-facts { gap: .7rem 1.1rem; font-size: .875rem; margin-top: 2rem; }
@@ -121,4 +120,20 @@
   .landing { color: CanvasText; }
   .landing .landing-start-button { background: ButtonFace; color: ButtonText; border-color: ButtonText; }
   .landing .landing-start-form .landing-start-controls input[type="text"] { background: Field; color: FieldText; border-color: CanvasText; }
+}
+
+/* Naslovnica zapolni prostor med glavo in nogo brez fiksne višine vsebine. */
+.landing-home { display: flex; flex-direction: column; --landing-space: clamp(.9rem, 2.4svh, 1.7rem); }
+.landing-home > .landing-content { flex: 1; width: 100%; min-height: 0; padding-block: clamp(1rem, 3svh, 3rem); }
+.landing-home .landing-title { font-size: clamp(2.8rem, min(7.7vw, 11svh), 7rem); }
+.landing-home .landing-eyebrow { margin-bottom: var(--landing-space); }
+.landing-home .landing-story { margin-block: var(--landing-space); line-height: 1.75; text-wrap: pretty; }
+.landing-home .landing-facts { margin-top: var(--landing-space); }
+
+@media (max-height: 700px) {
+  .landing-home { --landing-space: .75rem; }
+  .landing-home > .landing-content { padding-block: .75rem; }
+  .landing-home .landing-story { line-height: 1.6; }
+  .is-landing:has(.landing-home) .topbar { min-height: 64px; padding-block: .75rem; }
+  .is-landing:has(.landing-home) .footer { padding-block: 1rem; }
 }
