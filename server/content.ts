@@ -24,9 +24,9 @@ const stages: StageContent[] = [
     title: 'Kaj se skriva za čudnimi znaki?',
     topic: 'Kodiranja',
     kind: 'encoding',
-    intro: 'V odprti mapi najdeš obvestilo.dat, skrbnikov izvoz prve prijave nenavadnega dogajanja. V njem se skriva ime osebe, pri kateri se je preiskava začela. Ob datoteki je pripis: »Kar gre skozi moj sistem, nosi dve preobleki. Zunanja pozna šestnajst znakov, pod njo pa se skriva abeceda štiriinšestdesetih.« Preostanek zapiska manjka.',
+    intro: 'V odprti mapi najdeš obvestilo.dat, skrbnikov izvoz prve prijave nenavadnega dogajanja. V njem se skriva ime osebe, pri kateri se je preiskava začela, in oznaka mape z njeno prijavo ter shranjeno e-pošto. Ob datoteki je pripis: »Kar gre skozi moj sistem, nosi dve preobleki. Zunanja pozna šestnajst znakov, pod njo pa se skriva abeceda štiriinšestdesetih.« Preostanek zapiska manjka.',
     question: 'Prekopiraj dokaz v pretvornik in odkrij sporočilo. Vnesi samo kodo naslednje mape.',
-    evidence: '55 46 4A 4A 53 6B 46 57 53 56 52 46 54 45 6F 36 49 45 78 56 53 30 45 67 53 30 39 57 51 55 4D 75 49 45 74 50 52 45 45 67 54 55 46 51 52 54 6F 67 55 30 39 57 51 53 34 3D',
+    evidence: '55 46 4A 4A 53 6B 46 57 53 56 52 46 54 45 6F 36 49 45 78 56 53 30 45 67 53 30 39 57 51 55 4D 75 49 45 74 50 52 45 45 67 54 55 46 51 52 54 6F 67 55 46 4A 46 52 45 46 4D 4C 67 3D 3D',
     note: 'Najprej dekodiraj zunanji zapis. Celoten vmesni rezultat ročno prekopiraj v vhod, nato izberi kodiranje notranjega zapisa in znova dekodiraj. Poskusi v pretvorniku ne štejejo kot oddaje odgovora.',
     investigations: [
       { id: 'ovojnica', title: 'Izvoz: obvestilo.dat', text: 'Skrbnikov izvoz prve prijave je bil kodiran dvakrat. Pri branju najprej odstrani zunanjo, nato notranjo plast; končnica .dat postopka ne določa.' },
@@ -77,15 +77,15 @@ const stages: StageContent[] = [
       },
       {
         id: 'B',
-        sender: 'Šolska IT podpora <podpora@piramida-preverjanje.example>',
+        sender: 'Šolska IT podpora <podpora@piramiida.si>',
         recipient: 'Luka Kovač <luka.kovac@piramida.si>',
         time: '09:57',
         preview: 'Zaznali smo težavo s tvojim računom. Odzovi se v 10 minutah.',
-        replyTo: 'podpora@piramida-preverjanje.example',
+        replyTo: 'podpora@piramiida.si',
         subject: 'NUJNO: tvoj račun bo čez 10 minut blokiran',
         body: 'Pozdravljen, Luka Kovač, zaznali smo težavo s tvojim šolskim računom. V naslednjih 10 minutah odpri spodnjo povezavo ter vnesi geslo in enkratno prijavno kodo, sicer bo račun blokiran.',
         linkLabel: 'Preveri šolski račun',
-        linkUrl: 'https://piramida.si.arhiv-nacrtov.example/prijava',
+        linkUrl: 'https://piramida.si.piramiida.si/prijava',
       },
       {
         id: 'E',
@@ -254,15 +254,15 @@ const stages: StageContent[] = [
     title: 'Najdi ponarejeno spletno stran',
     topic: 'Domene',
     kind: 'domains',
-    intro: 'Dnevnik je pokazal račun in naslov IP računalnika, s katerega je bil sprožen prenos načrta. Skrbnik zdaj odpre zavarovano zgodovino tega računalnika. Med šestimi naslovi je tudi povezava iz Lukove sumljive pošte. Prijavne strani so videti enako, zato preveri URL: gostitelj je del za https:// in pred naslednjo poševnico. Šola uporablja piramida.si in ucilnica.piramida.si. Ponaredek lahko šolsko ime skrije v tujo poddomeno ali pot; dodatek za vprašajem je parameter. Pred iskanjem načrta loči šolski arhiv od tujih strani.',
+    intro: 'Dnevnik je pokazal račun in naslov IP računalnika, s katerega je bil sprožen prenos načrta. Skrbnik zdaj odpre zavarovano zgodovino tega računalnika. Med šestimi naslovi je tudi povezava iz Lukove sumljive pošte. Prijavne strani so videti enako, zato preveri URL: gostitelj je del za https:// in pred naslednjo poševnico. Šola uporablja piramida.si in ucilnica.piramida.si. Ponaredek lahko spremeni eno črko, jo podvoji ali šolsko ime skrije v poddomeno oziroma pot tuje strani; dodatek za vprašajem je parameter. Pred iskanjem načrta loči šolski arhiv od tujih strani.',
     question: 'V zgodovini izberi eno ponarejeno povezavo. Kateri tuji domeni pripada? Vpiši samo domeno, brez https:// in poti.',
     note: 'Zgodovina vsebuje šest pripravljenih naslovov. Prikaz prijavne strani ostane enak; spreminja se naslovna vrstica. Noben naslov se ne odpre v omrežju in obrazec ne zbira prijavnih podatkov.',
     choices: [
       { id: 'A', label: 'https://piramida.si/prijava' },
       { id: 'B', label: 'https://ucilnica.piramida.si/prijava' },
-      { id: 'C', label: 'https://piramida.si.arhiv-nacrtov.example/prijava' },
-      { id: 'D', label: 'https://piramida-si.example/prijava' },
-      { id: 'E', label: 'https://prijava.example/piramida.si/prijava' },
+      { id: 'C', label: 'https://piramida.si.piramiida.si/prijava' },
+      { id: 'D', label: 'https://pirameda.si/prijava' },
+      { id: 'E', label: 'https://piramida-prijava.si/piramida.si/prijava' },
       { id: 'F', label: 'https://piramida.si/prijava?jezik=sl' },
     ],
     investigations: [
@@ -306,12 +306,12 @@ const hints: Record<number, [string, string]> = {
 
 const explanations: Record<number, string> = {
   1: 'Koda PIRAMIDA odpre mapo s skrbnikovim izvozom prve prijave. Cezarjeva šifra zamenja črke s stalnim premikom po abecedi. V tem primeru je šifriranje premaknilo črke za tri mesta naprej, dešifriranje pa jih je vrnilo nazaj. Zgodba je razkrila premik, primerjava abeced pa preslikavo posameznih črk. Presledki in vrstni red so pomagali preveriti smiselnost sporočila. Takšna šifra je primerna za razumevanje osnov, ne za sodobno varovanje podatkov.',
-  2: 'Obvestilo razkrije prijavitelja Luko Kovača in kodo SOVA za mapo z njegovo prijavo ter kopijo poštnega predala. Zapis je vseboval dve plasti: dekodiranje HEX je razkrilo zapis Base64, šele njegovo dekodiranje pa besedilo. Vrstni red je pomemben, ker mora biti rezultat prvega postopka veljaven vhod za drugega. HEX in Base64 sta kodiranji, ne šifriranje; tudi njuna kombinacija ne zagotavlja zaupnosti. Besedilo obvestila samo po sebi še ne pojasni celotnega poteka incidenta.',
+  2: 'Obvestilo razkrije prijavitelja Luko Kovača in kodo PREDAL: ta odpre mapo z njegovo prijavo ter kopijo poštnega predala, ki jo pregledaš v naslednjem koraku. Zapis je vseboval dve plasti: dekodiranje HEX je razkrilo zapis Base64, šele njegovo dekodiranje pa besedilo. Vrstni red je pomemben, ker mora biti rezultat prvega postopka veljaven vhod za drugega. HEX in Base64 sta kodiranji, ne šifriranje; tudi njuna kombinacija ne zagotavlja zaupnosti. Besedilo obvestila samo po sebi še ne pojasni celotnega poteka incidenta.',
   3: 'Phishing skuša uporabnika zavesti v razkritje podatkov ali nevarno dejanje. Sporočilo B združuje tuji domeni pošiljatelja in povezave, grožnjo blokade ter zahtevo po prijavnih podatkih. Nujno obvestilo o učilnici in pričakovana priponka v drugih sporočilih sama po sebi nista phishing. V tem pripravljenem primeru ostalih šest sporočil ni zlonamernih; v resničnem svetu tudi ujemajoča se domena sama ne jamči varnosti. HTTPS šifrira povezavo, vendar sam ne potrjuje legitimnosti strani.',
   4: 'Ime ljubljenčka in rojstna letnica sta javna in predvidljiva gradnika. Dodan klicaj ali preprosta zamenjava črke z znakom tega ne odpravita. Boljša izbira so dolga, naključna in za vsak račun različna gesla; pri ustvarjanju ter shranjevanju pomaga upravljalnik gesel. Večfaktorska prijava doda zaščito računa, ne spremeni pa šibkega gesla v močno. Ta vaja ne razkriva Lukovega pravega gesla in ne dokazuje, kaj je bilo uporabljeno pri incidentu.',
   5: 'Čas 10:42 usmeri naslednji pregled na dogodke okoli domnevnega Lukovega odhoda iz učilnice; ne dokazuje, kdo je ostal za računalnikom. Rdeč nahrbtnik na hodniku je pomagal prepoznati pravo fotografijo med drugimi slikami. Polje Čas nastanka posnetka beleži 10:42:17, polje Čas spremembe pa 11:15:00. Poznejše urejanje ali ponovno shranjevanje lahko spremeni čas datoteke, zato 11:15 ne pomeni nujno časa fotografiranja. Sam zapis spremembe ne pove, kaj je bilo spremenjeno. Metapodatki lahko manjkajo ali so spremenjeni; so sled za preverjanje, ne nezmotljiv dokaz.',
   6: 'Paketni pregled in aplikacijski dnevnik sta različna vira. Šifrirani TLS-paketi ne razkrijejo računa ali poti; tukaj je njuna povezava pripravljena učna korelacija. Ločen dnevniški zapis ob 10:45:12 potrjuje uspešen prenos /zaupno/nacrt.pdf z računom ucenec17. Zavrnjen prenos, uspešen ogled, prenos druge datoteke in TCP ACK niso enak dokaz. Naslov IP 10.0.0.17 poveže dogodek z računalnikom, katerega zgodovino pregledaš v naslednjem koraku. Zapis potrjuje uporabo računa, sam pa ne dokazuje, katera oseba je bila za tipkovnico.',
-  7: 'Povezava iz Lukove pošte se pojavi tudi v zavarovani zgodovini; to še ne dokazuje, kdo jo je odprl oziroma ali je kdo vnesel geslo. Domnevni arhiv na piramida.si.arhiv-nacrtov.example pripada tuji domeni arhiv-nacrtov.example; piramida.si je le njena zavajajoča poddomena. Podobno zapisani piramida-si.example je druga tuja domena. Pri prijava.example/piramida.si/prijava pa je tuja domena prijava.example, šolsko ime je samo del poti. Potrjena gostitelja sta piramida.si in ucilnica.piramida.si; dodatek ?jezik=sl ne spremeni gostitelja. Izbira ponaredka je utemeljena z njegovo tujo domeno. Kopirana podoba in HTTPS sama ne potrjujeta pripadnosti šoli. Razčlenitev velja za te naslove; registrirana domena ni vedno sestavljena iz zadnjih dveh delov.',
+  7: 'Povezava iz Lukove pošte se pojavi tudi v zavarovani zgodovini; to še ne dokazuje, kdo jo je odprl oziroma ali je kdo vnesel geslo. Domnevni arhiv na piramida.si.piramiida.si pripada tuji domeni piramiida.si; piramida.si je le njena zavajajoča poddomena. Domena piramiida.si ima podvojen i, pirameda.si pa namesto drugega i uporablja e; nobena ni šolska piramida.si. Pri piramida-prijava.si/piramida.si/prijava pa je tuja domena piramida-prijava.si, šolsko ime je samo del poti. Potrjena gostitelja sta piramida.si in ucilnica.piramida.si; dodatek ?jezik=sl ne spremeni gostitelja. Izbira ponaredka je utemeljena z njegovo tujo domeno. Kopirana podoba in HTTPS sama ne potrjujeta pripadnosti šoli. Razčlenitev velja za te naslove; registrirana domena ni vedno sestavljena iz zadnjih dveh delov.',
   8: 'Mesta v bajtu imajo uteži 128, 64, 32, 16, 8, 4, 2 in 1. Enica prispeva pripadajočo utež, ničla pa nič; seštevek je decimalna vrednost bajta. Tabela ASCII to vrednost poveže z znakom. Deset bajtov da besedo BRUCOVANJE: kodno ime projekta, ki mu pripada preneseni načrt. S tem si našel podatek, zaradi katerega si odprl preiskavo. Gre za predstavitev podatkov, ne za šifriranje; druga znakovna kodiranja lahko iste bajte razložijo drugače. Preiskava je zaključena.',
 };
 
@@ -357,7 +357,7 @@ export function validateAnswer(id: number, answer: unknown): boolean {
       return ['PIRAMIDA', 'KODA JE PIRAMIDA'].includes(words(answer) ?? '');
     case 2: {
       const value = words(answer);
-      return value === 'SOVA' || (value !== undefined && /^KODA\s*:\s*SOVA$/u.test(value));
+      return value === 'PREDAL' || (value !== undefined && /^KODA\s*:\s*PREDAL$/u.test(value));
     }
     case 3: {
       if (!answer || typeof answer !== 'object' || Array.isArray(answer)) return false;
@@ -382,7 +382,7 @@ export function validateAnswer(id: number, answer: unknown): boolean {
       const { sourceId, domain } = answer as { sourceId?: unknown; domain?: unknown };
       if (typeof sourceId !== 'string' || typeof domain !== 'string') return false;
       const foreignDomains = new Map([
-        ['C', 'arhiv-nacrtov.example'], ['D', 'piramida-si.example'], ['E', 'prijava.example'],
+        ['C', 'piramiida.si'], ['D', 'pirameda.si'], ['E', 'piramida-prijava.si'],
       ]);
       return domain.trim().toLowerCase() === foreignDomains.get(sourceId);
     }

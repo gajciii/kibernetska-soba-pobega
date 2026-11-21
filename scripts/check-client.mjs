@@ -2,7 +2,7 @@ import { readdirSync, readFileSync } from 'node:fs';
 import { join } from 'node:path';
 function files(folder) { return readdirSync(folder, { withFileTypes: true }).flatMap(entry => entry.isDirectory() ? files(join(folder, entry.name)) : [join(folder, entry.name)]); }
 const publicFiles = files('dist/client');
-const forbidden = ['KODA JE PIRAMIDA', 'SOVA', 'ucenec17', '10:42:17', 'BRUCOVANJE', 'correctAnswer', 'validateAnswer', 'isCorrect', 'react.development.js', 'react-dom-client.development.js'];
+const forbidden = ['KODA JE PIRAMIDA', 'PREDAL', 'ucenec17', '10:42:17', 'BRUCOVANJE', 'correctAnswer', 'validateAnswer', 'isCorrect', 'react.development.js', 'react-dom-client.development.js'];
 for (const file of publicFiles) {
   if (/\.map$|VODNIK|server\/|\.env/u.test(file)) throw new Error(`Zasebna datoteka v javnem buildu: ${file}`);
   const content = readFileSync(file, 'utf8');

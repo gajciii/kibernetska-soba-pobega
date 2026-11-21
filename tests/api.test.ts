@@ -49,9 +49,9 @@ async function start(client = team, teamName = 'Testna skupina'): Promise<Sessio
 }
 
 const correctAnswers: unknown[] = [
-  'PIRAMIDA', 'SOVA', { message: 'B', reasons: ['domain', 'link'] },
+  'PIRAMIDA', 'PREDAL', { message: 'B', reasons: ['domain', 'link'] },
   { recommendations: ['long', 'unique', 'manager', 'mfa'] }, '10:42', 'ucenec17',
-  { sourceId: 'C', domain: 'arhiv-nacrtov.example' }, 'BRUCOVANJE',
+  { sourceId: 'C', domain: 'piramiida.si' }, 'BRUCOVANJE',
 ];
 
 async function solveThrough(end: number, client = team) {
@@ -101,7 +101,7 @@ describe('anonimne seje in zaščita API-ja', () => {
     expect(bootstrap.body.stages).toHaveLength(8);
     for (const stage of bootstrap.body.stages) expect(Object.keys(stage).sort()).toEqual(['id', 'title', 'topic']);
     const initial = JSON.stringify(bootstrap.body);
-    for (const secret of ['KODA JE PIRAMIDA', 'SOVA', 'ucenec17', '10:42', 'BRUCOVANJE', 'correctAnswer', 'isCorrect']) {
+    for (const secret of ['KODA JE PIRAMIDA', 'PREDAL', 'ucenec17', '10:42', 'BRUCOVANJE', 'correctAnswer', 'isCorrect']) {
       expect(initial).not.toContain(secret);
     }
     const session = await start();
@@ -271,12 +271,12 @@ describe('potek igre, namigi in shranjevanje', () => {
     await start();
     await solveThrough(6);
     const failures: unknown[] = [
-      ...['A', 'B', 'F'].map(sourceId => ({ sourceId, domain: 'arhiv-nacrtov.example' })),
-      { sourceId: 'C', domain: 'piramida-si.example' },
-      { sourceId: 'D', domain: 'prijava.example' },
-      { sourceId: 'E', domain: 'arhiv-nacrtov.example' },
-      { sourceId: 'C', domain: 'https://arhiv-nacrtov.example' },
-      { sourceId: 'E', domain: 'prijava.example/piramida.si/prijava' },
+      ...['A', 'B', 'F'].map(sourceId => ({ sourceId, domain: 'piramiida.si' })),
+      { sourceId: 'C', domain: 'pirameda.si' },
+      { sourceId: 'D', domain: 'piramida-prijava.si' },
+      { sourceId: 'E', domain: 'piramiida.si' },
+      { sourceId: 'C', domain: 'https://piramiida.si' },
+      { sourceId: 'E', domain: 'piramida-prijava.si/piramida.si/prijava' },
       { sourceId: 'C', url: 'https://piramida.si/prijava' },
       'C',
     ];
@@ -294,7 +294,7 @@ describe('potek igre, namigi in shranjevanje', () => {
     expect(unsolved.body.explanation).toBeUndefined();
 
     const identified = await post(team, '/api/stages/7/answer', {
-      answer: { sourceId: 'D', domain: '  PIRAMIDA-SI.EXAMPLE  ' },
+      answer: { sourceId: 'D', domain: '  PIRAMEDA.SI  ' },
     }).expect(200);
     expect(identified.body.correct).toBe(true);
     expect(identified.body.explanation).toBeTruthy();

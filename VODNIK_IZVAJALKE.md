@@ -6,7 +6,7 @@ Delavnica je izmišljena izobraževalna simulacija za srednješolce. Dvojica upo
 
 ## Rdeča nit zgodbe
 
-Cezarjeva koda **PIRAMIDA** odpre prvo mapo, dvojno kodirano obvestilo pa razkrije **Luko Kovača** kot prijavitelja in kodo mape **SOVA**. Njegova prijava sumljive pošte utemelji pregled predala. Osebni nagovor v lažnem sporočilu vodi k javnemu profilu in hipotetično šibkemu geslu. Luka nato pove, da je uporabljal skupni šolski računalnik in ob odhodu fotografiral hodnik. Čas fotografije usmeri pregled okoliških omrežnih dogodkov. Uspešen prenos poveže račun **ucenec17** z računalnikom **10.0.0.17**, njegova zavarovana zgodovina pa vsebuje isto lažno povezavo kot pošta. Ko je ponarejena prijava prepoznana, skrbnik v pravem arhivu po računu, času in poti najde ustrezno različico načrta. Izvoz njene oznake v ASCII razkrije **BRUCOVANJE**.
+Cezarjeva koda **PIRAMIDA** odpre prvo mapo, dvojno kodirano obvestilo pa razkrije **Luko Kovača** kot prijavitelja in kodo mape **PREDAL**. Njegova prijava sumljive pošte utemelji pregled predala. Osebni nagovor v lažnem sporočilu vodi k javnemu profilu in hipotetično šibkemu geslu. Luka nato pove, da je uporabljal skupni šolski računalnik in ob odhodu fotografiral hodnik. Čas fotografije usmeri pregled okoliških omrežnih dogodkov. Uspešen prenos poveže račun **ucenec17** z računalnikom **10.0.0.17**, njegova zavarovana zgodovina pa vsebuje isto lažno povezavo kot pošta. Ko je ponarejena prijava prepoznana, skrbnik v pravem arhivu po računu, času in poti najde ustrezno različico načrta. Izvoz njene oznake v ASCII razkrije **BRUCOVANJE**.
 
 Časovne sledi z dne 20. 11. 2026 so:
 
@@ -62,7 +62,7 @@ Vsako nalogo uvede kratka zgodba, ki dokaze poveže s preiskavo. Pri nalogah 3�
 **Dokaz:** pod zgodbenim odstavkom je naslednji zapis. Par ga mora sam prekopirati v prazni vhod pretvornika; v delovnem oknu ni dodatne kopije dokaza.
 
 ```text
-55 46 4A 4A 53 6B 46 57 53 56 52 46 54 45 6F 36 49 45 78 56 53 30 45 67 53 30 39 57 51 55 4D 75 49 45 74 50 52 45 45 67 54 55 46 51 52 54 6F 67 55 30 39 57 51 53 34 3D
+55 46 4A 4A 53 6B 46 57 53 56 52 46 54 45 6F 36 49 45 78 56 53 30 45 67 53 30 39 57 51 55 4D 75 49 45 74 50 52 45 45 67 54 55 46 51 52 54 6F 67 55 46 4A 46 52 45 46 4D 4C 67 3D 3D
 ```
 
 Zgodba predstavi datoteko `obvestilo.dat`, skrbnikov izvoz prve prijave nenavadnega dogajanja. V njem sta prijaviteljevo ime in koda naslednje mape. Nepopolni pripis govori o **dveh preoblekah**: zunanja pozna **šestnajst znakov**, pod njo pa je abeceda **štiriinšestdesetih**. Besedi »zunanja« in »pod njo« namigujeta na vrstni red. Uvod ne našteva dovoljenih znakov, ne razloži dopolnila in ne pove korakov pretvorbe; neposrednejša pomoč je v namigih. Reševanje poteka brez samodejnega prenosa rezultatov:
@@ -70,16 +70,16 @@ Zgodba predstavi datoteko `obvestilo.dat`, skrbnikov izvoz prve prijave nenavadn
 1. Izbereta **Šestnajstiško (HEX)** in dekodiranje. Prvi rezultat je še vedno kodiran zapis:
 
    ```text
-   UFJJSkFWSVRFTEo6IExVS0EgS09WQUMuIEtPREEgTUFQRTogU09WQS4=
+   UFJJSkFWSVRFTEo6IExVS0EgS09WQUMuIEtPREEgTUFQRTogUFJFREFMLg==
    ```
 
-2. Celoten vmesni rezultat **ročno prekopirata v vhod**, izbereta **Base64** in ponovno dekodirata. Končno besedilo je **`PRIJAVITELJ: LUKA KOVAC. KODA MAPE: SOVA.`**
-3. V polje za odgovor zgoraj desno vneseta samo **`SOVA`**. Celotno obvestilo ni odgovor; zaradi združljivosti ostaja sprejet tudi stari vnos `KODA: SOVA`. Velikost črk in odvečni presledki niso pomembni.
+2. Celoten vmesni rezultat **ročno prekopirata v vhod**, izbereta **Base64** in ponovno dekodirata. Končno besedilo je **`PRIJAVITELJ: LUKA KOVAC. KODA MAPE: PREDAL.`**
+3. V polje za odgovor zgoraj desno vneseta samo **`PREDAL`**. Celotno obvestilo ni odgovor; sprejet je tudi vnos `KODA: PREDAL`. Velikost črk in odvečni presledki niso pomembni.
 
 - Namig 1: »Upoštevaj vrstni red: najprej zunanji zapis s šestnajstimi znaki v parih, nato notranji z naborom štiriinšestdesetih znakov.«
 - Namig 2: »Najprej dekodiraj Šestnajstiško (HEX). Celoten rezultat ročno prekopiraj v vhod, izberi Base64 in ponovno dekodiraj. Odgovor je samo koda naslednje mape.«
 
-**Opomba za izvajalca:** končnica `.dat` ne določa kodiranja. Če pretvorba ne uspe, naj preverita vrstni red, celovitost prekopiranih parov in vmesnega rezultata ter smer dekodiranja. Vmesni niz vsebuje 56 znakov in se konča z enim `=`; končno sporočilo vsebuje 41 bajtov ASCII. Neuspešen poskus v pripomočku ne poveča števila oddanih odgovorov. Ime prijavitelja pojasni naslednji pregled predala, ne določi storilca.
+**Opomba za izvajalca:** končnica `.dat` ne določa kodiranja. Če pretvorba ne uspe, naj preverita vrstni red, celovitost prekopiranih parov in vmesnega rezultata ter smer dekodiranja. Vmesni niz vsebuje 60 znakov in se konča z dvema znakoma `=`; končno sporočilo vsebuje 43 bajtov ASCII. Neuspešen poskus v pripomočku ne poveča števila oddanih odgovorov. Ime prijavitelja pojasni naslednji pregled predala, ne določi storilca.
 
 **Učni cilj:** prepoznati dve zaporedni kodiranji in uporabiti rezultat prvega kot vhod drugega. Par šestnajstiških znakov predstavlja en bajt zapisa Base64, ta pa predstavlja končno besedilo. HEX in Base64 sta kodiranji, ne šifriranje; za obratno pretvorbo ne potrebujemo skrivnega ključa in njuna kombinacija ne zagotavlja zaupnosti.
 
@@ -93,8 +93,8 @@ Odpiranje sporočila označi njegovo prebranost in prikaže dejanskega pošiljat
 
 Pravilen izbor je **sporočilo B** in **najmanj dva** od teh opozorilnih znakov, brez napačnih:
 
-- Domena pošiljatelja se ne ujema s šolsko domeno: `podpora@piramida-preverjanje.example`.
-- Povezava vodi na drugo domeno: `https://piramida.si.arhiv-nacrtov.example/prijava`. Isti URL se pojavi kot tretji zapis zgodovine v sedmi nalogi.
+- Domena pošiljatelja se ne ujema s šolsko domeno: `podpora@piramiida.si`.
+- Povezava vodi na drugo domeno: `https://piramida.si.piramiida.si/prijava`. Isti URL se pojavi kot tretji zapis zgodovine v sedmi nalogi.
 - Sporočilo pritiska z nujnostjo in grožnjo blokade čez 10 minut.
 - Zahteva geslo in enkratno prijavno kodo na nepričakovani strani.
 
@@ -169,16 +169,16 @@ Zapis uspešnega prenosa poveže račun `ucenec17` z računalnikom `10.0.0.17`. 
 | --- | --- | --- |
 | 1 | `https://piramida.si/prijava` | Pravi šolski naslov. |
 | 2 | `https://ucilnica.piramida.si/prijava` | Prava šolska učilnica. |
-| 3 | `https://piramida.si.arhiv-nacrtov.example/prijava` | Ponaredek: `piramida.si` je poddomena tuje domene `arhiv-nacrtov.example`. |
-| 4 | `https://piramida-si.example/prijava` | Ponaredek: podobno ime pripada drugi domeni. |
-| 5 | `https://prijava.example/piramida.si/prijava` | Ponaredek: `piramida.si` je samo del poti na gostitelju `prijava.example`. |
+| 3 | `https://piramida.si.piramiida.si/prijava` | Ponaredek: `piramida.si` je poddomena tuje domene `piramiida.si`. |
+| 4 | `https://pirameda.si/prijava` | Ponaredek: podobno ime pripada drugi domeni. |
+| 5 | `https://piramida-prijava.si/piramida.si/prijava` | Ponaredek: `piramida.si` je samo del poti na gostitelju `piramida-prijava.si`. |
 | 6 | `https://piramida.si/prijava?jezik=sl` | Pravi šolski naslov; parameter ne spremeni gostitelja. |
 
 Navodilo se glasi: »V zgodovini izberi eno ponarejeno povezavo. Kateri tuji domeni pripada? Vpiši samo domeno, brez https:// in poti.« Par izbere **eno** ponarejeno povezavo in v polje **Tuja domena** vpiše pripadajoči odgovor:
 
-- Tretja povezava: **`arhiv-nacrtov.example`**.
-- Četrta povezava: **`piramida-si.example`**.
-- Peta povezava: **`prijava.example`**.
+- Tretja povezava: **`piramiida.si`**.
+- Četrta povezava: **`pirameda.si`**.
+- Peta povezava: **`piramida-prijava.si`**.
 
 Izbrana povezava in vnesena domena se morata ujemati. Celoten URL, šolska domena ali tuja domena druge povezave ne zadostujejo. Prva, druga in šesta povezava so prave, zato z njimi naloge ni mogoče rešiti. Zadostuje ena pravilno utemeljena izbira. Naslovi ostanejo lokalno učno gradivo, brez odpiranja zunanjih strani ali prijavnih poskusov.
 

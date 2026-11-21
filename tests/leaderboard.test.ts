@@ -14,7 +14,7 @@ let pool: pg.Pool;
 let app: ReturnType<typeof createApp>;
 let clock: number;
 type Team = { agent: ReturnType<typeof request.agent>; csrf: string; cookie: string };
-const answers: unknown[] = ['PIRAMIDA', 'SOVA', { message: 'B', reasons: ['domain', 'link'] }, { recommendations: ['long', 'unique', 'manager', 'mfa'] }, '10:42', 'ucenec17', { sourceId: 'C', domain: 'arhiv-nacrtov.example' }, 'BRUCOVANJE'];
+const answers: unknown[] = ['PIRAMIDA', 'PREDAL', { message: 'B', reasons: ['domain', 'link'] }, { recommendations: ['long', 'unique', 'manager', 'mfa'] }, '10:42', 'ucenec17', { sourceId: 'C', domain: 'piramiida.si' }, 'BRUCOVANJE'];
 
 async function anonymous(): Promise<Team> {
   const agent = request.agent(app);
@@ -75,7 +75,7 @@ describe('trajna skupna lestvica', () => {
     const publicBoard = await request(app).get('/api/leaderboard').set('Cookie', 'operacija404=neveljavno').expect(200);
     expect(publicBoard.body.currentEntry).toBeNull();
     expect(publicBoard.body.entries[0].isCurrent).toBe(false);
-    for (const secret of [team.csrf, team.cookie.split('=')[1], createHash('sha256').update(team.cookie.split('=')[1]).digest('hex'), 'token_hash', 'csrf', 'answers', 'SOVA', 'BRUCOVANJE']) {
+    for (const secret of [team.csrf, team.cookie.split('=')[1], createHash('sha256').update(team.cookie.split('=')[1]).digest('hex'), 'token_hash', 'csrf', 'answers', 'PREDAL', 'BRUCOVANJE']) {
       expect(JSON.stringify(publicBoard.body)).not.toContain(secret);
     }
   });

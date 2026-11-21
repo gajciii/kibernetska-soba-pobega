@@ -22,12 +22,12 @@ describe('Cezarjeva šifra', () => {
 
 describe('Base64', () => {
   it('dekodira obvezni zapis', () => {
-    expect(decodeBase64('S09EQTogU09WQQ==')).toBe('KODA: SOVA');
+    expect(decodeBase64('S09EQTogUFJFREFM')).toBe('KODA: PREDAL');
   });
   it('dekodira drug vnos, UTF-8 in prelome vrstic', () => {
     expect(decodeBase64('SGVsbG8sIHdvcmxkIQ==')).toBe('Hello, world!');
     expect(decodeBase64('xI3FocW+')).toBe('čšž');
-    expect(decodeBase64(' U09W\nQQ== ')).toBe('SOVA');
+    expect(decodeBase64(' UFJF\nREFM ')).toBe('PREDAL');
     expect(decodeBase64('QUJD')).toBe('ABC');
   });
   it('ohrani HTML kot navadno izhodno besedilo', () => {

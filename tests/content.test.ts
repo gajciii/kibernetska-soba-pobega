@@ -2,12 +2,12 @@ import { describe, expect, it } from 'vitest';
 import { finale, getExplanation, getFeedback, getHint, getStage, stageSummaries, validateAnswer, validateProfilePassword } from '../server/content.js';
 import { caesarDecrypt, convertText, hexToText, textToHex } from '../shared/converters.js';
 
-const stage2Intermediate = 'UFJJSkFWSVRFTEo6IExVS0EgS09WQUMuIEtPREEgTUFQRTogU09WQS4=';
+const stage2Intermediate = 'UFJJSkFWSVRFTEo6IExVS0EgS09WQUMuIEtPREEgTUFQRTogUFJFREFMLg==';
 
 describe('strežniško preverjanje osmih stopenj', () => {
   const correct: [number, unknown][] = [
-    [1, 'PIRAMIDA'], [2, 'SOVA'], [3, { message: 'B', reasons: ['domain', 'link'] }],
-    [4, { recommendations: ['long', 'unique', 'manager', 'mfa'] }], [5, '10:42'], [6, 'ucenec17'], [7, { sourceId: 'C', domain: 'arhiv-nacrtov.example' }], [8, 'BRUCOVANJE'],
+    [1, 'PIRAMIDA'], [2, 'PREDAL'], [3, { message: 'B', reasons: ['domain', 'link'] }],
+    [4, { recommendations: ['long', 'unique', 'manager', 'mfa'] }], [5, '10:42'], [6, 'ucenec17'], [7, { sourceId: 'C', domain: 'piramiida.si' }], [8, 'BRUCOVANJE'],
   ];
 
   it.each(correct)('sprejme pravilen odgovor stopnje %i', (id, answer) => {
@@ -26,9 +26,10 @@ describe('strežniško preverjanje osmih stopenj', () => {
     expect(validateAnswer(1, 'P I R A M I D A')).toBe(false);
     expect(validateAnswer(1, 'MOST')).toBe(false);
     expect(validateAnswer(1, 'KODA JE MOST')).toBe(false);
-    expect(validateAnswer(2, ' koda :  sova ')).toBe(true);
-    expect(validateAnswer(2, 'KODA:SOVA')).toBe(true);
-    expect(validateAnswer(2, ' sOvA ')).toBe(true);
+    expect(validateAnswer(2, ' koda :  predal ')).toBe(true);
+    expect(validateAnswer(2, 'KODA:PREDAL')).toBe(true);
+    expect(validateAnswer(2, ' pReDaL ')).toBe(true);
+    expect(validateAnswer(2, 'SOVA')).toBe(false);
     expect(validateAnswer(6, ' UceNec17  ')).toBe(true);
     expect(validateAnswer(8, '  bRuCoVaNjE\n')).toBe(true);
     expect(validateAnswer(8, 'BRU COVANJE')).toBe(false);
@@ -145,7 +146,7 @@ describe('razširjeni dokazi ostanejo skladni z obstoječimi rešitvami', () => 
         }
       }
     }
-    expect(mails.find(mail => mail.id === 'B')!.linkUrl).toBe('https://piramida.si.arhiv-nacrtov.example/prijava');
+    expect(mails.find(mail => mail.id === 'B')!.linkUrl).toBe('https://piramida.si.piramiida.si/prijava');
     expect(getStage(7)!.choices!.map(choice => choice.label)).toContain(mails.find(mail => mail.id === 'B')!.linkUrl);
     expect(mails.find(mail => mail.id === 'D')!.sender).toBe('Šolska IT podpora <podpora@piramida.si>');
     expect(mails.find(mail => mail.id === 'F')!.attachment).toBeTruthy();
@@ -175,8 +176,8 @@ describe('razširjeni dokazi ostanejo skladni z obstoječimi rešitvami', () => 
     const choices = getStage(7)!.choices!;
     expect(choices).toHaveLength(6);
     expect(choices.map(choice => choice.id)).toEqual(['A', 'B', 'C', 'D', 'E', 'F']);
-    expect(choices[2].label).toBe('https://piramida.si.arhiv-nacrtov.example/prijava');
-    const domains = { C: 'arhiv-nacrtov.example', D: 'piramida-si.example', E: 'prijava.example' };
+    expect(choices[2].label).toBe('https://piramida.si.piramiida.si/prijava');
+    const domains = { C: 'piramiida.si', D: 'pirameda.si', E: 'piramida-prijava.si' };
     for (const [sourceId, domain] of Object.entries(domains)) {
       expect(validateAnswer(7, { sourceId, domain })).toBe(true);
       expect(validateAnswer(7, { sourceId, domain: `  ${domain.toUpperCase()}  ` })).toBe(true);
@@ -186,23 +187,23 @@ describe('razširjeni dokazi ostanejo skladni z obstoječimi rešitvami', () => 
     }
     for (const choice of choices) {
       const host = new URL(choice.label).hostname;
-      expect(['piramida.si', 'ucilnica.piramida.si'].includes(host) || host.endsWith('.example')).toBe(true);
+      expect(['piramida.si', 'ucilnica.piramida.si', 'piramida.si.piramiida.si', 'pirameda.si', 'piramida-prijava.si']).toContain(host);
     }
   });
 
   it('zavrne šolsko domeno, celoten URL, pot, nepopolno domeno in stare odgovore', () => {
     for (const domain of [
-      'piramida.si', 'ucilnica.piramida.si', 'piramida.si.arhiv-nacrtov.example',
-      'https://arhiv-nacrtov.example', 'https://piramida.si.arhiv-nacrtov.example/prijava',
-      'arhiv-nacrtov.example/prijava', 'arhiv-nacrtov.example?jezik=sl',
-      'arhiv-nacrtov', '.example', 'example', 'arhiv-nacrtov.example.',
-      'www.arhiv-nacrtov.example', 'arhiv-nacrtov.example:443',
-      'arhiv-nacrtov .example', '', null, 42, {}, [],
+      'piramida.si', 'ucilnica.piramida.si', 'piramida.si.piramiida.si',
+      'https://piramiida.si', 'https://piramida.si.piramiida.si/prijava',
+      'piramiida.si/prijava', 'piramiida.si?jezik=sl',
+      'piramiida', '.si', 'si', 'piramiida.si.',
+      'www.piramiida.si', 'piramiida.si:443',
+      'piramiida .si', '', null, 42, {}, [],
     ]) expect(validateAnswer(7, { sourceId: 'C', domain })).toBe(false);
     for (const sourceId of ['A', 'B', 'F', 'c', 'Z', '', null, 7, ['C']]) {
-      expect(validateAnswer(7, { sourceId, domain: 'arhiv-nacrtov.example' })).toBe(false);
+      expect(validateAnswer(7, { sourceId, domain: 'piramiida.si' })).toBe(false);
     }
-    for (const answer of ['C', 'arhiv-nacrtov.example', { sourceId: 'C' }, { domain: 'arhiv-nacrtov.example' }, { sourceId: 'C', url: 'https://piramida.si/prijava' }, [{ sourceId: 'C', domain: 'arhiv-nacrtov.example' }]]) {
+    for (const answer of ['C', 'piramiida.si', { sourceId: 'C' }, { domain: 'piramiida.si' }, { sourceId: 'C', url: 'https://piramida.si/prijava' }, [{ sourceId: 'C', domain: 'piramiida.si' }]]) {
       expect(validateAnswer(7, answer)).toBe(false);
     }
   });
@@ -294,7 +295,7 @@ describe('razširjeni dokazi ostanejo skladni z obstoječimi rešitvami', () => 
   });
 
   it('zapiski usmerjajo pregled dokazov brez izpisanih končnih kod', () => {
-    for (const [id, solution] of [[1, 'PIRAMIDA'], [2, 'SOVA'], [8, 'BRUCOVANJE']] as const) {
+    for (const [id, solution] of [[1, 'PIRAMIDA'], [2, 'PREDAL'], [8, 'BRUCOVANJE']] as const) {
       const notes = getStage(id)!.investigations!;
       expect(notes).toHaveLength(3);
       expect(new Set(notes.map(note => note.id)).size).toBe(3);
@@ -323,11 +324,11 @@ describe('razširjeni dokazi ostanejo skladni z obstoječimi rešitvami', () => 
     expect(validateAnswer(2, intermediate)).toBe(false);
     expect(validateAnswer(2, evidence)).toBe(false);
     const decoded = convertText(intermediate, 'base64', 'decode');
-    expect(decoded).toBe('PRIJAVITELJ: LUKA KOVAC. KODA MAPE: SOVA.');
+    expect(decoded).toBe('PRIJAVITELJ: LUKA KOVAC. KODA MAPE: PREDAL.');
     const profileName = getStage(4)!.profile!.name.normalize('NFD').replace(/\p{M}/gu, '').toUpperCase();
     expect(decoded).toContain(`PRIJAVITELJ: ${profileName}.`);
     const code = /KODA MAPE: ([A-Z]+)\./u.exec(decoded)?.[1];
-    expect(code).toBe('SOVA');
+    expect(code).toBe('PREDAL');
     expect(validateAnswer(2, code)).toBe(true);
     expect(validateAnswer(2, decoded)).toBe(false);
     expect(textToHex(convertText(decoded, 'base64', 'encode'))).toBe(evidence);
@@ -341,7 +342,7 @@ describe('razširjeni dokazi ostanejo skladni z obstoječimi rešitvami', () => 
       let result: string;
       try { result = convertText(evidence, method, 'decode'); }
       catch { continue; }
-      expect(result).not.toContain('SOVA');
+      expect(result).not.toContain('PREDAL');
       expect(validateAnswer(2, result)).toBe(false);
     }
   });
