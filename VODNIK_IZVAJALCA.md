@@ -6,7 +6,7 @@ Delavnica je izmišljena izobraževalna simulacija. Dvojica uporablja en računa
 
 ## Rdeča nit zgodbe
 
-Cezarjeva koda **PIRAMIDA** odpre prvo mapo, dvojno kodirano obvestilo pa razkrije **Luko Kovača** kot prijavitelja in kodo mape **PREDAL**. Njegova prijava sumljive pošte utemelji pregled predala. Osebni nagovor v lažnem sporočilu vodi k javnemu profilu in hipotetično šibkemu geslu. Luka nato pove, da je uporabljal skupni šolski računalnik in ob odhodu fotografiral hodnik. Čas fotografije usmeri pregled okoliških omrežnih dogodkov. Uspešen prenos poveže račun **ucenec17** z računalnikom **10.0.0.17**, njegova zavarovana zgodovina pa vsebuje isto lažno povezavo kot pošta. Ko je ponarejena prijava prepoznana, skrbnik v pravem arhivu po računu, času in poti najde ustrezno različico načrta. Izvoz njene oznake v ASCII razkrije **BRUCOVANJE**.
+Cezarjeva koda **PIRAMIDA** odpre prvo mapo, dvojno kodirano obvestilo pa razkrije **Luko Kralja** kot prijavitelja in kodo mape **PREDAL**. Njegova prijava sumljive pošte utemelji pregled predala. Osebni nagovor v lažnem sporočilu vodi k javnemu profilu in hipotetično šibkemu geslu. Luka nato pove, da je uporabljal skupni šolski računalnik in ob odhodu fotografiral hodnik. Čas fotografije usmeri pregled okoliških omrežnih dogodkov. Uspešen prenos poveže račun **ucenec17** z računalnikom **10.0.0.17**, njegova zavarovana zgodovina pa vsebuje isto lažno povezavo kot pošta. Ko je ponarejena prijava prepoznana, skrbnik v pravem arhivu po računu, času in poti najde ustrezno različico načrta. Izvoz njene oznake v ASCII razkrije **BRUCOVANJE**.
 
 Časovne sledi z dne 20. 11. 2026 so:
 
@@ -62,7 +62,7 @@ Vsako nalogo uvede kratka zgodba, ki dokaze poveže s preiskavo. Pri nalogah 3�
 **Dokaz:** pod zgodbenim odstavkom je naslednji zapis. Par ga mora sam prekopirati v prazni vhod pretvornika; v delovnem oknu ni dodatne kopije dokaza.
 
 ```text
-55 46 4A 4A 53 6B 46 57 53 56 52 46 54 45 6F 36 49 45 78 56 53 30 45 67 53 30 39 57 51 55 4D 75 49 45 74 50 52 45 45 67 54 55 46 51 52 54 6F 67 55 46 4A 46 52 45 46 4D 4C 67 3D 3D
+55 46 4A 4A 53 6B 46 57 53 56 52 46 54 45 6F 36 49 45 78 56 53 30 45 67 53 31 4A 42 54 45 6F 75 49 45 74 50 52 45 45 67 54 55 46 51 52 54 6F 67 55 46 4A 46 52 45 46 4D 4C 67 3D 3D
 ```
 
 Zgodba predstavi datoteko `obvestilo.dat`, skrbnikov izvoz prve prijave nenavadnega dogajanja. V njem sta prijaviteljevo ime in koda naslednje mape. Nepopolni pripis govori o **dveh preoblekah**: zunanja pozna **šestnajst znakov**, pod njo pa je abeceda **štiriinšestdesetih**. Besedi »zunanja« in »pod njo« namigujeta na vrstni red. Uvod ne našteva dovoljenih znakov, ne razloži dopolnila in ne pove korakov pretvorbe; neposrednejša pomoč je v namigih. Reševanje poteka brez samodejnega prenosa rezultatov:
@@ -70,10 +70,10 @@ Zgodba predstavi datoteko `obvestilo.dat`, skrbnikov izvoz prve prijave nenavadn
 1. Izbereta **Šestnajstiško (HEX)** in dekodiranje. Prvi rezultat je še vedno kodiran zapis:
 
    ```text
-   UFJJSkFWSVRFTEo6IExVS0EgS09WQUMuIEtPREEgTUFQRTogUFJFREFMLg==
+   UFJJSkFWSVRFTEo6IExVS0EgS1JBTEouIEtPREEgTUFQRTogUFJFREFMLg==
    ```
 
-2. Celoten vmesni rezultat **ročno prekopirata v vhod**, izbereta **Base64** in ponovno dekodirata. Končno besedilo je **`PRIJAVITELJ: LUKA KOVAC. KODA MAPE: PREDAL.`**
+2. Celoten vmesni rezultat **ročno prekopirata v vhod**, izbereta **Base64** in ponovno dekodirata. Končno besedilo je **`PRIJAVITELJ: LUKA KRALJ. KODA MAPE: PREDAL.`**
 3. V polje za odgovor zgoraj desno vneseta samo **`PREDAL`**. Celotno obvestilo ni odgovor; sprejet je tudi vnos `KODA: PREDAL`. Velikost črk in odvečni presledki niso pomembni.
 
 - Namig 1: »Upoštevaj vrstni red: najprej zunanji zapis s šestnajstimi znaki v parih, nato notranji z naborom štiriinšestdesetih znakov.«
@@ -85,7 +85,7 @@ Zgodba predstavi datoteko `obvestilo.dat`, skrbnikov izvoz prve prijave nenavadn
 
 ## 3. Poišči phishing sporočilo
 
-Šolska domena v učnem primeru je `piramida.si`. Obvestilo iz druge naloge pripelje do **Luke Kovača**, ki je skrbniku še pred opozorilom o prenosu prijavil sumljivo pošto in mu predal kopijo predala **`luka.kovac@piramida.si`**. Zato sledi pregled njegove pošte. To je izmišljeni lastnik predala; aplikacija ne bere prave pošte ali navezuje stikov. Vseh sedem sporočil je naslovljenih nanj.
+Šolska domena v učnem primeru je `piramida.si`. Obvestilo iz druge naloge pripelje do **Luke Kralja**, ki je skrbniku še pred opozorilom o prenosu prijavil sumljivo pošto in mu predal kopijo predala **`luka.kralj@piramida.si`**. Zato sledi pregled njegove pošte. To je izmišljeni lastnik predala; aplikacija ne bere prave pošte ali navezuje stikov. Vseh sedem sporočil je naslovljenih nanj.
 
 Začetni vrstni red je **A, C, D, B, E, F, G**: knjižnični opomnik, mentorsko obvestilo, načrtovano IT-vzdrževanje, lažna IT-zahteva, pomembna sprememba učilnice, pričakovana priponka fotografskega krožka in jedilnik. Phishing sporočilo je torej **četrto**, njegov stabilni identifikator **B** pa ostaja nespremenjen. Vrstni red je ureditev dokazne zbirke, ne časovno razvrščanje.
 
@@ -107,7 +107,7 @@ Pravilen izbor je **sporočilo B** in **najmanj dva** od teh opozorilnih znakov,
 
 ## 4. Ugotovi predvidljivo geslo
 
-Javni profil Luke Kovača (`@luka.kovac`) nadaljuje zgodbo njegovega poštnega predala. Ima profilno fotografijo, opis z letnikom **2009** in **tri fotografske objave**: psičko **Luno**, smučanje in gorsko pot. Podatek o imenu psičke je v pripisu prve objave. Opis je »🎂 2009. 🏫 Šola Piramida. Najraje zunaj, na snegu ⛷️ ali na poti v hribe. 🏔️«. Pod kartico profila je privzeto zaprt razdelek »Pogosta slaba gesla« s šestimi vzorci: zaporedje številk, ime hišnega ljubljenčka, zaporedje tipk na tipkovnici, beseda »geslo« ali »password«, letnica rojstva ter ponavljanje istega znaka. Ime ljubljenčka in letnica sta ločena. Vse slike so ustvarjene za učno zgodbo in se nalagajo lokalno.
+Javni profil Luke Kralja (`@luka.kralj`) nadaljuje zgodbo njegovega poštnega predala. Ima profilno fotografijo, opis z letnikom **2009** in **tri fotografske objave**: psičko **Luno**, smučanje in gorsko pot. Podatek o imenu psičke je v pripisu prve objave. Opis je »🎂 2009. 🏫 Šola Piramida. Najraje zunaj, na snegu ⛷️ ali na poti v hribe. 🏔️«. Pod kartico profila je privzeto zaprt razdelek »Pogosta slaba gesla« s šestimi vzorci: zaporedje številk, ime hišnega ljubljenčka, zaporedje tipk na tipkovnici, beseda »geslo« ali »password«, letnica rojstva ter ponavljanje istega znaka. Ime ljubljenčka in letnica sta ločena. Vse slike so ustvarjene za učno zgodbo in se nalagajo lokalno.
 
 Naloga ima dva zaporedna dela:
 

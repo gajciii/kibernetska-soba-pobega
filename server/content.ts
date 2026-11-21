@@ -26,7 +26,7 @@ const stages: StageContent[] = [
     kind: 'encoding',
     intro: 'V odprti mapi najdeš obvestilo.dat, skrbnikov izvoz prve prijave nenavadnega dogajanja. V njem se skriva ime osebe, pri kateri se je preiskava začela, in oznaka mape z njeno prijavo ter shranjeno e-pošto. Ob datoteki je pripis: »Kar gre skozi moj sistem, nosi dve preobleki. Zunanja pozna šestnajst znakov, pod njo pa se skriva abeceda štiriinšestdesetih.« Preostanek zapiska manjka.',
     question: 'Prekopiraj dokaz v pretvornik in odkrij sporočilo. Vnesi samo kodo naslednje mape.',
-    evidence: '55 46 4A 4A 53 6B 46 57 53 56 52 46 54 45 6F 36 49 45 78 56 53 30 45 67 53 30 39 57 51 55 4D 75 49 45 74 50 52 45 45 67 54 55 46 51 52 54 6F 67 55 46 4A 46 52 45 46 4D 4C 67 3D 3D',
+    evidence: '55 46 4A 4A 53 6B 46 57 53 56 52 46 54 45 6F 36 49 45 78 56 53 30 45 67 53 31 4A 42 54 45 6F 75 49 45 74 50 52 45 45 67 54 55 46 51 52 54 6F 67 55 46 4A 46 52 45 46 4D 4C 67 3D 3D',
     note: 'Najprej dekodiraj zunanji zapis. Celoten vmesni rezultat ročno prekopiraj v vhod, nato izberi kodiranje notranjega zapisa in znova dekodiraj. Poskusi v pretvorniku ne štejejo kot oddaje odgovora.',
     investigations: [
       { id: 'ovojnica', title: 'Izvoz: obvestilo.dat', text: 'Skrbnikov izvoz prve prijave je bil kodiran dvakrat. Pri branju najprej odstrani zunanjo, nato notranjo plast; končnica .dat postopka ne določa.' },
@@ -39,14 +39,14 @@ const stages: StageContent[] = [
     title: 'Poišči phishing sporočilo',
     topic: 'Phishing',
     kind: 'phishing',
-    intro: 'Razkrito obvestilo te pripelje do dijaka Luke Kovača. Še pred opozorilom o prenosu je skrbniku prijavil nenavadno e-pošto in mu predal kopijo svojega predala. Med običajnimi šolskimi sporočili iščeš tisto, ki bi lahko pojasnilo poskus dostopa do računa. Lukin naslov je luka.kovac@piramida.si, šola uporablja domeno piramida.si. Preglej sedem sporočil in označi sumljivega, da napreduješ.',
+    intro: 'Razkrito obvestilo te pripelje do dijaka Luke Kralja. Še pred opozorilom o prenosu je skrbniku prijavil nenavadno e-pošto in mu predal kopijo svojega predala. Med običajnimi šolskimi sporočili iščeš tisto, ki bi lahko pojasnilo poskus dostopa do računa. Lukin naslov je luka.kralj@piramida.si, šola uporablja domeno piramida.si. Preglej sedem sporočil in označi sumljivega, da napreduješ.',
     question: 'Katero sporočilo je phishing? Utemelji izbiro.',
     note: 'Izmišljena šola uporablja domeno piramida.si. Vsa sporočila so z dne 20. 11. 2026, časi so lokalni. Predal, priponke in povezave so neaktivna učna simulacija. Prikazno ime, nujnost ali sama prisotnost priponke še ne zadoščajo za sklep.',
     mails: [
       {
         id: 'A',
         sender: 'Šolska knjižnica <knjiznica@piramida.si>',
-        recipient: 'Luka Kovač <luka.kovac@piramida.si>',
+        recipient: 'Luka Kralj <luka.kralj@piramida.si>',
         time: '08:12',
         preview: 'V petek poteče rok za vračilo izposojene knjige.',
         replyTo: 'knjiznica@piramida.si',
@@ -56,7 +56,7 @@ const stages: StageContent[] = [
       {
         id: 'C',
         sender: 'Mentorica <mentorica@piramida.si>',
-        recipient: 'Luka Kovač <luka.kovac@piramida.si>',
+        recipient: 'Luka Kralj <luka.kralj@piramida.si>',
         time: '08:44',
         preview: 'Jutrišnja delavnica bo ob 10. uri v računalniški učilnici.',
         replyTo: 'mentorica@piramida.si',
@@ -66,7 +66,7 @@ const stages: StageContent[] = [
       {
         id: 'D',
         sender: 'Šolska IT podpora <podpora@piramida.si>',
-        recipient: 'Luka Kovač <luka.kovac@piramida.si>',
+        recipient: 'Luka Kralj <luka.kralj@piramida.si>',
         time: '07:50',
         preview: 'Danes od 16. do 17. ure bo potekalo načrtovano vzdrževanje.',
         subject: 'Načrtovano vzdrževanje šolske učilnice',
@@ -78,19 +78,19 @@ const stages: StageContent[] = [
       {
         id: 'B',
         sender: 'Šolska IT podpora <podpora@piramiida.si>',
-        recipient: 'Luka Kovač <luka.kovac@piramida.si>',
+        recipient: 'Luka Kralj <luka.kralj@piramida.si>',
         time: '09:57',
         preview: 'Zaznali smo težavo s tvojim računom. Odzovi se v 10 minutah.',
         replyTo: 'podpora@piramiida.si',
         subject: 'NUJNO: tvoj račun bo čez 10 minut blokiran',
-        body: 'Pozdravljen, Luka Kovač, zaznali smo težavo s tvojim šolskim računom. V naslednjih 10 minutah odpri spodnjo povezavo ter vnesi geslo in enkratno prijavno kodo, sicer bo račun blokiran.',
+        body: 'Pozdravljen, Luka Kralj, zaznali smo težavo s tvojim šolskim računom. V naslednjih 10 minutah odpri spodnjo povezavo ter vnesi geslo in enkratno prijavno kodo, sicer bo račun blokiran.',
         linkLabel: 'Preveri šolski račun',
         linkUrl: 'https://piramida.si.piramiida.si/prijava',
       },
       {
         id: 'E',
         sender: 'Tajništvo šole <tajnistvo@piramida.si>',
-        recipient: 'Luka Kovač <luka.kovac@piramida.si>',
+        recipient: 'Luka Kralj <luka.kralj@piramida.si>',
         time: '09:30',
         preview: 'Sprememba učilnice velja že za naslednjo šolsko uro.',
         subject: 'Pomembno: naslednja ura je v učilnici 204',
@@ -100,7 +100,7 @@ const stages: StageContent[] = [
       {
         id: 'F',
         sender: 'Šolski krožek fotografije <foto@piramida.si>',
-        recipient: 'Luka Kovač <luka.kovac@piramida.si>',
+        recipient: 'Luka Kralj <luka.kralj@piramida.si>',
         time: '09:08',
         preview: 'V priponki je že napovedani razpored fotografiranja razredov.',
         subject: 'Razpored fotografiranja za prihodnji teden',
@@ -111,7 +111,7 @@ const stages: StageContent[] = [
       {
         id: 'G',
         sender: 'Šolska prehrana <prehrana@piramida.si>',
-        recipient: 'Luka Kovač <luka.kovac@piramida.si>',
+        recipient: 'Luka Kralj <luka.kralj@piramida.si>',
         time: '10:05',
         preview: 'Jedilnik za prihodnji teden je objavljen na šolski strani.',
         subject: 'Jedilnik za prihodnji teden',
@@ -139,11 +139,11 @@ const stages: StageContent[] = [
     question: 'Iz javnih podatkov sestavi primer predvidljivega gesla, nato izberi priporočila za varnejšo uporabo gesel in zaščito računa.',
     note: 'Vnos se preveri samo v učni igri in se ne uporabi za prijavo. Potrditev predvidljivega gesla odpre drugi del naloge; naslednjo stopnjo odklene šele pravilen izbor priporočil.',
     profile: {
-      name: 'Luka Kovač',
-      username: '@luka.kovac',
+      name: 'Luka Kralj',
+      username: '@luka.kralj',
       bio: '🎂 2009. 🏫 Šola Piramida. Najraje zunaj, na snegu ⛷️ ali na poti v hribe. 🏔️',
       avatar: '/profile/luka.jpg',
-      avatarAlt: 'Portret Luke Kovača.',
+      avatarAlt: 'Portret Luke Kralja.',
       posts: [
         { id: 'luna', image: '/profile/luna.jpg', alt: 'Psička na sprehodu na prostem.', caption: 'Luna je danes spet ukradla vso pozornost. Z njo tudi kratek sprehod postane dogodivščina.', location: 'Popoldanski sprehod' },
         { id: 'smucanje', image: '/profile/smucanje.jpg', alt: 'Luka na zasneženem smučišču.', caption: 'Prva vožnja, mrzel zrak in cel dan na snegu. Takih vikendov se ne naveličam.', location: 'Na smučišču' },
@@ -306,7 +306,7 @@ const hints: Record<number, [string, string]> = {
 
 const explanations: Record<number, string> = {
   1: 'Koda PIRAMIDA odpre mapo s skrbnikovim izvozom prve prijave. Cezarjeva šifra zamenja črke s stalnim premikom po abecedi. V tem primeru je šifriranje premaknilo črke za tri mesta naprej, dešifriranje pa jih je vrnilo nazaj. Zgodba je razkrila premik, primerjava abeced pa preslikavo posameznih črk. Presledki in vrstni red so pomagali preveriti smiselnost sporočila. Takšna šifra je primerna za razumevanje osnov, ne za sodobno varovanje podatkov.',
-  2: 'Obvestilo razkrije prijavitelja Luko Kovača in kodo PREDAL: ta odpre mapo z njegovo prijavo ter kopijo poštnega predala, ki jo pregledaš v naslednjem koraku. Zapis je vseboval dve plasti: dekodiranje HEX je razkrilo zapis Base64, šele njegovo dekodiranje pa besedilo. Vrstni red je pomemben, ker mora biti rezultat prvega postopka veljaven vhod za drugega. HEX in Base64 sta kodiranji, ne šifriranje; tudi njuna kombinacija ne zagotavlja zaupnosti. Besedilo obvestila samo po sebi še ne pojasni celotnega poteka incidenta.',
+  2: 'Obvestilo razkrije prijavitelja Luko Kralja in kodo PREDAL: ta odpre mapo z njegovo prijavo ter kopijo poštnega predala, ki jo pregledaš v naslednjem koraku. Zapis je vseboval dve plasti: dekodiranje HEX je razkrilo zapis Base64, šele njegovo dekodiranje pa besedilo. Vrstni red je pomemben, ker mora biti rezultat prvega postopka veljaven vhod za drugega. HEX in Base64 sta kodiranji, ne šifriranje; tudi njuna kombinacija ne zagotavlja zaupnosti. Besedilo obvestila samo po sebi še ne pojasni celotnega poteka incidenta.',
   3: 'Phishing skuša uporabnika zavesti v razkritje podatkov ali nevarno dejanje. Sporočilo B združuje tuji domeni pošiljatelja in povezave, grožnjo blokade ter zahtevo po prijavnih podatkih. Nujno obvestilo o učilnici in pričakovana priponka v drugih sporočilih sama po sebi nista phishing. V tem pripravljenem primeru ostalih šest sporočil ni zlonamernih; v resničnem svetu tudi ujemajoča se domena sama ne jamči varnosti. HTTPS šifrira povezavo, vendar sam ne potrjuje legitimnosti strani.',
   4: 'Ime ljubljenčka in rojstna letnica sta javna in predvidljiva gradnika. Dodan klicaj ali preprosta zamenjava črke z znakom tega ne odpravita. Boljša izbira so dolga, naključna in za vsak račun različna gesla; pri ustvarjanju ter shranjevanju pomaga upravljalnik gesel. Večfaktorska prijava doda zaščito računa, ne spremeni pa šibkega gesla v močno. Ta vaja ne razkriva Lukovega pravega gesla in ne dokazuje, kaj je bilo uporabljeno pri incidentu.',
   5: 'Čas 10:42 usmeri naslednji pregled na dogodke okoli domnevnega Lukovega odhoda iz učilnice; ne dokazuje, kdo je ostal za računalnikom. Rdeč nahrbtnik na hodniku je pomagal prepoznati pravo fotografijo med drugimi slikami. Polje Čas nastanka posnetka beleži 10:42:17, polje Čas spremembe pa 11:15:00. Poznejše urejanje ali ponovno shranjevanje lahko spremeni čas datoteke, zato 11:15 ne pomeni nujno časa fotografiranja. Sam zapis spremembe ne pove, kaj je bilo spremenjeno. Metapodatki lahko manjkajo ali so spremenjeni; so sled za preverjanje, ne nezmotljiv dokaz.',
