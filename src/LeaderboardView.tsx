@@ -13,7 +13,7 @@ function duration(seconds: number) {
 function ScoreRow({ entry }: { entry: LeaderboardEntry }) {
   return <li className={`board-entry${entry.rank <= 3 ? ` board-rank-${entry.rank}` : ''}${entry.isCurrent ? ' is-current' : ''}`} data-entry-id={entry.id}>
     <span className="board-rank" aria-label={`Mesto ${entry.rank}`}>{String(entry.rank).padStart(2, '0')}</span>
-    <div className="board-team"><h2>{entry.teamName}</h2><span className="board-team-state">{entry.completed ? 'Zaključeno' : 'V teku'}{entry.isCurrent && <strong>Tvoja skupina</strong>}</span></div>
+    <div className="board-team"><h2>{entry.teamName}</h2><span className="board-team-state">{entry.completed ? 'Zaključeno' : entry.stopped ? 'Prekinjeno' : 'V teku'}{entry.isCurrent && <strong>Tvoja skupina</strong>}</span></div>
     <dl className="board-metrics"><div><dt>Rešeno</dt><dd>{entry.solvedCount}<span> / 8</span></dd></div><div><dt>Namigi</dt><dd>{entry.hintCount}</dd></div><div><dt>Čas</dt><dd>{duration(entry.elapsedSeconds)}</dd></div></dl>
   </li>;
 }

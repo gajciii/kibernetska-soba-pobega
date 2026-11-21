@@ -6,7 +6,7 @@ Iz šolskega arhiva je bil prenesen zaupni načrt. Skrbnik ima nenavadno sporoč
 
 Slovenska izobraževalna soba pobega, predvidoma **45–60 minut v paru**. Obravnava Cezarjevo šifro, kodiranja, phishing, gesla, metapodatke, omrežne dnevnike, domene in binarni zapis. Šola Piramida, osebe in dokazi so izmišljeni; igra ne izvaja pravih vdorov ali prijav v tuje račune.
 
-Registracija ni potrebna. Obvezno je ime skupine, ki je javno na lestvici, zato izberi izmišljeno oznako. Napredek se shranjuje v PostgreSQL in nadaljuje v istem brskalniku. Lestvica primerja rešene izzive, nato manj namigov in krajši čas; prejšnji rezultati ostanejo tudi po ponastavitvi.
+Registracija ni potrebna. Obvezno je ime skupine, ki je javno na lestvici, zato izberi izmišljeno oznako. Napredek se shranjuje v PostgreSQL in nadaljuje v istem brskalniku. Lestvica primerja rešene izzive, nato manj namigov in krajši čas; prejšnji rezultati ostanejo tudi po ponastavitvi, njihov čas pa se ustavi.
 
 ## Kje lahko igram?
 

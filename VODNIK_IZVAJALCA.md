@@ -44,13 +44,13 @@ Vsako nalogo uvede kratka zgodba, ki dokaze poveže s preiskavo. Pri nalogah 3�
 
 ## 1. Razbij skrivno sporočilo
 
-**Dokaz:** `NRGD MH SLUDPLGD`, iz datoteke `sporocilo.txt`. Skrbnik je s Cezarjevo šifro skril kodo prvega dela preiskovalne mape, v kateri je zbral sledi prenosa. Nad pripomočkom je zgodbeni odstavek. Par naj ga prebere: opis prejemnika vsebuje namig **»tri mesta nazaj«**, ki neposredno usmeri dešifriranje v levo. Kratko navodilo premika ne ponovi.
+**Dokaz:** `NRGD MH SLUDPLGD`, iz datoteke `sporocilo.txt`. Skrbnik je s Cezarjevo šifro skril kodo prvega dela preiskovalne mape, v kateri je zbral sledi prenosa. Nad pripomočkom je zgodbeni odstavek. Par naj ga prebere: uvod razloži namen kode, zamenjavo črk in premik **»tri mesta nazaj«** s primerom D → A. Navodilo poimenuje gumb »Nazaj«, izbiro črke v zgornji vrstici ter odgovor zgoraj desno.
 
 **Potek reševanja:** uporabljata abecedo A–Z brez šumnikov. V ročnem pripomočku premikata abecedo v obe smeri, nastavita ustrezno preslikavo in po črkah razbereta sporočilo. Samodejnega dešifriranja ni. Razkrito sporočilo je `KODA JE PIRAMIDA`; v edino polje za odgovor zgoraj desno vneseta samo kodo **`PIRAMIDA`**. Strežniško preverjanje zaradi združljivosti še naprej sprejme tudi celoten stavek, ne glede na velikost črk in odvečne presledke.
 
 **Opomba za izvajalca:** ime datoteke ni koda; presledki in vrstni red omogočajo preverjanje smiselnosti treh besed. Če dobita drug rezultat, naj primerjata smer šifriranja s smerjo dešifriranja. Številke in ločila se ne spreminjajo.
 
-- Namig 1: »V zgodbi poišči, kako je prejemnik razbral Cezarjevo sporočilo. Enak premik uporabi za svoj dokaz.«
+- Namig 1: »V zgodbi poišči, za koliko mest in v katero smer se premakneš. Z gumbom »Nazaj« nastavi ta premik, nato izberi prvo črko sporočila.«
 - Namig 2: »Pri dešifriranju se premakni za tri mesta nazaj: N postane K. Isto preslikavo uporabi za vse črke.«
 
 **Učni cilj:** iz zgodbe izluščiti podatek, ročno povezati šifrirane in izvirne črke ter razumeti stalni premik in obratno smer. Takšna šifra je primerna za osnove, ne za sodobno varovanje podatkov.
@@ -219,7 +219,7 @@ V edino polje za odgovor v sekciji **ODGOVOR** zgoraj desno par vpiše kodno ime
 
 »Odkril si projekt BRUCOVANJE.« potrdi cilj, zastavljen na začetku. Zaključek pokaže tri statistike: osem rešenih stopenj, čas in uporabljene namige. Pod njimi je vodoravna vrstica osmih obravnavanih tem; na ozkem zaslonu se pomika. Spodnja vprašanja in omejitve dokazov so gradivo za pogovor z izvajalcem.
 
-Na ločeni javni lestvici `/lestvica` se ekipe razvrstijo najprej po več rešenih izzivih, nato po manj uporabljenih namigih in nazadnje po krajšem času. Ob enakih treh vrednostih si delijo mesto. Podatki se med ogledom osvežujejo vsakih pet sekund; za ogled ni potreben začetek igre. Čas teče od začetka igre in se ustavi po rešitvi vseh osmih izzivov. Pri nedokončanem rezultatu teče tudi po ponastavitvi ali izteku seje. Ponoven ogled istega namiga števila ne poveča; tudi namig, prvič odprt po rešitvi njegove stopnje, ne poslabša rezultata. Zaključen rezultat ostane nespremenjen.
+Na ločeni javni lestvici `/lestvica` se ekipe razvrstijo najprej po več rešenih izzivih, nato po manj uporabljenih namigih in nazadnje po krajšem času. Ob enakih treh vrednostih si delijo mesto. Podatki se med ogledom osvežujejo vsakih pet sekund; za ogled ni potreben začetek igre. Čas teče od začetka igre in se ustavi po rešitvi vseh osmih izzivov. Pri nedokončanem poskusu se čas ustavi ob potrditvi nove preiskave ali izteku seje; tak rezultat dobi oznako »Prekinjeno«. Ponoven ogled istega namiga števila ne poveča; tudi namig, prvič odprt po rešitvi njegove stopnje, ne poslabša rezultata. Zaključen rezultat ostane nespremenjen.
 
 Lestvica prikaže prvih 100 rezultatov in lasten rezultat tudi zunaj tega izbora. Ena igra ima en zapis, ki nastane že ob začetku z rezultatom 0/8. Ponastavitev odpre novo prazno sejo, vnos imena pa ustvari nov rezultat. Stari rezultat z njegovim imenom ostane, tudi če poteče seja ali se izbriše piškotek. Ime skupine je javno, zato pred delavnico dogovori izmišljene oznake. Ekipe lahko uporabljajo namige, ko jih potrebujejo; razvrstitev naj bo izhodišče za pogovor o postopku in ne ocena znanja.
 
@@ -236,4 +236,4 @@ Možne usmeritve: preverjanje nenavadnih zahtev po neodvisnem kanalu, upravljaln
 
 Napačen odgovor ostane v polju in omogoča nov poskus. Pri omrežni napaki naj par počaka na povezavo in ponovi oddajo, brez ponastavitve. Ob vrnitvi v isti brskalnik izbere »Nadaljuj preiskavo«. Če je bil piškotek izbrisan ali se je uporabljalo zasebno okno, povezave z anonimno sejo ni mogoče obnoviti prek imena ekipe. Ne uporabljaj skupnega javnega računalnika za več hkratnih ekip v istem profilu brskalnika.
 
-Če stara seja še nima imena, ga par dopolni in nadaljuje z ohranjenim napredkom. Napredka ne briši s premikanjem baze ali ponovno objavo. Gumb za ponastavitev po potrditvi odpre novo igro; prejšnjega rezultata na lestvici ne izbriše. V primeru težave s strežnikom skrbnik preveri `/api/health` in dnevnik procesa, ne da bi javno delil produkcijsko okolje ali podatkovno bazo.
+Če stara seja še nima imena, ga par dopolni in nadaljuje z ohranjenim napredkom. Napredka ne briši s premikanjem baze ali ponovno objavo. Gumb za ponastavitev po potrditvi konča trenutni poskus, ustavi njegov čas in odpre novo igro. Prejšnji rezultat ostane na lestvici, stare seje pa ni več mogoče nadaljevati. V primeru težave s strežnikom skrbnik preveri `/api/health` in dnevnik procesa, ne da bi javno delil produkcijsko okolje ali podatkovno bazo.

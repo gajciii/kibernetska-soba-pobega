@@ -19,6 +19,7 @@ export interface LeaderboardEntry {
   hintCount: number;
   elapsedSeconds: number;
   completed: boolean;
+  stopped: boolean;
   isCurrent: boolean;
 }
 export interface LeaderboardResponse {

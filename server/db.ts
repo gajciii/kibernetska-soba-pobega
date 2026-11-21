@@ -40,7 +40,7 @@ export async function openDatabase(connectionString: string, schema?: string) {
     await client.query('CREATE TABLE IF NOT EXISTS schema_version (version integer PRIMARY KEY, applied_at timestamptz NOT NULL DEFAULT now())');
     const versions = await client.query<{ version: number }>('SELECT version FROM schema_version ORDER BY version DESC LIMIT 1');
     const version = versions.rows[0]?.version ?? 0;
-    if (version > 3) throw new Error('Baza zahteva novejšo različico aplikacije.');
+    if (version > 4) throw new Error('Baza zahteva novejšo različico aplikacije.');
     if (version < 1) {
       await client.query(`CREATE TABLE game_sessions (
         token_hash char(64) PRIMARY KEY, csrf char(64) NOT NULL,
@@ -77,6 +77,16 @@ export async function openDatabase(connectionString: string, schema?: string) {
       )`);
       await client.query('INSERT INTO schema_version(version) VALUES (3)');
     }
+    if (version < 4) {
+      await client.query('ALTER TABLE leaderboard_runs ADD COLUMN stopped_at timestamptz');
+      // Za stare ponastavljene poskuse poznamo le čas zadnjega shranjevanja.
+      await client.query(`UPDATE leaderboard_runs r SET stopped_at=GREATEST(r.started_at,r.updated_at)
+        WHERE r.completed_at IS NULL AND NOT EXISTS (SELECT 1 FROM game_sessions s WHERE s.run_id=r.id)`);
+      await client.query('INSERT INTO schema_version(version) VALUES (4)');
+    }
+    await client.query(`UPDATE leaderboard_runs r SET stopped_at=GREATEST(r.started_at,s.expires_at)
+      FROM game_sessions s WHERE s.run_id=r.id AND s.expires_at<now()
+      AND r.completed_at IS NULL AND r.stopped_at IS NULL`);
     await client.query('DELETE FROM game_sessions WHERE expires_at < now()');
     await client.query('COMMIT');
   } catch (error) { await client.query('ROLLBACK'); client.release(); await pool.end(); throw error; }
@@ -123,6 +133,8 @@ export async function resetSession(pool: pg.Pool, hash: string, replacement: Ses
       await client.query('COMMIT');
       return { row: previous, replaced: false };
     }
+    await client.query(`UPDATE leaderboard_runs SET stopped_at=GREATEST(started_at,clock_timestamp())
+      WHERE id=$1 AND completed_at IS NULL AND stopped_at IS NULL`, [previous.run_id]);
     const fresh = await client.query<SessionRow>('INSERT INTO game_sessions(token_hash,csrf,expires_at,next_start_at) VALUES($1,$2,$3,$4) RETURNING *', [replacement.tokenHash, replacement.csrf, replacement.expiresAt, previous.next_start_at]);
     await client.query('DELETE FROM game_sessions WHERE token_hash=$1', [hash]);
     await client.query('COMMIT');
@@ -133,17 +145,19 @@ export async function resetSession(pool: pg.Pool, hash: string, replacement: Ses
 
 interface RankedRun {
   id: string; team_name: string; solved_count: number; hint_count: number;
-  elapsed_seconds: number; completed: boolean; is_current: boolean;
+  elapsed_seconds: number; completed: boolean; stopped: boolean; is_current: boolean;
   rank: number; position: number; total: number;
 }
 
 export async function readLeaderboard(pool: pg.Pool, tokenHash?: string): Promise<LeaderboardResponse> {
   const updatedAt = new Date().toISOString();
   const result = await pool.query<RankedRun>(`WITH scores AS (
-      SELECT id,team_name,solved_count,hint_count,started_at,completed_at IS NOT NULL AS completed,
-        GREATEST(0,FLOOR(EXTRACT(EPOCH FROM (COALESCE(completed_at,$1::timestamptz)-started_at))))::integer AS elapsed_seconds,
-        COALESCE(id=(SELECT run_id FROM game_sessions WHERE token_hash=$2 AND expires_at>$1::timestamptz),false) AS is_current
-      FROM leaderboard_runs
+      SELECT r.id,r.team_name,r.solved_count,r.hint_count,r.started_at,r.completed_at IS NOT NULL AS completed,
+        (r.completed_at IS NULL AND (r.stopped_at IS NOT NULL OR s.run_id IS NULL OR s.expires_at<=$1::timestamptz)) AS stopped,
+        GREATEST(0,FLOOR(EXTRACT(EPOCH FROM (COALESCE(r.completed_at,r.stopped_at,
+          CASE WHEN s.run_id IS NULL THEN r.updated_at ELSE LEAST(s.expires_at,$1::timestamptz) END)-r.started_at))))::integer AS elapsed_seconds,
+        COALESCE(s.token_hash=$2 AND s.expires_at>$1::timestamptz,false) AS is_current
+      FROM leaderboard_runs r LEFT JOIN game_sessions s ON s.run_id=r.id
     ), ranked AS (
       SELECT *, RANK() OVER (ORDER BY solved_count DESC,hint_count,elapsed_seconds)::integer AS rank,
         ROW_NUMBER() OVER (ORDER BY solved_count DESC,hint_count,elapsed_seconds,started_at,id)::integer AS position,
@@ -152,7 +166,7 @@ export async function readLeaderboard(pool: pg.Pool, tokenHash?: string): Promis
     ) SELECT * FROM ranked WHERE position<=100 OR is_current ORDER BY position`, [updatedAt, tokenHash ?? null]);
   const entry = (row: RankedRun): LeaderboardEntry => ({
     id: row.id, rank: row.rank, teamName: row.team_name, solvedCount: row.solved_count,
-    hintCount: row.hint_count, elapsedSeconds: row.elapsed_seconds, completed: row.completed, isCurrent: row.is_current,
+    hintCount: row.hint_count, elapsedSeconds: row.elapsed_seconds, completed: row.completed, stopped: row.stopped, isCurrent: row.is_current,
   });
   return {
     entries: result.rows.filter(row => row.position <= 100).map(entry),
