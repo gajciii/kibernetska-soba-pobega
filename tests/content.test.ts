@@ -87,7 +87,7 @@ describe('strežniško preverjanje osmih stopenj', () => {
     for (const value of ['11:15', '11:15:00', '10:42:00', '1042', '10 : 42', '010:42', '10.42.17']) {
       expect(validateAnswer(5, value)).toBe(false);
     }
-    expect(getStage(5)?.metadata).toBe('FileName: hodnik.jpg\nDateTimeOriginal: 2026:11:20 10:42:17\nOffsetTimeOriginal: +01:00\nModifyDate: 2026:11:20 11:15:00');
+    expect(getStage(5)?.metadata).toBe('Ime datoteke: hodnik.jpg\nVelikost: 2,4 MB\nČas nastanka posnetka: 20. 11. 2026 10:42:17\nČas spremembe: 20. 11. 2026 11:15:00\nČasovni pas: UTC+01:00');
   });
 
   it('ločuje uspešen prenos zaupne datoteke od zavrnjenega prenosa, ogleda in javne datoteke', () => {
@@ -164,22 +164,48 @@ describe('razširjeni dokazi ostanejo skladni z obstoječimi rešitvami', () => 
     expect(choices.map(choice => validateAnswer(7, choice.id))).toEqual([false, false, true]);
   });
 
-  it('ločuje metapodatke zahtevane fotografije od druge fotografije in posnetka zaslona', () => {
+  it('med dvanajstimi slikami poveže predzadnjo fotografijo z opisom in slovenskimi metapodatki', () => {
     const stage = getStage(5)!;
     const artifacts = stage.artifacts!;
-    expect(artifacts).toHaveLength(3);
-    expect(new Set(artifacts.map(artifact => artifact.id)).size).toBe(3);
-    expect(new Set(artifacts.map(artifact => artifact.name)).size).toBe(3);
-    const required = artifacts.find(artifact => artifact.name === 'hodnik.jpg')!;
+    expect(artifacts).toHaveLength(12);
+    expect(new Set(artifacts.map(artifact => artifact.id)).size).toBe(12);
+    expect(artifacts.map(artifact => artifact.name)).toEqual([
+      'ucilnica.jpg', 'dvorisce.jpg', 'knjiznica.jpg',
+      'telovadnica.jpg', 'projekt.jpg', 'stopnisce.jpg', 'obvestilo.png', 'gore.jpg',
+      'jedilnica.jpg', 'vhod.jpg', 'hodnik.jpg', 'tabla.jpg',
+    ]);
+    const required = artifacts[10];
+    expect(required.id).toBe('hodnik');
     expect(required.metadata).toBe(stage.metadata);
-    expect(stage.question).toContain(required.name);
+    expect(required.description).toContain('rdečim nahrbtnikom');
+    expect(stage.intro).toContain('rdečim nahrbtnikom');
+    expect(stage.intro).toContain('11:15');
+    expect(stage.intro).toContain('metapodatki');
+    expect(stage.intro).not.toMatch(/hodnik\.jpg|10:42|Čas nastanka posnetka/u);
+    expect(stage.question).toBe('Ob kateri uri je bila fotografija dejansko posneta? Odgovori v obliki HH:MM.');
     for (const artifact of artifacts) {
-      expect(artifact.metadata).toContain(`FileName: ${artifact.name}`);
+      const photo = artifact.kind === 'photo';
+      expect(artifact.metadata).toContain(`Ime datoteke: ${artifact.name}`);
+      expect(artifact.metadata).toContain(`Velikost: ${artifact.size}`);
+      expect(artifact.metadata).toContain('Časovni pas: UTC+01:00');
+      expect(artifact.metadata.split('\n').map(line => line.split(':')[0])).toEqual([
+        'Ime datoteke', 'Velikost', photo ? 'Čas nastanka posnetka' : 'Čas ustvarjanja', 'Čas spremembe', 'Časovni pas',
+      ]);
       expect(artifact.size).toBeTruthy();
       expect(artifact.description).toBeTruthy();
+      expect(artifact.alt).toBeTruthy();
+      const folder = artifact.id === 'gore' ? 'profile' : 'evidence';
+      expect(artifact.preview).toBe(`/${folder}/${artifact.name}`);
       if (artifact.name !== 'hodnik.jpg') expect(artifact.metadata).not.toContain('10:42');
     }
-    expect(artifacts.find(artifact => artifact.name === 'obvestilo.png')!.metadata).not.toContain('DateTimeOriginal:');
+    expect(artifacts[0].metadata).toContain('Čas nastanka posnetka: 20. 11. 2026 08:16:09');
+    expect(artifacts[0].metadata).toContain('Čas spremembe: 20. 11. 2026 08:25:44');
+    expect(artifacts[6].metadata).toContain('Čas ustvarjanja: 20. 11. 2026 09:51:06');
+    expect(artifacts[6].metadata).toContain('Čas spremembe: 20. 11. 2026 10:03:28');
+    expect(artifacts[6].metadata).not.toContain('Čas nastanka posnetka');
+    expect(JSON.stringify(stage)).not.toMatch(/correctAnswer|isCorrect|DateTimeOriginal|ModifyDate/u);
+    expect(getHint(5, 2)).toContain('Čas nastanka posnetka');
+    expect(getExplanation(5)).toContain('ne pove, kaj je bilo spremenjeno');
     for (const otherTime of ['08:16', '08:25', '09:51', '10:03', '11:15']) expect(validateAnswer(5, otherTime)).toBe(false);
   });
 

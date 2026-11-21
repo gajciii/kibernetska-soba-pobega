@@ -44,6 +44,8 @@ export interface EvidenceArtifact {
   kind: 'photo' | 'document' | 'image';
   size: string;
   description: string;
+  preview: string;
+  alt: string;
   metadata: string;
 }
 export interface PublicProfile {

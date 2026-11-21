@@ -108,23 +108,26 @@ Dijaki sestavijo hipotetično predvidljivo geslo za ta učni primer. Ne iščejo
 
 ## 5. Fotografija skriva namig
 
-Pregledovalnik vsebuje **tri datoteke**. Na začetku ni izbrana nobena: par naj izbere `hodnik.jpg`, nato uporabi »Poglej metapodatke«. Izpis je urejen v poimenovana polja. Za zahtevano fotografijo so vrednosti:
+Luka je poslal mapo šolskih in osebnih slik ter trdi, da je hodnik pred računalniško učilnico z rdečim nahrbtnikom fotografiral ob **11:15**. Uvod na kratko pojasni, da so metapodatki podatki, ki spremljajo datoteko, na primer ime, velikost in zapisani časi. Navodilo se glasi: »Ob kateri uri je bila fotografija dejansko posneta? Odgovori v obliki HH:MM.« Imena datoteke in pravilnega polja uvod ne razkrije; par fotografijo najprej prepozna po opisu.
+
+Pregledovalnik vsebuje **12 datotek** v tem vrstnem redu: `ucilnica.jpg`, `dvorisce.jpg`, `knjiznica.jpg`, `telovadnica.jpg`, `projekt.jpg`, `stopnisce.jpg`, `obvestilo.png`, `gore.jpg`, `jedilnica.jpg`, `vhod.jpg`, **`hodnik.jpg`**, `tabla.jpg`. Iskana fotografija je enajsta, torej predzadnja. Pri njenem pregledu so na voljo slovensko poimenovani metapodatki:
 
 ```text
-FileName: hodnik.jpg
-DateTimeOriginal: 2026:11:20 10:42:17
-OffsetTimeOriginal: +01:00
-ModifyDate: 2026:11:20 11:15:00
+Ime datoteke: hodnik.jpg
+Velikost: 2,4 MB
+Čas nastanka posnetka: 20. 11. 2026 10:42:17
+Čas spremembe: 20. 11. 2026 11:15:00
+Časovni pas: UTC+01:00
 ```
 
-Pravilen odgovor je **`10:42`**. Dovoljeni sta tudi obliki `10.42` in `10:42:17`. `11:15` je čas spremembe datoteke in ne čas nastanka posnetka.
+Pravilen odgovor je **`10:42`**. Dovoljeni sta tudi obliki `10.42` in `10:42:17`. Zapisani čas nastanka posnetka je **10:42:17**, `11:15` pa je čas spremembe. Poznejše urejanje ali ponovno shranjevanje lahko spremeni čas datoteke, zato čas spremembe ne pomeni nujno časa fotografiranja. Iz njega tudi ni mogoče razbrati, kaj je bilo spremenjeno.
 
-Drugi datoteki sta `ucilnica.jpg` (nastanek ob 08:16:09, sprememba ob 08:25:44) in `obvestilo.png` (nastanek posnetka zaslona ob 09:51:06, sprememba ob 10:03:28, brez polja `DateTimeOriginal`). Njuni časi niso odgovor na vprašanje o hodniku. Vsi trije izpisi in lokalne ilustracije so jasno označeni učni primeri; aplikacija ne bere resničnega EXIF-a.
+Vsaka datoteka ima svoj pripravljeni izpis. `ucilnica.jpg` ohrani nastanek ob 08:16:09 in spremembo ob 08:25:44. Posnetek zaslona `obvestilo.png` ima **Čas ustvarjanja** 09:51:06 in spremembo 10:03:28, nima pa polja **Čas nastanka posnetka**. Druge slike ne vsebujejo ciljnega časa. Izpisi so učni podatki, aplikacija jih ne bere iz dejanskega EXIF-a ustvarjenih predogledov; tudi prikazane velikosti opisujejo datoteke v zgodbi.
 
-- Namig 1: »Preveri, da je izbrana datoteka hodnik.jpg. V njenem izpisu loči čas nastanka posnetka od časa spremembe datoteke.«
-- Namig 2: »V metapodatkih hodnik.jpg poišči DateTimeOriginal in prepiši samo uro ter minute.«
+- Namig 1: »Med slikami poišči hodnik z rdečim nahrbtnikom in odpri njegove metapodatke. Čas poznejše spremembe ni nujno čas fotografiranja.«
+- Namig 2: »Pri datoteki hodnik.jpg primerjaj polji Čas nastanka posnetka in Čas spremembe. V odgovor prepiši uro in minute iz prvega.«
 
-**Učni cilj:** brati pravo polje in upoštevati pomen metapodatkov. Časovni odmik je izpisan; ni treba preračunavati v UTC. Metapodatki lahko manjkajo ali so spremenjeni, zato sami niso nezmotljiv dokaz.
+**Učni cilj:** prepoznati pravi dokaz in razlikovati nastanek posnetka od poznejše spremembe datoteke. Za izvajalko: polje »Čas nastanka posnetka« predstavlja pomen `DateTimeOriginal`, »Čas spremembe« pa `ModifyDate`. Časovni odmik je izpisan; ni treba preračunavati v UTC. Metapodatki lahko manjkajo, so napačno nastavljeni ali spremenjeni, zato sami niso nezmotljiv dokaz. Razlika med časoma ne dokazuje namernega zavajanja, posega v vsebino slike ali identitete osebe, ki jo je spreminjala.
 
 ## 6. Kdo je dostopal do skrivne datoteke?
 

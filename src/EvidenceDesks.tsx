@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import type { Choice, EvidenceArtifact } from '../shared/types';
 import './evidence-desks.css';
 
@@ -7,15 +7,52 @@ type AnswerProps = { answer: string; onAnswer: (answer: string) => void; disable
 export function MetadataDesk({ artifacts }: { artifacts: EvidenceArtifact[] }) {
   const [selectedId, setSelectedId] = useState<string | null>(null);
   const [properties, setProperties] = useState(false);
+  const [query, setQuery] = useState('');
+  const deskRef = useRef<HTMLDivElement>(null);
+  const headingRef = useRef<HTMLHeadingElement>(null);
+  const searchRef = useRef<HTMLInputElement>(null);
+  const filtered = artifacts.filter(item => item.name.toLocaleLowerCase('sl').includes(query.trim().toLocaleLowerCase('sl')));
   const selected = artifacts.find(item => item.id === selectedId);
-  return <div className="file-desk"><header className="desk-heading"><code>/dokazi/priloge/</code><span className="desk-counter">{artifacts.length} datoteke</span></header>
-    <div className="file-workspace"><nav className="artifact-list" aria-label="Dokazne datoteke">{artifacts.map(artifact => <button key={artifact.id} aria-pressed={selectedId === artifact.id} onClick={() => { setSelectedId(artifact.id); setProperties(false); }}><span className="artifact-extension" aria-hidden="true">{artifact.name.split('.').pop()}</span><span><strong>{artifact.name}</strong><small>{artifact.size}</small></span></button>)}</nav>
-      <div className="artifact-inspector" aria-live="polite">{selected ? <>
-        <div className="artifact-toolbar"><h4>{selected.name}</h4><button className="text-button" onClick={() => setProperties(previous => !previous)} aria-expanded={properties} aria-controls="metadata">{properties ? 'Poglej predogled' : 'Poglej metapodatke'}</button></div>
-        {properties ? <div id="metadata" className="artifact-properties"><dl>{selected.metadata.split('\n').map((line, index) => { const colon = line.indexOf(':'); return <div key={index}><dt>{line.slice(0, colon)}</dt><dd><code>{line.slice(colon + 1).trim()}</code></dd></div>; })}</dl></div> : <>{selected.kind === 'photo' ? <figure className="artifact-photo"><img src={`${import.meta.env.BASE_URL}${selected.id === 'hodnik' ? 'hodnik' : 'ucilnica'}.svg`} alt={selected.id === 'hodnik' ? 'Učna ilustracija praznega šolskega hodnika' : 'Učna ilustracija prazne računalniške učilnice'}/><figcaption>{selected.description}</figcaption></figure> : <div className="artifact-document"><h4>{selected.name}</h4><p>{selected.description}</p></div>}</>}
-      </> : <div className="empty-desk artifact-empty"><p>Izberita datoteko.</p></div>}</div>
+  const assetUrl = (path: string) => `${import.meta.env.BASE_URL}${path.replace(/^\/+/, '')}`;
+
+  useEffect(() => {
+    if (selectedId && deskRef.current && deskRef.current.clientWidth <= 700) {
+      headingRef.current?.focus({ preventScroll: true });
+      headingRef.current?.scrollIntoView({ block: 'nearest', behavior: 'instant' });
+    }
+  }, [selectedId]);
+
+  function changeQuery(value: string) {
+    setQuery(value);
+    if (selected && !selected.name.toLocaleLowerCase('sl').includes(value.trim().toLocaleLowerCase('sl'))) {
+      setSelectedId(null);
+      setProperties(false);
+    }
+  }
+
+  return <div className="file-desk" ref={deskRef}>
+    <header className="file-toolbar">
+      <div className="file-breadcrumb" aria-label="Mapa Dokazi, Fotografije"><FileIcon name="folder"/><span>Dokazi</span><span className="file-breadcrumb-divider" aria-hidden="true">/</span><strong>Fotografije</strong></div>
+      <div className="file-search"><FileIcon name="search"/><input ref={searchRef} type="search" aria-label="Poišči datoteko" placeholder="Poišči datoteko" value={query} onChange={event => changeQuery(event.target.value)}/>{query && <button type="button" aria-label="Počisti iskanje" onClick={() => { changeQuery(''); searchRef.current?.focus(); }}><FileIcon name="close"/></button>}</div>
+    </header>
+    <div className="file-workspace">
+      <div className="file-folder">
+        <nav className="artifact-list" aria-label="Dokazne datoteke">{filtered.map(artifact => <button type="button" key={artifact.id} aria-label={`Odpri datoteko ${artifact.name}`} aria-pressed={selectedId === artifact.id} onClick={() => { setSelectedId(artifact.id); setProperties(false); }}><span className="artifact-thumbnail"><img src={assetUrl(artifact.preview)} alt="" loading="lazy"/></span><strong>{artifact.name}</strong><small>{artifact.size}</small></button>)}</nav>
+        {!filtered.length && <div className="artifact-search-empty"><FileIcon name="search"/><p>Ni datotek s tem imenom.</p></div>}
+      </div>
+      <section className="artifact-inspector" aria-label="Pregled izbrane datoteke">{selected ? <>
+        <div className="artifact-toolbar"><div><span>Izbrana datoteka</span><h4 ref={headingRef} tabIndex={-1}>{selected.name}</h4><small>{selected.size}</small></div><button type="button" onClick={() => setProperties(previous => !previous)} aria-expanded={properties} aria-controls="artifact-view">{properties ? 'Poglej predogled' : 'Poglej metapodatke'}</button></div>
+        <div id="artifact-view">{properties ? <div id="metadata" className="artifact-properties"><h5>Lastnosti datoteke</h5><dl>{selected.metadata.split('\n').filter(line => line.includes(':')).map((line, index) => { const colon = line.indexOf(':'); return <div key={index}><dt>{line.slice(0, colon).trim()}</dt><dd>{line.slice(colon + 1).trim()}</dd></div>; })}</dl></div> : <figure className="artifact-photo"><img src={assetUrl(selected.preview)} alt={selected.alt}/><figcaption>{selected.description}</figcaption></figure>}</div>
+      </> : <div className="artifact-empty"><FileIcon name="image"/><h4>Predogled datoteke</h4><p>Izberita fotografijo iz mape.</p></div>}</section>
     </div>
+    <footer className="file-status"><span role="status">{query.trim() ? `${filtered.length} od ${artifacts.length} datotek` : `${artifacts.length} datotek`}</span><span>{selected ? `Izbrano: ${selected.name}` : 'Ni izbrane datoteke'}</span></footer>
   </div>;
+}
+
+function FileIcon({ name }: { name: 'folder' | 'search' | 'close' | 'image' }) {
+  return <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+    {name === 'folder' ? <path d="M3 7V5h6l2 2h10v12H3V7Z"/> : name === 'search' ? <><circle cx="10.5" cy="10.5" r="6.5"/><path d="m16 16 5 5"/></> : name === 'close' ? <path d="m6 6 12 12M18 6 6 18"/> : <><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8" cy="8" r="1.5"/><path d="m3 17 5-5 4 4 4-6 5 7"/></>}
+  </svg>;
 }
 
 export function BrowserDesk({ choices, answer, onAnswer, disabled }: { choices: Choice[] } & AnswerProps) {

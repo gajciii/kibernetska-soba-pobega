@@ -1,0 +1,78 @@
+{
+  "mode": "Built-in image_gen; generated original photographs",
+  "date": "2026-11-21",
+  "web_export": "JPEG quality 82; original generated PNGs preserved",
+  "assets": [
+    {
+      "name": "ucilnica",
+      "prompt": "Use case: photorealistic-natural. Asset type: local evidence photograph in a fictional Slovenian school investigation game, displayed as a thumbnail and enlarged preview. Primary request: a casual smartphone photograph of an empty secondary-school computer classroom with rows of black monitors and light wooden desks, windows along one side, everyday teaching space. Ordinary believable school interior or surroundings, pale cream walls and light wooden furnishings where applicable, natural daylight mixed with normal indoor light. Real textures and subtle phone-camera imperfections, not polished architectural advertising. Landscape 3:2 framing. No people, no logos, no watermark, no timestamps, no clocks, no legible text, no interface. No red backpacks.",
+      "source": "/Users/gajagujt/.codex/generated_images/01a1fd8d-0314-7423-8a24-f0c249c4bc5d/exec-9bfca668-7ae0-417b-949e-177f8e88cec9.png",
+      "file": "public/evidence/ucilnica.jpg"
+    },
+    {
+      "name": "dvorisce",
+      "prompt": "Use case: photorealistic-natural. Asset type: local evidence photograph in a fictional Slovenian school investigation game, displayed as a thumbnail and enlarged preview. Primary request: a casual smartphone photograph of a quiet secondary-school courtyard with paved walkways, a few trees and bike racks beside a modest school building. Ordinary believable school interior or surroundings, pale cream walls and light wooden furnishings where applicable, natural daylight mixed with normal indoor light. Real textures and subtle phone-camera imperfections, not polished architectural advertising. Landscape 3:2 framing. No people, no logos, no watermark, no timestamps, no clocks, no legible text, no interface. No red backpacks.",
+      "source": "/Users/gajagujt/.codex/generated_images/01a1fd8d-0314-7423-8a24-f0c249c4bc5d/exec-b49780a8-bf66-4bc9-a03e-fd74e4a5b71c.png",
+      "file": "public/evidence/dvorisce.jpg"
+    },
+    {
+      "name": "knjiznica",
+      "prompt": "Use case: photorealistic-natural. Asset type: local evidence photograph in a fictional Slovenian school investigation game, displayed as a thumbnail and enlarged preview. Primary request: a casual smartphone photograph of a small secondary-school library with rows of bookshelves and wooden reading tables by a window, colored book spines without legible titles. Ordinary believable school interior or surroundings, pale cream walls and light wooden furnishings where applicable, natural daylight mixed with normal indoor light. Real textures and subtle phone-camera imperfections, not polished architectural advertising. Landscape 3:2 framing. No people, no logos, no watermark, no timestamps, no clocks, no legible text, no interface. No red backpacks.",
+      "source": "/Users/gajagujt/.codex/generated_images/01a1fd8d-0314-7423-8a24-f0c249c4bc5d/exec-d9346c82-4cc8-4a8b-b4e9-ad9ae8dea946.png",
+      "file": "public/evidence/knjiznica.jpg"
+    },
+    {
+      "name": "telovadnica",
+      "prompt": "Use case: photorealistic-natural. Asset type: local evidence photograph in a fictional Slovenian school investigation game, displayed as a thumbnail and enlarged preview. Primary request: a casual smartphone photograph of an empty secondary-school gym with a varnished wooden floor, basketball hoop, wall bars and simple court markings. Ordinary believable school interior or surroundings, pale cream walls and light wooden furnishings where applicable, natural daylight mixed with normal indoor light. Real textures and subtle phone-camera imperfections, not polished architectural advertising. Landscape 3:2 framing. No people, no logos, no watermark, no timestamps, no clocks, no legible text, no interface. No red backpacks.",
+      "source": "/Users/gajagujt/.codex/generated_images/01a1fd8d-0314-7423-8a24-f0c249c4bc5d/exec-14278a6d-b78b-4a16-ad8d-cdf4cd0b3fa4.png",
+      "file": "public/evidence/telovadnica.jpg"
+    },
+    {
+      "name": "projekt",
+      "prompt": "Use case: photorealistic-natural. Asset type: local evidence photograph in a fictional Slovenian school investigation game, displayed as a thumbnail and enlarged preview. Primary request: a casual smartphone photograph of a small student robotics project on a school worktable: compact wheeled robot kit, a small circuit board and neatly placed tools, seen at a casual angle. Ordinary believable school interior or surroundings, pale cream walls and light wooden furnishings where applicable, natural daylight mixed with normal indoor light. Real textures and subtle phone-camera imperfections, not polished architectural advertising. Landscape 3:2 framing. No people, no logos, no watermark, no timestamps, no clocks, no legible text, no interface. No red backpacks.",
+      "source": "/Users/gajagujt/.codex/generated_images/01a1fd8d-0314-7423-8a24-f0c249c4bc5d/exec-2537e3b2-4e32-4159-ac12-3cbc877ebda1.png",
+      "file": "public/evidence/projekt.jpg"
+    },
+    {
+      "name": "stopnisce",
+      "prompt": "Use case: photorealistic-natural. Asset type: local evidence photograph in a fictional Slovenian school investigation game, displayed as a thumbnail and enlarged preview. Primary request: a casual smartphone photograph of a secondary-school stairwell with terrazzo steps, simple metal handrails and pale walls, looking upwards toward the next landing. Ordinary believable school interior or surroundings, pale cream walls and light wooden furnishings where applicable, natural daylight mixed with normal indoor light. Real textures and subtle phone-camera imperfections, not polished architectural advertising. Landscape 3:2 framing. No people, no logos, no watermark, no timestamps, no clocks, no legible text, no interface. No red backpacks.",
+      "source": "/Users/gajagujt/.codex/generated_images/01a1fd8d-0314-7423-8a24-f0c249c4bc5d/exec-df5cd322-2d63-4eea-b135-4c5cab35118a.png",
+      "file": "public/evidence/stopnisce.jpg"
+    },
+    {
+      "name": "jedilnica",
+      "prompt": "Use case: photorealistic-natural. Asset type: local evidence photograph in a fictional Slovenian school investigation game, displayed as a thumbnail and enlarged preview. Primary request: a casual smartphone photograph of an empty school cafeteria with simple light wooden tables and chairs, soft daylight from broad windows. Ordinary believable school interior or surroundings, pale cream walls and light wooden furnishings where applicable, natural daylight mixed with normal indoor light. Real textures and subtle phone-camera imperfections, not polished architectural advertising. Landscape 3:2 framing. No people, no logos, no watermark, no timestamps, no clocks, no legible text, no interface. No red backpacks.",
+      "source": "/Users/gajagujt/.codex/generated_images/01a1fd8d-0314-7423-8a24-f0c249c4bc5d/exec-376bbc63-f6b4-41bc-acf3-f2daca177954.png",
+      "file": "public/evidence/jedilnica.jpg"
+    },
+    {
+      "name": "vhod",
+      "prompt": "Use case: photorealistic-natural. Asset type: local evidence photograph in a fictional Slovenian school investigation game, displayed as a thumbnail and enlarged preview. Primary request: a casual smartphone photograph of the entrance to a modest secondary-school building, glass double doors, pale facade, paved steps and a simple covered entrance. Ordinary believable school interior or surroundings, pale cream walls and light wooden furnishings where applicable, natural daylight mixed with normal indoor light. Real textures and subtle phone-camera imperfections, not polished architectural advertising. Landscape 3:2 framing. No people, no logos, no watermark, no timestamps, no clocks, no legible text, no interface. No red backpacks.",
+      "source": "/Users/gajagujt/.codex/generated_images/01a1fd8d-0314-7423-8a24-f0c249c4bc5d/exec-b3f52baa-d0c7-485e-9268-69a3eef08d18.png",
+      "file": "public/evidence/vhod.jpg"
+    },
+    {
+      "name": "hodnik",
+      "prompt": "Use case: photorealistic-natural. Asset type: local evidence photograph in a fictional Slovenian school investigation game, displayed as a thumbnail and enlarged preview. Primary request: a casual smartphone photograph of an empty secondary-school hallway outside a computer classroom: one unmistakable bright red backpack rests on a wooden bench beside the classroom door; through the partly open door, a few computer monitors are visible. Make the red backpack plainly visible as the central story clue. No other bags. Ordinary believable school interior or surroundings, pale cream walls and light wooden furnishings where applicable, natural daylight mixed with normal indoor light. Real textures and subtle phone-camera imperfections, not polished architectural advertising. Landscape 3:2 framing. No people, no logos, no watermark, no timestamps, no clocks, no legible text, no interface. Keep the red backpack large enough to recognize in a small thumbnail.",
+      "source": "/Users/gajagujt/.codex/generated_images/01a1fd8d-0314-7423-8a24-f0c249c4bc5d/exec-aa690c77-6eed-4de6-be50-44f80950ee31.png",
+      "file": "public/evidence/hodnik.jpg"
+    },
+    {
+      "name": "tabla",
+      "prompt": "Use case: photorealistic-natural. Asset type: local evidence photograph in a fictional Slovenian school investigation game, displayed as a thumbnail and enlarged preview. Primary request: a casual smartphone photograph of a casual close view of a school chalkboard with a few roughly drawn geometric diagrams and chalk on the tray, no readable words or numbers. Ordinary believable school interior or surroundings, pale cream walls and light wooden furnishings where applicable, natural daylight mixed with normal indoor light. Real textures and subtle phone-camera imperfections, not polished architectural advertising. Landscape 3:2 framing. No people, no logos, no watermark, no timestamps, no clocks, no legible text, no interface. No red backpacks.",
+      "source": "/Users/gajagujt/.codex/generated_images/01a1fd8d-0314-7423-8a24-f0c249c4bc5d/exec-145048f1-8535-43a1-904e-ec8343818bc6.png",
+      "file": "public/evidence/tabla.jpg"
+    }
+  ],
+  "reused_assets": [
+    {
+      "file": "public/profile/gore.jpg",
+      "source_manifest": "docs/profile-assets.json"
+    }
+  ],
+  "screenshot": {
+    "file": "public/evidence/obvestilo.png",
+    "source": "docs/metadata-notice.html",
+    "mode": "Code-native fictional school portal rendered with Playwright"
+  }
+}
