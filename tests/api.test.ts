@@ -489,6 +489,9 @@ describe('potek igre, namigi in shranjevanje', () => {
     const otherAfter = await other.agent.get('/api/session');
     expect(otherAfter.body).toEqual(otherBefore.body);
     team.csrf = reset.body.csrfToken;
+    await post(team, '/api/session', { teamName: 'Testna skupina' }).expect(429);
+    const freshHash = createHash('sha256').update(cookies[0].split(';')[0].split('=')[1]).digest('hex');
+    await pool.query('UPDATE game_sessions SET next_start_at=$1 WHERE token_hash=$2', [new Date(Date.now() - 1000), freshHash]);
     const fresh = await start(team);
     expect(fresh.solved).toEqual([]);
     expect(fresh.attempts).toEqual({});

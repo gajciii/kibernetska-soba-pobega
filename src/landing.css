@@ -74,6 +74,8 @@
 .landing .landing-start-button:disabled, .landing .landing-reset-button:disabled { opacity: .55; cursor: not-allowed; }
 .landing .landing-start-controls input:focus-visible, .landing .landing-start-button:focus-visible, .landing .landing-reset-button:focus-visible { outline: 2px solid #d3e2ff; outline-offset: 5px; }
 .landing-name-error { margin: .75rem 0 0; color: #ffd1de; font-size: .875rem; line-height: 1.6; }
+.landing-cooldown { margin: .85rem 0 0; color: #d0ddf3; font-size: .875rem; line-height: 1.7; }
+.landing-cooldown > span { font-family: var(--code); font-variant-numeric: tabular-nums; white-space: nowrap; }
 .landing-save-note { margin: .85rem 0 0; color: #b6c7e1; font-size: .875rem; line-height: 1.7; text-align: center; }
 
 .landing-resume { width: 100%; max-width: 600px; margin: 0; color: #bac7de; }

@@ -2,6 +2,19 @@ import { test, expect, type Page } from '@playwright/test';
 import { mkdtempSync, rmSync } from 'node:fs';
 import { join } from 'node:path';
 import { tmpdir } from 'node:os';
+import pg from 'pg';
+
+async function expireNewGameCooldown(page: Page) {
+  const databaseUrl = process.env.TEST_DATABASE_URL || 'postgres://operacija404@127.0.0.1:55432/operacija404_test';
+  if (new URL(databaseUrl).pathname !== '/operacija404_test') throw new Error('Premik omejitve je dovoljen samo v bazi operacija404_test.');
+  const bootstrap = await (await page.request.get('/api/session')).json();
+  const pool = new pg.Pool({ connectionString: databaseUrl, connectionTimeoutMillis: 5000, max: 1 });
+  try {
+    // Premaknemo le čas lastne testne seje; browser clock ne vpliva na strežnik.
+    const changed = await pool.query("UPDATE game_sessions SET next_start_at=now()-interval '1 second' WHERE csrf=$1 AND progress IS NULL", [bootstrap.csrfToken]);
+    expect(changed.rowCount).toBe(1);
+  } finally { await pool.end(); }
+}
 
 async function checkLayout(page: Page) {
   const width = await page.evaluate(() => ({ content: document.documentElement.scrollWidth, window: window.innerWidth }));
@@ -539,6 +552,7 @@ test('vseh osem stopenj, lokalni pripomočki, nadaljevanje in zaključek', async
 });
 
 test('ime skupine je obvezno in lestvica v živo spremlja nov poskus', async ({ page }, testInfo) => {
+  await page.clock.install();
   await page.goto('/');
   const name = page.getByLabel('Ime skupine', { exact: true });
   const startButton = page.getByRole('button', { name: 'Začni preiskavo', exact: true });
@@ -590,7 +604,15 @@ test('ime skupine je obvezno in lestvica v živo spremlja nov poskus', async ({ 
     await expect(page.getByRole('dialog')).toContainText('rezultat ostane na lestvici');
     await page.getByRole('button', { name: 'Začni nov poskus', exact: true }).click();
     await expect(page.getByLabel('Ime skupine', { exact: true })).toHaveValue('');
+    await page.getByLabel('Ime skupine', { exact: true }).fill('Novi poskus');
+    await expect(startButton).toBeDisabled();
+    await expect(page.getByTestId('start-cooldown')).toBeVisible();
+    await expireNewGameCooldown(page);
+    await page.clock.fastForward(61000);
+    await expect(startButton).toBeEnabled();
+    await expect(page.getByLabel('Ime skupine', { exact: true })).toHaveValue('Novi poskus');
     await begin(page, 'Novi poskus');
+    await expectFirstStage(page);
     const nextSession = (await (await page.request.get('/api/session')).json()).session;
     expect(nextSession.leaderboardId).not.toBe(initial.leaderboardId);
     const scores = await (await page.request.get('/api/leaderboard')).json();
@@ -603,6 +625,80 @@ test('ime skupine je obvezno in lestvica v živo spremlja nov poskus', async ({ 
     await page.goForward();
     await expect(page.getByRole('heading', { name: 'Lestvica skupin.', exact: true })).toBeVisible();
   } finally { await board.close(); }
+});
+
+test('časovna omejitev nove igre preživi osvežitev in 429 ohrani ime', async ({ page }, testInfo) => {
+  await page.clock.install();
+  await page.goto('/');
+  await begin(page, 'Prva preiskava');
+  await expectFirstStage(page);
+  await page.getByRole('button', { name: 'Operacija 404, začetni zaslon', exact: true }).click();
+  await expect(page.getByRole('button', { name: 'Nadaljuj preiskavo', exact: true })).toBeEnabled();
+  await expect(page.getByTestId('start-cooldown')).toHaveCount(0);
+  await page.getByRole('button', { name: 'Nadaljuj preiskavo', exact: true }).click();
+  await expectFirstStage(page);
+  await page.getByRole('button', { name: 'Ponastavi preiskavo', exact: true }).click();
+  await page.getByRole('button', { name: 'Začni nov poskus', exact: true }).click();
+
+  const name = page.getByLabel('Ime skupine', { exact: true });
+  const start = page.getByRole('button', { name: 'Začni preiskavo', exact: true });
+  const countdown = page.getByTestId('start-cooldown');
+  const announcement = page.locator('.landing-start-form [role="status"]');
+  await expect(start).toBeDisabled();
+  await expect(countdown).toHaveAttribute('aria-live', 'off');
+  await expect(countdown).toContainText('Novo preiskavo lahko začneš čez 00:');
+  await expect(name).toBeEditable();
+  await name.fill('Ohranjeno ime');
+  const firstAnnouncement = await announcement.textContent();
+  const firstCount = await countdown.textContent();
+  await page.clock.fastForward(1000);
+  await expect(countdown).not.toHaveText(firstCount!);
+  await expect(announcement).toHaveText(firstAnnouncement!);
+  await expect(name).toHaveValue('Ohranjeno ime');
+  let attemptedStarts = 0;
+  page.on('request', request => { if (request.method() === 'POST' && request.url().endsWith('/api/session')) attemptedStarts++; });
+  await name.press('Enter');
+  await page.clock.runFor(50);
+  expect(attemptedStarts).toBe(0);
+  await page.reload();
+  await expect(start).toBeDisabled();
+  await expect(countdown).toBeVisible();
+  await name.fill('Ohranjeno po zavrnitvi');
+
+  // Namenoma prehitimo samo uro brskalnika: pravi strežnik še vedno zavrne nov začetek.
+  await page.clock.fastForward(61000);
+  await expect(start).toBeEnabled();
+  const rejectedRequest = page.waitForResponse(response => response.request().method() === 'POST' && response.url().endsWith('/api/session'));
+  await start.click();
+  const rejected = await rejectedRequest;
+  expect(rejected.status()).toBe(429);
+  const failure = await rejected.json();
+  expect(failure.retryAfterSeconds).toBeGreaterThan(0);
+  expect(failure.retryAfterSeconds).toBeLessThanOrEqual(60);
+  await expect(start).toBeDisabled();
+  await expect(countdown).toBeVisible();
+  await expect(name).toHaveValue('Ohranjeno po zavrnitvi');
+  await expect(name).toBeEditable();
+  await checkLayout(page);
+  await page.screenshot({ path: `.local/qa-${testInfo.project.name}-start-cooldown.png` });
+  const narrowContext = await page.context().browser()!.newContext({ viewport: { width: 320, height: 900 }, storageState: await page.context().storageState() });
+  try {
+    const narrow = await narrowContext.newPage();
+    await narrow.goto(new URL('/', page.url()).href);
+    await expect(narrow.getByTestId('start-cooldown')).toBeVisible();
+    await narrow.getByLabel('Ime skupine', { exact: true }).fill('Ohranjeno po zavrnitvi');
+    await checkLayout(narrow);
+    await narrow.screenshot({ path: `.local/qa-${testInfo.project.name}-start-cooldown-320.png` });
+  } finally { await narrowContext.close(); }
+
+  await expireNewGameCooldown(page);
+  await page.clock.fastForward((failure.retryAfterSeconds + 1) * 1000);
+  await expect(start).toBeEnabled();
+  await expect(countdown).toHaveCount(0);
+  await expect(announcement).toHaveText('Zdaj lahko začneš novo preiskavo.');
+  await expect(name).toHaveValue('Ohranjeno po zavrnitvi');
+  await start.click();
+  await expectFirstStage(page);
 });
 
 test('pretvornik menja formate, ohrani vhod in podpira ročno kopiranje', async ({ page }) => {

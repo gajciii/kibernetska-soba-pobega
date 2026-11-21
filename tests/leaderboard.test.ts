@@ -42,7 +42,7 @@ async function leaderboard(team?: Team): Promise<LeaderboardResponse> {
 beforeAll(async () => { pool = await openDatabase(databaseUrl, schema); app = createApp(pool, config); });
 beforeEach(async () => {
   // Obe tabeli sta v edinstveni testni shemi, ne v deljeni aplikacijski shemi.
-  await pool.query('TRUNCATE game_sessions,leaderboard_runs');
+  await pool.query('TRUNCATE game_sessions,leaderboard_runs,request_limits');
   clock = Date.now();
   vi.useFakeTimers({ toFake: ['Date'] });
   vi.setSystemTime(clock);
@@ -140,6 +140,7 @@ describe('trajna skupna lestvica', () => {
     team.cookie = (reset.headers['set-cookie'] as unknown as string[])[0].split(';')[0];
     expect((await leaderboard(team)).currentEntry).toBeNull();
     expect((await leaderboard()).total).toBe(2);
+    vi.setSystemTime(clock + 60_000);
     const fresh = await post(team, '/api/session', { teamName: 'Nov poskus' }).expect(200);
     expect(fresh.body.session.leaderboardId).not.toBe(old.id);
     expect((await leaderboard()).total).toBe(3);
@@ -208,11 +209,12 @@ describe('trajna skupna lestvica', () => {
       await raw.end();
       migrated = await openDatabase(databaseUrl, legacySchema);
       const versions = await migrated.query('SELECT version FROM schema_version ORDER BY version');
-      expect(versions.rows.map(row => row.version)).toEqual([1, 2]);
+      expect(versions.rows.map(row => row.version)).toEqual([1, 2, 3]);
       const sessions = await migrated.query('SELECT * FROM game_sessions ORDER BY token_hash');
       expect(sessions.rows).toHaveLength(2);
       expect(sessions.rows[0].progress).toMatchObject(named);
       expect(sessions.rows[0].progress.leaderboardId).toBe(sessions.rows[0].run_id);
+      expect(sessions.rows[0].next_start_at.toISOString()).toBe(new Date(Date.parse(named.startedAt) + 60_000).toISOString());
       expect(sessions.rows[1].progress).toEqual(blank);
       expect(sessions.rows[1].run_id).toBeNull();
       const oldId = sessions.rows[0].run_id;

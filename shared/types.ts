@@ -27,7 +27,7 @@ export interface LeaderboardResponse {
   total: number;
   updatedAt: string;
 }
-export interface Bootstrap { csrfToken: string; session: SessionView | null; stages: StageSummary[] }
+export interface Bootstrap { csrfToken: string; session: SessionView | null; stages: StageSummary[]; nextStartAt: string | null }
 export interface Choice { id: string; label: string }
 export interface Mail {
   id: string;

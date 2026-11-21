@@ -1,8 +1,11 @@
 import pg from 'pg';
 import { randomUUID } from 'node:crypto';
 import type { LeaderboardEntry, LeaderboardResponse, SessionView } from '../shared/types.js';
+import { consumeIpLimit } from './rate-limit.js';
 
-export interface SessionRow { token_hash: string; csrf: string; progress: SessionView | null; expires_at: Date; run_id: string | null }
+export interface SessionRow { token_hash: string; csrf: string; progress: SessionView | null; expires_at: Date; run_id: string | null; next_start_at: Date | null }
+export interface SessionCredentials { tokenHash: string; csrf: string; expiresAt: Date }
+export class SessionUnavailableError extends Error { constructor() { super('Seja je bila že ponastavljena ali je potekla. Osveži stran.'); } }
 
 export function normalizeTeamName(value: unknown): string | undefined {
   if (typeof value !== 'string') return undefined;
@@ -37,7 +40,7 @@ export async function openDatabase(connectionString: string, schema?: string) {
     await client.query('CREATE TABLE IF NOT EXISTS schema_version (version integer PRIMARY KEY, applied_at timestamptz NOT NULL DEFAULT now())');
     const versions = await client.query<{ version: number }>('SELECT version FROM schema_version ORDER BY version DESC LIMIT 1');
     const version = versions.rows[0]?.version ?? 0;
-    if (version > 2) throw new Error('Baza zahteva novejšo različico aplikacije.');
+    if (version > 3) throw new Error('Baza zahteva novejšo različico aplikacije.');
     if (version < 1) {
       await client.query(`CREATE TABLE game_sessions (
         token_hash char(64) PRIMARY KEY, csrf char(64) NOT NULL,
@@ -64,6 +67,16 @@ export async function openDatabase(connectionString: string, schema?: string) {
       }
       await client.query('INSERT INTO schema_version(version) VALUES (2)');
     }
+    if (version < 3) {
+      await client.query('ALTER TABLE game_sessions ADD COLUMN next_start_at timestamptz');
+      await client.query(`UPDATE game_sessions SET next_start_at=(progress->>'startedAt')::timestamptz + interval '60 seconds'
+        WHERE progress IS NOT NULL AND progress->>'startedAt' IS NOT NULL`);
+      await client.query(`CREATE TABLE request_limits (
+        ip_hash char(64) NOT NULL, action text NOT NULL CHECK (action IN ('anonymous','start')),
+        accepted_at_ms bigint[] NOT NULL DEFAULT '{}', PRIMARY KEY (ip_hash,action)
+      )`);
+      await client.query('INSERT INTO schema_version(version) VALUES (3)');
+    }
     await client.query('DELETE FROM game_sessions WHERE expires_at < now()');
     await client.query('COMMIT');
   } catch (error) { await client.query('ROLLBACK'); client.release(); await pool.end(); throw error; }
@@ -71,18 +84,49 @@ export async function openDatabase(connectionString: string, schema?: string) {
   return pool;
 }
 
-export async function changeSession<T>(pool: pg.Pool, hash: string, change: (row: SessionRow) => T): Promise<T> {
+export async function changeSession<T>(pool: pg.Pool, hash: string, change: (row: SessionRow, client: pg.PoolClient) => T | Promise<T>): Promise<T> {
   const client = await pool.connect();
   try {
     await client.query('BEGIN');
     const result = await client.query<SessionRow>('SELECT * FROM game_sessions WHERE token_hash=$1 AND expires_at > now() FOR UPDATE', [hash]);
     const row = result.rows[0];
-    if (!row) throw new Error('Seja ni več na voljo. Osveži stran.');
-    const response = change(row);
+    if (!row) throw new SessionUnavailableError();
+    const response = await change(row, client);
     await syncLeaderboard(client, row);
-    await client.query('UPDATE game_sessions SET progress=$1,run_id=$2 WHERE token_hash=$3', [row.progress ? JSON.stringify(row.progress) : null, row.run_id, hash]);
+    await client.query('UPDATE game_sessions SET progress=$1,run_id=$2,next_start_at=$3 WHERE token_hash=$4', [row.progress ? JSON.stringify(row.progress) : null, row.run_id, row.next_start_at, hash]);
     await client.query('COMMIT');
     return response;
+  } catch (error) { await client.query('ROLLBACK'); throw error; }
+  finally { client.release(); }
+}
+
+export async function createAnonymousSession(pool: pg.Pool, credentials: SessionCredentials, ipHash: string, now: number): Promise<SessionRow> {
+  const client = await pool.connect();
+  try {
+    await client.query('BEGIN');
+    await consumeIpLimit(client, ipHash, 'anonymous', now);
+    const result = await client.query<SessionRow>('INSERT INTO game_sessions(token_hash,csrf,expires_at) VALUES($1,$2,$3) RETURNING *', [credentials.tokenHash, credentials.csrf, credentials.expiresAt]);
+    await client.query('COMMIT');
+    return result.rows[0];
+  } catch (error) { await client.query('ROLLBACK'); throw error; }
+  finally { client.release(); }
+}
+
+export async function resetSession(pool: pg.Pool, hash: string, replacement: SessionCredentials): Promise<{ row: SessionRow; replaced: boolean }> {
+  const client = await pool.connect();
+  try {
+    await client.query('BEGIN');
+    const previous = (await client.query<SessionRow>('SELECT * FROM game_sessions WHERE token_hash=$1 AND expires_at>now() FOR UPDATE', [hash])).rows[0];
+    if (!previous) throw new SessionUnavailableError();
+    // Ponoven reset prazne seje ne ustvarja novih vrstic in ne premika roka.
+    if (!previous.progress) {
+      await client.query('COMMIT');
+      return { row: previous, replaced: false };
+    }
+    const fresh = await client.query<SessionRow>('INSERT INTO game_sessions(token_hash,csrf,expires_at,next_start_at) VALUES($1,$2,$3,$4) RETURNING *', [replacement.tokenHash, replacement.csrf, replacement.expiresAt, previous.next_start_at]);
+    await client.query('DELETE FROM game_sessions WHERE token_hash=$1', [hash]);
+    await client.query('COMMIT');
+    return { row: fresh.rows[0], replaced: true };
   } catch (error) { await client.query('ROLLBACK'); throw error; }
   finally { client.release(); }
 }

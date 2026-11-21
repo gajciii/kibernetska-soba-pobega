@@ -39,6 +39,11 @@ const applications: Record<StageContent['kind'], { name: string; icon: IconName 
 const base = import.meta.env.BASE_URL;
 type PageView = 'intro' | 'stage' | 'finale' | 'leaderboard';
 const isLeaderboardPath = () => window.location.pathname.replace(/\/$/u, '') === `${base}lestvica`.replace(/\/$/u, '');
+class RequestError extends Error {
+  constructor(message: string, readonly status: number, readonly retryAfterSeconds?: number) {
+    super(message);
+  }
+}
 function elapsed(session: SessionView | null, now: number) {
   if (!session) return '00:00';
   const seconds = Math.max(0, Math.floor(((session.completedAt ? Date.parse(session.completedAt) : now) - Date.parse(session.startedAt)) / 1000));
@@ -56,8 +61,11 @@ async function request<T>(path: string, csrf: string, body?: unknown): Promise<T
   } catch {
     throw new Error('Povezava s strežnikom je prekinjena. Vnos je ohranjen. Preveri povezavo in poskusi znova.');
   }
-  const data = await response.json().catch(() => null) as (T & { error?: string }) | null;
-  if (!response.ok || !data) throw new Error(data?.error ?? 'Strežnik trenutno ni dosegljiv. Poskusi znova.');
+  const data = await response.json().catch(() => null) as (T & { error?: string; retryAfterSeconds?: number }) | null;
+  if (!response.ok || !data) {
+    const retryAfterSeconds = Number(data?.retryAfterSeconds ?? response.headers.get('Retry-After'));
+    throw new RequestError(data?.error ?? 'Strežnik trenutno ni dosegljiv. Poskusi znova.', response.status, Number.isFinite(retryAfterSeconds) && retryAfterSeconds > 0 ? retryAfterSeconds : undefined);
+  }
   return data;
 }
 
@@ -117,7 +125,14 @@ export default function App() {
       setBoot(next);
       if (next.session?.completedAt) await openFinale();
       else { setStageData(await request<StageResponse>(`/stages/${next.session?.currentStage ?? 1}`, next.csrfToken)); changeView('stage'); }
-    } catch (e) { setError((e as Error).message); }
+    } catch (e) {
+      if (!session && e instanceof RequestError && e.status === 429 && e.retryAfterSeconds) {
+        const receivedAt = Date.now();
+        const retryAfterSeconds = e.retryAfterSeconds;
+        setNow(receivedAt);
+        setBoot(previous => previous ? { ...previous, nextStartAt: new Date(receivedAt + retryAfterSeconds * 1000).toISOString() } : previous);
+      } else setError((e as Error).message);
+    }
     finally { setBusy(false); }
   }
   async function reset() {
@@ -152,7 +167,7 @@ export default function App() {
     </header>
     {error && <div className="global-error" role="alert"><span>{error}</span>{!boot ? <button onClick={() => void bootstrap()} disabled={busy}>Poskusi znova</button> : <button aria-label="Zapri obvestilo" onClick={() => setError('')}><Icon name="close"/></button>}</div>}
     {!boot ? <main id="main" className="loading-screen"><span className="loading-symbol"><Icon name="shield" size={36}/></span><h1>{busy ? 'Pripravljamo preiskovalno mapo …' : 'Povezava ni uspela'}</h1></main> : view === 'intro' ?
-      <Landing session={session} busy={busy} onStart={start} onContinue={continueInvestigation} onReset={() => setResetOpen(true)} headingRef={headingRef}/>
+      <Landing session={session} nextStartAt={boot.nextStartAt} now={now} busy={busy} onStart={start} onContinue={continueInvestigation} onReset={() => setResetOpen(true)} headingRef={headingRef}/>
       : view === 'leaderboard' ? <LeaderboardView headingRef={headingRef} onBack={leaveLeaderboard}/>
       : view === 'stage' && stageData ? <Stage key={stageData.stage.id} data={stageData} csrf={csrf} busy={busy} setBusy={setBusy} onSession={updateSession} onData={setStageData} onNext={() => stageData.stage.id === 8 ? void openFinale() : void openStage(stageData.stage.id + 1)} onFinale={openFinale} headingRef={headingRef}
         navigation={<Sidebar stages={boot.stages} session={session!} active={stageData.stage.id} busy={busy} onSelect={openStage} onFinale={openFinale} onReset={() => setResetOpen(true)}/>}/>
