@@ -29,7 +29,7 @@ function Icon({ name, size = 20 }: { name: IconName; size?: number }) {
 function Explanation({ text }: { text: string }) {
   return <>{text.split(/(\b[a-z0-9-]+(?:\.[a-z0-9-]+)+\b)/gi).map((part, index) => index % 2 === 1 ? <strong className="explanation-domain" key={index}>{part}</strong> : part)}</>;
 }
-const applications: Record<StageContent['kind'], { name: string; icon: IconName }> = { caesar: { name: 'Šifrirnik', icon: 'key' }, base64: { name: 'Pretvornik', icon: 'terminal' }, phishing: { name: 'Pošta', icon: 'mail' }, password: { name: 'Javni profil', icon: 'shield' }, metadata: { name: 'Datoteke', icon: 'folder' }, logs: { name: 'Omrežni promet', icon: 'terminal' }, domains: { name: 'Brskalnik', icon: 'globe' }, binary: { name: 'Binarni pretvornik', icon: 'terminal' } };
+const applications: Record<StageContent['kind'], { name: string; icon: IconName }> = { caesar: { name: 'Šifrirnik', icon: 'key' }, encoding: { name: 'Pretvornik', icon: 'terminal' }, phishing: { name: 'Pošta', icon: 'mail' }, password: { name: 'Javni profil', icon: 'shield' }, metadata: { name: 'Datoteke', icon: 'folder' }, logs: { name: 'Omrežni promet', icon: 'terminal' }, domains: { name: 'Brskalnik', icon: 'globe' }, binary: { name: 'Binarni pretvornik', icon: 'terminal' } };
 const base = import.meta.env.BASE_URL;
 function elapsed(session: SessionView | null, now: number) {
   if (!session) return '00:00';
@@ -188,15 +188,16 @@ function Stage({ data, csrf, busy, setBusy, onSession, onData, onNext, onFinale,
         <div className="stage-breadcrumb"><span>IZZIV {String(stage.id).padStart(2, '0')} / 08</span><span>{stage.topic}</span>{data.solved && <span className="solved-badge"><Icon name="check" size={14}/>Rešeno</span>}</div>
         <h1 ref={headingRef} tabIndex={-1}>{stage.title}</h1>
       </div>
-      {stage.kind === 'caesar' && <p className="stage-intro caesar-story">{stage.intro}</p>}
+      {['caesar', 'encoding'].includes(stage.kind) && <p className={`stage-intro ${stage.kind}-story`}>{stage.intro}</p>}
+      {stage.kind === 'encoding' && stage.evidence && <div className="source-evidence story-evidence"><span>DOKAZ · obvestilo.dat</span><code>{stage.evidence}</code></div>}
       <section className="task-instruction" aria-labelledby="instruction-heading"><h2 id="instruction-heading">NAVODILO</h2><p>{stage.question}</p></section>
       <a className="mobile-answer-link" href="#answer-panel">Vnesi odgovor</a>
       <section className="desktop-window" aria-label={`${app.name} — delovno okno`}>
         <header className="window-toolbar"><div className="window-app"><Icon name={app.icon} size={17}/><strong>{app.name}</strong></div><span className="window-file">PRIMER 404 / {String(stage.id).padStart(2, '0')}</span><span className="window-controls" aria-hidden="true"><i/><i/><i/></span></header>
         <div className="window-body">
-          {stage.evidence && <div className="source-evidence"><span>DOKAZ</span><code>{stage.evidence}</code></div>}
+          {stage.kind !== 'encoding' && stage.evidence && <div className="source-evidence"><span>DOKAZ</span><code>{stage.evidence}</code></div>}
           {stage.kind === 'caesar' && <CaesarWorkbench/>}
-          {['base64', 'binary'].includes(stage.kind) && <ConverterWorkbench stage={stage}/>}
+          {['encoding', 'binary'].includes(stage.kind) && <ConverterWorkbench stage={stage}/>}
           {stage.kind === 'phishing' && <Mailbox mails={stage.mails ?? []} answer={answer} onAnswer={setAnswer} disabled={data.solved || busy}/>}
           {stage.kind === 'password' && <ProfileDesk stage={stage} answer={answer} onAnswer={setAnswer} disabled={data.solved || busy}/>}
           {stage.kind === 'metadata' && <MetadataDesk artifacts={stage.artifacts ?? []}/>}

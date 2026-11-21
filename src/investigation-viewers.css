@@ -38,7 +38,7 @@
 .iv-mail-headers dl > div { grid-template-columns: 85px minmax(0, 1fr); }
 .iv-mail-body { padding: 16px 0; margin-top: 10px; border-top: 1px solid var(--line); color: var(--text); font-size: 1rem; line-height: 1.65; }
 .iv-mail-body > p { margin: 0; white-space: pre-wrap; overflow-wrap: anywhere; }
-.iv-mail-url { margin-top: 14px; padding: 12px; border: 1px solid var(--line); border-radius: 4px; background: var(--bg); }
+.iv-mail-url { margin-top: 14px; padding: 12px; border: 1px solid var(--line); border-radius: var(--control-radius); background: var(--bg); }
 .iv-mail-url > span { display: block; color: var(--accent); text-decoration: underline; text-underline-offset: 3px; }
 .iv-mail-url small { display: block; margin: 10px 0 6px; color: var(--muted); font-size: .8rem; }
 .iv-mail-url code { display: block; color: var(--text); font-size: .875rem; line-height: 1.6; overflow-wrap: anywhere; }
@@ -55,12 +55,12 @@
 .iv-traffic-filter { display: flex; align-items: flex-end; flex-wrap: wrap; gap: 10px 14px; padding: 10px 16px 14px; border-bottom: 1px solid var(--line); }
 .iv-packet-search { flex: 1 1 220px; min-width: 0; }
 .iv-protocol-filter { position: relative; flex: 0 1 145px; min-width: 130px; }
-.iv-protocol-filter select { appearance: none; width: 100%; min-height: 42px; padding: 9px 30px 9px 10px; border: 1px solid var(--line); border-radius: 4px; background: var(--bg); color: var(--text); font: inherit; font-size: .875rem; cursor: pointer; }
+.iv-protocol-filter select { appearance: none; width: 100%; min-height: 42px; padding: 9px 30px 9px 10px; border: 1px solid var(--line); border-radius: var(--control-radius); background: var(--bg); color: var(--text); font: inherit; font-size: .875rem; cursor: pointer; }
 .iv-protocol-filter::after { content: ''; position: absolute; right: 12px; bottom: 18px; width: 6px; height: 6px; border-right: 1px solid var(--muted); border-bottom: 1px solid var(--muted); transform: rotate(45deg); pointer-events: none; }
 .iv-mail-reader h3, .iv-packet-detail h3 { scroll-margin-top: 16px; }
 .iv-protocol-filter select:focus-visible { outline: 2px solid var(--accent); outline-offset: 3px; }
 .iv-traffic-filter > button { flex: 0 0 auto; min-height: 42px; }
-.iv-packet-scroll { width: 100%; max-height: 290px; overflow: auto; scrollbar-color: var(--line-strong) var(--surface); overscroll-behavior: contain; }
+.iv-packet-scroll { border-radius: var(--control-radius); width: 100%; max-height: 290px; overflow: auto; scrollbar-color: var(--line-strong) var(--surface); overscroll-behavior: contain; }
 .iv-packet-table { width: 100%; border-collapse: separate; border-spacing: 0; text-align: left; font: .875rem/1.4 var(--code); white-space: nowrap; }
 .iv-packet-table th { position: sticky; top: 0; z-index: 1; padding: 9px 10px; border-bottom: 1px solid var(--line-strong); background: var(--bg); color: var(--muted); font: inherit; }
 .iv-packet-table td { padding: 6px 10px; border-bottom: 1px solid var(--line); color: var(--text); }
@@ -107,6 +107,6 @@
   .iv-search-line > input { flex-basis: 100%; }
   .iv-traffic-filter { gap: 10px; }
   .iv-packet-search { flex-basis: 100%; }
-  .iv-packet-scroll { max-height: 250px; }
+  .iv-packet-scroll { border-radius: var(--control-radius); max-height: 250px; }
   .iv-mail-body { font-size: 1rem; }
 }

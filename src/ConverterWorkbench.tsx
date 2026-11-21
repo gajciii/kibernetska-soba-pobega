@@ -5,68 +5,93 @@ import type { ConversionDirection, EncodingMethod } from '../shared/converters';
 import type { StageContent } from '../shared/types';
 import './converter-workbench.css';
 
-const methods: { id: EncodingMethod; label: string; help: string }[] = [
-  { id: 'base64', label: 'Base64', help: 'Uporablja črke A–Z, a–z, števke, + in /. Na koncu je lahko dopolnilo =. Dekodiranje pričakuje celoten zapis s pravilnim dopolnilom.' },
-  { id: 'hex', label: 'Šestnajstiško (HEX)', help: 'En bajt sestavljata dva znaka od 0–9 in A–F. Vnesita pare, ločene s presledki, ali neprekinjen niz parov, brez predpone 0x.' },
-  { id: 'binary', label: 'Binarno', help: 'En bajt sestavlja osem ničel ali enic. Skupine ločita s presledki ali novimi vrsticami. Črka A je v ASCII en bajt; šumniki in emoji v UTF-8 potrebujejo več bajtov.' },
-  { id: 'url', label: 'URL – odstotkovno', help: 'Zapis % in dve šestnajstiški števki predstavljata bajt. Presledek je %20; znak + tukaj ostane plus. Pretvarjata del naslova kot besedilo, brez odpiranja povezav.' },
-  { id: 'decimal', label: 'Decimalni bajti', help: 'Vsak bajt je celo število od 0 do 255. Števila ločita s presledki ali novimi vrsticami; vejice niso ločila.' },
+const methods: { id: EncodingMethod; label: string }[] = [
+  { id: 'base64', label: 'Base64' },
+  { id: 'binary', label: 'Binarno' },
+  { id: 'decimal', label: 'Decimalni bajti' },
+  { id: 'hex', label: 'Šestnajstiško (HEX)' },
+  { id: 'url', label: 'URL – odstotkovno' },
 ];
 const alphabet = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
+type FieldErrors = { method?: string; input?: string; direction?: string };
 
 export default function ConverterWorkbench({ stage }: { stage: StageContent }) {
   const uid = useId();
-  const [input, setInput] = useState(stage.evidence ?? '');
+  const manualSetup = stage.kind === 'encoding';
+  const [input, setInput] = useState(manualSetup ? '' : stage.evidence ?? '');
   const [method, setMethod] = useState<EncodingMethod | ''>(stage.kind === 'binary' ? 'binary' : '');
-  const [direction, setDirection] = useState<ConversionDirection>('decode');
+  const [direction, setDirection] = useState<ConversionDirection | ''>(manualSetup ? '' : 'decode');
   const [result, setResult] = useState<string | null>(null);
-  const [error, setError] = useState('');
-  const [notice, setNotice] = useState('');
+  const [conversionNotice, setConversionNotice] = useState('');
+  const [toolError, setToolError] = useState('');
+  const [fieldErrors, setFieldErrors] = useState<FieldErrors>({});
+  const methodRef = useRef<HTMLSelectElement>(null);
   const inputRef = useRef<HTMLTextAreaElement>(null);
-  const currentMethod = methods.find((item) => item.id === method);
+  const directionRef = useRef<HTMLSelectElement>(null);
 
-  function invalidate() { setResult(null); setError(''); setNotice(''); }
+  function invalidate(field: keyof FieldErrors) {
+    setResult(null);
+    setConversionNotice('');
+    setToolError('');
+    setFieldErrors(previous => ({ ...previous, [field]: undefined }));
+  }
+
   function submit(event: FormEvent) {
     event.preventDefault();
-    setError(''); setNotice(''); setResult(null);
+    setResult(null);
+    setConversionNotice('');
+    setToolError('');
+    const errors: FieldErrors = {};
+    if (!method) errors.method = 'Izberita kodiranje.';
+    if (!input.length) errors.input = 'Vnesita besedilo za pretvorbo.';
+    if (!direction) errors.direction = 'Izberita smer pretvorbe.';
+    setFieldErrors(errors);
+    if (errors.method || errors.input || errors.direction) {
+      if (errors.method) methodRef.current?.focus();
+      else if (errors.input) inputRef.current?.focus();
+      else directionRef.current?.focus();
+      return;
+    }
+    if (!method || !direction) return;
     try {
-      if (!input.length) throw new Error('Najprej vnesita besedilo za pretvorbo.');
-      if (!method) throw new Error('Najprej izberita kodiranje, ki ga želita preizkusiti.');
       setResult(convertText(input, method, direction));
     } catch (failure) {
-      setError(failure instanceof Error ? failure.message : 'Pretvorba ni uspela. Preverita vnos.');
+      if (manualSetup) {
+        setConversionNotice('S temi nastavitvami zapisa ni mogoče pretvoriti. Preverita prepis in namig v zgodbi.');
+      } else {
+        setToolError(failure instanceof Error ? failure.message : 'Pretvorba ni uspela. Preverita vnos.');
+      }
     }
-  }
-  function reuseResult() {
-    if (result === null) return;
-    setInput(result); setResult(null); setError('');
-    setNotice('Rezultat je prenesen v vhod.');
-    inputRef.current?.focus();
   }
 
   return <section className="converter-workbench" aria-label="Pretvornik besedila">
-    <form onSubmit={submit}>
-      <div className="workbench-controls">
-        <div><label htmlFor={`${uid}-encoding`}>Kodiranje</label><select id={`${uid}-encoding`} value={method} onChange={event => { setMethod(event.target.value as EncodingMethod | ''); invalidate(); }}>
+    <form className="workbench-form" onSubmit={submit} noValidate>
+      <div className="workbench-field">
+        <label htmlFor={`${uid}-encoding`}>Kodiranje</label>
+        <div className="workbench-select-wrap"><select id={`${uid}-encoding`} ref={methodRef} value={method} aria-invalid={!!fieldErrors.method} aria-describedby={fieldErrors.method ? `${uid}-method-error` : undefined} onChange={event => { setMethod(event.target.value as EncodingMethod | ''); invalidate('method'); }}>
           <option value="">Izberita kodiranje</option>{methods.map(item => <option value={item.id} key={item.id}>{item.label}</option>)}
         </select></div>
-        <div><label htmlFor={`${uid}-direction`}>Smer pretvorbe</label><select id={`${uid}-direction`} value={direction} onChange={event => { setDirection(event.target.value as ConversionDirection); invalidate(); }}>
-          <option value="decode">Dekodiranje – zapis v besedilo</option><option value="encode">Kodiranje – besedilo v zapis</option>
+        {fieldErrors.method && <p id={`${uid}-method-error`} className="workbench-field-error" role="alert">{fieldErrors.method}</p>}
+      </div>
+      <div className="workbench-input">
+        <div className="workbench-editor-heading"><label htmlFor={`${uid}-input`}>Besedilo za pretvorbo</label><span>{Array.from(input).length} znakov</span></div>
+        <textarea id={`${uid}-input`} ref={inputRef} value={input} onChange={event => { setInput(event.target.value); invalidate('input'); }} spellCheck={false} autoComplete="off" rows={3} maxLength={32768} aria-invalid={!!fieldErrors.input} aria-describedby={fieldErrors.input ? `${uid}-input-error` : undefined}/>
+        {fieldErrors.input && <p id={`${uid}-input-error`} className="workbench-field-error" role="alert">{fieldErrors.input}</p>}
+      </div>
+      <div className="workbench-field">
+        <label htmlFor={`${uid}-direction`}>Smer pretvorbe</label>
+        <div className="workbench-select-wrap"><select id={`${uid}-direction`} ref={directionRef} value={direction} aria-invalid={!!fieldErrors.direction} aria-describedby={fieldErrors.direction ? `${uid}-direction-error` : undefined} onChange={event => { setDirection(event.target.value as ConversionDirection | ''); invalidate('direction'); }}>
+          <option value="">Izberita smer pretvorbe</option><option value="encode">Kodiranje – besedilo v zapis</option><option value="decode">Dekodiranje – zapis v besedilo</option>
         </select></div>
+        {fieldErrors.direction && <p id={`${uid}-direction-error`} className="workbench-field-error" role="alert">{fieldErrors.direction}</p>}
       </div>
-      <div className="workbench-editors">
-        <div className="workbench-input"><div className="workbench-editor-heading"><label htmlFor={`${uid}-input`}>Besedilo za pretvorbo</label><span>{Array.from(input).length} znakov</span></div>
-          <textarea id={`${uid}-input`} ref={inputRef} value={input} onChange={event => { setInput(event.target.value); invalidate(); }} spellCheck={false} autoComplete="off" rows={6} maxLength={32768} aria-describedby={error ? `${uid}-error` : undefined}/>
-        </div>
-        <div className="workbench-result"><div className="workbench-editor-heading"><span id={`${uid}-output-label`} className="workbench-output-label">Rezultat</span><span>{result === null ? '' : `${Array.from(result).length} znakov`}</span></div>
-          <output className={`workbench-output${result === null ? ' empty' : ''}`} aria-labelledby={`${uid}-output-label`} aria-live="polite" aria-atomic="true" tabIndex={0}>{result ?? '—'}</output>
-        </div>
+      <div className="workbench-result">
+        <div className="workbench-editor-heading"><span id={`${uid}-output-label`} className="workbench-output-label">Rezultat</span><span>{result === null ? '' : `${Array.from(result).length} znakov`}</span></div>
+        <output className={`workbench-output${result === null ? ' empty' : ''}${conversionNotice ? ' conversion-notice' : ''}`} aria-labelledby={`${uid}-output-label`} role="status" aria-live="polite" aria-atomic="true" tabIndex={0}>{result ?? (conversionNotice || '—')}</output>
+        {toolError && <p className="workbench-error" role="alert">{toolError}</p>}
       </div>
-      {error && <p id={`${uid}-error`} className="workbench-error" role="alert">{error}</p>}
-      <div className="workbench-actions"><button className="primary" type="submit">Pretvori</button><button className="workbench-reuse" type="button" onClick={reuseResult} disabled={result === null}>Uporabi rezultat kot vhod</button></div>
-      {notice && <p className="workbench-status" role="status">{notice}</p>}
+      <div className="workbench-actions"><button className="primary" type="submit">Pretvori</button></div>
     </form>
-    <details className="workbench-help"><summary>Pomoč za kodiranje</summary><p>{currentMethod?.help ?? 'Izberita kodiranje za prikaz njegovega opisa. Pretvornik zapis pretvori samo z izbranim postopkom.'}</p><p>Besedilni formati uporabljajo UTF-8. Za naslednji korak uporabita rezultat kot vhod.</p></details>
     {stage.kind === 'binary' && <details className="workbench-ascii"><summary>Referenčna tabela ASCII · črke A–Z</summary><p>Vse prikazane črke imajo v ASCII in UTF-8 enak osembitni zapis.</p><div className="workbench-ascii-scroll"><table><caption className="sr-only">Črke A do Z z decimalnim in binarnim zapisom ASCII</caption><thead><tr><th scope="col">Črka</th><th scope="col">Decimalno</th><th scope="col">Binarno</th></tr></thead><tbody>{Array.from(alphabet, letter => <tr key={letter}><th scope="row">{letter}</th><td>{letter.charCodeAt(0)}</td><td>{letter.charCodeAt(0).toString(2).padStart(8, '0')}</td></tr>)}</tbody></table></div></details>}
   </section>;
 }

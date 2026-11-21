@@ -98,20 +98,58 @@ test('vseh osem stopenj, lokalni pripomočki, nadaljevanje in zaključek', async
   await expect(page.getByRole('status').filter({ hasText: 'Izziv opravljen' })).toBeVisible();
   await page.screenshot({ path: `.local/qa-${testInfo.project.name}-stage.png`, fullPage: true });
   await next(page);
-  await expect(page.getByLabel('Kodiranje', { exact: true })).toHaveValue('');
-  await page.getByRole('button', { name: 'Pretvori', exact: true }).click();
-  await expect(page.getByRole('alert')).toContainText('izberita kodiranje');
-  await page.getByLabel('Kodiranje', { exact: true }).selectOption('base64');
-  await page.getByLabel('Besedilo za pretvorbo').fill('%%%');
-  await page.getByRole('button', { name: 'Pretvori', exact: true }).click();
-  await expect(page.getByRole('alert')).toBeVisible();
-  await page.getByLabel('Besedilo za pretvorbo').fill('PGI+dmFybm88L2I+');
-  await page.getByRole('button', { name: 'Pretvori', exact: true }).click();
-  await expect(page.locator('output')).toHaveText('<b>varno</b>');
-  await expect(page.locator('output b')).toHaveCount(0);
-  await page.getByLabel('Besedilo za pretvorbo').fill('S09EQTogU09WQQ==');
-  await page.getByRole('button', { name: 'Pretvori', exact: true }).click();
-  await expect(page.locator('output')).toHaveText('KODA: SOVA');
+  const method = page.getByLabel('Kodiranje', { exact: true });
+  const input = page.getByLabel('Besedilo za pretvorbo');
+  const direction = page.getByLabel('Smer pretvorbe', { exact: true });
+  const output = page.locator('output');
+  const convert = page.getByRole('button', { name: 'Pretvori', exact: true });
+  await expect(method).toHaveValue('');
+  await expect(input).toHaveValue('');
+  await expect(direction).toHaveValue('');
+  await expect(page.locator('.encoding-story')).toContainText('šestnajst');
+  await expect(page.locator('.source-evidence')).toHaveCount(1);
+  await expect(page.locator('.desktop-window .source-evidence')).toHaveCount(0);
+  await expect(page.getByRole('button', { name: 'Uporabi rezultat kot vhod', exact: true })).toHaveCount(0);
+  expect(await method.locator('option').nth(1).getAttribute('value')).not.toBe('hex');
+  expect(await direction.locator('option').nth(1).getAttribute('value')).toBe('encode');
+  const fields = await Promise.all([method, input, direction, output, convert].map(field => field.boundingBox()));
+  for (let i = 1; i < fields.length; i++) expect(fields[i]!.y).toBeGreaterThanOrEqual(fields[i - 1]!.y + fields[i - 1]!.height);
+  await convert.click();
+  await expect(page.getByRole('alert')).toHaveCount(3);
+  await expect(method).toBeFocused();
+  await expect(input).toHaveAttribute('aria-invalid', 'true');
+  const evidence = (await page.locator('.story-evidence code').textContent())!;
+  await input.fill(evidence); // Par sam prekopira celoten dokaz iz uvoda.
+  await direction.selectOption('decode');
+  await page.getByLabel('Odgovor', { exact: true }).fill('moj vnos');
+  const neutralFailure = 'S temi nastavitvami zapisa ni mogoče pretvoriti. Preverita prepis in namig v zgodbi.';
+  for (const wrongMethod of ['base64', 'binary', 'decimal']) {
+    await method.selectOption(wrongMethod);
+    await convert.click();
+    await expect(output).toHaveText(neutralFailure);
+    await expect(page.getByRole('alert')).toHaveCount(0);
+    await expect(input).toHaveValue(evidence);
+    await expect(method.locator('option:not([value=""])')).toHaveCount(5);
+    await expect(method.locator('option:disabled')).toHaveCount(0);
+  }
+  await method.selectOption('url');
+  await convert.click();
+  await expect(output).toHaveText(evidence); // Veljavna pretvorba ne pomeni pravilnega odgovora.
+  await method.selectOption('base64');
+  await input.fill('PGI+dmFybm88L2I+');
+  await convert.click();
+  await expect(output).toHaveText('<b>varno</b>');
+  await expect(output.locator('b')).toHaveCount(0);
+  await input.fill(evidence);
+  await method.selectOption('hex');
+  await direction.selectOption('encode');
+  await convert.click();
+  await expect(output).not.toContainText('PRENOS ZABELEZEN');
+  await direction.selectOption('decode');
+  await expect(output).toHaveText('—');
+  await convert.click();
+  await expect(output).toHaveText('PRENOS ZABELEZEN. KODA NASLEDNJE MAPE: SOVA.');
+  await expect(page.getByLabel('Odgovor', { exact: true })).toHaveValue('moj vnos');
   await page.screenshot({ path: `.local/qa-${testInfo.project.name}-converter.png`, fullPage: true });
   await submit(page, 'sova'); await next(page);
   await expect(page.getByRole('button', { name: /^Odpri sporočilo/ })).toHaveCount(7);
@@ -234,7 +272,7 @@ test('vseh osem stopenj, lokalni pripomočki, nadaljevanje in zaključek', async
   expect(browserErrors).toEqual([]);
 });
 
-test('pretvornik menja formate, ohrani vhod in poveže več korakov', async ({ page }) => {
+test('pretvornik menja formate, ohrani vhod in podpira ročno kopiranje', async ({ page }) => {
   await page.goto('/');
   await page.getByRole('button', { name: 'Začni preiskavo', exact: true }).click();
   await submit(page, 'MOST'); await next(page);
@@ -242,26 +280,28 @@ test('pretvornik menja formate, ohrani vhod in poveže več korakov', async ({ p
   const method = page.getByLabel('Kodiranje', { exact: true });
   const direction = page.getByLabel('Smer pretvorbe', { exact: true });
   const convert = page.getByRole('button', { name: 'Pretvori', exact: true });
-  const reuse = page.getByRole('button', { name: 'Uporabi rezultat kot vhod', exact: true });
+  await expect(page.getByRole('button', { name: 'Uporabi rezultat kot vhod', exact: true })).toHaveCount(0);
+  await direction.selectOption('decode');
   await method.selectOption('hex');
   await input.fill('C4 8D 61 6A');
   await convert.click();
   await expect(page.locator('output')).toHaveText('čaj');
-  await reuse.click();
-  await expect(input).toBeFocused();
+  await expect(input).toHaveValue('C4 8D 61 6A');
+  await input.fill((await page.locator('output').textContent())!);
   await expect(input).toHaveValue('čaj');
   await direction.selectOption('encode');
   await method.selectOption('url');
   await convert.click();
   await expect(page.locator('output')).toHaveText('%C4%8Daj');
-  await reuse.click();
+  await expect(input).toHaveValue('čaj');
+  await input.fill((await page.locator('output').textContent())!);
   await direction.selectOption('decode');
   await convert.click();
   await expect(page.locator('output')).toHaveText('čaj');
   await method.selectOption('decimal');
   await expect(input).toHaveValue('%C4%8Daj');
   await expect(page.locator('output')).not.toHaveText('čaj');
-  await expect(reuse).toBeDisabled();
+  await expect(page.locator('output')).toHaveText('—');
   await input.fill('196 141 97 106');
   await convert.click();
   await expect(page.locator('output')).toHaveText('čaj');
@@ -272,9 +312,9 @@ test('pretvornik menja formate, ohrani vhod in poveže več korakov', async ({ p
   await method.selectOption('hex');
   await input.fill('GG');
   await convert.click();
-  await expect(page.getByRole('alert')).toBeVisible();
+  await expect(page.locator('output')).toContainText('S temi nastavitvami zapisa ni mogoče pretvoriti.');
+  await expect(page.getByRole('alert')).toHaveCount(0);
   await expect(input).toHaveValue('GG');
-  await expect(reuse).toBeDisabled();
   await checkLayout(page);
 });
 
@@ -386,7 +426,7 @@ test('uvodna svetloba sledi kazalcu; naloge imajo navodilo in stalni odgovor', a
   }
   await page.setViewportSize(originalViewport);
   await submit(page, 'MOST'); await next(page);
-  await expect(page.locator('.stage-intro')).toHaveCount(0);
+  await expect(page.locator('.encoding-story')).toBeVisible();
   await expect(page.getByLabel('Odgovor', { exact: true })).toBeVisible();
   await expect(page.locator('.task-instruction')).toBeVisible();
   await page.reload();

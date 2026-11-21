@@ -1,53 +1,210 @@
 .converter-workbench {
-  container: converter / inline-size;
   min-width: 0;
-  min-height: 420px;
+  width: 100%;
   padding: 18px;
   color: var(--text);
   background: var(--surface);
   font-family: inherit;
 }
-.workbench-controls { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 14px; margin-bottom: 18px; }
-.workbench-controls > div, .workbench-input, .workbench-result { min-width: 0; }
-.workbench-controls label { font-size: .875rem; color: var(--muted); }
-.workbench-controls select {
-  width: 100%; min-width: 0; min-height: 42px; padding: 9px 32px 9px 12px;
-  appearance: none; border: 1px solid var(--line); border-radius: 4px;
-  color: var(--text); background-color: var(--bg); font: inherit; font-size: .875rem; cursor: pointer;
-  background-image: linear-gradient(45deg, transparent 50%, #a5b3ca 50%), linear-gradient(135deg, #a5b3ca 50%, transparent 50%);
-  background-position: calc(100% - 17px) 50%, calc(100% - 12px) 50%; background-size: 5px 5px; background-repeat: no-repeat;
+
+/* Vrstni red je enak na vseh širinah: kodiranje, vnos, smer, rezultat, pretvorba. */
+.workbench-form {
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+  min-width: 0;
+  width: 100%;
 }
-.workbench-controls select:focus-visible, .converter-workbench button:focus-visible,
-.converter-workbench textarea:focus-visible, .converter-workbench input:focus-visible,
-.workbench-output:focus-visible, .converter-workbench summary:focus-visible { outline: 2px solid var(--accent); outline-offset: 3px; }
-.workbench-editors { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 14px; }
-.workbench-editor-heading { display: flex; align-items: baseline; flex-wrap: wrap; justify-content: space-between; gap: 4px 10px; margin-bottom: 8px; }
-.workbench-editor-heading label, .workbench-editor-heading .workbench-output-label { margin: 0; color: var(--text); font-size: .875rem; }
-.workbench-editor-heading > span { color: var(--muted); font-size: .8rem; }
-.converter-workbench textarea, .workbench-output {
-  display: block; width: 100%; min-height: 220px; margin: 0; padding: 14px;
-  border: 1px solid var(--line); border-radius: 4px; color: var(--text); background: var(--bg);
-  font: 1rem/1.6 var(--code); overflow-wrap: anywhere; white-space: pre-wrap;
+
+.workbench-field,
+.workbench-input,
+.workbench-result {
+  min-width: 0;
+  width: 100%;
 }
-.workbench-output { max-height: 360px; overflow: auto; color: var(--success); }
-.workbench-output.empty { color: var(--muted); }
-.workbench-actions { display: flex; flex-wrap: wrap; align-items: center; gap: 10px 16px; margin-top: 14px; }
-.workbench-reuse { min-height: 42px; padding: 8px 12px; border: 1px solid var(--line); border-radius: var(--button-radius); background: transparent; color: var(--text); font: inherit; font-size: .875rem; text-align: left; }
-.workbench-reuse:hover:not(:disabled) { background: color-mix(in srgb, var(--accent) 8%, transparent); }
-.workbench-status { margin: 10px 0 0; color: var(--success); font-size: .875rem; }
-.workbench-error { margin: 12px 0 0; padding-left: 10px; border-left: 2px solid var(--warning); color: var(--warning); font-size: .875rem; }
-.workbench-help, .workbench-ascii { margin-top: 14px; color: var(--muted); font-size: .875rem; }
-.workbench-help summary, .workbench-ascii summary { width: fit-content; max-width: 100%; padding: 6px 0; cursor: pointer; }
-.workbench-help p, .workbench-ascii p { margin: 8px 0 0; line-height: 1.6; }
-.workbench-ascii-scroll { margin-top: 12px; max-height: 260px; overflow: auto; }
-.workbench-ascii table { width: 100%; border-collapse: collapse; text-align: left; font: .875rem var(--code); }
-.workbench-ascii th, .workbench-ascii td { padding: 7px 12px; border: 0; border-bottom: 1px solid var(--line); white-space: nowrap; }
-.workbench-ascii th { font-weight: 500; }
-.workbench-ascii tbody th { color: var(--accent); }
-@container converter (max-width: 540px) {
-  .workbench-editors, .workbench-controls { grid-template-columns: minmax(0, 1fr); }
-  .workbench-output, .converter-workbench textarea { min-height: 150px; }
+
+.workbench-field label {
+  margin-bottom: 8px;
+  color: var(--text);
+  font-size: .875rem;
 }
+
+.workbench-select-wrap {
+  position: relative;
+}
+
+.workbench-select-wrap::after {
+  content: '';
+  position: absolute;
+  right: 16px;
+  top: 18px;
+  width: 7px;
+  height: 7px;
+  border-right: 1px solid var(--muted);
+  border-bottom: 1px solid var(--muted);
+  transform: rotate(45deg);
+  pointer-events: none;
+}
+
+.workbench-select-wrap select {
+  width: 100%;
+  min-width: 0;
+  min-height: 46px;
+  padding: 10px 38px 10px 14px;
+  appearance: none;
+  border: 1px solid var(--line-strong);
+  border-radius: var(--control-radius, 12px);
+  color: var(--text);
+  background: var(--bg);
+  font: inherit;
+  font-size: .875rem;
+  line-height: 1.5;
+  cursor: pointer;
+}
+
+.workbench-select-wrap select:focus-visible,
+.converter-workbench button:focus-visible,
+.converter-workbench textarea:focus-visible,
+.workbench-output:focus-visible,
+.converter-workbench summary:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 3px;
+}
+
+.workbench-editor-heading {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 4px 12px;
+  margin-bottom: 8px;
+}
+
+.workbench-editor-heading label,
+.workbench-editor-heading .workbench-output-label {
+  margin: 0;
+  color: var(--text);
+  font-size: .875rem;
+}
+
+.workbench-editor-heading > span {
+  color: var(--muted);
+  font-size: .875rem;
+}
+
+.converter-workbench textarea,
+.workbench-output {
+  display: block;
+  width: 100%;
+  margin: 0;
+  padding: 14px;
+  border: 1px solid var(--line-strong);
+  border-radius: var(--control-radius, 12px);
+  color: var(--text);
+  background: var(--bg);
+  font: 1rem/1.65 var(--code);
+  overflow-wrap: anywhere;
+  white-space: pre-wrap;
+}
+
+.converter-workbench textarea {
+  min-height: 120px;
+  resize: vertical;
+}
+
+.workbench-output {
+  min-height: 96px;
+  max-height: 340px;
+  overflow: auto;
+}
+
+.workbench-output.empty {
+  color: var(--muted);
+}
+
+.workbench-output.conversion-notice {
+  color: var(--muted);
+  font-family: inherit;
+  font-size: 1rem;
+  line-height: 1.7;
+}
+
+.workbench-actions {
+  display: flex;
+  align-items: center;
+  min-width: 0;
+}
+
+.workbench-actions .primary {
+  min-width: 135px;
+  min-height: 44px;
+  border-radius: var(--button-radius, 12px);
+}
+
+.workbench-field-error,
+.workbench-error {
+  margin: 9px 0 0;
+  padding-left: 10px;
+  border-left: 2px solid var(--warning);
+  color: var(--warning);
+  font-size: .875rem;
+  line-height: 1.65;
+}
+
+.converter-workbench [aria-invalid='true'] {
+  border-color: var(--warning);
+}
+
+.workbench-ascii {
+  margin-top: 20px;
+  color: var(--muted);
+  font-size: .875rem;
+}
+
+.workbench-ascii summary {
+  width: fit-content;
+  max-width: 100%;
+  padding: 6px 0;
+  cursor: pointer;
+}
+
+.workbench-ascii p {
+  margin: 8px 0 0;
+  line-height: 1.6;
+}
+
+.workbench-ascii-scroll {
+  margin-top: 12px;
+  max-height: 260px;
+  overflow: auto;
+}
+
+.workbench-ascii table {
+  width: 100%;
+  border-collapse: collapse;
+  text-align: left;
+  font: .875rem var(--code);
+}
+
+.workbench-ascii th,
+.workbench-ascii td {
+  padding: 7px 12px;
+  border: 0;
+  border-bottom: 1px solid var(--line);
+  white-space: nowrap;
+}
+
+.workbench-ascii th {
+  font-weight: 500;
+}
+
+.workbench-ascii tbody th {
+  color: var(--accent);
+}
+
 @media (max-width: 600px) {
-  .converter-workbench { min-height: 0; padding: 14px; }
+  .converter-workbench { padding: 14px; }
+  .workbench-form { gap: 16px; }
+  .converter-workbench textarea { min-height: 120px; }
+  .workbench-output { min-height: 96px; }
 }

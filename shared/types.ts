@@ -48,7 +48,7 @@ export interface EvidenceArtifact {
 export interface StageContent extends StageSummary {
   intro: string;
   question: string;
-  kind: 'caesar' | 'base64' | 'phishing' | 'password' | 'metadata' | 'logs' | 'domains' | 'binary';
+  kind: 'caesar' | 'encoding' | 'phishing' | 'password' | 'metadata' | 'logs' | 'domains' | 'binary';
   evidence?: string;
   note?: string;
   choices?: Choice[];

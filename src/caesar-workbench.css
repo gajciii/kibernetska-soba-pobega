@@ -95,7 +95,7 @@
   width: 100%;
   max-width: 100%;
   overflow-x: auto;
-  padding-bottom: .65rem;
+  border-radius: var(--control-radius);
   scrollbar-color: #627e9f #0d182b;
   scrollbar-width: thin;
   overscroll-behavior-x: contain;

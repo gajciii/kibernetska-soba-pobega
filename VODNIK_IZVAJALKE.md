@@ -42,14 +42,22 @@ Vsaka naloga ima eno kratko navodilo in delovni pripomoček. Polje oziroma izbir
 
 ## 2. Kaj se skriva za čudnimi znaki?
 
-**Dokaz:** `S09EQTogU09WQQ==`. Laboratorij kodiranj ponuja Base64, šestnajstiški, binarni, URL in decimalni zapis. Začetna navodila ustrezne metode ne povedo: par primerja nabor znakov ter končna znaka `=` in izbere Base64. Pretvorba vrne `KODA: SOVA`; koda je **`SOVA`**. Sprejet je tudi celoten zapis, ne glede na velikost črk in odvečne presledke.
+**Dokaz:** pod zgodbenim odstavkom je naslednji zapis. Par ga mora sam prekopirati v prazni vhod pretvornika; v delovnem oknu ni dodatne kopije dokaza.
 
-- Namig 1: »Oglej si nabor znakov in zaključna znaka =. Katera metoda v laboratoriju uporablja tak zapis?«
-- Namig 2: »Izberi Base64. Po dekodiranju je iskana beseda za dvopičjem.«
+```text
+50 52 45 4E 4F 53 20 5A 41 42 45 4C 45 5A 45 4E 2E 20 4B 4F 44 41 20 4E 41 53 4C 45 44 4E 4A 45 20 4D 41 50 45 3A 20 53 4F 56 41 2E
+```
 
-**Opomba za izvajalko:** končnica `.dat` ne določa kodiranja; pri izbiri metode pomagata nabor znakov in smiselnost rezultata. Neuspešen poskus v pripomočku ne poveča števila oddanih odgovorov.
+Zgodba zapis poveže z zavarovanim izvozom šolskih sistemskih obvestil. Omenjenih **šestnajst znakov, 0–9 in A–F, ter branje v parih** namigujejo na šestnajstiški zapis. Par izbere **Šestnajstiško (HEX)** in dekodiranje. Laboratorij še vedno ponuja tudi druga kodiranja za primerjavo; izbira ni samodejna.
 
-**Učni cilj:** izbrati pretvorbo na podlagi značilnosti zapisa in smiselnosti rezultata ter razlikovati kodiranje od šifriranja. Za dekodiranje Base64 ne potrebujemo skrivnega ključa in Base64 ne zagotavlja zaupnosti. Naključnemu videzu zapisa ne pripisujemo varnosti.
+Rezultat je **`PRENOS ZABELEZEN. KODA NASLEDNJE MAPE: SOVA.`** V polje za odgovor zgoraj desno sodi samo **`SOVA`**. Celotno novo obvestilo ni odgovor; zaradi združljivosti ostaja sprejet tudi stari vnos `KODA: SOVA`. Velikost črk in odvečni presledki niso pomembni.
+
+- Namig 1: »V zgodbi je omenjenih šestnajst znakov, zapis pa je razdeljen v pare. Poišči ustrezno ime kodiranja v izbirnem meniju.«
+- Namig 2: »Izberi Šestnajstiško (HEX) in dekodiranje. Iz razkritega sporočila prepiši samo kodo naslednje mape.«
+
+**Opomba za izvajalko:** končnica `.dat` ne določa kodiranja. Če pretvorba ne uspe, naj preverita celovitost prekopiranih parov, nabor znakov in izbrano smer. Neuspešen poskus v pripomočku ne poveča števila oddanih odgovorov. Besedilo obvestila je sled v zgodbi, ne dokaz celotnega poteka incidenta.
+
+**Učni cilj:** izbrati pretvorbo na podlagi značilnosti zapisa in smiselnosti rezultata ter razlikovati kodiranje od šifriranja. Par šestnajstiških znakov v tem primeru predstavlja en bajt. Za pretvorbo HEX ne potrebujemo skrivnega ključa; zapis ne zagotavlja zaupnosti.
 
 ## 3. Poišči phishing sporočilo
 

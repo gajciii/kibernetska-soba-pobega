@@ -23,15 +23,15 @@ const stages: StageContent[] = [
     id: 2,
     title: 'Kaj se skriva za čudnimi znaki?',
     topic: 'Kodiranja',
-    kind: 'base64',
-    intro: 'Izvoz sporočila nima oznake uporabljenega kodiranja.',
-    question: 'Izberi ustrezno kodiranje in dekodiraj prikazani niz. Vnesi kodo iz razkritega sporočila.',
-    evidence: 'S09EQTogU09WQQ==',
-    note: 'Vgrajeni laboratorij podpira več kodiranj. Izberi metodo, pretvori celoten niz in presodi rezultat. Napaka pri neustrezni metodi je uporaben podatek, ne izgubljen poskus odgovora.',
+    kind: 'encoding',
+    intro: 'V zavarovanem izvozu šolskih sistemskih obvestil sta našla zapis, ki bi lahko pojasnil nenavadni prenos. Oznaka kodiranja je izgubljena, ostala pa je opomba: »Uporabljamo samo šestnajst znakov: števke od 0 do 9 in črke od A do F. Beremo jih v parih.« Prava pretvorba bo razkrila, kaj je bilo zabeleženo in katera koda odpira naslednjo mapo.',
+    question: 'Prekopiraj zapis v pretvornik in razberi sporočilo. Vnesi samo kodo naslednje mape.',
+    evidence: '50 52 45 4E 4F 53 20 5A 41 42 45 4C 45 5A 45 4E 2E 20 4B 4F 44 41 20 4E 41 53 4C 45 44 4E 4A 45 20 4D 41 50 45 3A 20 53 4F 56 41 2E',
+    note: 'Presledki ločujejo pare znakov. Prenesi celoten zapis iz zgodbe v pretvornik, izberi metodo in preveri smiselnost rezultata. Poskus v pretvorniku ne šteje kot oddaja odgovora.',
     investigations: [
-      { id: 'ovojnica', title: 'Izvoz: sporocilo.dat', text: 'Priponka vsebuje samo prikazani niz; besedilo ni stisnjeno. Končnica .dat ne določa kodiranja.' },
-      { id: 'nabor', title: 'Pregled znakov', text: 'Zapis vsebuje velike in male črke, številke ter znaka = na koncu. Pri izbiri metode primerjaj dovoljen nabor znakov in obliko zapisa.' },
-      { id: 'rezultat', title: 'Pričakovani rezultat', text: 'Izvor je kratko besedilno sporočilo. Naključni simboli ali neberljivi znaki še ne pomenijo uspešne pretvorbe; preveri tudi pomen rezultata.' },
+      { id: 'ovojnica', title: 'Izvoz: obvestilo.dat', text: 'Zavarovani izvoz vsebuje eno sistemsko obvestilo. Končnica .dat ne določa kodiranja.' },
+      { id: 'nabor', title: 'Pregled znakov', text: 'Vsaka skupina vsebuje dva znaka iz nabora 0–9 in A–F. Presledki ločujejo skupine in niso del predstavljenih bajtov.' },
+      { id: 'rezultat', title: 'Pričakovani rezultat', text: 'Izvor je kratko obvestilo s kodo naslednje mape. Samo uspešna pretvorba še ni dovolj: rezultat mora sestavljati smiselno sporočilo.' },
     ],
   },
   {
@@ -276,7 +276,7 @@ export const stageSummaries: StageSummary[] = stages.map(({ id, title, topic }) 
 
 const hints: Record<number, [string, string]> = {
   1: ['V zgodbi poišči, kako je prejemnik razbral Cezarjevo sporočilo. Enak premik uporabi za vajin dokaz.', 'Pri dešifriranju se premakni za tri mesta nazaj: N postane K. Isto preslikavo uporabi za vse črke.'],
-  2: ['Oglej si nabor znakov in zaključna znaka =. Katera metoda v laboratoriju uporablja tak zapis?', 'Izberi Base64. Po dekodiranju je iskana beseda za dvopičjem.'],
+  2: ['V zgodbi je omenjenih šestnajst znakov, zapis pa je razdeljen v pare. Poišči ustrezno ime kodiranja v izbirnem meniju.', 'Izberi Šestnajstiško (HEX) in dekodiranje. Iz razkritega sporočila prepiši samo kodo naslednje mape.'],
   3: ['Odpri podrobnosti sporočil. Primerjaj dejanski naslov pošiljatelja in povezave z domeno sola.example.', 'Primerjaj zahteve sporočil: eno združuje tuji domeni, grožnjo takojšnje blokade in zahtevo po geslu ter enkratni kodi.'],
   4: ['Poglej, katere osebne podatke lahko prebere vsak obiskovalec profila.', 'Primerjaj ime psičke in letnico rojstva s ponujenimi gesli.'],
   5: ['Preveri, da je izbrana datoteka hodnik.jpg. V njenem izpisu loči čas nastanka posnetka od časa spremembe datoteke.', 'V metapodatkih hodnik.jpg poišči DateTimeOriginal in prepiši samo uro ter minute.'],
@@ -287,7 +287,7 @@ const hints: Record<number, [string, string]> = {
 
 const explanations: Record<number, string> = {
   1: 'Cezarjeva šifra zamenja črke s stalnim premikom po abecedi. V tem primeru je šifriranje premaknilo črke za tri mesta naprej, dešifriranje pa jih je vrnilo nazaj. Zgodba je razkrila premik, primerjava abeced pa preslikavo posameznih črk. Presledki in vrstni red so pomagali preveriti smiselnost sporočila. Takšna šifra je primerna za razumevanje osnov, ne za sodobno varovanje podatkov.',
-  2: 'Nabor znakov in dopolnilo = sta namignila na Base64, smiseln izhod pa je potrdil izbiro metode. Base64 je kodiranje, ne šifriranje. Za pretvorbo nazaj ne potrebujemo skrivnega ključa in sam zapis ne zagotavlja zaupnosti. Tudi šestnajstiški, binarni, URL in decimalni zapis so načini predstavitve podatkov, ne samodejna zaščita.',
+  2: 'Šestnajstiški zapis (HEX) uporablja šestnajst znakov, 0–9 in A–F. Vsak par v tem primeru predstavlja en bajt besedila. Smiseln izhod je potrdil izbiro metode in razkril kodo naslednje mape. HEX je kodiranje, ne šifriranje: za pretvorbo ne potrebujemo skrivnega ključa in zapis sam ne varuje zaupnosti. Besedilo obvestila tudi samo po sebi še ne pojasni celotnega poteka incidenta.',
   3: 'Phishing skuša uporabnika zavesti v razkritje podatkov ali nevarno dejanje. Sporočilo B združuje tuji domeni pošiljatelja in povezave, grožnjo blokade ter zahtevo po prijavnih podatkih. Nujno obvestilo o učilnici in pričakovana priponka v drugih sporočilih sama po sebi nista phishing. V tem pripravljenem primeru ostalih šest sporočil ni zlonamernih; v resničnem svetu tudi ujemajoča se domena sama ne jamči varnosti. HTTPS šifrira povezavo, vendar sam ne potrjuje legitimnosti strani.',
   4: 'Imena ljubljenčkov in letnice rojstva so predvidljivi gradniki gesel. Dodan klicaj te predvidljivosti ne odpravi. Uporabljaj dolga, enkratna gesla, upravljalnik gesel in večfaktorsko prijavo. Tudi Miza783? ni zgled dobrega gesla. Iz te učne izbire ne moremo sklepati, katero geslo je bilo uporabljeno v incidentu.',
   5: 'Najprej je treba izbrati pravo datoteko: čas druge fotografije ne pojasni nastanka hodnik.jpg. DateTimeOriginal označuje nastanek posnetka; čas spremembe ModifyDate ni nujno čas fotografiranja. Posnetek zaslona v tej mapi tega podatka nima. Metapodatki lahko manjkajo ali so spremenjeni, zato sami po sebi niso nezmotljiv dokaz.',
@@ -298,7 +298,7 @@ const explanations: Record<number, string> = {
 
 const feedback: Record<number, string> = {
   1: 'Še ni pravilno. Preveri smer in velikost premika ter poišči besedo, ki jo sporočilo označuje kot kodo.',
-  2: 'Še ni pravilno. Primerjaj obliko niza z izbrano metodo. Pretvori celoten zapis in preveri, ali rezultat sestavlja smiselno sporočilo s kodo.',
+  2: 'Še ni pravilno. Preveri, ali si prekopiral vse pare in izbral metodo, ki ustreza namigu v zgodbi. V odgovor sodi samo koda naslednje mape, ne celotno obvestilo.',
   3: 'Še ni pravilno. Izberi eno sporočilo in vsaj dva različna opozorilna znaka. Vsak označeni razlog mora opisovati resnično opozorilo; preveri tudi morebitne odvečne izbire.',
   4: 'Še ni pravilno. Primerjaj javne podatke profila z gradniki vsakega ponujenega gesla.',
   5: 'Še ni pravilno. Preveri izbrano datoteko in loči nastanek posnetka od poznejše spremembe datoteke. Odgovori v obliki HH:MM.',
@@ -367,7 +367,7 @@ export const finale: Finale = {
     'Odklenila sta končno poročilo in opravila vseh osem stopenj.',
   ],
   limitation: 'Dokazi potrjujejo uporabo računa, ne identitete osebe za tipkovnico. Ne dokazujejo, da je lastnik računa storilec, da je bilo prav izbrano učno geslo uporabljeno za vdor ali da poznamo celoten potek napada.',
-  topics: stageSummaries.map(({ id, topic }) => id === 2 ? 'Kodiranja (Base64)' : topic),
+  topics: stageSummaries.map(({ id, topic }) => id === 2 ? 'Kodiranja (HEX)' : topic),
   discussion: [
     'Kateri podatek je bil najbolj prepričljiv dokaz in kakšne so njegove omejitve?',
     'Kaj bi lahko šola in uporabniki naredili za boljšo zaščito?',
