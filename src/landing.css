@@ -142,7 +142,7 @@
   min-height: 54px;
   padding: .9rem 1.55rem;
   border: 1px solid #bdcff2;
-  border-radius: 2px;
+  border-radius: var(--button-radius);
   background: #bdcff2;
   color: #0c1830;
   font-family: var(--landing-sans);
@@ -204,7 +204,7 @@
   margin: .85rem auto 0;
   padding: .5rem;
   border: 0;
-  border-radius: 0;
+  border-radius: var(--button-radius);
   background: transparent;
   color: #b8c9e5;
   font-family: var(--landing-sans);

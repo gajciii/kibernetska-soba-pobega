@@ -41,7 +41,7 @@
   min-height: 76px;
   padding: .7rem 1rem;
   border: 1px solid #405676;
-  border-radius: 5px;
+  border-radius: var(--button-radius);
   color: var(--text);
   background: #192a43;
   line-height: 1.45;
@@ -164,7 +164,7 @@
   border: 0;
   border-top: 2px solid transparent;
   border-bottom: 2px solid transparent;
-  border-radius: 0;
+  border-radius: var(--button-radius);
   color: var(--text);
   background: transparent;
   font-family: var(--code);
@@ -270,7 +270,7 @@
   min-height: 42px;
   padding: .65rem .85rem;
   border: 1px solid #3e526e;
-  border-radius: 4px;
+  border-radius: var(--button-radius);
   color: var(--text);
   background: #15243a;
   font-size: .875rem;

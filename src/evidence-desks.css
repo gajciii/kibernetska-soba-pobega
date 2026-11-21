@@ -21,7 +21,7 @@
 .profile-notebook > small, .empty-desk { color: var(--muted); font-size: .8rem; }
 .password-candidates { margin-top: 18px; display: flex; flex-wrap: wrap; gap: 10px 20px; }
 .password-candidates legend { margin-bottom: 6px; font-size: .875rem; }
-.password-candidates label { display: flex; gap: 10px; min-width: 165px; padding: 8px 10px; margin: 0; border: 1px solid var(--line); border-radius: 4px; background: var(--bg); }
+.password-candidates label { display: flex; gap: 10px; min-width: 165px; padding: 8px 10px; margin: 0; border: 1px solid var(--line); border-radius: var(--button-radius); background: var(--bg); }
 .password-candidates label span { display: grid; gap: 3px; }
 .password-candidates small { color: var(--muted); font-size: .8rem; }
 .password-candidates code { font-size: 1rem; }
@@ -29,7 +29,7 @@
 .password-candidates .selected code { color: var(--accent); }
 .file-workspace { display: grid; grid-template-columns: 190px minmax(0, 1fr); min-height: 340px; gap: 18px; }
 .artifact-list { display: flex; flex-direction: column; align-items: stretch; gap: 4px; min-width: 0; border-right: 1px solid var(--line); padding-right: 10px; }
-.artifact-list button { display: flex; gap: 10px; align-items: center; width: 100%; padding: 10px 8px; background: none; border: 0; border-radius: 4px; text-align: left; }
+.artifact-list button { display: flex; gap: 10px; align-items: center; width: 100%; padding: 10px 8px; background: none; border: 0; border-radius: var(--button-radius); text-align: left; }
 .artifact-list button[aria-pressed="true"] { background: color-mix(in srgb, var(--accent) 12%, transparent); color: var(--accent); }
 .artifact-extension { min-width: 30px; color: var(--warning); font: .75rem var(--code); text-transform: uppercase; }
 .artifact-list strong { display: block; font-size: .875rem; font-weight: 500; overflow-wrap: anywhere; }
@@ -37,7 +37,7 @@
 .artifact-inspector { min-width: 0; }
 .artifact-toolbar { display: flex; flex-wrap: wrap; gap: 8px 12px; align-items: center; justify-content: space-between; padding: 0 0 14px; }
 .artifact-toolbar h4 { margin: 0; font: .875rem var(--code); overflow-wrap: anywhere; }
-.artifact-toolbar button { min-height: 38px; padding: 7px 10px; border: 1px solid var(--line); border-radius: 4px; color: var(--accent); background: var(--bg); font-size: .875rem; }
+.artifact-toolbar button { min-height: 38px; padding: 7px 10px; border: 1px solid var(--line); border-radius: var(--button-radius); color: var(--accent); background: var(--bg); font-size: .875rem; }
 .artifact-photo { margin: 0; }
 .artifact-photo img { display: block; width: 100%; max-height: 300px; object-fit: cover; border-radius: 4px; }
 .artifact-photo figcaption { color: var(--muted); font-size: .875rem; margin-top: 10px; }
@@ -53,7 +53,7 @@
 .browser-domain { padding: 12px 16px; color: var(--muted); font-size: .875rem; border-bottom: 1px solid var(--line); }
 .browser-domain code { color: var(--text); }
 .browser-tabs { display: flex; overflow-x: auto; gap: 4px; padding: 6px 8px 0; background: var(--bg); }
-.browser-tabs button { min-width: 115px; flex: 1; padding: 10px 12px; border: 0; border-bottom: 2px solid transparent; border-radius: 4px 4px 0 0; background: transparent; color: var(--muted); text-align: left; font-size: .875rem; }
+.browser-tabs button { min-width: 115px; flex: 1; padding: 10px 12px; border: 0; border-bottom: 2px solid transparent; border-radius: var(--button-radius); background: transparent; color: var(--muted); text-align: left; font-size: .875rem; }
 .browser-tabs button[aria-pressed="true"] { border-color: var(--accent); color: var(--text); background: var(--surface); }
 .browser-tabs small { display: block; margin-top: 3px; color: var(--muted); font-size: .75rem; }
 .browser-address { display: flex; align-items: center; gap: 12px; padding: 12px 16px; border-bottom: 1px solid var(--line); }
@@ -70,7 +70,7 @@
 .captured-login h4 { font-size: 1.15rem; font-weight: 600; margin-bottom: 12px; }
 .captured-fields { display: grid; gap: 8px; margin: 0 0 10px; }
 .captured-fields > span { padding: 8px 10px; border: 1px solid #334761; border-radius: 4px; font-size: .875rem; color: var(--muted); background: #111c30; }
-.captured-fields > .captured-login-button { border-color: #36516d; background: #263c55; color: #c4d3e5; text-align: center; }
+.captured-fields > .captured-login-button { border-radius: var(--button-radius); border-color: #36516d; background: #263c55; color: #c4d3e5; text-align: center; }
 .captured-login > small { color: var(--muted); font-size: .75rem; }
 .browser-decision { display: flex; flex-wrap: wrap; align-items: center; gap: 10px 16px; padding: 14px 16px; border-top: 1px solid var(--line); }
 .browser-decision .selected-evidence { color: var(--success); margin: 0; font-size: .875rem; }

@@ -32,7 +32,7 @@
 .workbench-output { max-height: 360px; overflow: auto; color: var(--success); }
 .workbench-output.empty { color: var(--muted); }
 .workbench-actions { display: flex; flex-wrap: wrap; align-items: center; gap: 10px 16px; margin-top: 14px; }
-.workbench-reuse { min-height: 42px; padding: 8px 12px; border: 1px solid var(--line); border-radius: 4px; background: transparent; color: var(--text); font: inherit; font-size: .875rem; text-align: left; }
+.workbench-reuse { min-height: 42px; padding: 8px 12px; border: 1px solid var(--line); border-radius: var(--button-radius); background: transparent; color: var(--text); font: inherit; font-size: .875rem; text-align: left; }
 .workbench-reuse:hover:not(:disabled) { background: color-mix(in srgb, var(--accent) 8%, transparent); }
 .workbench-status { margin: 10px 0 0; color: var(--success); font-size: .875rem; }
 .workbench-error { margin: 12px 0 0; padding-left: 10px; border-left: 2px solid var(--warning); color: var(--warning); font-size: .875rem; }

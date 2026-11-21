@@ -8,11 +8,12 @@
   --bg: #0b1120; --surface: #111c30; --text: #e8edf7; --muted: #a5b3ca; --quiet: #8f9fb9;
   --line: #24324a; --line-strong: #415370; --accent: #79cfff; --success: #8ed9b2; --warning: #e3c48e;
   --code: "IBM Plex Mono", "SFMono-Regular", Consolas, monospace;
+  --button-radius: 12px;
 }
 * { box-sizing: border-box; }
 body { margin: 0; min-width: 320px; }
 button, input, textarea, select { font: inherit; }
-button { color: inherit; cursor: pointer; }
+button { color: inherit; cursor: pointer; border-radius: var(--button-radius); }
 button, input, textarea, select, summary, a { outline-offset: 4px; touch-action: manipulation; }
 button:disabled { cursor: not-allowed; opacity: .48; }
 button:focus-visible, input:focus-visible, textarea:focus-visible, select:focus-visible, summary:focus-visible, a:focus-visible, [tabindex="0"]:focus-visible { outline: 2px solid var(--accent); }
@@ -41,9 +42,9 @@ textarea { resize: vertical; }
 .muted { color: var(--muted); }
 .sr-only { position: absolute; width: 1px; height: 1px; margin: -1px; padding: 0; overflow: hidden; clip: rect(0,0,0,0); white-space: nowrap; }
 .eyebrow { font-family: var(--code); font-size: .75rem; letter-spacing: .08em; color: var(--muted); }
-.skip-link { position: fixed; top: 1rem; left: 1rem; z-index: 100; padding: .7rem 1rem; color: var(--bg); background: var(--accent); }
+.skip-link { position: fixed; top: 1rem; left: 1rem; z-index: 100; padding: .7rem 1rem; border-radius: var(--button-radius); color: var(--bg); background: var(--accent); }
 .skip-link:not(:focus) { width: 1px; height: 1px; overflow: hidden; clip-path: inset(50%); white-space: nowrap; }
-.primary, .secondary, .danger { display: inline-flex; align-items: center; justify-content: center; gap: .55rem; min-height: 42px; padding: .65rem 1rem; border: 1px solid transparent; border-radius: 4px; font-size: .875rem; font-weight: 550; line-height: 1.35; text-decoration: none; transition: background-color .15s, border-color .15s; }
+.primary, .secondary, .danger { display: inline-flex; align-items: center; justify-content: center; gap: .55rem; min-height: 42px; padding: .65rem 1rem; border: 1px solid transparent; border-radius: var(--button-radius); font-size: .875rem; font-weight: 550; line-height: 1.35; text-decoration: none; transition: background-color .15s, border-color .15s; }
 .primary { background: #a3dfff; color: #0a1b2d; }
 .primary:hover:not(:disabled) { background: #c4ebff; }
 .secondary { background: #17243a; border-color: #344661; color: var(--text); }
