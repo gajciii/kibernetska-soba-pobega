@@ -1,0 +1,96 @@
+name: Preverjanje in pripravljena objava
+
+on:
+  pull_request:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: pipeline-${{ github.ref }}
+  cancel-in-progress: false
+
+jobs:
+  verify:
+    name: Koda, tipi, testi in produkcijski build
+    runs-on: ubuntu-latest
+    env:
+      DATABASE_URL: postgresql://operacija404_ci:ci_only@127.0.0.1:5432/operacija404_test
+      TEST_DATABASE_URL: postgresql://operacija404_ci:ci_only@127.0.0.1:5432/operacija404_test
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version-file: .nvmrc
+          cache: npm
+      - name: Lokalni PostgreSQL brez vsebnikov
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y postgresql postgresql-client
+          sudo systemctl start postgresql
+          sudo -u postgres psql -v ON_ERROR_STOP=1 -c "CREATE ROLE operacija404_ci LOGIN PASSWORD 'ci_only';"
+          sudo -u postgres createdb -O operacija404_ci operacija404_test
+      - run: npm ci
+      - run: npm run lint
+      - run: npm run typecheck
+      - run: bash -n deploy/deploy-release.sh
+      - run: npm test
+      - run: npm run build
+      - name: Namesti Chromium in Microsoft Edge Stable
+        run: npx playwright install --with-deps chromium msedge
+      - run: npm run test:e2e
+      - name: Pripravi izdajo brez baze in skrivnosti
+        run: tar -czf release.tar.gz dist package.json package-lock.json deploy
+      - uses: actions/upload-artifact@v4
+        with:
+          name: release-${{ github.sha }}
+          path: release.tar.gz
+          retention-days: 14
+
+  deploy:
+    name: Objava na potrjeni strežnik
+    needs: verify
+    if: >-
+      vars.ENABLE_DEPLOY == 'true' &&
+      github.ref == 'refs/heads/main' &&
+      (github.event_name == 'push' || github.event_name == 'workflow_dispatch')
+    runs-on: ubuntu-latest
+    environment: production
+    steps:
+      - uses: actions/download-artifact@v4
+        with:
+          name: release-${{ github.sha }}
+      - name: SSH z vnaprej potrjenim ključem gostitelja
+        env:
+          SSH_PRIVATE_KEY: ${{ secrets.DEPLOY_SSH_KEY }}
+          SSH_KNOWN_HOSTS: ${{ secrets.DEPLOY_KNOWN_HOSTS }}
+          DEPLOY_HOST: ${{ vars.DEPLOY_HOST }}
+          DEPLOY_USER: ${{ vars.DEPLOY_USER }}
+          DEPLOY_PORT: ${{ vars.DEPLOY_PORT || '22' }}
+          DEPLOY_ROOT: ${{ vars.DEPLOY_ROOT || '/srv/operacija404' }}
+          DEPLOY_SERVICE: ${{ vars.DEPLOY_SERVICE || 'operacija404.service' }}
+          RELEASE_ID: ${{ github.sha }}-${{ github.run_id }}-${{ github.run_attempt }}
+        shell: bash
+        run: |
+          set -euo pipefail
+          [[ "$DEPLOY_HOST" =~ ^[a-zA-Z0-9][a-zA-Z0-9.-]*$ ]]
+          [[ "$DEPLOY_USER" =~ ^[a-zA-Z_][a-zA-Z0-9_-]*$ ]]
+          [[ "$DEPLOY_PORT" =~ ^[0-9]+$ ]]
+          [[ "$DEPLOY_ROOT" =~ ^/[a-zA-Z0-9/_-]+$ && "$DEPLOY_ROOT" != / ]]
+          [[ "$DEPLOY_SERVICE" =~ ^[a-zA-Z0-9@_.-]+$ ]]
+          test -n "$SSH_PRIVATE_KEY"
+          test -n "$SSH_KNOWN_HOSTS"
+          install -m 700 -d "$HOME/.ssh"
+          printf '%s\n' "$SSH_PRIVATE_KEY" > "$HOME/.ssh/deploy_key"
+          printf '%s\n' "$SSH_KNOWN_HOSTS" > "$HOME/.ssh/known_hosts"
+          chmod 600 "$HOME/.ssh/deploy_key" "$HOME/.ssh/known_hosts"
+          ssh_options=(-i "$HOME/.ssh/deploy_key" -o BatchMode=yes -o IdentitiesOnly=yes -o StrictHostKeyChecking=yes)
+          target="$DEPLOY_USER@$DEPLOY_HOST"
+          ssh "${ssh_options[@]}" -p "$DEPLOY_PORT" "$target" "test -d '$DEPLOY_ROOT/incoming'"
+          scp "${ssh_options[@]}" -P "$DEPLOY_PORT" release.tar.gz "$target:$DEPLOY_ROOT/incoming/$RELEASE_ID.tar.gz"
+          tar -xzf release.tar.gz deploy/deploy-release.sh
+          ssh "${ssh_options[@]}" -p "$DEPLOY_PORT" "$target" \
+            "bash -s -- '$DEPLOY_ROOT' '$RELEASE_ID' '$DEPLOY_SERVICE'" < deploy/deploy-release.sh

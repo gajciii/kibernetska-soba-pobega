@@ -1,0 +1,17 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="960" height="600" viewBox="0 0 960 600" role="img" aria-labelledby="title desc">
+  <title id="title">Šolski hodnik</title><desc id="desc">Izmišljena ilustracija praznega šolskega hodnika z vrati, omaricami in okni. Učni primer.</desc>
+  <defs><linearGradient id="floor" x2="0" y2="1"><stop stop-color="#556c80"/><stop offset="1" stop-color="#253c54"/></linearGradient><linearGradient id="light"><stop stop-color="#d4ece6"/><stop offset="1" stop-color="#86b9c5"/></linearGradient></defs>
+  <path fill="#91a8b5" d="M0 0h960v600H0z"/><path fill="#a9c2cb" d="m0 0 357 166h245L960 0Z"/><path fill="url(#floor)" d="m0 600 357-257h245l358 257Z"/>
+  <path fill="#648194" d="m0 0 357 166v177L0 600Z"/><path fill="#7698a7" d="M960 0 602 166v177l358 257Z"/>
+  <path fill="#bccfd4" d="M357 166h245v177H357z"/><path fill="#395e73" d="M405 205h104v138H405z"/><path fill="url(#light)" d="M415 215h84v67h-84z"/><path fill="#a4babf" d="M415 291h84v43h-84z"/><circle cx="492" cy="305" r="3" fill="#e6d2ab"/>
+  <path fill="#34546c" d="m30 163 108 25v293L30 538Zm118 33 74 17v184l-74 58Zm99 24 53 12v111l-53 39Z"/><path fill="#78a0ab" d="m43 180 52 12v85l-52-1Zm118 30 48 12v59l-48-3Zm95 22 35 9v41l-35-2Z"/>
+  <path fill="#d7a266" d="m119 359 10-4v23l-10 5Zm106-45 7-1v17l-7 2Zm75-16 6-1v12l-6 2Z"/>
+  <path fill="#335971" d="m655 175 52-23v241l-52-30Zm79-34 74-33v350l-74-45Zm106-46 93-41v492l-93-58Z"/>
+  <path fill="url(#light)" d="m664 185 33-14v119l-33-7Zm81-31 52-23v172l-52-11Zm107-44 68-29v236l-68-14Z"/>
+  <path stroke="#527789" stroke-width="6" d="m681 178 1 107m-18-53 33-4m75-86v155m-27-77 52-5m89-120v215m-34-119 68-14"/>
+  <path stroke="#8eabb6" stroke-width="2" opacity=".55" d="m357 343-227 257m472-257 226 257M430 343l-55 257m165-257 56 257M304 382h352m-405 63h492M154 515h688"/>
+  <path fill="#e3eee5" d="m337 76 256 0-36 19H374Zm47 51h160l-19 12H402Z"/><path fill="#ccddd9" d="M427 151h78l-8 6h-62z"/>
+  <path fill="#355b6e" d="M534 230h41v59h-41z"/><path fill="#bdd5cf" d="M539 235h31v5h-31zm0 10h25v3h-25zm0 8h30v3h-30zm0 8h22v3h-22z"/>
+  <path fill="#2d4b5f" d="m0 530 357-187v10L0 548Zm602-187 358 190v17L602 353Z"/>
+  <path fill="#1c3c4b" d="M539 319h37l-5 24h-27z"/><path fill="#527f71" d="M557 325q-30-14-20-24 18 2 20 24m0 0q-9-30 2-40 12 14-2 40m0 0q25-28 27-12-4 13-27 12"/>
+</svg>

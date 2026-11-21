@@ -1,0 +1,24 @@
+[Unit]
+Description=Operacija 404 — kibernetska soba pobega
+After=network.target
+
+[Service]
+Type=simple
+User=operacija404
+Group=operacija404
+WorkingDirectory=/srv/operacija404/current
+Environment=NODE_ENV=production
+# Pot do sistemskega Node.js 24 prilagodi strežniku.
+ExecStart=/usr/bin/node --env-file=/srv/operacija404/shared/.env /srv/operacija404/current/dist/server/index.js
+Restart=on-failure
+RestartSec=3
+TimeoutStopSec=20
+UMask=0077
+NoNewPrivileges=true
+PrivateTmp=true
+ProtectHome=true
+ProtectSystem=strict
+ReadWritePaths=/srv/operacija404/shared
+
+[Install]
+WantedBy=multi-user.target
