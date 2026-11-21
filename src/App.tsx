@@ -2,6 +2,7 @@ import { useCallback, useEffect, useRef, useState } from 'react';
 import type { FormEvent, ReactNode } from 'react';
 import type { AnswerResponse, Bootstrap, Finale, SessionView, StageContent, StageResponse, StageSummary } from '../shared/types';
 import ConverterWorkbench from './ConverterWorkbench';
+import CaesarWorkbench from './CaesarWorkbench';
 import { Mailbox, TrafficViewer } from './InvestigationViewers';
 import { BrowserDesk, MetadataDesk, ProfileDesk } from './EvidenceDesks';
 import Landing from './Landing';
@@ -187,13 +188,15 @@ function Stage({ data, csrf, busy, setBusy, onSession, onData, onNext, onFinale,
         <div className="stage-breadcrumb"><span>IZZIV {String(stage.id).padStart(2, '0')} / 08</span><span>{stage.topic}</span>{data.solved && <span className="solved-badge"><Icon name="check" size={14}/>Rešeno</span>}</div>
         <h1 ref={headingRef} tabIndex={-1}>{stage.title}</h1>
       </div>
+      {stage.kind === 'caesar' && <p className="stage-intro caesar-story">{stage.intro}</p>}
       <section className="task-instruction" aria-labelledby="instruction-heading"><h2 id="instruction-heading">NAVODILO</h2><p>{stage.question}</p></section>
       <a className="mobile-answer-link" href="#answer-panel">Vnesi odgovor</a>
       <section className="desktop-window" aria-label={`${app.name} — delovno okno`}>
         <header className="window-toolbar"><div className="window-app"><Icon name={app.icon} size={17}/><strong>{app.name}</strong></div><span className="window-file">PRIMER 404 / {String(stage.id).padStart(2, '0')}</span><span className="window-controls" aria-hidden="true"><i/><i/><i/></span></header>
         <div className="window-body">
           {stage.evidence && <div className="source-evidence"><span>DOKAZ</span><code>{stage.evidence}</code></div>}
-          {['caesar', 'base64', 'binary'].includes(stage.kind) && <ConverterWorkbench stage={stage}/>}
+          {stage.kind === 'caesar' && <CaesarWorkbench/>}
+          {['base64', 'binary'].includes(stage.kind) && <ConverterWorkbench stage={stage}/>}
           {stage.kind === 'phishing' && <Mailbox mails={stage.mails ?? []} answer={answer} onAnswer={setAnswer} disabled={data.solved || busy}/>}
           {stage.kind === 'password' && <ProfileDesk stage={stage} answer={answer} onAnswer={setAnswer} disabled={data.solved || busy}/>}
           {stage.kind === 'metadata' && <MetadataDesk artifacts={stage.artifacts ?? []}/>}

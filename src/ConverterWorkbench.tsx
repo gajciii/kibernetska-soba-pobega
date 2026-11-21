@@ -1,6 +1,6 @@
 import { useId, useRef, useState } from 'react';
 import type { FormEvent } from 'react';
-import { caesarDecrypt, convertText } from '../shared/converters';
+import { convertText } from '../shared/converters';
 import type { ConversionDirection, EncodingMethod } from '../shared/converters';
 import type { StageContent } from '../shared/types';
 import './converter-workbench.css';
@@ -16,11 +16,9 @@ const alphabet = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
 
 export default function ConverterWorkbench({ stage }: { stage: StageContent }) {
   const uid = useId();
-  const isCaesar = stage.kind === 'caesar';
   const [input, setInput] = useState(stage.evidence ?? '');
   const [method, setMethod] = useState<EncodingMethod | ''>(stage.kind === 'binary' ? 'binary' : '');
   const [direction, setDirection] = useState<ConversionDirection>('decode');
-  const [shift, setShift] = useState(0);
   const [result, setResult] = useState<string | null>(null);
   const [error, setError] = useState('');
   const [notice, setNotice] = useState('');
@@ -33,11 +31,8 @@ export default function ConverterWorkbench({ stage }: { stage: StageContent }) {
     setError(''); setNotice(''); setResult(null);
     try {
       if (!input.length) throw new Error('Najprej vnesita besedilo za pretvorbo.');
-      if (isCaesar) setResult(caesarDecrypt(input, shift));
-      else {
-        if (!method) throw new Error('Najprej izberita kodiranje, ki ga želita preizkusiti.');
-        setResult(convertText(input, method, direction));
-      }
+      if (!method) throw new Error('Najprej izberita kodiranje, ki ga želita preizkusiti.');
+      setResult(convertText(input, method, direction));
     } catch (failure) {
       setError(failure instanceof Error ? failure.message : 'Pretvorba ni uspela. Preverita vnos.');
     }
@@ -49,26 +44,16 @@ export default function ConverterWorkbench({ stage }: { stage: StageContent }) {
     inputRef.current?.focus();
   }
 
-  return <section className="converter-workbench" aria-label={isCaesar ? 'Pripomoček za Cezarjevo šifro' : 'Pretvornik besedila'}>
+  return <section className="converter-workbench" aria-label="Pretvornik besedila">
     <form onSubmit={submit}>
-      {isCaesar ? <div className="workbench-caesar">
-        <div className="workbench-shift-heading"><label htmlFor={`${uid}-shift`}>Premik nazaj po abecedi A–Z</label><span className="workbench-shift-value">{shift} / 25</span></div>
-        <input id={`${uid}-shift`} type="range" min="0" max="25" step="1" value={shift} onChange={event => { setShift(Number(event.target.value)); invalidate(); }} aria-describedby={`${uid}-shift-help`}/>
-        <span className="sr-only" id={`${uid}-shift-help`}>Dešifriranje premakne črke nazaj po abecedi. Drugi znaki se ohranijo.</span>
-        <div className="workbench-alphabet" aria-label={`Primerjava abeced pri premiku ${shift} nazaj`}>
-          <div className="workbench-alphabet-labels"><span>Vhod</span><span>Po premiku</span></div>
-          <div className="workbench-alphabet-letters">{Array.from(alphabet, letter => <span className="workbench-letter-pair" key={letter}><span>{letter}</span><span>{caesarDecrypt(letter, shift)}</span></span>)}</div>
-        </div>
-      </div> : <>
-        <div className="workbench-controls">
-          <div><label htmlFor={`${uid}-encoding`}>Kodiranje</label><select id={`${uid}-encoding`} value={method} onChange={event => { setMethod(event.target.value as EncodingMethod | ''); invalidate(); }}>
-            <option value="">Izberita kodiranje</option>{methods.map(item => <option value={item.id} key={item.id}>{item.label}</option>)}
-          </select></div>
-          <div><label htmlFor={`${uid}-direction`}>Smer pretvorbe</label><select id={`${uid}-direction`} value={direction} onChange={event => { setDirection(event.target.value as ConversionDirection); invalidate(); }}>
-            <option value="decode">Dekodiranje – zapis v besedilo</option><option value="encode">Kodiranje – besedilo v zapis</option>
-          </select></div>
-        </div>
-      </>}
+      <div className="workbench-controls">
+        <div><label htmlFor={`${uid}-encoding`}>Kodiranje</label><select id={`${uid}-encoding`} value={method} onChange={event => { setMethod(event.target.value as EncodingMethod | ''); invalidate(); }}>
+          <option value="">Izberita kodiranje</option>{methods.map(item => <option value={item.id} key={item.id}>{item.label}</option>)}
+        </select></div>
+        <div><label htmlFor={`${uid}-direction`}>Smer pretvorbe</label><select id={`${uid}-direction`} value={direction} onChange={event => { setDirection(event.target.value as ConversionDirection); invalidate(); }}>
+          <option value="decode">Dekodiranje – zapis v besedilo</option><option value="encode">Kodiranje – besedilo v zapis</option>
+        </select></div>
+      </div>
       <div className="workbench-editors">
         <div className="workbench-input"><div className="workbench-editor-heading"><label htmlFor={`${uid}-input`}>Besedilo za pretvorbo</label><span>{Array.from(input).length} znakov</span></div>
           <textarea id={`${uid}-input`} ref={inputRef} value={input} onChange={event => { setInput(event.target.value); invalidate(); }} spellCheck={false} autoComplete="off" rows={6} maxLength={32768} aria-describedby={error ? `${uid}-error` : undefined}/>
@@ -78,10 +63,10 @@ export default function ConverterWorkbench({ stage }: { stage: StageContent }) {
         </div>
       </div>
       {error && <p id={`${uid}-error`} className="workbench-error" role="alert">{error}</p>}
-      <div className="workbench-actions"><button className="primary" type="submit">{isCaesar ? 'Dešifriraj' : 'Pretvori'}</button><button className="workbench-reuse" type="button" onClick={reuseResult} disabled={result === null}>Uporabi rezultat kot vhod</button></div>
+      <div className="workbench-actions"><button className="primary" type="submit">Pretvori</button><button className="workbench-reuse" type="button" onClick={reuseResult} disabled={result === null}>Uporabi rezultat kot vhod</button></div>
       {notice && <p className="workbench-status" role="status">{notice}</p>}
     </form>
-    <details className="workbench-help"><summary>{isCaesar ? 'Pomoč za premik' : 'Pomoč za kodiranje'}</summary><p>{isCaesar ? 'Vsako črko A–Z premaknemo za izbrano število mest nazaj. Presledki, ločila in šumniki se ohranijo.' : currentMethod?.help ?? 'Izberita kodiranje za prikaz njegovega opisa. Pretvornik zapis pretvori samo z izbranim postopkom.'}</p>{!isCaesar && <p>Besedilni formati uporabljajo UTF-8. Za naslednji korak uporabita rezultat kot vhod.</p>}</details>
+    <details className="workbench-help"><summary>Pomoč za kodiranje</summary><p>{currentMethod?.help ?? 'Izberita kodiranje za prikaz njegovega opisa. Pretvornik zapis pretvori samo z izbranim postopkom.'}</p><p>Besedilni formati uporabljajo UTF-8. Za naslednji korak uporabita rezultat kot vhod.</p></details>
     {stage.kind === 'binary' && <details className="workbench-ascii"><summary>Referenčna tabela ASCII · črke A–Z</summary><p>Vse prikazane črke imajo v ASCII in UTF-8 enak osembitni zapis.</p><div className="workbench-ascii-scroll"><table><caption className="sr-only">Črke A do Z z decimalnim in binarnim zapisom ASCII</caption><thead><tr><th scope="col">Črka</th><th scope="col">Decimalno</th><th scope="col">Binarno</th></tr></thead><tbody>{Array.from(alphabet, letter => <tr key={letter}><th scope="row">{letter}</th><td>{letter.charCodeAt(0)}</td><td>{letter.charCodeAt(0).toString(2).padStart(8, '0')}</td></tr>)}</tbody></table></div></details>}
   </section>;
 }

@@ -27,14 +27,18 @@ Vsaka naloga ima eno kratko navodilo in delovni pripomoček. Polje oziroma izbir
 
 ## 1. Razbij skrivno sporočilo
 
-**Dokaz:** `NRGD MH PRVW`. Cezarjeva šifra uporablja A–Z brez šumnikov in premik 3. V pripomočku naj nastavita premik 3 in dešifrirata nazaj. Rezultat je `KODA JE MOST`; koda je **`MOST`**. Sprejet je tudi celoten stavek, ne glede na velikost črk in odvečne presledke.
+**Dokaz:** `NRGD MH PRVW`, iz datoteke `sporocilo.txt`, ki jo je izmišljena varnostna ekipa zavarovala med sledmi nenavadnega prenosa. Nad pripomočkom je zgodbeni odstavek. Par naj ga prebere: opis prejemnika vsebuje namig **»tri mesta nazaj«**, ki neposredno usmeri dešifriranje v levo. Kratko navodilo premika ne ponovi.
 
-**Opomba za izvajalko:** ime `sporocilo.txt` ni koda; presledki in vrstni red omogočajo preverjanje smiselnosti treh besed. V pripomočku lahko poskusita tudi drugačen premik in primerjata rezultat.
+**Potek reševanja:** uporabljata abecedo A–Z brez šumnikov. V ročnem pripomočku premikata abecedo v obe smeri, nastavita ustrezno preslikavo in po črkah razbereta sporočilo. Samodejnega dešifriranja ni. Razkrito sporočilo je `KODA JE MOST`; v edino polje za odgovor zgoraj desno vneseta samo kodo **`MOST`**. Strežniško preverjanje zaradi združljivosti še naprej sprejme tudi celoten stavek, ne glede na velikost črk in odvečne presledke.
 
-- Namig 1: »Vsako črko premakni za enako število mest.«
-- Namig 2: »Pri dešifriranju se premakni za 3 mesta nazaj: N postane K.«
+**Opomba za izvajalko:** ime datoteke ni koda; presledki in vrstni red omogočajo preverjanje smiselnosti treh besed. Če dobita drug rezultat, naj primerjata smer šifriranja s smerjo dešifriranja. Številke in ločila se ne spreminjajo.
 
-**Učni cilj:** razumeti enostavno substitucijo in vlogo ključa/premika. Presledki in ločila se ohranijo. Takšna šifra je primerna za osnove, ne za sodobno varovanje podatkov. Če dobita drug rezultat, preverita smer in premik; začetna nastavitev pripomočka je 0.
+- Namig 1: »V zgodbi poišči, kako je prejemnik razbral Cezarjevo sporočilo. Enak premik uporabi za vajin dokaz.«
+- Namig 2: »Pri dešifriranju se premakni za tri mesta nazaj: N postane K. Isto preslikavo uporabi za vse črke.«
+
+**Učni cilj:** iz zgodbe izluščiti podatek, ročno povezati šifrirane in izvirne črke ter razumeti stalni premik in obratno smer. Takšna šifra je primerna za osnove, ne za sodobno varovanje podatkov.
+
+**Zgodovinski vir:** Svetonij v *Življenju Julija Cezarja*, 56.6, opisuje prikrivanje zaupnih sporočil s premaknjenimi črkami in povezavo A–D. Prikazana abeceda A–Z in šolska datoteka sta sodoben učni primer. [Svetonij, Julij Cezar 56.6 — izvirni vir v angleškem prevodu](https://penelope.uchicago.edu/Thayer/E/Roman/Texts/Suetonius/12Caesars/Julius%2A.html#56.6). Vir je namenjen izvajalki; za reševanje ni treba odpreti zunanje strani.
 
 ## 2. Kaj se skriva za čudnimi znaki?
 

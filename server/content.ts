@@ -9,10 +9,10 @@ const stages: StageContent[] = [
     title: 'Razbij skrivno sporočilo',
     topic: 'Cezarjeva šifra',
     kind: 'caesar',
-    intro: 'Iz začasne mape je ostalo kratko šifrirano sporočilo.',
-    question: 'S Cezarjevo šifro premakni črke A–Z za 3 mesta nazaj. Vnesi besedo, ki jo razkrito sporočilo določi kot kodo.',
+    intro: 'Med sledmi nenavadnega prenosa iz šolskega sistema sta našla datoteko sporocilo.txt. Njen šifrirani zapis skriva kodo za prvi del preiskovalne mape. Avtor si je trik izposodil od Julija Cezarja. Prejemnik je njegovo zaupno sporočilo razbral tako, da je vsako črko premaknil za tri mesta nazaj. Enako naredita z vajino sledjo: po abecedi A–Z se pomikajta v levo, pred A pa nadaljujta pri Z.',
+    question: 'Z abecednim pripomočkom razvozlaj sporočilo. V polje za odgovor vnesi samo besedo, ki jo sporočilo določi kot kodo.',
     evidence: 'NRGD MH PRVW',
-    note: 'Uporabljena je Cezarjeva šifra s premikom 3. Pri tej nalogi uporabljamo abecedo A–Z brez šumnikov. Dešifriranje pomeni premik nazaj po abecedi.',
+    note: 'Uporabljamo abecedo A–Z brez šumnikov. Premik in smer razberi iz zgodbe, nato črke primerjaj s pomočjo abecednega pripomočka. Presledke in ločila ohrani.',
     investigations: [
       { id: 'arhiv', title: 'Izvor: začasna mapa', text: 'Zapis je bil najden v datoteki sporocilo.txt. Njeno ime opisuje vrsto datoteke in ni geslo.' },
       { id: 'razmiki', title: 'Ohranjen prepis', text: 'Pri prepisu so bili ohranjeni vsi presledki in vrstni red znakov. Rezultat bi moral biti smiselno sporočilo s tremi besedami.' },
@@ -275,7 +275,7 @@ const stages: StageContent[] = [
 export const stageSummaries: StageSummary[] = stages.map(({ id, title, topic }) => ({ id, title, topic }));
 
 const hints: Record<number, [string, string]> = {
-  1: ['Vsako črko premakni za enako število mest.', 'Pri dešifriranju se premakni za 3 mesta nazaj: N postane K.'],
+  1: ['V zgodbi poišči, kako je prejemnik razbral Cezarjevo sporočilo. Enak premik uporabi za vajin dokaz.', 'Pri dešifriranju se premakni za tri mesta nazaj: N postane K. Isto preslikavo uporabi za vse črke.'],
   2: ['Oglej si nabor znakov in zaključna znaka =. Katera metoda v laboratoriju uporablja tak zapis?', 'Izberi Base64. Po dekodiranju je iskana beseda za dvopičjem.'],
   3: ['Odpri podrobnosti sporočil. Primerjaj dejanski naslov pošiljatelja in povezave z domeno sola.example.', 'Primerjaj zahteve sporočil: eno združuje tuji domeni, grožnjo takojšnje blokade in zahtevo po geslu ter enkratni kodi.'],
   4: ['Poglej, katere osebne podatke lahko prebere vsak obiskovalec profila.', 'Primerjaj ime psičke in letnico rojstva s ponujenimi gesli.'],
@@ -286,7 +286,7 @@ const hints: Record<number, [string, string]> = {
 };
 
 const explanations: Record<number, string> = {
-  1: 'Cezarjeva šifra zamenja črke s premikom po abecedi. Presledki in vrstni red so pomagali preveriti smiselnost rezultata; ime datoteke ni bilo koda. Šifra je primerna za razumevanje osnov, ne za sodobno varovanje podatkov.',
+  1: 'Cezarjeva šifra zamenja črke s stalnim premikom po abecedi. V tem primeru je šifriranje premaknilo črke za tri mesta naprej, dešifriranje pa jih je vrnilo nazaj. Zgodba je razkrila premik, primerjava abeced pa preslikavo posameznih črk. Presledki in vrstni red so pomagali preveriti smiselnost sporočila. Takšna šifra je primerna za razumevanje osnov, ne za sodobno varovanje podatkov.',
   2: 'Nabor znakov in dopolnilo = sta namignila na Base64, smiseln izhod pa je potrdil izbiro metode. Base64 je kodiranje, ne šifriranje. Za pretvorbo nazaj ne potrebujemo skrivnega ključa in sam zapis ne zagotavlja zaupnosti. Tudi šestnajstiški, binarni, URL in decimalni zapis so načini predstavitve podatkov, ne samodejna zaščita.',
   3: 'Phishing skuša uporabnika zavesti v razkritje podatkov ali nevarno dejanje. Sporočilo B združuje tuji domeni pošiljatelja in povezave, grožnjo blokade ter zahtevo po prijavnih podatkih. Nujno obvestilo o učilnici in pričakovana priponka v drugih sporočilih sama po sebi nista phishing. V tem pripravljenem primeru ostalih šest sporočil ni zlonamernih; v resničnem svetu tudi ujemajoča se domena sama ne jamči varnosti. HTTPS šifrira povezavo, vendar sam ne potrjuje legitimnosti strani.',
   4: 'Imena ljubljenčkov in letnice rojstva so predvidljivi gradniki gesel. Dodan klicaj te predvidljivosti ne odpravi. Uporabljaj dolga, enkratna gesla, upravljalnik gesel in večfaktorsko prijavo. Tudi Miza783? ni zgled dobrega gesla. Iz te učne izbire ne moremo sklepati, katero geslo je bilo uporabljeno v incidentu.',

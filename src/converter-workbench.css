@@ -9,7 +9,7 @@
 }
 .workbench-controls { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 14px; margin-bottom: 18px; }
 .workbench-controls > div, .workbench-input, .workbench-result { min-width: 0; }
-.workbench-controls label, .workbench-shift-heading label { font-size: .875rem; color: var(--muted); }
+.workbench-controls label { font-size: .875rem; color: var(--muted); }
 .workbench-controls select {
   width: 100%; min-width: 0; min-height: 42px; padding: 9px 32px 9px 12px;
   appearance: none; border: 1px solid var(--line); border-radius: 4px;
@@ -36,15 +36,6 @@
 .workbench-reuse:hover:not(:disabled) { background: color-mix(in srgb, var(--accent) 8%, transparent); }
 .workbench-status { margin: 10px 0 0; color: var(--success); font-size: .875rem; }
 .workbench-error { margin: 12px 0 0; padding-left: 10px; border-left: 2px solid var(--warning); color: var(--warning); font-size: .875rem; }
-.workbench-shift-heading { display: flex; justify-content: space-between; align-items: baseline; flex-wrap: wrap; gap: 8px; }
-.workbench-shift-heading label { margin: 0; }
-.workbench-shift-value { color: var(--accent); font: .875rem var(--code); }
-.workbench-caesar input[type="range"] { display: block; margin: 10px 0; min-height: 28px; accent-color: var(--accent); }
-.workbench-alphabet { display: flex; align-items: flex-start; gap: 12px; margin-bottom: 18px; padding: 12px; background: var(--bg); border-radius: 4px; }
-.workbench-alphabet-labels { display: grid; flex-shrink: 0; color: var(--muted); font: .8rem/2 var(--code); }
-.workbench-alphabet-letters { display: flex; flex-wrap: wrap; gap: 5px 8px; min-width: 0; }
-.workbench-letter-pair { display: grid; width: 1ch; font: .875rem/1.8 var(--code); text-align: center; }
-.workbench-letter-pair > :last-child { color: var(--accent); }
 .workbench-help, .workbench-ascii { margin-top: 14px; color: var(--muted); font-size: .875rem; }
 .workbench-help summary, .workbench-ascii summary { width: fit-content; max-width: 100%; padding: 6px 0; cursor: pointer; }
 .workbench-help p, .workbench-ascii p { margin: 8px 0 0; line-height: 1.6; }
@@ -56,10 +47,6 @@
 @container converter (max-width: 540px) {
   .workbench-editors, .workbench-controls { grid-template-columns: minmax(0, 1fr); }
   .workbench-output, .converter-workbench textarea { min-height: 150px; }
-  .workbench-alphabet { display: block; }
-  .workbench-alphabet-labels { display: flex; gap: 14px; margin-bottom: 8px; }
-  .workbench-alphabet-labels > :first-child::after { content: ' (zgoraj)'; }
-  .workbench-alphabet-labels > :last-child::after { content: ' (spodaj)'; }
 }
 @media (max-width: 600px) {
   .converter-workbench { min-height: 0; padding: 14px; }

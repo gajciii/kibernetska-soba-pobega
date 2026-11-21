@@ -29,6 +29,8 @@ async function next(page: Page) {
 test('vseh osem stopenj, lokalni pripomočki, nadaljevanje in zaključek', async ({ page }, testInfo) => {
   const foreignRequests: string[] = [];
   const browserErrors: string[] = [];
+  const submittedAnswers: string[] = [];
+  page.on('request', request => { if (request.url().endsWith('/answer')) submittedAnswers.push(request.url()); });
   page.on('request', request => { if (!request.url().startsWith('http://127.0.0.1:4173/')) foreignRequests.push(request.url()); });
   page.on('pageerror', error => browserErrors.push(error.message));
   await page.goto('/');
@@ -49,11 +51,39 @@ test('vseh osem stopenj, lokalni pripomočki, nadaljevanje in zaključek', async
     expect(main).not.toBeNull();
     expect(sidebar!.x).toBeGreaterThanOrEqual(main!.x + main!.width - 1);
   }
-  await page.getByLabel('Premik nazaj po abecedi A–Z').focus();
-  await page.keyboard.press('Home');
-  await page.keyboard.press('ArrowRight'); await page.keyboard.press('ArrowRight'); await page.keyboard.press('ArrowRight');
-  await page.getByRole('button', { name: 'Dešifriraj', exact: true }).click();
-  await expect(page.locator('output')).toHaveText('KODA JE MOST');
+  const caesar = page.getByTestId('caesar-workbench');
+  const rowLabel = await caesar.locator('.cw-row-label').first().boundingBox();
+  const firstLetter = await caesar.getByRole('button', { name: 'Izberi črko A', exact: true }).boundingBox();
+  expect(firstLetter!.x).toBeGreaterThanOrEqual(rowLabel!.x + rowLabel!.width - 1);
+  const backward = caesar.getByRole('button', { name: 'Premakni črke za eno mesto nazaj', exact: true });
+  const forward = caesar.getByRole('button', { name: 'Premakni črke za eno mesto naprej', exact: true });
+  await expect(caesar.locator('input, textarea, output, form')).toHaveCount(0);
+  await expect(page.getByRole('button', { name: 'Dešifriraj', exact: true })).toHaveCount(0);
+  await expect(page.getByRole('textbox')).toHaveCount(1);
+  await caesar.getByRole('button', { name: 'Izberi črko N', exact: true }).click();
+  await expect(page.getByTestId('caesar-mapping')).toHaveText('N → N');
+  await forward.click(); // Obratno ovijanje čez začetek abecede.
+  await expect(page.getByTestId('caesar-mapping')).toHaveText('N → O');
+  await backward.click();
+  await expect(page.getByTestId('caesar-mapping')).toHaveText('N → N');
+  await page.getByLabel('Odgovor', { exact: true }).fill('mo');
+  for (let step = 0; step < 3; step++) await backward.click();
+  await expect(page.getByTestId('caesar-shift')).toHaveText('3 mesta nazaj');
+  await expect(page.getByTestId('caesar-mapping')).toHaveText('N → K');
+  await expect(caesar.locator('.cw-output-cell[data-selected="true"]')).toHaveText('K');
+  await expect(caesar.getByRole('button', { name: 'Izberi črko N', exact: true })).toHaveAttribute('aria-pressed', 'true');
+  await expect(page.getByLabel('Odgovor', { exact: true })).toHaveValue('mo');
+  await expect(page.locator('.investigation-main')).not.toContainText('KODA JE MOST');
+  await caesar.getByRole('button', { name: 'Izberi črko A', exact: true }).click();
+  await expect(page.getByTestId('caesar-mapping')).toHaveText('A → X');
+  await expect(caesar.locator('.cw-output-cell[data-selected="true"]')).toHaveText('X');
+  await forward.click();
+  await expect(page.getByTestId('caesar-mapping')).toHaveText('A → Y');
+  await backward.click();
+  await caesar.getByRole('button', { name: 'Izberi črko N', exact: true }).click();
+  expect(submittedAnswers).toHaveLength(0);
+  await expect(caesar.locator('.cw-moving-letter').first()).toHaveCSS('transform', 'matrix(1, 0, 0, 1, 0, 0)');
+  await page.screenshot({ path: `.local/qa-${testInfo.project.name}-caesar.png`, fullPage: true });
   await page.locator('.hints-panel > summary').click();
   await page.getByRole('button', { name: 'Razkrij namig 1', exact: true }).click();
   await page.reload();
@@ -322,10 +352,11 @@ test('uvodna svetloba sledi kazalcu; naloge imajo navodilo in stalni odgovor', a
   await expectFirstStage(page);
   await expect(landing).toHaveCount(0);
   await expect(page.getByRole('heading', { name: 'NAVODILO', exact: true })).toBeVisible();
-  await expect(page.locator('.task-instruction')).toContainText('3');
-  await expect(page.locator('.task-instruction')).toContainText('nazaj');
+  await expect(page.locator('.task-instruction')).not.toContainText('3');
+  await expect(page.locator('.caesar-story')).toContainText('tri mesta nazaj');
+  await expect(page.locator('.caesar-story')).toContainText('levo');
   await expect(page.locator('.desktop-window')).toBeVisible();
-  await expect(page.locator('.stage-intro')).toHaveCount(0);
+  await expect(page.locator('.stage-intro')).toBeVisible();
   await expect(page.locator('.investigation-notes')).toHaveCount(0);
   await expect(page.locator('.hints-panel')).not.toHaveAttribute('open', '');
   if ((page.viewportSize()?.width ?? 0) > 800) {
@@ -342,7 +373,20 @@ test('uvodna svetloba sledi kazalcu; naloge imajo navodilo in stalni odgovor', a
     await page.getByRole('link', { name: 'Vnesi odgovor', exact: true }).click();
     await expect(page.locator('#answer-panel')).toBeInViewport();
   }
+  const originalViewport = page.viewportSize()!;
+  for (const width of [900, 320]) {
+    await page.setViewportSize({ width, height: 900 });
+    await checkLayout(page);
+    await expect(page.getByTestId('caesar-workbench')).toBeVisible();
+    if (width === 900) {
+      const main = await page.locator('.investigation-main').boundingBox();
+      const answer = await page.locator('.answer-panel').boundingBox();
+      expect(answer!.x).toBeGreaterThanOrEqual(main!.x + main!.width);
+    }
+  }
+  await page.setViewportSize(originalViewport);
   await submit(page, 'MOST'); await next(page);
+  await expect(page.locator('.stage-intro')).toHaveCount(0);
   await expect(page.getByLabel('Odgovor', { exact: true })).toBeVisible();
   await expect(page.locator('.task-instruction')).toBeVisible();
   await page.reload();
@@ -360,6 +404,26 @@ test('zmanjšano gibanje ohrani uvod brez svetilke in omogoča reševanje s tipk
   await expect(page.getByRole('heading', { name: 'NAVODILO', exact: true })).toBeVisible();
   await expect(page.locator('.source-evidence code')).toHaveText('NRGD MH PRVW');
   await checkLayout(page);
+  const caesar = page.getByTestId('caesar-workbench');
+  const firstLetter = caesar.getByRole('button', { name: 'Izberi črko A', exact: true });
+  const lastLetter = caesar.getByRole('button', { name: 'Izberi črko Z', exact: true });
+  await firstLetter.focus();
+  await page.keyboard.press('End');
+  await expect(lastLetter).toBeFocused();
+  await expect(lastLetter).toBeInViewport();
+  await page.keyboard.press('Space');
+  await expect(page.getByTestId('caesar-mapping')).toHaveText('Z → Z');
+  await page.keyboard.press('Home');
+  await expect(firstLetter).toBeFocused();
+  await page.keyboard.press('Enter');
+  await expect(page.getByTestId('caesar-mapping')).toHaveText('A → A');
+  const backward = caesar.getByRole('button', { name: 'Premakni črke za eno mesto nazaj', exact: true });
+  await backward.focus();
+  for (let step = 0; step < 3; step++) await page.keyboard.press('Enter');
+  await expect(page.getByTestId('caesar-mapping')).toHaveText('A → X');
+  await expect(caesar.locator('.cw-moving-letter').first()).toHaveCSS('animation-name', 'none');
+  await caesar.getByRole('button', { name: 'Ponastavi premik', exact: true }).click();
+  await expect(page.getByTestId('caesar-mapping')).toHaveText('A → A');
   await page.getByLabel('Odgovor', { exact: true }).focus();
   await page.keyboard.type('MOST');
   await page.keyboard.press('Enter');

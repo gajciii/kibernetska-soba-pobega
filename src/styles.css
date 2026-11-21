@@ -97,6 +97,9 @@ textarea { resize: vertical; }
 .source-evidence { display: flex; align-items: baseline; gap: 1rem; margin: 0; padding: 1rem 1.2rem; border-bottom: 1px solid var(--line); background: #0e192b; }
 .source-evidence > span { font-family: var(--code); font-size: .65rem; color: var(--quiet); letter-spacing: .08em; }
 .source-evidence > code { color: var(--warning); font-size: .95rem; white-space: pre-wrap; }
+.caesar-story { max-width: 82ch; margin: -.15rem 0 1.35rem; color: var(--muted); font-size: 1rem; line-height: 1.75; }
+[data-stage="caesar"] .source-evidence { padding: 1.25rem 1.5rem; }
+[data-stage="caesar"] .source-evidence > code { font-size: clamp(1.15rem, 1.65vw, 1.5rem); letter-spacing: .1em; }
 .window-status { display: flex; justify-content: space-between; align-items: center; gap: 1rem; padding: .45rem 1rem; border-top: 1px solid var(--line); background: #0e192b; color: var(--quiet); font-size: .7rem; }
 .window-status > span:first-child { display: flex; align-items: center; gap: .45rem; }
 .window-status i { width: 5px; height: 5px; border-radius: 50%; background: var(--success); }
