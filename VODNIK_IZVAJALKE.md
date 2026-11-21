@@ -1,6 +1,6 @@
-# Vodič za izvajalko: Operacija 404
+# Vodič za izvajalca: Operacija 404
 
-To je gradivo za izvajalko. Vsebuje rešitve in ni del javne aplikacije. Ne premakni ga v `public/` ali `dist/client/`. V javnem repozitoriju je izvorna koda skupaj z rešitvami seveda dostopna; za igro uporabljaj naslov aplikacije.
+To je gradivo za izvajalca. Vsebuje rešitve in ni del javne aplikacije. Ne premakni ga v `public/` ali `dist/client/`. V javnem repozitoriju je izvorna koda skupaj z rešitvami seveda dostopna; za igro uporabljaj naslov aplikacije.
 
 Delavnica je izmišljena izobraževalna simulacija za srednješolce. Dvojica uporablja en računalnik in isti brskalnik, brez registracije in zunanjih spletnih orodij. Vmesnik igralca nagovarja v ednini tudi pri delu v paru; ta vodič opisuje izvedbo delavnice z dvojicami. Igralca sta preiskovalca dogodka na šoli Piramida. Že na začetku vesta, da iščeta kodno ime projekta, ki mu pripada preneseni načrt `/zaupno/nacrt.pdf`. Osem ugank vodi do imena **BRUCOVANJE**.
 
@@ -27,7 +27,7 @@ Med začetkoma dveh iger v istem brskalniku mora preteči 60 sekund od prejšnje
 
 Preizkusi en celoten prehod. Nastavitev `APP_ORIGIN`, varen piškotek in HTTPS morajo ustrezati dejanskemu naslovu. Aplikacija potrebuje povezavo s svojim strežnikom, vsi dokazi in pripomočki pa ostanejo na istem spletnem mestu. Ne zahteva resničnega gesla, fotografije ali osebnih podatkov dijakov. Ime skupine je obvezno in javno na lestvici; par naj izbere izmišljeno oznako z 1–60 znaki. Robni presledki se odstranijo, samo presledki ali nevidni znaki niso veljavno ime. Predstavitev dokazov vključuje izbiranje sporočil, datotek in paketov. Četrta naloga zahteva ročni vnos predvidljivega gesla in nato priporočila; prej že rešene stopnje ostanejo rešene.
 
-Vsako nalogo uvede kratka zgodba, ki dokaze poveže s preiskavo. Pri nalogah 3–8 navodilo opredeli iskani podatek ali odločitev; konkretni postopki so v namigih. Druga naloga nima ločene sekcije NAVODILO. Polje oziroma izbira odgovora je zgoraj desno, namigi in razlaga pa so dostopni v stranskem panelu. Na ozkem zaslonu se elementi zložijo navpično. Dodatni dokazni zapiski niso prikazani v glavnem delu; spodnje opombe so pomoč izvajalki pri pogovoru.
+Vsako nalogo uvede kratka zgodba, ki dokaze poveže s preiskavo. Pri nalogah 3–8 navodilo opredeli iskani podatek ali odločitev; konkretni postopki so v namigih. Druga naloga nima ločene sekcije NAVODILO. Polje oziroma izbira odgovora je zgoraj desno, namigi in razlaga pa so dostopni v stranskem panelu. Na ozkem zaslonu se elementi zložijo navpično. Dodatni dokazni zapiski niso prikazani v glavnem delu; spodnje opombe so pomoč izvajalcu pri pogovoru.
 
 ## Predlog poteka: 45–60 minut
 
@@ -48,14 +48,14 @@ Vsako nalogo uvede kratka zgodba, ki dokaze poveže s preiskavo. Pri nalogah 3�
 
 **Potek reševanja:** uporabljata abecedo A–Z brez šumnikov. V ročnem pripomočku premikata abecedo v obe smeri, nastavita ustrezno preslikavo in po črkah razbereta sporočilo. Samodejnega dešifriranja ni. Razkrito sporočilo je `KODA JE PIRAMIDA`; v edino polje za odgovor zgoraj desno vneseta samo kodo **`PIRAMIDA`**. Strežniško preverjanje zaradi združljivosti še naprej sprejme tudi celoten stavek, ne glede na velikost črk in odvečne presledke.
 
-**Opomba za izvajalko:** ime datoteke ni koda; presledki in vrstni red omogočajo preverjanje smiselnosti treh besed. Če dobita drug rezultat, naj primerjata smer šifriranja s smerjo dešifriranja. Številke in ločila se ne spreminjajo.
+**Opomba za izvajalca:** ime datoteke ni koda; presledki in vrstni red omogočajo preverjanje smiselnosti treh besed. Če dobita drug rezultat, naj primerjata smer šifriranja s smerjo dešifriranja. Številke in ločila se ne spreminjajo.
 
 - Namig 1: »V zgodbi poišči, kako je prejemnik razbral Cezarjevo sporočilo. Enak premik uporabi za svoj dokaz.«
 - Namig 2: »Pri dešifriranju se premakni za tri mesta nazaj: N postane K. Isto preslikavo uporabi za vse črke.«
 
 **Učni cilj:** iz zgodbe izluščiti podatek, ročno povezati šifrirane in izvirne črke ter razumeti stalni premik in obratno smer. Takšna šifra je primerna za osnove, ne za sodobno varovanje podatkov.
 
-**Zgodovinski vir:** Svetonij v *Življenju Julija Cezarja*, 56.6, opisuje prikrivanje zaupnih sporočil s premaknjenimi črkami in povezavo A–D. Prikazana abeceda A–Z in šolska datoteka sta sodoben učni primer. [Svetonij, Julij Cezar 56.6 — izvirni vir v angleškem prevodu](https://penelope.uchicago.edu/Thayer/E/Roman/Texts/Suetonius/12Caesars/Julius%2A.html#56.6). Vir je namenjen izvajalki; za reševanje ni treba odpreti zunanje strani.
+**Zgodovinski vir:** Svetonij v *Življenju Julija Cezarja*, 56.6, opisuje prikrivanje zaupnih sporočil s premaknjenimi črkami in povezavo A–D. Prikazana abeceda A–Z in šolska datoteka sta sodoben učni primer. [Svetonij, Julij Cezar 56.6 — izvirni vir v angleškem prevodu](https://penelope.uchicago.edu/Thayer/E/Roman/Texts/Suetonius/12Caesars/Julius%2A.html#56.6). Vir je namenjen izvajalcu; za reševanje ni treba odpreti zunanje strani.
 
 ## 2. Kaj se skriva za čudnimi znaki?
 
@@ -79,7 +79,7 @@ Zgodba predstavi datoteko `obvestilo.dat`, skrbnikov izvoz prve prijave nenavadn
 - Namig 1: »Upoštevaj vrstni red: najprej zunanji zapis s šestnajstimi znaki v parih, nato notranji z naborom štiriinšestdesetih znakov.«
 - Namig 2: »Najprej dekodiraj Šestnajstiško (HEX). Celoten rezultat ročno prekopiraj v vhod, izberi Base64 in ponovno dekodiraj. Odgovor je samo koda naslednje mape.«
 
-**Opomba za izvajalko:** končnica `.dat` ne določa kodiranja. Če pretvorba ne uspe, naj preverita vrstni red, celovitost prekopiranih parov in vmesnega rezultata ter smer dekodiranja. Vmesni niz vsebuje 56 znakov in se konča z enim `=`; končno sporočilo vsebuje 41 bajtov ASCII. Neuspešen poskus v pripomočku ne poveča števila oddanih odgovorov. Ime prijavitelja pojasni naslednji pregled predala, ne določi storilca.
+**Opomba za izvajalca:** končnica `.dat` ne določa kodiranja. Če pretvorba ne uspe, naj preverita vrstni red, celovitost prekopiranih parov in vmesnega rezultata ter smer dekodiranja. Vmesni niz vsebuje 56 znakov in se konča z enim `=`; končno sporočilo vsebuje 41 bajtov ASCII. Neuspešen poskus v pripomočku ne poveča števila oddanih odgovorov. Ime prijavitelja pojasni naslednji pregled predala, ne določi storilca.
 
 **Učni cilj:** prepoznati dve zaporedni kodiranji in uporabiti rezultat prvega kot vhod drugega. Par šestnajstiških znakov predstavlja en bajt zapisa Base64, ta pa predstavlja končno besedilo. HEX in Base64 sta kodiranji, ne šifriranje; za obratno pretvorbo ne potrebujemo skrivnega ključa in njuna kombinacija ne zagotavlja zaupnosti.
 
@@ -144,7 +144,7 @@ Vsaka datoteka ima svoj pripravljeni izpis. `ucilnica.jpg` ohrani nastanek ob 08
 - Namig 1: »Med slikami poišči hodnik z rdečim nahrbtnikom in odpri njegove metapodatke. Čas poznejše spremembe ni nujno čas fotografiranja.«
 - Namig 2: »Pri datoteki hodnik.jpg primerjaj polji Čas nastanka posnetka in Čas spremembe. V odgovor prepiši uro in minute iz prvega.«
 
-**Učni cilj:** prepoznati pravi dokaz in razlikovati nastanek posnetka od poznejše spremembe datoteke. Za izvajalko: polje »Čas nastanka posnetka« predstavlja pomen `DateTimeOriginal`, »Čas spremembe« pa `ModifyDate`. Časovni odmik je izpisan; ni treba preračunavati v UTC. Metapodatki lahko manjkajo, so napačno nastavljeni ali spremenjeni, zato sami niso nezmotljiv dokaz. Razlika med časoma ne dokazuje namernega zavajanja, posega v vsebino slike ali identitete osebe, ki jo je spreminjala.
+**Učni cilj:** prepoznati pravi dokaz in razlikovati nastanek posnetka od poznejše spremembe datoteke. Za izvajalca: polje »Čas nastanka posnetka« predstavlja pomen `DateTimeOriginal`, »Čas spremembe« pa `ModifyDate`. Časovni odmik je izpisan; ni treba preračunavati v UTC. Metapodatki lahko manjkajo, so napačno nastavljeni ali spremenjeni, zato sami niso nezmotljiv dokaz. Razlika med časoma ne dokazuje namernega zavajanja, posega v vsebino slike ali identitete osebe, ki jo je spreminjala.
 
 ## 6. Kateri račun je bil uporabljen za prenos?
 
@@ -217,7 +217,7 @@ V edino polje za odgovor v sekciji **ODGOVOR** zgoraj desno par vpiše kodno ime
 
 ## Zaključek in pogovor
 
-»Odkril si projekt BRUCOVANJE.« potrdi cilj, zastavljen na začetku. Zaključek pokaže tri statistike: osem rešenih stopenj, čas in uporabljene namige. Pod njimi je vodoravna vrstica osmih obravnavanih tem; na ozkem zaslonu se pomika. Spodnja vprašanja in omejitve dokazov so gradivo za pogovor z izvajalko.
+»Odkril si projekt BRUCOVANJE.« potrdi cilj, zastavljen na začetku. Zaključek pokaže tri statistike: osem rešenih stopenj, čas in uporabljene namige. Pod njimi je vodoravna vrstica osmih obravnavanih tem; na ozkem zaslonu se pomika. Spodnja vprašanja in omejitve dokazov so gradivo za pogovor z izvajalcem.
 
 Na ločeni javni lestvici `/lestvica` se ekipe razvrstijo najprej po več rešenih izzivih, nato po manj uporabljenih namigih in nazadnje po krajšem času. Ob enakih treh vrednostih si delijo mesto. Podatki se med ogledom osvežujejo vsakih pet sekund; za ogled ni potreben začetek igre. Čas teče od začetka igre in se ustavi po rešitvi vseh osmih izzivov. Pri nedokončanem rezultatu teče tudi po ponastavitvi ali izteku seje. Ponoven ogled istega namiga števila ne poveča; tudi namig, prvič odprt po rešitvi njegove stopnje, ne poslabša rezultata. Zaključen rezultat ostane nespremenjen.
 
