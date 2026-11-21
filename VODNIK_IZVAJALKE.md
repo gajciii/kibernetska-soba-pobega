@@ -174,7 +174,7 @@ Izbrana povezava in vnesena domena se morata ujemati. Celoten URL, šolska domen
 
 **Dokaz:** `01001011 01001100 01001010 01010101 01000011`. Izvoz vsebuje pet bajtov v zapisu ASCII. Presledki ločujejo skupine in niso del končnega sporočila. Vrstni red skupin se ohrani.
 
-**Potek reševanja:** par izbere eno skupino in prebere osem bitov od leve proti desni. Mesta imajo uteži **128, 64, 32, 16, 8, 4, 2, 1**. Pri bitu **1** prišteje utež mesta, pri bitu **0** jo preskoči. Dobljeno decimalno število poišče v zložljivem pregledu ASCII s pari števil in črk A–Z ter si zapiše črko. Ločen učni primer `01000001 = 64 + 1 = 65 → A` pokaže postopek na drugem bajtu.
+**Potek reševanja:** par izbere eno skupino in prebere osem bitov od leve proti desni. Mesta imajo uteži **128, 64, 32, 16, 8, 4, 2, 1**. Pri bitu **1** prišteje utež mesta, pri bitu **0** jo preskoči. Dobljeno decimalno število poišče v zložljivem pregledu ASCII s pari števil in črk A–Z ter si zapiše črko. Primer takoj pod tremi koraki navodil pokaže postopek na drugem bajtu: `01000001` je `64 + 1 = 65` in predstavlja črko `A`.
 
 Pripomoček omogoča pregled posameznega bita in njegovega prispevka, ne izračuna pa skupne vsote ali črke. Oznaka »Skupina pregledana« in števec beležita pregled, ne pravilnosti. V njem ni izbire kodiranja, smeri ali gumba »Pretvori«. Rešitev se sestavi ročno:
 
