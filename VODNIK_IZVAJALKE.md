@@ -2,7 +2,22 @@
 
 To je gradivo za izvajalko. Vsebuje rešitve in ni del javne aplikacije. Ne premakni ga v `public/` ali `dist/client/`. V javnem repozitoriju je izvorna koda skupaj z rešitvami seveda dostopna; za igro uporabljaj naslov aplikacije.
 
-Delavnica je izmišljena izobraževalna simulacija za srednješolce. Dvojica uporablja en računalnik in isti brskalnik, brez registracije in zunanjih spletnih orodij. Vmesnik igralca nagovarja v ednini tudi pri delu v paru; ta vodič opisuje izvedbo delavnice z dvojicami. Igralca sta preiskovalca dogodka na šoli Most. Varnostna ekipa je zavarovala digitalne sledi, osem ugank pa vodi do izhoda iz digitalnega arhiva.
+Delavnica je izmišljena izobraževalna simulacija za srednješolce. Dvojica uporablja en računalnik in isti brskalnik, brez registracije in zunanjih spletnih orodij. Vmesnik igralca nagovarja v ednini tudi pri delu v paru; ta vodič opisuje izvedbo delavnice z dvojicami. Igralca sta preiskovalca dogodka na šoli Most. Že na začetku vesta, da iščeta kodno ime projekta, ki mu pripada preneseni načrt `/zaupno/nacrt.pdf`. Osem ugank vodi do imena **ISKRA**.
+
+## Rdeča nit zgodbe
+
+Cezarjeva koda **MOST** odpre prvo mapo, dvojno kodirano obvestilo pa razkrije **Luko Kovača** kot prijavitelja in kodo mape **SOVA**. Njegova prijava sumljive pošte utemelji pregled predala. Osebni nagovor v lažnem sporočilu vodi k javnemu profilu in hipotetično šibkemu geslu. Luka nato pove, da je uporabljal skupni šolski računalnik in ob odhodu fotografiral hodnik. Čas fotografije usmeri pregled okoliških omrežnih dogodkov. Uspešen prenos poveže račun **ucenec17** z računalnikom **10.0.0.17**, njegova zavarovana zgodovina pa vsebuje isto lažno povezavo kot pošta. Ko je ponarejena prijava prepoznana, skrbnik v pravem arhivu po računu, času in poti najde ustrezno različico načrta. Izvoz njene oznake v ASCII razkrije **ISKRA**.
+
+Časovne sledi z dne 20. 11. 2026 so:
+
+| Čas | Podatek v dokazih |
+| --- | --- |
+| 09:57 | Čas phishing sporočila B v predalu. |
+| 10:42:17 | Zapisani čas nastanka fotografije hodnika, ki ga Luka povezuje z odhodom iz učilnice. |
+| 10:45:12 | Uspešen prenos `/zaupno/nacrt.pdf` z računom `ucenec17` in IP `10.0.0.17`. |
+| 11:15:00 | Čas spremembe fotografije, ne čas njenega nastanka. |
+
+To zaporedje usmerja preverjanje sledi. Ne dokazuje, da je Luka odprl lažno povezavo, uporabil predvidljivo geslo ali izvedel prenos; tudi prisotnost povezave v zgodovini sama ne potrjuje vnesenih prijavnih podatkov ali vzroka prenosa.
 
 ## Pred izvedbo
 
@@ -27,7 +42,7 @@ Vsako nalogo uvede kratka zgodba, ki dokaze poveže s preiskavo. Pri nalogah 3�
 
 ## 1. Razbij skrivno sporočilo
 
-**Dokaz:** `NRGD MH PRVW`, iz datoteke `sporocilo.txt`, ki jo je izmišljena varnostna ekipa zavarovala med sledmi nenavadnega prenosa. Nad pripomočkom je zgodbeni odstavek. Par naj ga prebere: opis prejemnika vsebuje namig **»tri mesta nazaj«**, ki neposredno usmeri dešifriranje v levo. Kratko navodilo premika ne ponovi.
+**Dokaz:** `NRGD MH PRVW`, iz datoteke `sporocilo.txt`. Skrbnik je s Cezarjevo šifro skril kodo prvega dela preiskovalne mape, v kateri je zbral sledi prenosa. Nad pripomočkom je zgodbeni odstavek. Par naj ga prebere: opis prejemnika vsebuje namig **»tri mesta nazaj«**, ki neposredno usmeri dešifriranje v levo. Kratko navodilo premika ne ponovi.
 
 **Potek reševanja:** uporabljata abecedo A–Z brez šumnikov. V ročnem pripomočku premikata abecedo v obe smeri, nastavita ustrezno preslikavo in po črkah razbereta sporočilo. Samodejnega dešifriranja ni. Razkrito sporočilo je `KODA JE MOST`; v edino polje za odgovor zgoraj desno vneseta samo kodo **`MOST`**. Strežniško preverjanje zaradi združljivosti še naprej sprejme tudi celoten stavek, ne glede na velikost črk in odvečne presledke.
 
@@ -45,30 +60,30 @@ Vsako nalogo uvede kratka zgodba, ki dokaze poveže s preiskavo. Pri nalogah 3�
 **Dokaz:** pod zgodbenim odstavkom je naslednji zapis. Par ga mora sam prekopirati v prazni vhod pretvornika; v delovnem oknu ni dodatne kopije dokaza.
 
 ```text
-55 46 4A 46 54 6B 39 54 49 46 70 42 51 6B 56 4D 52 56 70 46 54 69 34 67 53 30 39 45 51 53 42 4F 51 56 4E 4D 52 55 52 4F 53 6B 55 67 54 55 46 51 52 54 6F 67 55 30 39 57 51 53 34 3D
+55 46 4A 4A 53 6B 46 57 53 56 52 46 54 45 6F 36 49 45 78 56 53 30 45 67 53 30 39 57 51 55 4D 75 49 45 74 50 52 45 45 67 54 55 46 51 52 54 6F 67 55 30 39 57 51 53 34 3D
 ```
 
-Zgodba predstavi datoteko `obvestilo.dat` in nepopoln skrbnikov zapis o **dveh preoblekah**: zunanja pozna **šestnajst znakov**, pod njo pa je abeceda **štiriinšestdesetih**. Besedi »zunanja« in »pod njo« namigujeta na vrstni red. Uvod ne našteva dovoljenih znakov, ne razloži dopolnila in ne pove korakov pretvorbe; neposrednejša pomoč je v namigih. Reševanje poteka brez samodejnega prenosa rezultatov:
+Zgodba predstavi datoteko `obvestilo.dat`, skrbnikov izvoz prve prijave nenavadnega dogajanja. V njem sta prijaviteljevo ime in koda naslednje mape. Nepopolni pripis govori o **dveh preoblekah**: zunanja pozna **šestnajst znakov**, pod njo pa je abeceda **štiriinšestdesetih**. Besedi »zunanja« in »pod njo« namigujeta na vrstni red. Uvod ne našteva dovoljenih znakov, ne razloži dopolnila in ne pove korakov pretvorbe; neposrednejša pomoč je v namigih. Reševanje poteka brez samodejnega prenosa rezultatov:
 
 1. Izbereta **Šestnajstiško (HEX)** in dekodiranje. Prvi rezultat je še vedno kodiran zapis:
 
    ```text
-   UFJFTk9TIFpBQkVMRVpFTi4gS09EQSBOQVNMRUROSkUgTUFQRTogU09WQS4=
+   UFJJSkFWSVRFTEo6IExVS0EgS09WQUMuIEtPREEgTUFQRTogU09WQS4=
    ```
 
-2. Celoten vmesni rezultat **ročno prekopirata v vhod**, izbereta **Base64** in ponovno dekodirata. Končno besedilo je **`PRENOS ZABELEZEN. KODA NASLEDNJE MAPE: SOVA.`**
+2. Celoten vmesni rezultat **ročno prekopirata v vhod**, izbereta **Base64** in ponovno dekodirata. Končno besedilo je **`PRIJAVITELJ: LUKA KOVAC. KODA MAPE: SOVA.`**
 3. V polje za odgovor zgoraj desno vneseta samo **`SOVA`**. Celotno obvestilo ni odgovor; zaradi združljivosti ostaja sprejet tudi stari vnos `KODA: SOVA`. Velikost črk in odvečni presledki niso pomembni.
 
 - Namig 1: »Upoštevaj vrstni red: najprej zunanji zapis s šestnajstimi znaki v parih, nato notranji z naborom štiriinšestdesetih znakov.«
 - Namig 2: »Najprej dekodiraj Šestnajstiško (HEX). Celoten rezultat ročno prekopiraj v vhod, izberi Base64 in ponovno dekodiraj. Odgovor je samo koda naslednje mape.«
 
-**Opomba za izvajalko:** končnica `.dat` ne določa kodiranja. Če pretvorba ne uspe, naj preverita vrstni red, celovitost prekopiranih parov in vmesnega rezultata ter smer dekodiranja. Vmesni niz vsebuje 60 znakov in se konča z enim `=`; končno sporočilo vsebuje 44 bajtov ASCII. Neuspešen poskus v pripomočku ne poveča števila oddanih odgovorov. Besedilo obvestila je sled v zgodbi, ne dokaz celotnega poteka incidenta.
+**Opomba za izvajalko:** končnica `.dat` ne določa kodiranja. Če pretvorba ne uspe, naj preverita vrstni red, celovitost prekopiranih parov in vmesnega rezultata ter smer dekodiranja. Vmesni niz vsebuje 56 znakov in se konča z enim `=`; končno sporočilo vsebuje 41 bajtov ASCII. Neuspešen poskus v pripomočku ne poveča števila oddanih odgovorov. Ime prijavitelja pojasni naslednji pregled predala, ne določi storilca.
 
 **Učni cilj:** prepoznati dve zaporedni kodiranji in uporabiti rezultat prvega kot vhod drugega. Par šestnajstiških znakov predstavlja en bajt zapisa Base64, ta pa predstavlja končno besedilo. HEX in Base64 sta kodiranji, ne šifriranje; za obratno pretvorbo ne potrebujemo skrivnega ključa in njuna kombinacija ne zagotavlja zaupnosti.
 
 ## 3. Poišči phishing sporočilo
 
-Šolska domena v učnem primeru je `most.si`. Zgodba predstavi zavarovani predal **Luke Kovača**, z naslovom **`luka.kovac@most.si`**. To je izmišljeni lastnik predala; aplikacija ne bere prave pošte ali navezuje stikov. Vseh sedem sporočil je naslovljenih nanj.
+Šolska domena v učnem primeru je `most.si`. Obvestilo iz druge naloge pripelje do **Luke Kovača**, ki je skrbniku še pred opozorilom o prenosu prijavil sumljivo pošto in mu predal kopijo predala **`luka.kovac@most.si`**. Zato sledi pregled njegove pošte. To je izmišljeni lastnik predala; aplikacija ne bere prave pošte ali navezuje stikov. Vseh sedem sporočil je naslovljenih nanj.
 
 Začetni vrstni red je **A, C, D, B, E, F, G**: knjižnični opomnik, mentorsko obvestilo, načrtovano IT-vzdrževanje, lažna IT-zahteva, pomembna sprememba učilnice, pričakovana priponka fotografskega krožka in jedilnik. Phishing sporočilo je torej **četrto**, njegov stabilni identifikator **B** pa ostaja nespremenjen. Vrstni red je ureditev dokazne zbirke, ne časovno razvrščanje.
 
@@ -77,7 +92,7 @@ Odpiranje sporočila označi njegovo prebranost in prikaže dejanskega pošiljat
 Pravilen izbor je **sporočilo B** in **najmanj dva** od teh opozorilnih znakov, brez napačnih:
 
 - Domena pošiljatelja se ne ujema s šolsko domeno: `podpora@most-preverjanje.example`.
-- Povezava vodi na drugo domeno: `https://most.si.preveri-racun.example/prijava`.
+- Povezava vodi na drugo domeno: `https://most.si.arhiv-nacrtov.example/prijava`. Isti URL se pojavi kot tretji zapis zgodovine v sedmi nalogi.
 - Sporočilo pritiska z nujnostjo in grožnjo blokade čez 10 minut.
 - Zahteva geslo in enkratno prijavno kodo na nepričakovani strani.
 
@@ -108,7 +123,7 @@ Dijaki sestavijo hipotetično predvidljivo geslo za ta učni primer. Ne iščejo
 
 ## 5. Fotografija skriva namig
 
-Luka je poslal mapo šolskih in osebnih slik ter trdi, da je hodnik pred računalniško učilnico z rdečim nahrbtnikom fotografiral ob **11:15**. Uvod na kratko pojasni, da so metapodatki podatki, ki spremljajo datoteko, na primer ime, velikost in zapisani časi. Navodilo se glasi: »Ob kateri uri je bila fotografija dejansko posneta? Odgovori v obliki HH:MM.« Imena datoteke in pravilnega polja uvod ne razkrije; par fotografijo najprej prepozna po opisu.
+Luka pove, da je uporabljal skupni šolski računalnik in ob odhodu fotografiral hodnik pred računalniško učilnico z rdečim nahrbtnikom. Trdi, da je bilo to ob **11:15**, in skrbniku pošlje mapo šolskih in osebnih slik. Posnetek je sled za časovno umestitev odhoda. Uvod na kratko pojasni, da so metapodatki podatki, ki spremljajo datoteko, na primer ime, velikost in zapisani časi. Navodilo se glasi: »Ob kateri uri je bila fotografija dejansko posneta? Odgovori v obliki HH:MM.« Imena datoteke in pravilnega polja uvod ne razkrije; par fotografijo najprej prepozna po opisu.
 
 Pregledovalnik vsebuje **12 datotek** v tem vrstnem redu: `ucilnica.jpg`, `dvorisce.jpg`, `knjiznica.jpg`, `telovadnica.jpg`, `projekt.jpg`, `stopnisce.jpg`, `obvestilo.png`, `gore.jpg`, `jedilnica.jpg`, `vhod.jpg`, **`hodnik.jpg`**, `tabla.jpg`. Iskana fotografija je enajsta, torej predzadnja. Pri njenem pregledu so na voljo slovensko poimenovani metapodatki:
 
@@ -129,9 +144,9 @@ Vsaka datoteka ima svoj pripravljeni izpis. `ucilnica.jpg` ohrani nastanek ob 08
 
 **Učni cilj:** prepoznati pravi dokaz in razlikovati nastanek posnetka od poznejše spremembe datoteke. Za izvajalko: polje »Čas nastanka posnetka« predstavlja pomen `DateTimeOriginal`, »Čas spremembe« pa `ModifyDate`. Časovni odmik je izpisan; ni treba preračunavati v UTC. Metapodatki lahko manjkajo, so napačno nastavljeni ali spremenjeni, zato sami niso nezmotljiv dokaz. Razlika med časoma ne dokazuje namernega zavajanja, posega v vsebino slike ali identitete osebe, ki jo je spreminjala.
 
-## 6. Kdo je dostopal do skrivne datoteke?
+## 6. Kateri račun je bil uporabljen za prenos?
 
-Zgodba postavi prenos dokumenta med običajni pouk v računalniški učilnici. Uvod pojasni omrežni promet kot izmenjavo podatkov med napravami v majhnih delih, imenovanih paketi. Šolski skrbnik je pripravil promet in strežniške dnevnike; ime datoteke je namig za uporabo iskalnika.
+Čas fotografije **10:42** usmeri pregled v dogajanje okoli Lukovega odhoda iz učilnice. Skrbnik pripravi promet in strežniške dnevnike iz tega časovnega okvira. Uvod pojasni omrežni promet kot izmenjavo podatkov med napravami v majhnih delih, imenovanih paketi. Ime `/zaupno/nacrt.pdf` pomaga pri iskanju uspešnega prenosa; račun v zapisu še ne določi osebe za skupnim računalnikom.
 
 Forenzični pregledovalnik vsebuje **32 simuliranih paketov** in **16 ločenih zapisov aplikacijskega dnevnika**. Vsi dogodki so z dne 20. 11. 2026; časi so lokalni. Paketni izbor vključuje ARP, DNS, TCP, TLS in HTTP ter ni celoten zajem povezav. Par filtrira prikaz, izbere paket ter odpre njegove podrobnosti in morebitno povezavo z aplikacijskim zapisom.
 
@@ -146,7 +161,7 @@ Primerjaj tri pogoje hkrati: prenos, prava datoteka in uspeh. `ucenec12` je imel
 
 ## 7. Najdi ponarejeno spletno stran
 
-Po prenosu `nacrt.pdf` je skrbnik med šestimi zapisi obiskov šolske prijave našel povezavo do domnevnega arhiva šolskih načrtov. Pri vsakem je podoba portala enaka; spreminja se naslovna vrstica. Uvod pojasni URL, pri teh primerih prepoznavanje gostitelja za `https://` in pred prvo naslednjo poševnico ter pomen poti in parametrov. Potrjena šolska gostitelja sta `most.si` in `ucilnica.most.si`.
+Zapis uspešnega prenosa poveže račun `ucenec17` z računalnikom `10.0.0.17`. Skrbnik odpre njegovo zavarovano zgodovino: med šestimi naslovi je tudi lažna povezava iz Lukove pošte, tretji zapis oziroma izbira C. Pri vsakem je podoba portala enaka; spreminja se naslovna vrstica. Pred iskanjem načrta je treba ločiti šolske naslove od tujih. Uvod pojasni URL, pri teh primerih prepoznavanje gostitelja za `https://` in pred prvo naslednjo poševnico ter pomen poti in parametrov. Potrjena šolska gostitelja sta `most.si` in `ucilnica.most.si`.
 
 | Zapis | Naslov | Presoja |
 | --- | --- | --- |
@@ -172,30 +187,30 @@ Izbrana povezava in vnesena domena se morata ujemati. Celoten URL, šolska domen
 
 ## 8. Računalnik govori v ničlah in enicah
 
-**Dokaz:** `01001011 01001100 01001010 01010101 01000011`. Izvoz vsebuje pet bajtov v zapisu ASCII. Presledki ločujejo skupine in niso del končnega sporočila. Vrstni red skupin se ohrani.
+**Dokaz:** `01001001 01010011 01001011 01010010 01000001`. Po prepoznani ponarejeni prijavi skrbnik v pravem arhivu po računu, času in poti prenosa najde ustrezno različico načrta. Dokaz je njegov izvoz oznake projekta: pet bajtov v zapisu ASCII. Presledki ločujejo skupine in niso del končnega sporočila. Vrstni red skupin se ohrani.
 
-**Potek reševanja:** par izbere eno skupino in prebere osem bitov od leve proti desni. Mesta imajo uteži **128, 64, 32, 16, 8, 4, 2, 1**. Pri bitu **1** prišteje utež mesta, pri bitu **0** jo preskoči. Dobljeno decimalno število poišče v zložljivem pregledu ASCII s pari števil in črk A–Z ter si zapiše črko. Primer takoj pod tremi koraki navodil pokaže postopek na drugem bajtu: `01000001` je `64 + 1 = 65` in predstavlja črko `A`.
+**Potek reševanja:** par izbere eno skupino in prebere osem bitov od leve proti desni. Mesta imajo uteži **128, 64, 32, 16, 8, 4, 2, 1**. Pri bitu **1** prišteje utež mesta, pri bitu **0** jo preskoči. Dobljeno decimalno število poišče v zložljivem pregledu ASCII s pari števil in črk A–Z ter si zapiše črko. Primer takoj pod tremi koraki navodil pokaže postopek: `01000001` je `64 + 1 = 65` in predstavlja črko `A`.
 
 Pripomoček omogoča pregled posameznega bita in njegovega prispevka, ne izračuna pa skupne vsote ali črke. V njem ni izbire kodiranja, smeri ali gumba »Pretvori«. Rešitev se sestavi ročno:
 
 | Skupina | Prištete uteži | Decimalno število | Znak ASCII |
 | --- | --- | --- | --- |
+| `01001001` | 64 + 8 + 1 | 73 | I |
+| `01010011` | 64 + 16 + 2 + 1 | 83 | S |
 | `01001011` | 64 + 8 + 2 + 1 | 75 | K |
-| `01001100` | 64 + 8 + 4 | 76 | L |
-| `01001010` | 64 + 8 + 2 | 74 | J |
-| `01010101` | 64 + 16 + 4 + 1 | 85 | U |
-| `01000011` | 64 + 2 + 1 | 67 | C |
+| `01010010` | 64 + 16 + 2 | 82 | R |
+| `01000001` | 64 + 1 | 65 | A |
 
-V edino polje za odgovor v sekciji **ODGOVOR** zgoraj desno par vpiše **`KLJUC`**. Sprejet je tudi `KLJUČ`, ne glede na velikost črk in robne presledke. Na ozkem zaslonu je sekcija pod pripomočkom. Posameznih vsot ali črk ni treba oddajati.
+V edino polje za odgovor v sekciji **ODGOVOR** zgoraj desno par vpiše kodno ime projekta **`ISKRA`**, ne glede na velikost črk in robne presledke. Na ozkem zaslonu je sekcija pod pripomočkom. Posameznih vsot ali črk ni treba oddajati.
 
 - Namig 1: »Uteži mest od leve proti desni so 128, 64, 32, 16, 8, 4, 2 in 1. Seštej samo uteži mest z enico; ničle ne prispevajo ničesar. Vsota enega bajta določi eno črko v tabeli ASCII.«
-- Namig 2: »Pri prvem bajtu 01001011 so enice na mestih z utežmi 64, 8, 2 in 1. Vsota je 75, v tabeli ASCII pa to pomeni K. Enako obdelaj preostale štiri bajte in ohrani njihov vrstni red.«
+- Namig 2: »Pri prvem bajtu 01001001 so enice na mestih z utežmi 64, 8 in 1. Vsota je 73, v tabeli ASCII pa to pomeni I. Enako obdelaj preostale štiri bajte in ohrani njihov vrstni red.«
 
 **Učni cilj:** povezati mesta v binarnem zapisu s potencami števila dve, ročno izračunati decimalno vrednost bajta ter po dogovorjenem kodiranju ASCII razbrati črko. Vsota dobi pomen znaka šele s tem dogovorom; ta primer ni šifriranje. Pravilen odgovor odpre finale; devete uganke ni. Večnamenski pretvornik ostaja pripomoček druge naloge.
 
 ## Zaključek in pogovor
 
-»Preiskava zaključena« pokaže tri statistike: osem rešenih stopenj, čas in uporabljene namige. Pod njimi je vodoravna vrstica osmih obravnavanih tem; na ozkem zaslonu se pomika. Spodnja vprašanja in omejitve dokazov so gradivo za pogovor z izvajalko.
+»Odkril si projekt ISKRA.« potrdi cilj, zastavljen na začetku. Zaključek pokaže tri statistike: osem rešenih stopenj, čas in uporabljene namige. Pod njimi je vodoravna vrstica osmih obravnavanih tem; na ozkem zaslonu se pomika. Spodnja vprašanja in omejitve dokazov so gradivo za pogovor z izvajalko.
 
 Na ločeni javni lestvici `/lestvica` se ekipe razvrstijo najprej po več rešenih izzivih, nato po manj uporabljenih namigih in nazadnje po krajšem času. Ob enakih treh vrednostih si delijo mesto. Podatki se med ogledom osvežujejo vsakih pet sekund; za ogled ni potreben začetek igre. Čas teče od začetka igre in se ustavi po rešitvi vseh osmih izzivov. Pri nedokončanem rezultatu teče tudi po ponastavitvi ali izteku seje. Ponoven ogled istega namiga števila ne poveča; tudi namig, prvič odprt po rešitvi njegove stopnje, ne poslabša rezultata. Zaključen rezultat ostane nespremenjen.
 

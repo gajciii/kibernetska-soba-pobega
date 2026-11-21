@@ -14,7 +14,7 @@ let pool: pg.Pool;
 let app: ReturnType<typeof createApp>;
 let clock: number;
 type Team = { agent: ReturnType<typeof request.agent>; csrf: string; cookie: string };
-const answers: unknown[] = ['MOST', 'SOVA', { message: 'B', reasons: ['domain', 'link'] }, { recommendations: ['long', 'unique', 'manager', 'mfa'] }, '10:42', 'ucenec17', { sourceId: 'C', domain: 'arhiv-nacrtov.example' }, 'KLJUC'];
+const answers: unknown[] = ['MOST', 'SOVA', { message: 'B', reasons: ['domain', 'link'] }, { recommendations: ['long', 'unique', 'manager', 'mfa'] }, '10:42', 'ucenec17', { sourceId: 'C', domain: 'arhiv-nacrtov.example' }, 'ISKRA'];
 
 async function anonymous(): Promise<Team> {
   const agent = request.agent(app);
@@ -75,7 +75,7 @@ describe('trajna skupna lestvica', () => {
     const publicBoard = await request(app).get('/api/leaderboard').set('Cookie', 'operacija404=neveljavno').expect(200);
     expect(publicBoard.body.currentEntry).toBeNull();
     expect(publicBoard.body.entries[0].isCurrent).toBe(false);
-    for (const secret of [team.csrf, team.cookie.split('=')[1], createHash('sha256').update(team.cookie.split('=')[1]).digest('hex'), 'token_hash', 'csrf', 'answers', 'SOVA', 'KLJUC']) {
+    for (const secret of [team.csrf, team.cookie.split('=')[1], createHash('sha256').update(team.cookie.split('=')[1]).digest('hex'), 'token_hash', 'csrf', 'answers', 'SOVA', 'ISKRA']) {
       expect(JSON.stringify(publicBoard.body)).not.toContain(secret);
     }
   });
@@ -121,8 +121,8 @@ describe('trajna skupna lestvica', () => {
     vi.setSystemTime(clock + 3_600_000);
     await post(team, '/api/stages/8/hints', { index: 1 }).expect(200);
     const duplicates = await Promise.all([
-      post(team, '/api/stages/8/answer', { answer: 'KLJUC' }),
-      post(team, '/api/stages/8/answer', { answer: 'KLJUČ' }),
+      post(team, '/api/stages/8/answer', { answer: 'ISKRA' }),
+      post(team, '/api/stages/8/answer', { answer: 'iskra' }),
     ]);
     expect(duplicates.every(response => response.status === 200 && response.body.correct)).toBe(true);
     expect((await leaderboard(team)).currentEntry).toEqual(completed);

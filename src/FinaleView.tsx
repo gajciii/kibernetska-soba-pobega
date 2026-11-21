@@ -1,8 +1,9 @@
 import type { RefObject } from 'react';
-import type { SessionView, StageSummary } from '../shared/types';
+import type { Finale, SessionView, StageSummary } from '../shared/types';
 import './finale.css';
 
 type FinaleViewProps = {
+  finale: Finale;
   session: SessionView;
   stages: StageSummary[];
   time: string;
@@ -23,12 +24,12 @@ const skillNames: Record<number, string> = {
   8: 'Binarni zapis',
 };
 
-export default function FinaleView({ session, stages, time, headingRef, onReset, onLeaderboard }: FinaleViewProps) {
+export default function FinaleView({ finale, session, stages, time, headingRef, onReset, onLeaderboard }: FinaleViewProps) {
   const hintLabel = session.hintCount === 1 ? 'uporabljen namig' : session.hintCount === 2 ? 'uporabljena namiga' : session.hintCount === 3 || session.hintCount === 4 ? 'uporabljeni namigi' : 'uporabljenih namigov';
   return <section className="finale completion-hero" data-testid="finale" aria-labelledby="completion-title">
     <div className="completion-title-wrap ambient-heading" data-ambient-heading>
-      <h1 className="completion-title" id="completion-title" ref={headingRef} tabIndex={-1}>Preiskava zaključena.</h1>
-      <div className="completion-title ambient-heading-light" aria-hidden="true">Preiskava zaključena.</div>
+      <h1 className="completion-title" id="completion-title" ref={headingRef} tabIndex={-1}>{finale.title}</h1>
+      <div className="completion-title ambient-heading-light" aria-hidden="true">{finale.title}</div>
     </div>
     {session.teamName.trim() && <p className="completion-team">{session.teamName}</p>}
     <div className="finale-stats">

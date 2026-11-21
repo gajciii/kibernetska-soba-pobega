@@ -23,7 +23,7 @@ export default function BinaryWorkbench({ evidence }: { evidence: string }) {
     <ol className="binary-steps">
       <li>Pri enici prištej vrednost mesta. Ničla prispeva 0.</li>
       <li>Decimalni seštevek poišči v tabeli ASCII.</li>
-      <li>Črke ohrani v vrstnem redu skupin in celotno kodo oddaj v polju Odgovor.</li>
+      <li>Črke ohrani v vrstnem redu skupin in kodno ime projekta oddaj v polju Odgovor.</li>
     </ol>
 
     <section className="binary-example" aria-labelledby={`${id}-example-heading`}>

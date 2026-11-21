@@ -1,6 +1,6 @@
 import { useCallback, useEffect, useRef, useState } from 'react';
 import type { FormEvent, ReactNode } from 'react';
-import type { AnswerResponse, Bootstrap, SessionView, StageContent, StageResponse, StageSummary } from '../shared/types';
+import type { AnswerResponse, Bootstrap, Finale, SessionView, StageContent, StageResponse, StageSummary } from '../shared/types';
 import ConverterWorkbench from './ConverterWorkbench';
 import CaesarWorkbench from './CaesarWorkbench';
 import BinaryWorkbench from './BinaryWorkbench';
@@ -66,6 +66,7 @@ export default function App() {
   const [view, setView] = useState<PageView>(() => isLeaderboardPath() ? 'leaderboard' : 'intro');
   const gameView = useRef<Exclude<PageView, 'leaderboard'>>('intro');
   const [stageData, setStageData] = useState<StageResponse | null>(null);
+  const [finale, setFinale] = useState<Finale | null>(null);
   const [busy, setBusy] = useState(false);
   const [error, setError] = useState('');
   const [now, setNow] = useState(Date.now());
@@ -104,8 +105,8 @@ export default function App() {
   async function openFinale() {
     setBusy(true); setError('');
     try {
-      const result = await request<{ session: SessionView }>('/finale', csrf);
-      updateSession(result.session); changeView('finale');
+      const result = await request<{ finale: Finale; session: SessionView }>('/finale', csrf);
+      setFinale(result.finale); updateSession(result.session); changeView('finale');
     } catch (e) { setError((e as Error).message); }
     finally { setBusy(false); }
   }
@@ -122,14 +123,17 @@ export default function App() {
   async function reset() {
     setBusy(true); setError('');
     try {
-      setBoot(await request<Bootstrap>('/reset', csrf, {})); setStageData(null); changeView('intro'); setResetOpen(false);
+      setBoot(await request<Bootstrap>('/reset', csrf, {})); setStageData(null); setFinale(null); changeView('intro'); setResetOpen(false);
     } catch (e) { setError((e as Error).message); setResetOpen(false); }
     finally { setBusy(false); }
   }
   const continueInvestigation = () => !session?.teamName.trim() ? changeView('intro') : session.completedAt ? void openFinale() : void openStage(session.currentStage);
   const leaveLeaderboard = () => {
     if (gameView.current === 'stage' && stageData) changeView('stage');
-    else if (gameView.current === 'finale' && session?.completedAt) changeView('finale');
+    else if (gameView.current === 'finale' && session?.completedAt) {
+      if (finale) changeView('finale');
+      else void openFinale();
+    }
     else changeView('intro');
   };
   return <div className={`app-shell ${view === 'intro' ? 'is-landing' : view === 'finale' ? 'is-finale' : view === 'leaderboard' ? 'is-leaderboard' : 'is-workspace'}`}>
@@ -153,7 +157,7 @@ export default function App() {
       : view === 'stage' && stageData ? <Stage key={stageData.stage.id} data={stageData} csrf={csrf} busy={busy} setBusy={setBusy} onSession={updateSession} onData={setStageData} onNext={() => stageData.stage.id === 8 ? void openFinale() : void openStage(stageData.stage.id + 1)} onFinale={openFinale} headingRef={headingRef}
         navigation={<Sidebar stages={boot.stages} session={session!} active={stageData.stage.id} busy={busy} onSelect={openStage} onFinale={openFinale} onReset={() => setResetOpen(true)}/>}/>
       : <main id="main" className="finale-page" aria-busy={busy}>
-        {session && <FinaleView session={session} stages={boot.stages} time={elapsed(session, now)} headingRef={headingRef} onReset={() => setResetOpen(true)} onLeaderboard={() => changeView('leaderboard')}/>}
+        {session && finale && <FinaleView finale={finale} session={session} stages={boot.stages} time={elapsed(session, now)} headingRef={headingRef} onReset={() => setResetOpen(true)} onLeaderboard={() => changeView('leaderboard')}/>}
         </main>}
     <footer className="footer"><span><strong>FERI</strong><span className="footer-divider">/</span> Kibernetska soba pobega</span><span className="footer-credit"><span>Avtorica: Gaja Gujt</span><a href={`${base}license.txt`} target="_blank" rel="noopener noreferrer">Licenca MIT</a></span></footer>
     {resetOpen && <ResetDialog busy={busy} onCancel={() => setResetOpen(false)} onReset={reset}/>}

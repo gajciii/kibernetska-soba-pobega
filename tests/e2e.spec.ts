@@ -153,11 +153,11 @@ test('vseh osem stopenj, lokalni pripomočki, nadaljevanje in zaključek', async
   await method.selectOption('hex');
   await direction.selectOption('encode');
   await convert.click();
-  await expect(output).not.toContainText('PRENOS ZABELEZEN');
+  await expect(output).not.toContainText('PRIJAVITELJ: LUKA KOVAC');
   await direction.selectOption('decode');
   await expect(output).toHaveText('—');
   await convert.click();
-  await expect(output).toHaveText('UFJFTk9TIFpBQkVMRVpFTi4gS09EQSBOQVNMRUROSkUgTUFQRTogU09WQS4=');
+  await expect(output).toHaveText('UFJJSkFWSVRFTEo6IExVS0EgS09WQUMuIEtPREEgTUFQRTogU09WQS4=');
   await expect(input).toHaveValue(evidence);
   await expect(page.getByLabel('Odgovor', { exact: true })).toHaveValue('moj vnos');
   const intermediate = (await output.textContent())!;
@@ -168,7 +168,7 @@ test('vseh osem stopenj, lokalni pripomočki, nadaljevanje in zaključek', async
   await expect(output).toHaveText('—');
   await convert.click();
   await expect(input).toHaveValue(intermediate);
-  await expect(output).toHaveText('PRENOS ZABELEZEN. KODA NASLEDNJE MAPE: SOVA.');
+  await expect(output).toHaveText('PRIJAVITELJ: LUKA KOVAC. KODA MAPE: SOVA.');
   await expect(page.getByLabel('Odgovor', { exact: true })).toHaveValue('moj vnos');
   await page.screenshot({ path: `.local/qa-${testInfo.project.name}-converter.png`, fullPage: true });
   await submit(page, 'sova'); await next(page);
@@ -203,7 +203,7 @@ test('vseh osem stopenj, lokalni pripomočki, nadaljevanje in zaključek', async
   const mailTooltip = page.getByRole('tooltip');
   await expect(mailTooltip).toHaveCount(0);
   await mailLink.focus();
-  await expect(mailTooltip).toContainText('https://most.si.preveri-racun.example/prijava');
+  await expect(mailTooltip).toContainText('https://most.si.arhiv-nacrtov.example/prijava');
   await page.keyboard.press('Escape');
   await expect(mailTooltip).toHaveCount(0);
   await expect(mailLink).toBeFocused();
@@ -482,11 +482,10 @@ test('vseh osem stopenj, lokalni pripomočki, nadaljevanje in zaključek', async
   await expect(binary.locator('.binary-ascii-grid > div')).toHaveCount(26);
   await expect(binary.locator('.binary-ascii-grid > div').first()).toHaveText('65A');
   await expect(binary.locator('.binary-ascii-grid > div').last()).toHaveText('90Z');
-  await expect(binary.locator('.binary-ascii-grid')).not.toContainText('01001011');
+  await expect(binary.locator('.binary-ascii-grid')).not.toContainText('01001001');
   await expect(binaryAnswer).toHaveValue('moj zapis');
   expect(submittedAnswers.length).toBe(answersBeforeBits);
-  await expect(binary).not.toContainText('KLJUC');
-  await expect(binary).not.toContainText('KLJUČ');
+  await expect(binary).not.toContainText('ISKRA');
   const binaryViewport = page.viewportSize()!;
   for (const width of [900, 320]) {
     await page.setViewportSize({ width, height: 900 });
@@ -499,8 +498,8 @@ test('vseh osem stopenj, lokalni pripomočki, nadaljevanje in zaključek', async
   await submit(page, 'A');
   await expect(page.getByRole('alert')).toBeVisible();
   await expect(page.locator('.stage-breadcrumb')).toContainText('08 / 08');
-  await submit(page, 'ključ');
-  await expect(page.getByRole('heading', { name: 'Preiskava zaključena.', exact: true })).toBeVisible();
+  await submit(page, 'iskra');
+  await expect(page.getByRole('heading', { name: 'Odkril si projekt ISKRA.', exact: true })).toBeVisible();
   await expect(page.getByTestId('dark-entry')).toHaveCount(0);
   await expect(page.locator('.finale-stats')).toContainText('8 / 8');
   await expect(page.locator('.finale-stats')).toContainText('1uporabljen namig');
@@ -533,7 +532,7 @@ test('vseh osem stopenj, lokalni pripomočki, nadaljevanje in zaključek', async
   await expect(page.getByTestId('finale')).toBeVisible();
   await page.reload();
   await page.getByRole('button', { name: 'Odpri zaključeno preiskavo' }).click();
-  await expect(page.getByRole('heading', { name: 'Preiskava zaključena.', exact: true })).toBeVisible();
+  await expect(page.getByRole('heading', { name: 'Odkril si projekt ISKRA.', exact: true })).toBeVisible();
   await expect(page.getByTestId('dark-entry')).toHaveCount(0);
   expect(foreignRequests).toEqual([]);
   expect(browserErrors).toEqual([]);

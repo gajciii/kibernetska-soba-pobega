@@ -51,7 +51,7 @@ async function start(client = team, teamName = 'Testna skupina'): Promise<Sessio
 const correctAnswers: unknown[] = [
   'MOST', 'SOVA', { message: 'B', reasons: ['domain', 'link'] },
   { recommendations: ['long', 'unique', 'manager', 'mfa'] }, '10:42', 'ucenec17',
-  { sourceId: 'C', domain: 'arhiv-nacrtov.example' }, 'KLJUC',
+  { sourceId: 'C', domain: 'arhiv-nacrtov.example' }, 'ISKRA',
 ];
 
 async function solveThrough(end: number, client = team) {
@@ -101,7 +101,7 @@ describe('anonimne seje in zaščita API-ja', () => {
     expect(bootstrap.body.stages).toHaveLength(8);
     for (const stage of bootstrap.body.stages) expect(Object.keys(stage).sort()).toEqual(['id', 'title', 'topic']);
     const initial = JSON.stringify(bootstrap.body);
-    for (const secret of ['KODA JE MOST', 'SOVA', 'ucenec17', '10:42', 'KLJUC', 'correctAnswer', 'isCorrect']) {
+    for (const secret of ['KODA JE MOST', 'SOVA', 'ucenec17', '10:42', 'ISKRA', 'correctAnswer', 'isCorrect']) {
       expect(initial).not.toContain(secret);
     }
     const session = await start();
@@ -162,7 +162,7 @@ describe('anonimne seje in zaščita API-ja', () => {
   it('ne streže izvajalkinega vodiča, strežniške kode ali konfiguracije', async () => {
     for (const path of ['/VODNIK_IZVAJALKE.md', '/server/content.ts', '/.env', '/package.json']) {
       const response = await request(app).get(path).expect(404);
-      expect(response.text).not.toContain('KLJUC');
+      expect(response.text).not.toContain('ISKRA');
       expect(response.text).not.toContain('DATABASE_URL');
     }
   });
@@ -225,13 +225,13 @@ describe('potek igre, namigi in shranjevanje', () => {
       if (id < 8) await team.agent.get('/api/finale').expect(403);
     }
     const finished = await team.agent.get('/api/finale').expect(200);
-    expect(finished.body.finale.title).toBe('Preiskava zaključena');
+    expect(finished.body.finale.title).toBe('Odkril si projekt ISKRA.');
     expect(finished.body.finale.topics).toHaveLength(8);
     expect(finished.body.session.solved).toHaveLength(8);
     expect(finished.body.session.startedAt).toBe(beginning.startedAt);
     expect(Date.parse(finished.body.session.completedAt)).toBeGreaterThanOrEqual(Date.parse(beginning.startedAt));
     const completedAt = finished.body.session.completedAt;
-    await post(team, '/api/stages/8/answer', { answer: 'KLJUČ' }).expect(200);
+    await post(team, '/api/stages/8/answer', { answer: 'iskra' }).expect(200);
     const afterDuplicate = await team.agent.get('/api/finale');
     expect(afterDuplicate.body.session.completedAt).toBe(completedAt);
     expect(afterDuplicate.body.session.attempts['8']).toBe(2);
@@ -288,7 +288,7 @@ describe('potek igre, namigi in shranjevanje', () => {
       expect(rejected.body.session.currentStage).toBe(7);
       await team.agent.get('/api/stages/8').expect(403);
     }
-    await post(team, '/api/stages/8/answer', { answer: 'KLJUC' }).expect(403);
+    await post(team, '/api/stages/8/answer', { answer: 'ISKRA' }).expect(403);
     const unsolved = await team.agent.get('/api/stages/7').expect(200);
     expect(unsolved.body.solved).toBe(false);
     expect(unsolved.body.explanation).toBeUndefined();

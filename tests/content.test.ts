@@ -2,12 +2,12 @@ import { describe, expect, it } from 'vitest';
 import { finale, getExplanation, getFeedback, getHint, getStage, stageSummaries, validateAnswer, validateProfilePassword } from '../server/content.js';
 import { convertText, hexToText, textToHex } from '../shared/converters.js';
 
-const stage2Intermediate = 'UFJFTk9TIFpBQkVMRVpFTi4gS09EQSBOQVNMRUROSkUgTUFQRTogU09WQS4=';
+const stage2Intermediate = 'UFJJSkFWSVRFTEo6IExVS0EgS09WQUMuIEtPREEgTUFQRTogU09WQS4=';
 
 describe('strežniško preverjanje osmih stopenj', () => {
   const correct: [number, unknown][] = [
     [1, 'MOST'], [2, 'SOVA'], [3, { message: 'B', reasons: ['domain', 'link'] }],
-    [4, { recommendations: ['long', 'unique', 'manager', 'mfa'] }], [5, '10:42'], [6, 'ucenec17'], [7, { sourceId: 'C', domain: 'arhiv-nacrtov.example' }], [8, 'KLJUC'],
+    [4, { recommendations: ['long', 'unique', 'manager', 'mfa'] }], [5, '10:42'], [6, 'ucenec17'], [7, { sourceId: 'C', domain: 'arhiv-nacrtov.example' }], [8, 'ISKRA'],
   ];
 
   it.each(correct)('sprejme pravilen odgovor stopnje %i', (id, answer) => {
@@ -28,8 +28,10 @@ describe('strežniško preverjanje osmih stopenj', () => {
     expect(validateAnswer(2, 'KODA:SOVA')).toBe(true);
     expect(validateAnswer(2, ' sOvA ')).toBe(true);
     expect(validateAnswer(6, ' UceNec17  ')).toBe(true);
-    expect(validateAnswer(8, '  kljuČ\n')).toBe(true);
-    expect(validateAnswer(8, 'KL JUČ')).toBe(false);
+    expect(validateAnswer(8, '  iSkRa\n')).toBe(true);
+    expect(validateAnswer(8, 'IS KRA')).toBe(false);
+    expect(validateAnswer(8, 'KLJUC')).toBe(false);
+    expect(validateAnswer(8, 'KLJUČ')).toBe(false);
   });
 
   it('ločuje ročni vnos gesla od priporočil in zahteva tujo domeno', () => {
@@ -104,8 +106,8 @@ describe('strežniško preverjanje osmih stopenj', () => {
   it('ne izmisli dodatne devete uganke', () => {
     expect(getStage(9)).toBeUndefined();
     expect(getStage(-1)).toBeUndefined();
-    expect(validateAnswer(9, 'KLJUC')).toBe(false);
-    expect(finale.title).toBe('Preiskava zaključena');
+    expect(validateAnswer(9, 'ISKRA')).toBe(false);
+    expect(finale.title).toBe('Odkril si projekt ISKRA.');
     expect(finale.topics).toHaveLength(8);
     expect(Object.keys(finale).sort()).toEqual(['title', 'topics']);
   });
@@ -133,7 +135,8 @@ describe('razširjeni dokazi ostanejo skladni z obstoječimi rešitvami', () => 
         }
       }
     }
-    expect(mails.find(mail => mail.id === 'B')!.linkUrl).toBe('https://most.si.preveri-racun.example/prijava');
+    expect(mails.find(mail => mail.id === 'B')!.linkUrl).toBe('https://most.si.arhiv-nacrtov.example/prijava');
+    expect(getStage(7)!.choices!.map(choice => choice.label)).toContain(mails.find(mail => mail.id === 'B')!.linkUrl);
     expect(mails.find(mail => mail.id === 'D')!.sender).toBe('Šolska IT podpora <podpora@most.si>');
     expect(mails.find(mail => mail.id === 'F')!.attachment).toBeTruthy();
     expect(getExplanation(3)).toContain('ujemajoča se domena sama ne jamči varnosti');
@@ -281,7 +284,7 @@ describe('razširjeni dokazi ostanejo skladni z obstoječimi rešitvami', () => 
   });
 
   it('zapiski usmerjajo pregled dokazov brez izpisanih končnih kod', () => {
-    for (const [id, solution] of [[1, 'MOST'], [2, 'SOVA'], [8, 'KLJUC']] as const) {
+    for (const [id, solution] of [[1, 'MOST'], [2, 'SOVA'], [8, 'ISKRA']] as const) {
       const notes = getStage(id)!.investigations!;
       expect(notes).toHaveLength(3);
       expect(new Set(notes.map(note => note.id)).size).toBe(3);
@@ -310,8 +313,10 @@ describe('razširjeni dokazi ostanejo skladni z obstoječimi rešitvami', () => 
     expect(validateAnswer(2, intermediate)).toBe(false);
     expect(validateAnswer(2, evidence)).toBe(false);
     const decoded = convertText(intermediate, 'base64', 'decode');
-    expect(decoded).toBe('PRENOS ZABELEZEN. KODA NASLEDNJE MAPE: SOVA.');
-    const code = /KODA NASLEDNJE MAPE: ([A-Z]+)\./u.exec(decoded)?.[1];
+    expect(decoded).toBe('PRIJAVITELJ: LUKA KOVAC. KODA MAPE: SOVA.');
+    const profileName = getStage(4)!.profile!.name.normalize('NFD').replace(/\p{M}/gu, '').toUpperCase();
+    expect(decoded).toContain(`PRIJAVITELJ: ${profileName}.`);
+    const code = /KODA MAPE: ([A-Z]+)\./u.exec(decoded)?.[1];
     expect(code).toBe('SOVA');
     expect(validateAnswer(2, code)).toBe(true);
     expect(validateAnswer(2, decoded)).toBe(false);
@@ -353,10 +358,11 @@ describe('razširjeni dokazi ostanejo skladni z obstoječimi rešitvami', () => 
     });
     const code = String.fromCodePoint(...values);
     expect(validateAnswer(8, code)).toBe(true);
+    expect(finale.title).toContain(code);
     expect(validateAnswer(8, values.join(' '))).toBe(false);
     expect(validateAnswer(8, values.reduce((sum, value) => sum + value, 0))).toBe(false);
     expect(validateAnswer(8, [...code].reverse().join(''))).toBe(false);
-    expect(JSON.stringify(stage)).not.toMatch(/\bKLJU[CČ]\b|correctAnswer|isCorrect/iu);
+    expect(JSON.stringify(stage)).not.toMatch(/\bISKRA\b|correctAnswer|isCorrect/iu);
   });
 });
 
@@ -366,7 +372,7 @@ describe('ločeno razkrivanje učne vsebine', () => {
     for (const summary of stageSummaries) expect(Object.keys(summary).sort()).toEqual(['id', 'title', 'topic']);
     expect(getStage(1)?.evidence).toBe('NRGD MH PRVW');
     expect(getStage(2)?.evidence).toBe(textToHex(stage2Intermediate));
-    expect(getStage(8)?.evidence).toBe('01001011 01001100 01001010 01010101 01000011');
+    expect(getStage(8)?.evidence).toBe('01001001 01010011 01001011 01010010 01000001');
     for (let id = 1; id <= 8; id++) {
       const stage = getStage(id);
       expect(stage).toBeDefined();
@@ -374,6 +380,7 @@ describe('ločeno razkrivanje učne vsebine', () => {
       expect(stage).not.toHaveProperty('isCorrect');
       expect(stage).not.toHaveProperty('hints');
       expect(stage).not.toHaveProperty('explanation');
+      expect(JSON.stringify(stage)).not.toMatch(/\bISKRA\b/u);
       expect(getHint(id, 1)).toBeTruthy();
       expect(getHint(id, 2)).toBeTruthy();
       expect(getExplanation(id)).toBeTruthy();
