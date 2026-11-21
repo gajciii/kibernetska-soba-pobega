@@ -43,8 +43,8 @@ function post(client: Team, path: string, body: object) {
     .send(body);
 }
 
-async function start(client = team, teamName?: string): Promise<SessionView> {
-  const response = await post(client, '/api/session', teamName === undefined ? {} : { teamName }).expect(200);
+async function start(client = team, teamName = 'Testna skupina'): Promise<SessionView> {
+  const response = await post(client, '/api/session', { teamName }).expect(200);
   return (response.body as Bootstrap).session!;
 }
 
@@ -95,7 +95,7 @@ describe('anonimne seje in zaščita API-ja', () => {
     expect(bootstrap.headers['content-security-policy']).toContain("default-src 'self'");
   });
 
-  it('začne s klikom brez imena in ne razkrije rešitev ali zaklenjenega gradiva', async () => {
+  it('začne z imenom in ne razkrije rešitev ali zaklenjenega gradiva', async () => {
     const bootstrap = await team.agent.get('/api/session').expect(200);
     expect(bootstrap.body.session).toBeNull();
     expect(bootstrap.body.stages).toHaveLength(8);
@@ -105,7 +105,7 @@ describe('anonimne seje in zaščita API-ja', () => {
       expect(initial).not.toContain(secret);
     }
     const session = await start();
-    expect(session.teamName).toBe('');
+    expect(session.teamName).toBe('Testna skupina');
     expect(session.solved).toEqual([]);
     expect(session.completedAt).toBeNull();
     expect(session.currentStage).toBe(1);
@@ -168,7 +168,7 @@ describe('anonimne seje in zaščita API-ja', () => {
   });
 
   it('preveri ime ekipe, omeji velikost zahteve in varno hrani uporabniško besedilo', async () => {
-    for (const teamName of [123, {}, [], 'x'.repeat(61)]) {
+    for (const teamName of [undefined, null, '', '   ', '\u200b\u200d', '\n\t', 'ime\u0000', 123, {}, [], 'x'.repeat(61)]) {
       await post(team, '/api/session', { teamName }).expect(400);
     }
     await post(team, '/api/session', { teamName: 'x'.repeat(20000) }).expect(413);
@@ -226,8 +226,6 @@ describe('potek igre, namigi in shranjevanje', () => {
     }
     const finished = await team.agent.get('/api/finale').expect(200);
     expect(finished.body.finale.title).toBe('Preiskava zaključena');
-    expect(finished.body.finale.findings.join(' ')).toContain('/zaupno/nacrt.pdf');
-    expect(finished.body.finale.findings.join(' ')).toContain('ucenec17');
     expect(finished.body.finale.topics).toHaveLength(8);
     expect(finished.body.session.solved).toHaveLength(8);
     expect(finished.body.session.startedAt).toBe(beginning.startedAt);

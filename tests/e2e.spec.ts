@@ -12,6 +12,11 @@ async function expectFirstStage(page: Page) {
   await expect(page.getByRole('button', { name: 'Odpri prvo sled', exact: true })).toHaveCount(0);
   await expect(page.getByRole('heading', { name: 'Razbij skrivno sporočilo', exact: true })).toBeVisible();
 }
+async function begin(page: Page, name = 'Preizkusna skupina') {
+  const field = page.getByLabel('Ime skupine', { exact: true });
+  if (!(await field.inputValue()).trim()) await field.fill(name);
+  await page.getByRole('button', { name: 'Začni preiskavo', exact: true }).click();
+}
 async function submit(page: Page, answer?: string, label = 'Odgovor') {
   if (answer) await page.getByLabel(label, { exact: true }).fill(answer);
   await page.getByRole('button', { name: 'Preveri odgovor', exact: true }).click();
@@ -38,9 +43,9 @@ test('vseh osem stopenj, lokalni pripomočki, nadaljevanje in zaključek', async
   page.on('request', request => { if (!request.url().startsWith('http://127.0.0.1:4173/')) foreignRequests.push(request.url()); });
   page.on('pageerror', error => browserErrors.push(error.message));
   await page.goto('/');
-  await page.getByLabel('Ime ekipe').fill('Digitalna preiskovalca');
+  await page.getByLabel('Ime skupine').fill('Digitalna preiskovalca');
   await page.screenshot({ path: `.local/qa-${testInfo.project.name}-intro.png`, fullPage: true });
-  await page.getByRole('button', { name: 'Začni preiskavo', exact: true }).click();
+  await begin(page);
   await expectFirstStage(page);
   const timeline = page.getByRole('navigation', { name: 'Stopnje preiskave' });
   await expect(timeline.locator('.step-dot')).toHaveCount(8);
@@ -499,25 +504,19 @@ test('vseh osem stopenj, lokalni pripomočki, nadaljevanje in zaključek', async
   await expect(page.getByRole('alert')).toBeVisible();
   await expect(page.locator('.stage-breadcrumb')).toContainText('08 / 08');
   await submit(page, 'ključ');
-  await expect(page.getByRole('heading', { name: 'Preiskava zaključena', exact: true })).toBeVisible();
+  await expect(page.getByRole('heading', { name: 'Preiskava zaključena.', exact: true })).toBeVisible();
   await expect(page.getByTestId('dark-entry')).toHaveCount(0);
   await expect(page.locator('.finale-stats')).toContainText('8 / 8');
   await expect(page.locator('.finale-stats')).toContainText('1uporabljen namig');
-  await expect(page.locator('.completed-stages > div')).toHaveCount(8);
-  await expect(page.locator('.case-timeline > li')).toHaveCount(4);
-  await expect(page.locator('.case-timeline')).toContainText('10:45:12');
-  await expect(page.locator('.case-boundary')).toContainText('ne identitete osebe');
-  await page.locator('.case-message > summary').focus();
-  await page.keyboard.press('Enter');
-  await expect(page.locator('.case-message')).toHaveAttribute('open', '');
-  await expect(page.locator('.case-message-state')).toHaveText('Prebrano');
-  await expect(page.locator('.case-receipt')).toBeVisible();
-  await page.locator('.case-message > summary').click();
-  await expect(page.locator('.case-message-state')).toHaveText('Prebrano');
-  await page.locator('.case-message > summary').click();
+  await expect(page.locator('.finale-skills-track > li')).toHaveCount(8);
+  await expect(page.locator('.finale-skills-track')).toContainText('Cezarjeva šifra');
+  await expect(page.locator('.finale-skills-track')).toContainText('Omrežni promet');
+  await expect(page.locator('.case-message, .case-report, .case-learning, .case-timeline')).toHaveCount(0);
+  await expect(page.getByTestId('finale')).not.toContainText('Zaključno poročilo');
+  await expect(page.locator('.sidebar')).toHaveCount(0);
+  await expect(page.getByTestId('ambient-background')).toHaveCount(1);
   await page.emulateMedia({ reducedMotion: 'reduce' });
-  await expect(page.locator('.case-message-body')).toHaveCSS('animation-name', 'none');
-  await expect(page.locator('.case-node').first()).toHaveCSS('animation-name', 'none');
+  await expect(page.getByTestId('ambient-light')).toHaveCount(0);
   for (const width of [900, 320]) {
     await page.setViewportSize({ width, height: 900 });
     await checkLayout(page);
@@ -526,17 +525,94 @@ test('vseh osem stopenj, lokalni pripomočki, nadaljevanje in zaključek', async
   await page.setViewportSize(binaryViewport);
   await checkLayout(page);
   await page.screenshot({ path: `.local/qa-${testInfo.project.name}-finale.png`, fullPage: true });
+  await page.locator('.completion-actions').getByRole('link', { name: 'Lestvica', exact: true }).click();
+  await expect(page).toHaveURL(/\/lestvica$/u);
+  await expect(page.getByRole('heading', { name: 'Lestvica skupin.', exact: true })).toBeVisible();
+  const finishedSession = (await (await page.request.get('/api/session')).json()).session;
+  const finishedRow = page.locator(`[data-entry-id="${finishedSession.leaderboardId}"]`);
+  await expect(finishedRow).toBeVisible();
+  await expect(finishedRow).toContainText('Zaključeno');
+  await expect(finishedRow.locator('.board-metrics > div').first()).toContainText('8 / 8');
+  await page.getByRole('button', { name: 'Nazaj k preiskavi', exact: true }).click();
+  await expect(page.getByTestId('finale')).toBeVisible();
   await page.reload();
   await page.getByRole('button', { name: 'Odpri zaključeno preiskavo' }).click();
-  await expect(page.getByRole('heading', { name: 'Preiskava zaključena', exact: true })).toBeVisible();
+  await expect(page.getByRole('heading', { name: 'Preiskava zaključena.', exact: true })).toBeVisible();
   await expect(page.getByTestId('dark-entry')).toHaveCount(0);
   expect(foreignRequests).toEqual([]);
   expect(browserErrors).toEqual([]);
 });
 
+test('ime skupine je obvezno in lestvica v živo spremlja nov poskus', async ({ page }, testInfo) => {
+  await page.goto('/');
+  const name = page.getByLabel('Ime skupine', { exact: true });
+  const startButton = page.getByRole('button', { name: 'Začni preiskavo', exact: true });
+  await expect(name).toHaveAttribute('required', '');
+  await startButton.click();
+  await expect(page.getByRole('alert')).toHaveText('Vnesi ime skupine.');
+  await expect(name).toBeFocused();
+  await name.fill('   ');
+  await startButton.click();
+  await expect(page.getByRole('alert')).toHaveText('Vnesi ime skupine.');
+  expect((await (await page.request.get('/api/session')).json()).session).toBeNull();
+  const teamName = `Modri signal ${testInfo.project.name} ${Date.now()}`;
+  await name.fill(teamName);
+  await startButton.click();
+  await expectFirstStage(page);
+  const initial = (await (await page.request.get('/api/session')).json()).session;
+
+  const board = await page.context().newPage();
+  try {
+    let refreshes = 0;
+    board.on('request', request => { if (request.url().endsWith('/api/leaderboard')) refreshes++; });
+    await board.goto('/lestvica');
+    await expect(board.getByRole('heading', { name: 'Lestvica skupin.', exact: true })).toBeVisible();
+    const row = board.locator(`[data-entry-id="${initial.leaderboardId}"]`);
+    await expect(row).toContainText(teamName);
+    await expect(row.locator('.board-metrics > div').first()).toContainText('0 / 8');
+    await page.locator('.hints-panel > summary').click();
+    await page.getByRole('button', { name: 'Razkrij namig 1', exact: true }).click();
+    await submit(page, 'MOST');
+    await expect(row.locator('.board-metrics > div').first()).toContainText('1 / 8', { timeout: 10000 });
+    await expect(row.locator('.board-metrics > div').nth(1).locator('dd')).toHaveText('1');
+    expect(refreshes).toBeGreaterThanOrEqual(2);
+    await checkLayout(board);
+    await board.screenshot({ path: `.local/qa-${testInfo.project.name}-leaderboard.png` });
+    await board.setViewportSize({ width: 320, height: 900 });
+    await checkLayout(board);
+    await board.screenshot({ path: `.local/qa-${testInfo.project.name}-leaderboard-320.png` });
+    await board.route('**/api/leaderboard', route => route.abort());
+    await board.getByRole('button', { name: 'Osveži lestvico', exact: true }).click();
+    await expect(board.getByRole('alert')).toContainText('Zadnji podatki ostajajo prikazani');
+    await expect(row).toContainText(teamName);
+    await board.unroute('**/api/leaderboard');
+    await board.getByRole('button', { name: 'Osveži lestvico', exact: true }).click();
+    await expect(board.getByRole('alert')).toHaveCount(0);
+    await board.reload();
+    await expect(row).toContainText(teamName);
+
+    await page.getByRole('button', { name: 'Ponastavi preiskavo', exact: true }).click();
+    await expect(page.getByRole('dialog')).toContainText('rezultat ostane na lestvici');
+    await page.getByRole('button', { name: 'Začni nov poskus', exact: true }).click();
+    await expect(page.getByLabel('Ime skupine', { exact: true })).toHaveValue('');
+    await begin(page, 'Novi poskus');
+    const nextSession = (await (await page.request.get('/api/session')).json()).session;
+    expect(nextSession.leaderboardId).not.toBe(initial.leaderboardId);
+    const scores = await (await page.request.get('/api/leaderboard')).json();
+    expect(scores.currentEntry.teamName).toBe('Novi poskus');
+    expect(scores.currentEntry.id).toBe(nextSession.leaderboardId);
+    await page.getByRole('link', { name: 'Lestvica', exact: true }).click();
+    await expect(page).toHaveURL(/\/lestvica$/u);
+    await page.goBack();
+    await expectFirstStage(page);
+    await page.goForward();
+    await expect(page.getByRole('heading', { name: 'Lestvica skupin.', exact: true })).toBeVisible();
+  } finally { await board.close(); }
+});
+
 test('pretvornik menja formate, ohrani vhod in podpira ročno kopiranje', async ({ page }) => {
   await page.goto('/');
-  await page.getByRole('button', { name: 'Začni preiskavo', exact: true }).click();
+  await begin(page);
   await submit(page, 'MOST'); await next(page);
   const input = page.getByLabel('Besedilo za pretvorbo');
   const method = page.getByLabel('Kodiranje', { exact: true });
@@ -582,7 +658,7 @@ test('pretvornik menja formate, ohrani vhod in podpira ročno kopiranje', async 
 
 test('napaka omrežja ohrani odgovor; ponastavitev zahteva potrditev', async ({ page }) => {
   await page.goto('/');
-  await page.getByRole('button', { name: 'Začni preiskavo', exact: true }).click();
+  await begin(page);
   await expectFirstStage(page);
   await page.route('**/api/stages/1/answer', route => route.abort());
   await submit(page, 'MOST');
@@ -594,7 +670,7 @@ test('napaka omrežja ohrani odgovor; ponastavitev zahteva potrditev', async ({ 
   await expect(page.getByRole('dialog')).toBeVisible();
   await expect(page.getByRole('button', { name: 'Ohrani preiskavo' })).toBeFocused();
   await page.keyboard.press('Tab');
-  await expect(page.getByRole('button', { name: 'Izbriši in začni znova' })).toBeFocused();
+  await expect(page.getByRole('button', { name: 'Začni nov poskus' })).toBeFocused();
   await page.keyboard.press('Shift+Tab');
   await expect(page.getByRole('button', { name: 'Ohrani preiskavo' })).toBeFocused();
   await page.keyboard.press('Escape');
@@ -602,7 +678,7 @@ test('napaka omrežja ohrani odgovor; ponastavitev zahteva potrditev', async ({ 
   await expect(page.getByRole('button', { name: 'Ponastavi preiskavo' })).toBeFocused();
   await expect(page.getByRole('button', { name: 'Nadaljuj', exact: true })).toBeVisible();
   await page.getByRole('button', { name: 'Ponastavi preiskavo' }).click();
-  await page.getByRole('button', { name: 'Izbriši in začni znova' }).click();
+  await page.getByRole('button', { name: 'Začni nov poskus' }).click();
   await expect(page.getByRole('button', { name: 'Začni preiskavo', exact: true })).toBeVisible();
 });
 
@@ -615,7 +691,7 @@ test('zaprt in ponovno odprt brskalnik ohrani trajno sejo', async ({ playwright,
     context = await browserType.launchPersistentContext(profile, options);
     const page = await context.newPage();
     await page.goto('http://127.0.0.1:4173/');
-    await page.getByRole('button', { name: 'Začni preiskavo', exact: true }).click();
+    await begin(page);
     await expectFirstStage(page);
     await submit(page, 'MOST');
     expect((await context.cookies())[0].expires).toBeGreaterThan(Date.now() / 1000);
@@ -633,26 +709,32 @@ test('zaprt in ponovno odprt brskalnik ohrani trajno sejo', async ({ playwright,
   }
 });
 
-test('uvodna svetloba sledi kazalcu; naloge imajo navodilo in stalni odgovor', async ({ page }, testInfo) => {
+test('enotna svetloba sledi kazalcu; naloge imajo navodilo in stalni odgovor', async ({ page }, testInfo) => {
   await page.goto('/');
   const landing = page.getByTestId('landing');
-  const light = page.getByTestId('landing-light');
+  const light = page.getByTestId('ambient-light');
+  const shell = page.locator('.app-shell');
   await expect(landing.getByRole('heading', { level: 1 })).toBeVisible();
   const enabled = await page.evaluate(() => window.matchMedia('(hover: hover) and (pointer: fine)').matches && !window.matchMedia('(prefers-reduced-motion: reduce)').matches && CSS.supports('mask-image', 'radial-gradient(circle, black, transparent)'));
   if (enabled) {
-    await expect(light).toHaveAttribute('aria-hidden', 'true');
+    await expect(page.getByTestId('ambient-background')).toHaveAttribute('aria-hidden', 'true');
     const bounds = await landing.boundingBox();
     await page.mouse.move(bounds!.x + 30, bounds!.y + 40);
-    await expect(landing).toHaveAttribute('style', /--landing-pointer-x:\s*[\d.]+px/);
-    const previous = await landing.getAttribute('style');
+    await expect(shell).toHaveAttribute('style', /--ambient-pointer-x:\s*[\d.]+px/);
+    const previous = await shell.getAttribute('style');
     await page.mouse.move(bounds!.x + bounds!.width / 2, bounds!.y + 180);
-    await expect(landing).not.toHaveAttribute('style', previous!);
+    await expect(shell).not.toHaveAttribute('style', previous!);
   } else await expect(light).toHaveCount(0);
   await checkLayout(page);
   await page.screenshot({ path: `.local/qa-${testInfo.project.name}-landing-light.png`, fullPage: true });
-  await page.getByRole('button', { name: 'Začni preiskavo', exact: true }).click();
+  await begin(page);
   await expectFirstStage(page);
   await expect(landing).toHaveCount(0);
+  await expect(page.getByTestId('ambient-background')).toHaveCount(1);
+  if (enabled) {
+    await page.mouse.move(150, 180);
+    await expect(shell).toHaveAttribute('style', /--ambient-pointer-x: 150px/);
+  }
   await expect(page.getByRole('heading', { name: 'NAVODILO', exact: true })).toBeVisible();
   await expect(page.locator('.task-instruction')).not.toContainText('3');
   await expect(page.locator('.caesar-story')).toContainText('tri mesta nazaj');
@@ -700,8 +782,8 @@ test('zmanjšano gibanje ohrani uvod brez svetilke in omogoča reševanje s tipk
   await page.emulateMedia({ reducedMotion: 'reduce' });
   await page.goto('/');
   await expect(page.getByTestId('landing')).toBeVisible();
-  await expect(page.getByTestId('landing-light')).toHaveCount(0);
-  await page.getByRole('button', { name: 'Začni preiskavo', exact: true }).click();
+  await expect(page.getByTestId('ambient-light')).toHaveCount(0);
+  await begin(page);
   await expectFirstStage(page);
   await expect(page.getByRole('heading', { name: 'NAVODILO', exact: true })).toBeVisible();
   await expect(page.locator('.source-evidence code')).toHaveText('NRGD MH PRVW');

@@ -2,13 +2,13 @@
 
 To je gradivo za izvajalko. Vsebuje rešitve in ni del javne aplikacije. Ne premakni ga v `public/` ali `dist/client/`. V javnem repozitoriju je izvorna koda skupaj z rešitvami seveda dostopna; za igro uporabljaj naslov aplikacije.
 
-Delavnica je izmišljena izobraževalna simulacija za srednješolce. Dvojica uporablja en računalnik in isti brskalnik, brez registracije in zunanjih spletnih orodij. Vmesnik igralca nagovarja v ednini tudi pri delu v paru; ta vodič opisuje izvedbo delavnice z dvojicami. Igralca sta preiskovalca dogodka na šoli Most. Varnostna ekipa je zavarovala digitalne sledi, osem ugank pa odklepa zaključni spis.
+Delavnica je izmišljena izobraževalna simulacija za srednješolce. Dvojica uporablja en računalnik in isti brskalnik, brez registracije in zunanjih spletnih orodij. Vmesnik igralca nagovarja v ednini tudi pri delu v paru; ta vodič opisuje izvedbo delavnice z dvojicami. Igralca sta preiskovalca dogodka na šoli Most. Varnostna ekipa je zavarovala digitalne sledi, osem ugank pa vodi do izhoda iz digitalnega arhiva.
 
 ## Pred izvedbo
 
 Odpri aplikacijo na računalnikih in preveri dostop do strežnika. Vsaka dvojica potrebuje svoj profil brskalnika oziroma svoj računalnik. Dva zavihka istega profila delita isto sejo. Če se pari pri računalniku zamenjajo, naj novi par potrdi ponastavitev prejšnje igre.
 
-Preizkusi en celoten prehod. Nastavitev `APP_ORIGIN`, varen piškotek in HTTPS morajo ustrezati dejanskemu naslovu. Aplikacija potrebuje povezavo s svojim strežnikom, vsi dokazi in pripomočki pa ostanejo na istem spletnem mestu. Ne zahteva resničnega gesla, fotografije ali osebnih podatkov dijakov. Ime ekipe je neobvezno; priporočene so izmišljene oznake. Predstavitev dokazov vključuje izbiranje sporočil, datotek in paketov. Četrta naloga zdaj zahteva ročni vnos predvidljivega gesla in nato priporočila; prej že rešene stopnje ostanejo rešene.
+Preizkusi en celoten prehod. Nastavitev `APP_ORIGIN`, varen piškotek in HTTPS morajo ustrezati dejanskemu naslovu. Aplikacija potrebuje povezavo s svojim strežnikom, vsi dokazi in pripomočki pa ostanejo na istem spletnem mestu. Ne zahteva resničnega gesla, fotografije ali osebnih podatkov dijakov. Ime skupine je obvezno in javno na lestvici; par naj izbere izmišljeno oznako z 1–60 znaki. Robni presledki se odstranijo, samo presledki ali nevidni znaki niso veljavno ime. Predstavitev dokazov vključuje izbiranje sporočil, datotek in paketov. Četrta naloga zahteva ročni vnos predvidljivega gesla in nato priporočila; prej že rešene stopnje ostanejo rešene.
 
 Vsako nalogo uvede kratka zgodba, ki dokaze poveže s preiskavo. Pri nalogah 3–8 navodilo opredeli iskani podatek ali odločitev; konkretni postopki so v namigih. Druga naloga nima ločene sekcije NAVODILO. Polje oziroma izbira odgovora je zgoraj desno, namigi in razlaga pa so dostopni v stranskem panelu. Na ozkem zaslonu se elementi zložijo navpično. Dodatni dokazni zapiski niso prikazani v glavnem delu; spodnje opombe so pomoč izvajalki pri pogovoru.
 
@@ -21,9 +21,9 @@ Vsako nalogo uvede kratka zgodba, ki dokaze poveže s preiskavo. Pri nalogah 3�
 | 15–25 min | Nalogi 3–4: phishing in predvidljivost gesel. |
 | 25–37 min | Nalogi 5–6: branje metapodatkov in povezovanje pogojev v dnevniku. |
 | 37–47 min | Nalogi 7–8: domene in binarni zapis. |
-| 47–60 min | Zaključno poročilo, pogovor in prenos spoznanj v vsakodnevno rabo. |
+| 47–60 min | Zaključek igre, pogovor in prenos spoznanj v vsakodnevno rabo. |
 
-Časi so okvirni. Ura v igri ni omejitev, poskusi niso omejeni, namigi niso kazen. Eden lahko upravlja pripomočke, drugi bere dokaze; po četrti nalogi naj vlogi zamenjata. Če par obstane, naj najprej s svojimi besedami povzame vprašanje, nato uporabi prvi in po potrebi drugi namig. Po pravilnem odgovoru naj prebere razlago.
+Časi so okvirni. Ura igre ne prekine, število poskusov ni omejeno. Namigi pomagajo pri učenju in vplivajo na razvrstitev na lestvici po spodaj opisanih pravilih. Eden lahko upravlja pripomočke, drugi bere dokaze; po četrti nalogi naj vlogi zamenjata. Če par obstane, naj najprej s svojimi besedami povzame vprašanje, nato uporabi prvi in po potrebi drugi namig. Po pravilnem odgovoru naj prebere razlago.
 
 ## 1. Razbij skrivno sporočilo
 
@@ -195,16 +195,11 @@ V edino polje za odgovor v sekciji **ODGOVOR** zgoraj desno par vpiše **`KLJUC`
 
 ## Zaključek in pogovor
 
-»Preiskava zaključena« pokaže osem rešenih stopenj, informativni čas in število uporabljenih namigov. Ponoven ogled istega namiga ne poveča števila. Namigi naj podpirajo delo, ne razvrščanja ekip.
+»Preiskava zaključena« pokaže tri statistike: osem rešenih stopenj, čas in uporabljene namige. Pod njimi je vodoravna vrstica osmih obravnavanih tem; na ozkem zaslonu se pomika. Spodnja vprašanja in omejitve dokazov so gradivo za pogovor z izvajalko.
 
-Časovnica poveže tri časovno označene sledi in zaključek igre:
+Na ločeni javni lestvici `/lestvica` se ekipe razvrstijo najprej po več rešenih izzivih, nato po manj uporabljenih namigih in nazadnje po krajšem času. Ob enakih treh vrednostih si delijo mesto. Podatki se med ogledom osvežujejo vsakih pet sekund; za ogled ni potreben začetek igre. Čas teče od začetka igre in se ustavi po rešitvi vseh osmih izzivov. Pri nedokončanem rezultatu teče tudi po ponastavitvi ali izteku seje. Ponoven ogled istega namiga števila ne poveča; tudi namig, prvič odprt po rešitvi njegove stopnje, ne poslabša rezultata. Zaključen rezultat ostane nespremenjen.
 
-- **09:57:** phishing sporočilo v Lukovem predalu.
-- **10:42:17:** zapisani čas nastanka fotografije `hodnik.jpg`. Čas spremembe **11:15:00** je ločen podatek, ne čas fotografiranja.
-- **10:45:12:** dnevnik potrjuje uspešen prenos `/zaupno/nacrt.pdf` z računom `ucenec17`.
-- **Zdaj:** vseh osem izzivov je rešenih in poročilo je odprto. To je zaključek igre, ne nov zgodovinski dogodek z izmišljenim časom.
-
-Odprto sporočilo skrbnika šole Most z naslovom »Poročilo prevzeto — nadaljujemo preiskavo« je ločen epilog preiskave. Skrbnik opiše odprto poročilo in utišana opozorila, se zahvali za natančno presojo ter preda zbrane sledi šolski varnostni ekipi. Omejitve sklepanja so pojasnjene v samostojnem delu poročila; epilog ni dodatni dokaz o osebi ali vzroku prenosa.
+Lestvica prikaže prvih 100 rezultatov in lasten rezultat tudi zunaj tega izbora. Ena igra ima en zapis, ki nastane že ob začetku z rezultatom 0/8. Ponastavitev odpre novo prazno sejo, vnos imena pa ustvari nov rezultat. Stari rezultat z njegovim imenom ostane, tudi če poteče seja ali se izbriše piškotek. Ime skupine je javno, zato pred delavnico dogovori izmišljene oznake. Ekipe lahko uporabljajo namige, ko jih potrebujejo; razvrstitev naj bo izhodišče za pogovor o postopku in ne ocena znanja.
 
 **Ne sklepamo**, da je lastnik tega računa dokazano storilec, da je bilo iz javnih podatkov sestavljeno geslo dejansko uporabljeno pri vdoru ali da prikazani dokazi potrjujejo ves potek napada. Fotografija sama ne pove, kdo je uporabljal račun, časovna bližina dogodkov pa ni dokaz vzroka.
 
@@ -219,4 +214,4 @@ Možne usmeritve: preverjanje nenavadnih zahtev po neodvisnem kanalu, upravljaln
 
 Napačen odgovor ostane v polju in omogoča nov poskus. Pri omrežni napaki naj par počaka na povezavo in ponovi oddajo, brez ponastavitve. Ob vrnitvi v isti brskalnik izbere »Nadaljuj preiskavo«. Če je bil piškotek izbrisan ali se je uporabljalo zasebno okno, povezave z anonimno sejo ni mogoče obnoviti prek imena ekipe. Ne uporabljaj skupnega javnega računalnika za več hkratnih ekip v istem profilu brskalnika.
 
-Napredka ne briši s premikanjem baze ali ponovno objavo; uporabniški gumb za ponastavitev po potrditvi izbriše le trenutno igro. V primeru težave s strežnikom skrbnik preveri `/api/health` in dnevnik procesa, ne da bi javno delil produkcijsko okolje ali podatkovno bazo.
+Če stara seja še nima imena, ga par dopolni in nadaljuje z ohranjenim napredkom. Napredka ne briši s premikanjem baze ali ponovno objavo. Gumb za ponastavitev po potrditvi odpre novo igro; prejšnjega rezultata na lestvici ne izbriše. V primeru težave s strežnikom skrbnik preveri `/api/health` in dnevnik procesa, ne da bi javno delil produkcijsko okolje ali podatkovno bazo.

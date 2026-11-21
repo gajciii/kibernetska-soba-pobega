@@ -4,13 +4,17 @@ import { createHash, randomBytes, timingSafeEqual } from 'node:crypto';
 import { resolve } from 'node:path';
 import type pg from 'pg';
 import type { AppConfig } from './config.js';
-import { changeSession, type SessionRow } from './db.js';
+import { changeSession, normalizeTeamName, readLeaderboard, type SessionRow } from './db.js';
 import { stageSummaries, getStage, getHint, getExplanation, validateAnswer, validateProfilePassword, getFeedback, finale } from './content.js';
 import type { SessionView } from '../shared/types.js';
 
 const hashToken = (token: string) => createHash('sha256').update(token).digest('hex');
 class HttpError extends Error { constructor(public status: number, message: string) { super(message); } }
-const started = (row: SessionRow): SessionView => { if (!row.progress) throw new HttpError(409, 'Najprej začni preiskavo.'); return row.progress; };
+const started = (row: SessionRow): SessionView => {
+  if (!row.progress) throw new HttpError(409, 'Najprej začni preiskavo.');
+  if (!normalizeTeamName(row.progress.teamName)) throw new HttpError(409, 'Za nadaljevanje vnesi ime skupine.');
+  return row.progress;
+};
 function allowed(row: SessionRow, id: number) {
   const session = started(row);
   if (!getStage(id)) throw new HttpError(404, 'Ta stopnja ne obstaja.');
@@ -28,6 +32,14 @@ export function createApp(pool: pg.Pool, config: AppConfig) {
   app.use('/api', (_req, res, next) => { res.set('Cache-Control', 'no-store'); next(); });
   app.get('/api/health', async (_req, res) => { await pool.query('SELECT 1'); res.json({ status: 'ok' }); });
   const cookieName = config.secureCookie ? '__Host-operacija404' : 'operacija404';
+  const cookieToken = (req: express.Request) => {
+    const token = (req.headers.cookie || '').split(';').map(x => x.trim()).find(x => x.startsWith(`${cookieName}=`))?.slice(cookieName.length + 1);
+    return token && /^[a-f0-9]{64}$/.test(token) ? token : undefined;
+  };
+  app.get('/api/leaderboard', async (req, res) => {
+    const token = cookieToken(req);
+    res.json(await readLeaderboard(pool, token ? hashToken(token) : undefined));
+  });
   const setCookie = (res: express.Response, token: string) => res.cookie(cookieName, token, { httpOnly: true, secure: config.secureCookie, sameSite: 'strict', path: '/', maxAge: config.ttlDays * 86400000 });
   async function createSession(res: express.Response) {
     const token = randomBytes(32).toString('hex');
@@ -38,9 +50,9 @@ export function createApp(pool: pg.Pool, config: AppConfig) {
     return result.rows[0];
   }
   app.use('/api', async (req, res, next) => {
-    const token = (req.headers.cookie || '').split(';').map(x => x.trim()).find(x => x.startsWith(`${cookieName}=`))?.slice(cookieName.length + 1);
+    const token = cookieToken(req);
     let row: SessionRow | undefined;
-    if (token && /^[a-f0-9]{64}$/.test(token)) row = (await pool.query<SessionRow>('SELECT * FROM game_sessions WHERE token_hash=$1 AND expires_at > now()', [hashToken(token)])).rows[0];
+    if (token) row = (await pool.query<SessionRow>('SELECT * FROM game_sessions WHERE token_hash=$1 AND expires_at > now()', [hashToken(token)])).rows[0];
     if (!row && req.method === 'GET' && req.path === '/session') row = await createSession(res);
     if (!row) throw new HttpError(401, 'Seja je potekla. Osveži stran in začni preiskavo.');
     res.locals.row = row;
@@ -58,10 +70,11 @@ export function createApp(pool: pg.Pool, config: AppConfig) {
   const bootstrap = (row: SessionRow) => ({ csrfToken: row.csrf, session: row.progress, stages: stageSummaries });
   app.get('/api/session', (_req, res) => res.json(bootstrap(res.locals.row)));
   app.post('/api/session', async (req, res) => {
-    const name: unknown = req.body?.teamName ?? '';
-    if (typeof name !== 'string' || name.trim().length > 60) throw new HttpError(400, 'Ime ekipe naj bo dolgo največ 60 znakov.');
+    const name = normalizeTeamName(req.body?.teamName);
+    if (!name) throw new HttpError(400, 'Vnesi ime skupine z največ 60 znaki.');
     const result = await changeSession(pool, res.locals.row.token_hash, row => {
-      row.progress ??= { teamName: name.trim(), startedAt: new Date().toISOString(), completedAt: null, solved: [], attempts: {}, hints: {}, currentStage: 1, hintCount: 0 };
+      row.progress ??= { teamName: name, startedAt: new Date().toISOString(), completedAt: null, solved: [], attempts: {}, hints: {}, currentStage: 1, hintCount: 0 };
+      if (!normalizeTeamName(row.progress.teamName)) row.progress.teamName = name;
       return bootstrap(row);
     });
     res.json(result);
@@ -106,7 +119,10 @@ export function createApp(pool: pg.Pool, config: AppConfig) {
       const session = allowed(row, id);
       const seen = session.hints[id] ||= [];
       if (index === 2 && !seen.includes(1)) throw new HttpError(409, 'Najprej odpri prvi namig.');
-      if (!seen.includes(index)) { seen.push(index); session.hintCount += 1; }
+      if (!seen.includes(index)) {
+        seen.push(index);
+        if (!session.solved.includes(id) && !session.completedAt) session.hintCount += 1;
+      }
       return { hints: hintsFor(session, id), session };
     });
     res.json(result);
@@ -123,6 +139,7 @@ export function createApp(pool: pg.Pool, config: AppConfig) {
   });
   app.use('/api', (_req, _res) => { throw new HttpError(404, 'Ta zahteva ne obstaja.'); });
   app.use(express.static(resolve('dist/client'), { index: 'index.html', dotfiles: 'deny', etag: true }));
+  app.get('/lestvica', (_req, res) => res.sendFile(resolve('dist/client/index.html')));
   app.use((_req, res) => res.status(404).type('text').send('Stran ne obstaja. Vrni se na začetek preiskave.'));
   app.use((error: unknown, _req: express.Request, res: express.Response, _next: express.NextFunction) => {
     if (error instanceof HttpError) { res.status(error.status).json({ error: error.message }); return; }

@@ -279,7 +279,7 @@ const stages: StageContent[] = [
     title: 'Računalnik govori v ničlah in enicah',
     topic: 'Binarni zapis',
     kind: 'binary',
-    intro: 'Zaključno poročilo čaka za zadnjimi zaprtimi vrati arhiva. Skrbnik je ob njih pustil pet bajtov in pripis: »Vsaka enica nekaj šteje. Njeno mesto pove, koliko.« Pet skupin skriva kodo za dostop. Ko vsaka skupina dobi svojo črko, se odpre zadnja mapa.',
+    intro: 'Izhod iz digitalnega arhiva zapirajo zadnja vrata. Skrbnik je ob njih pustil pet bajtov in pripis: »Vsaka enica nekaj šteje. Njeno mesto pove, koliko.« Pet skupin skriva kodo za izhod. Ko vsaka skupina dobi svojo črko, se vrata odprejo.',
     question: 'Za vsak bajt seštej uteži mest z enico. Vsoto poišči v tabeli ASCII, sestavi kodo in jo vpiši v polje za odgovor.',
     evidence: '01001011 01001100 01001010 01010101 01000011',
     note: 'Uteži osmih mest od leve proti desni so 128, 64, 32, 16, 8, 4, 2 in 1. Enica prispeva utež svojega mesta, ničla pa nič. Za vsak bajt posebej seštej prispevke in decimalno vsoto poišči v tabeli ASCII za črke A–Z.',
@@ -312,7 +312,7 @@ const explanations: Record<number, string> = {
   5: 'Rdeč nahrbtnik na hodniku je pomagal prepoznati pravo fotografijo med drugimi slikami. Polje Čas nastanka posnetka beleži 10:42:17, polje Čas spremembe pa 11:15:00. Poznejše urejanje ali ponovno shranjevanje lahko spremeni čas datoteke, zato 11:15 ne pomeni nujno časa fotografiranja. Sam zapis spremembe ne pove, kaj je bilo spremenjeno. Metapodatki lahko manjkajo ali so spremenjeni; so sled za preverjanje, ne nezmotljiv dokaz.',
   6: 'Paketni pregled in aplikacijski dnevnik sta različna vira. Šifrirani TLS-paketi ne razkrijejo računa ali poti; tukaj je njuna povezava pripravljena učna korelacija. Ločen dnevniški zapis ob 10:45:12 potrjuje uspešen prenos /zaupno/nacrt.pdf z računom ucenec17. Zavrnjen prenos, uspešen ogled, prenos druge datoteke in TCP ACK niso enak dokaz. Zapis potrjuje uporabo računa, sam pa ne dokazuje, katera oseba je bila za tipkovnico.',
   7: 'Domnevni arhiv na most.si.arhiv-nacrtov.example pripada tuji domeni arhiv-nacrtov.example; most.si je le njena zavajajoča poddomena. Podobno zapisani most-si.example je druga tuja domena. Pri prijava.example/most.si/prijava pa je tuja domena prijava.example, šolsko ime je samo del poti. Potrjena gostitelja sta most.si in ucilnica.most.si; dodatek ?jezik=sl ne spremeni gostitelja. Izbira ponaredka je utemeljena z njegovo tujo domeno. Kopirana podoba in HTTPS sama ne potrjujeta pripadnosti šoli. Razčlenitev velja za te naslove; registrirana domena ni vedno sestavljena iz zadnjih dveh delov.',
-  8: 'Mesta v bajtu imajo uteži 128, 64, 32, 16, 8, 4, 2 in 1. Enica prispeva pripadajočo utež, ničla pa nič; seštevek je decimalna vrednost bajta. Tabela ASCII to vrednost poveže z znakom. Pet bajtov tako da pet črk, ki ohranijo prvotni vrstni red. Gre za predstavitev podatkov, ne za šifriranje; druga znakovna kodiranja lahko iste bajte razložijo drugače. Končno poročilo je odprto.',
+  8: 'Mesta v bajtu imajo uteži 128, 64, 32, 16, 8, 4, 2 in 1. Enica prispeva pripadajočo utež, ničla pa nič; seštevek je decimalna vrednost bajta. Tabela ASCII to vrednost poveže z znakom. Pet bajtov tako da pet črk, ki ohranijo prvotni vrstni red. Gre za predstavitev podatkov, ne za šifriranje; druga znakovna kodiranja lahko iste bajte razložijo drugače. Preiskava je zaključena.',
 };
 
 const feedback: Record<number, string> = {
@@ -395,32 +395,5 @@ export function validateAnswer(id: number, answer: unknown): boolean {
 
 export const finale: Finale = {
   title: 'Preiskava zaključena',
-  lead: 'Alarm je utihnil. Dokazi so ostali.',
-  findings: [
-    'Sumljivo sporočilo in lažna domena sta prepoznana.',
-    'Iz prikazanih metapodatkov je razbran čas nastanka fotografije: 10:42.',
-    'V dnevniku je potrjen uspešen prenos datoteke /zaupno/nacrt.pdf z računom ucenec17.',
-    'Končno poročilo je odklenjeno in vseh osem stopenj je opravljenih.',
-  ],
-  limitation: 'Dokazi potrjujejo uporabo računa, ne identitete osebe za tipkovnico. Ne dokazujejo, da je lastnik računa storilec, da je bilo prav izbrano učno geslo uporabljeno za vdor ali da je znan celoten potek napada.',
   topics: stageSummaries.map(({ id, topic }) => id === 2 ? 'Kodiranja (HEX in Base64)' : topic),
-  discussion: [
-    'Kateri podatek je bil najbolj prepričljiv dokaz in kakšne so njegove omejitve?',
-    'Kaj bi lahko šola in uporabniki naredili za boljšo zaščito?',
-  ],
-  timeline: [
-    { time: '09:57', title: 'Sumljivo sporočilo v predalu', detail: 'V Lukovem predalu je sporočilo z zahtevo po geslu in enkratni kodi ter grožnjo blokade računa.' },
-    { time: '10:42:17', title: 'Zapisani čas fotografije', detail: 'Fotografija hodnika z rdečim nahrbtnikom ima zapisan čas nastanka 10:42:17 in čas spremembe 11:15:00.' },
-    { time: '10:45:12', title: 'Uspešen prenos dokumenta', detail: 'Aplikacijski dnevnik beleži uspešen prenos /zaupno/nacrt.pdf z računom ucenec17.' },
-    { time: 'Zdaj', title: 'Zaključno poročilo je odprto', detail: 'Vseh osem izzivov je rešenih in zbrane sledi so pripravljene za predajo šolskemu skrbniku.' },
-  ],
-  dispatch: {
-    sender: 'Skrbnik šole Most',
-    subject: 'Poročilo prevzeto — nadaljujemo preiskavo',
-    paragraphs: [
-      'Na mojem zaslonu je utihnilo še zadnje opozorilo. Ob njem je odprto tvoje poročilo: vsak pomemben zapis ima čas, vir in mesto v zgodbi.',
-      'Hvala za vztrajnost in za vsako podrobnost, ki jo preveriš, preden ji zaupaš. Zbrane sledi prevzema šolska varnostna ekipa; jaz pa za danes zapiram svojo konzolo.',
-    ],
-  },
-  closing: 'Tvoj del preiskave je končan. Ohrani navado: preveri, preden zaupaš.',
 };

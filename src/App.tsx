@@ -1,6 +1,6 @@
 import { useCallback, useEffect, useRef, useState } from 'react';
 import type { FormEvent, ReactNode } from 'react';
-import type { AnswerResponse, Bootstrap, Finale, SessionView, StageContent, StageResponse, StageSummary } from '../shared/types';
+import type { AnswerResponse, Bootstrap, SessionView, StageContent, StageResponse, StageSummary } from '../shared/types';
 import ConverterWorkbench from './ConverterWorkbench';
 import CaesarWorkbench from './CaesarWorkbench';
 import BinaryWorkbench from './BinaryWorkbench';
@@ -10,6 +10,8 @@ import { MetadataDesk } from './EvidenceDesks';
 import { BrowserDesk } from './BrowserDesk';
 import { PasswordPatterns, ProfileDesk } from './ProfileDesk';
 import Landing from './Landing';
+import AmbientBackground from './AmbientBackground';
+import LeaderboardView from './LeaderboardView';
 
 type IconName = 'lock' | 'check' | 'clock' | 'folder' | 'key' | 'mail' | 'shield' | 'image' | 'terminal' | 'globe' | 'bulb' | 'reset' | 'close';
 function Icon({ name, size = 20 }: { name: IconName; size?: number }) {
@@ -35,6 +37,8 @@ function Explanation({ text }: { text: string }) {
 }
 const applications: Record<StageContent['kind'], { name: string; icon: IconName }> = { caesar: { name: 'Šifrirnik', icon: 'key' }, encoding: { name: 'Pretvornik', icon: 'terminal' }, phishing: { name: 'Pošta', icon: 'mail' }, password: { name: 'Javni profil', icon: 'shield' }, metadata: { name: 'Datoteke', icon: 'folder' }, logs: { name: 'Omrežni promet', icon: 'terminal' }, domains: { name: 'Brskalnik', icon: 'globe' }, binary: { name: 'Bitna konzola', icon: 'terminal' } };
 const base = import.meta.env.BASE_URL;
+type PageView = 'intro' | 'stage' | 'finale' | 'leaderboard';
+const isLeaderboardPath = () => window.location.pathname.replace(/\/$/u, '') === `${base}lestvica`.replace(/\/$/u, '');
 function elapsed(session: SessionView | null, now: number) {
   if (!session) return '00:00';
   const seconds = Math.max(0, Math.floor(((session.completedAt ? Date.parse(session.completedAt) : now) - Date.parse(session.startedAt)) / 1000));
@@ -59,9 +63,9 @@ async function request<T>(path: string, csrf: string, body?: unknown): Promise<T
 
 export default function App() {
   const [boot, setBoot] = useState<Bootstrap | null>(null);
-  const [view, setView] = useState<'intro' | 'stage' | 'finale'>('intro');
+  const [view, setView] = useState<PageView>(() => isLeaderboardPath() ? 'leaderboard' : 'intro');
+  const gameView = useRef<Exclude<PageView, 'leaderboard'>>('intro');
   const [stageData, setStageData] = useState<StageResponse | null>(null);
-  const [finale, setFinale] = useState<Finale | null>(null);
   const [busy, setBusy] = useState(false);
   const [error, setError] = useState('');
   const [now, setNow] = useState(Date.now());
@@ -76,20 +80,32 @@ export default function App() {
     finally { setBusy(false); }
   }, []);
   useEffect(() => { void bootstrap(); }, [bootstrap]);
+  useEffect(() => {
+    const onPopState = () => { setView(isLeaderboardPath() ? 'leaderboard' : gameView.current); };
+    window.addEventListener('popstate', onPopState);
+    return () => window.removeEventListener('popstate', onPopState);
+  }, []);
   useEffect(() => { const timer = window.setInterval(() => setNow(Date.now()), 1000); return () => window.clearInterval(timer); }, []);
   useEffect(() => { headingRef.current?.focus(); }, [view, stageData?.stage.id]);
+  function changeView(next: PageView) {
+    const path = next === 'leaderboard' ? `${base}lestvica` : base;
+    if (window.location.pathname !== path) window.history.pushState({}, '', path);
+    if (next !== 'leaderboard') gameView.current = next;
+    setView(next);
+    window.scrollTo({ top: 0, left: 0 });
+  }
   function updateSession(next: SessionView) { setBoot(previous => previous ? { ...previous, session: next } : previous); }
   async function openStage(id: number) {
     setBusy(true); setError('');
-    try { setStageData(await request<StageResponse>(`/stages/${id}`, csrf)); setView('stage'); }
+    try { setStageData(await request<StageResponse>(`/stages/${id}`, csrf)); changeView('stage'); }
     catch (e) { setError((e as Error).message); }
     finally { setBusy(false); }
   }
   async function openFinale() {
     setBusy(true); setError('');
     try {
-      const result = await request<{ finale: Finale; session: SessionView }>('/finale', csrf);
-      setFinale(result.finale); updateSession(result.session); setView('finale');
+      const result = await request<{ session: SessionView }>('/finale', csrf);
+      updateSession(result.session); changeView('finale');
     } catch (e) { setError((e as Error).message); }
     finally { setBusy(false); }
   }
@@ -98,39 +114,47 @@ export default function App() {
     try {
       const next = await request<Bootstrap>('/session', csrf, { teamName });
       setBoot(next);
-      setStageData(await request<StageResponse>('/stages/1', next.csrfToken)); setView('stage');
+      if (next.session?.completedAt) await openFinale();
+      else { setStageData(await request<StageResponse>(`/stages/${next.session?.currentStage ?? 1}`, next.csrfToken)); changeView('stage'); }
     } catch (e) { setError((e as Error).message); }
     finally { setBusy(false); }
   }
   async function reset() {
     setBusy(true); setError('');
     try {
-      setBoot(await request<Bootstrap>('/reset', csrf, {})); setStageData(null); setFinale(null); setView('intro'); setResetOpen(false);
+      setBoot(await request<Bootstrap>('/reset', csrf, {})); setStageData(null); changeView('intro'); setResetOpen(false);
     } catch (e) { setError((e as Error).message); setResetOpen(false); }
     finally { setBusy(false); }
   }
-  const continueInvestigation = () => session?.completedAt ? void openFinale() : void openStage(session?.currentStage ?? 1);
-  return <div className={`app-shell ${view === 'intro' ? 'is-landing' : 'is-workspace'}`}>
+  const continueInvestigation = () => !session?.teamName.trim() ? changeView('intro') : session.completedAt ? void openFinale() : void openStage(session.currentStage);
+  const leaveLeaderboard = () => {
+    if (gameView.current === 'stage' && stageData) changeView('stage');
+    else if (gameView.current === 'finale' && session?.completedAt) changeView('finale');
+    else changeView('intro');
+  };
+  return <div className={`app-shell ${view === 'intro' ? 'is-landing' : view === 'finale' ? 'is-finale' : view === 'leaderboard' ? 'is-leaderboard' : 'is-workspace'}`}>
+    <AmbientBackground/>
     <a className="skip-link" href="#main">Preskoči na vsebino</a>
     <header className="topbar">
-      <button className="brand" onClick={() => setView('intro')} aria-label="Operacija 404, začetni zaslon">
+      <button className="brand" onClick={() => changeView('intro')} aria-label="Operacija 404, začetni zaslon">
         <span className="brand-mark" aria-hidden="true">[404]</span>
         <span><strong>OPERACIJA <span>404</span></strong><small>KIBERNETSKA SOBA POBEGA</small></span>
       </button>
-      <div className="header-stats">
+      <div className="header-controls"><a className="header-leaderboard" href={`${base}lestvica`} aria-current={view === 'leaderboard' ? 'page' : undefined} onClick={event => { if (!event.metaKey && !event.ctrlKey && !event.shiftKey && !event.altKey && event.button === 0) { event.preventDefault(); changeView('leaderboard'); } }}>Lestvica</a>{view === 'stage' && <div className="header-stats">
         <span className="header-progress"><span className="muted">Rešene stopnje</span><strong>{session?.solved.length ?? 0}<span className="muted"> / 8</span></strong></span>
         <span className="timer" aria-label={`Čas preiskave ${elapsed(session, now)}`}><Icon name="clock"/><span>{elapsed(session, now)}</span></span>
         <span className="workshop-badge">UČNA SIMULACIJA</span>
-      </div>
+      </div>}</div>
     </header>
     {error && <div className="global-error" role="alert"><span>{error}</span>{!boot ? <button onClick={() => void bootstrap()} disabled={busy}>Poskusi znova</button> : <button aria-label="Zapri obvestilo" onClick={() => setError('')}><Icon name="close"/></button>}</div>}
     {!boot ? <main id="main" className="loading-screen"><span className="loading-symbol"><Icon name="shield" size={36}/></span><h1>{busy ? 'Pripravljamo preiskovalno mapo …' : 'Povezava ni uspela'}</h1></main> : view === 'intro' ?
       <Landing session={session} busy={busy} onStart={start} onContinue={continueInvestigation} onReset={() => setResetOpen(true)} headingRef={headingRef}/>
+      : view === 'leaderboard' ? <LeaderboardView headingRef={headingRef} onBack={leaveLeaderboard}/>
       : view === 'stage' && stageData ? <Stage key={stageData.stage.id} data={stageData} csrf={csrf} busy={busy} setBusy={setBusy} onSession={updateSession} onData={setStageData} onNext={() => stageData.stage.id === 8 ? void openFinale() : void openStage(stageData.stage.id + 1)} onFinale={openFinale} headingRef={headingRef}
         navigation={<Sidebar stages={boot.stages} session={session!} active={stageData.stage.id} busy={busy} onSelect={openStage} onFinale={openFinale} onReset={() => setResetOpen(true)}/>}/>
-      : <div className="workspace finale-workspace"><main id="main" className="investigation-main" aria-busy={busy}>
-        {finale && session && <FinaleView finale={finale} session={session} stages={boot.stages} time={elapsed(session, now)} headingRef={headingRef} onReview={() => void openStage(1)} onReset={() => setResetOpen(true)}/>}
-        </main><aside className="sidebar"><Sidebar stages={boot.stages} session={session!} busy={busy} onSelect={openStage} onFinale={openFinale} onReset={() => setResetOpen(true)}/></aside></div>}
+      : <main id="main" className="finale-page" aria-busy={busy}>
+        {session && <FinaleView session={session} stages={boot.stages} time={elapsed(session, now)} headingRef={headingRef} onReset={() => setResetOpen(true)} onLeaderboard={() => changeView('leaderboard')}/>}
+        </main>}
     <footer className="footer"><span><strong>FERI</strong><span className="footer-divider">/</span> Kibernetska soba pobega</span><span className="footer-credit"><span>Avtorica: Gaja Gujt</span><a href={`${base}license.txt`} target="_blank" rel="noopener noreferrer">Licenca MIT</a></span></footer>
     {resetOpen && <ResetDialog busy={busy} onCancel={() => setResetOpen(false)} onReset={reset}/>}
   </div>;
@@ -150,7 +174,7 @@ function Sidebar({ stages, session, active, busy, onSelect, onFinale, onReset }:
         <span className="stage-nav-copy"><strong>{stage.title}</strong><small className="sr-only">{solved ? 'Rešeno' : locked ? 'Zaklenjeno' : 'Trenutna stopnja'}</small></span>
       </button></li>;
     })}</ol></nav>
-    {session.completedAt && <button className="secondary finale-nav" onClick={() => void onFinale()} disabled={busy}><Icon name="folder"/>Zaključno poročilo</button>}
+    {session.completedAt && <button className="secondary finale-nav" onClick={() => void onFinale()} disabled={busy}><Icon name="check"/>Rezultat preiskave</button>}
     <div className="sidebar-bottom"><div className="team-chip"><Icon name="shield"/><span>{session.teamName || 'Preiskovalna ekipa'}</span></div><button className="text-button reset-button" disabled={busy} onClick={onReset}><Icon name="reset" size={16}/>Ponastavi preiskavo</button></div>
   </section>;
 }
@@ -243,7 +267,7 @@ function Stage({ data, csrf, busy, setBusy, onSession, onData, onNext, onFinale,
         </form>
         {feedback && !feedback.success && <div className="feedback error" role="alert">{feedback.text}</div>}
         <div className="answer-status" role="status">{data.solved ? 'Izziv opravljen' : ''}</div>
-        {data.solved && <div className="solved-result"><button className="primary check-button" onClick={onNext} disabled={busy}>{stage.id === 8 ? 'Odpri zaključno poročilo' : 'Nadaljuj'}</button><details className="answer-explanation"><summary>Razlaga rešitve</summary><p><Explanation text={data.explanation ?? ''}/></p></details></div>}
+        {data.solved && <div className="solved-result"><button className="primary check-button" onClick={onNext} disabled={busy}>{stage.id === 8 ? 'Poglej rezultat' : 'Nadaljuj'}</button><details className="answer-explanation"><summary>Razlaga rešitve</summary><p><Explanation text={data.explanation ?? ''}/></p></details></div>}
       </section>
       <details className="hints-panel"><summary>Namigi <span>{data.hints.length} / 2</span></summary><div className="hints-content">{[1, 2].map(index => {
         const revealed = data.hints.find(h => h.index === index);
@@ -268,5 +292,5 @@ function ResetDialog({ busy, onCancel, onReset }: { busy: boolean; onCancel: () 
       if (opener?.isConnected) opener.focus();
     };
   }, [opener]);
-  return <dialog className="reset-dialog" ref={ref} onCancel={e => { e.preventDefault(); if (!busy) onCancel(); }} aria-labelledby="reset-title" aria-describedby="reset-description"><span className="dialog-icon"><Icon name="reset" size={28}/></span><h2 id="reset-title">Želiš začeti novo preiskavo?</h2><p id="reset-description">Tvoj napredek in namigi bodo izbrisani. Druge preiskave ostanejo shranjene.</p><div className="dialog-actions"><button className="secondary" onClick={onCancel} disabled={busy} autoFocus>Ohrani preiskavo</button><button className="danger" onClick={() => void onReset()} disabled={busy}>{busy ? 'Ponastavljanje …' : 'Izbriši in začni znova'}</button></div></dialog>;
+  return <dialog className="reset-dialog" ref={ref} onCancel={e => { e.preventDefault(); if (!busy) onCancel(); }} aria-labelledby="reset-title" aria-describedby="reset-description"><span className="dialog-icon"><Icon name="reset" size={28}/></span><h2 id="reset-title">Želiš začeti novo preiskavo?</h2><p id="reset-description">Začneš nov poskus od prve naloge. Doseženi rezultat ostane na lestvici.</p><div className="dialog-actions"><button className="secondary" onClick={onCancel} disabled={busy} autoFocus>Ohrani preiskavo</button><button className="danger" onClick={() => void onReset()} disabled={busy}>{busy ? 'Ponastavljanje …' : 'Začni nov poskus'}</button></div></dialog>;
 }
