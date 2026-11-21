@@ -244,7 +244,9 @@ describe('razširjeni dokazi ostanejo skladni z obstoječimi rešitvami', () => 
     expect(stage.note).toContain('TLS sam ne razkrije');
     expect(stage.note).toContain('učna korelacija');
     expect(getExplanation(6)).toContain('različna vira');
-    const broadcast = stage.packets!.filter(packet => packet.protocol === 'ARP' && packet.info.startsWith('Kdo ima'));
+    const broadcast = stage.packets!.filter(packet => [1, 20].includes(packet.number));
+    expect(broadcast).toHaveLength(2);
+    expect(broadcast.every(packet => packet.protocol === 'ARP')).toBe(true);
     expect(broadcast.every(packet => packet.destination === 'ff:ff:ff:ff:ff:ff')).toBe(true);
   });
 

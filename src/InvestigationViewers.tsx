@@ -200,6 +200,6 @@ export function TrafficViewer({ packets, logs }: { packets: TrafficPacket[]; log
       </> : <div className="iv-inspector-empty"><p>Izberita paket za podrobnosti.</p></div>}
     </div>
     <div className="iv-traffic-legend"><span>DOWNLOAD = prenos datoteke</span><span>VIEW = ogled</span><span>SUCCESS = uspešno</span><span>DENIED = zavrnjeno</span><span>LOGIN / LOGOUT = prijava / odjava</span></div>
-    <details className="iv-protocol-legend"><summary>Legenda omrežnih protokolov</summary><dl><div><dt>ARP</dt><dd>iskanje naslova naprave v lokalnem omrežju</dd></div><div><dt>DNS</dt><dd>pretvorba imena gostitelja v omrežni naslov</dd></div><div><dt>TCP</dt><dd>vzpostavitev in prenos podatkov po povezavi</dd></div><div><dt>TLS</dt><dd>šifrirana povezava; vsebina ni prikazana</dd></div><div><dt>HTTP</dt><dd>spletni zahtevek v tem učnem zajemu</dd></div></dl></details>
+    <details className="iv-protocol-legend"><summary>Legenda omrežnih protokolov</summary><dl><div><dt>ARP</dt><dd>iskanje strojnega naslova (MAC) naprave v lokalnem omrežju</dd></div><div><dt>DNS</dt><dd>pretvorba imena gostitelja v omrežni naslov</dd></div><div><dt>TCP</dt><dd>vzpostavitev in prenos podatkov po povezavi</dd></div><div><dt>TLS</dt><dd>šifrirana povezava; vsebina ni prikazana</dd></div><div><dt>HTTP</dt><dd>spletni zahtevek v tem učnem zajemu</dd></div></dl></details>
   </section>;
 }
