@@ -9,8 +9,8 @@ const stages: StageContent[] = [
     title: 'Razbij skrivno sporočilo',
     topic: 'Cezarjeva šifra',
     kind: 'caesar',
-    intro: 'Varnostna ekipa je iz mape začasnih datotek rešila tri zapiske in kratek zapis. Ugotovita, kateri podatki pomagajo pri njegovem branju, ter odklenita prvi del preiskovalne mape.',
-    question: 'Katera beseda je koda v dešifriranem sporočilu?',
+    intro: 'Iz začasne mape je ostalo kratko šifrirano sporočilo.',
+    question: 'S Cezarjevo šifro premakni črke A–Z za 3 mesta nazaj. Vnesi besedo, ki jo razkrito sporočilo določi kot kodo.',
     evidence: 'NRGD MH PRVW',
     note: 'Uporabljena je Cezarjeva šifra s premikom 3. Pri tej nalogi uporabljamo abecedo A–Z brez šumnikov. Dešifriranje pomeni premik nazaj po abecedi.',
     investigations: [
@@ -24,8 +24,8 @@ const stages: StageContent[] = [
     title: 'Kaj se skriva za čudnimi znaki?',
     topic: 'Kodiranja',
     kind: 'base64',
-    intro: 'V izvozu sporočil je ostal niz brez oznake uporabljene pretvorbe. Primerjaj njegove znake z možnostmi v laboratoriju kodiranj. Poskusi lahko več metod; pomemben je smiseln rezultat.',
-    question: 'Ugotovi ustrezno kodiranje in preberi sporočilo. Katera beseda je koda?',
+    intro: 'Izvoz sporočila nima oznake uporabljenega kodiranja.',
+    question: 'Izberi ustrezno kodiranje in dekodiraj prikazani niz. Vnesi kodo iz razkritega sporočila.',
     evidence: 'S09EQTogU09WQQ==',
     note: 'Vgrajeni laboratorij podpira več kodiranj. Izberi metodo, pretvori celoten niz in presodi rezultat. Napaka pri neustrezni metodi je uporaben podatek, ne izgubljen poskus odgovora.',
     investigations: [
@@ -39,8 +39,8 @@ const stages: StageContent[] = [
     title: 'Poišči phishing sporočilo',
     topic: 'Phishing',
     kind: 'phishing',
-    intro: 'Varnostna ekipa je zavarovala predal s sedmimi sporočili. Med običajnimi obvestili poišči tisto, ki prejemnika zavaja. Odpri sporočila in primerjaj vsebino, pošiljatelje ter cilje povezav.',
-    question: 'Katero sporočilo je v tem primeru phishing? Izberi ga in označi vsaj dva opozorilna znaka.',
+    intro: 'V zavarovanem predalu je sedem sporočil.',
+    question: 'Šolska domena je sola.example. Izberi phishing sporočilo in vsaj dva opozorilna znaka, brez napačnih razlogov.',
     note: 'Izmišljena šola uporablja domeno sola.example. Vsa sporočila so z dne 20. 11. 2026, časi so lokalni. Predal, priponke in povezave so neaktivna učna simulacija. Prikazno ime, nujnost ali sama prisotnost priponke še ne zadoščajo za sklep.',
     mails: [
       {
@@ -135,8 +135,8 @@ const stages: StageContent[] = [
     title: 'Ugotovi predvidljivo geslo',
     topic: 'Predvidljiva gesla',
     kind: 'password',
-    intro: 'Profil vsebuje vsakdanje objave o šoli, hobijih in domačem življenju. Izlušči podatke, ki bi lahko postali predvidljivi gradniki gesla; vsi podatki niso enako uporabni.',
-    question: 'Katero geslo je najlažje predvideti na podlagi teh javnih podatkov?',
+    intro: 'Javne objave lahko razkrijejo predvidljive gradnike gesel.',
+    question: 'Preglej javne objave profila in izberi geslo, ki ga je na njihovi podlagi najlažje predvideti.',
     note: 'To je izbirna učna naloga. Ne ugibamo dejanskega gesla in ne izvajamo prijavnih poskusov.',
     profile: {
       name: 'Nika — učni profil.',
@@ -160,8 +160,8 @@ const stages: StageContent[] = [
     title: 'Fotografija skriva namig',
     topic: 'Metapodatki',
     kind: 'metadata',
-    intro: 'Mapa vsebuje fotografiji in posnetek zaslona. Za časovnico je pomembna fotografija hodnika, poimenovana hodnik.jpg. Najprej izberi pravo datoteko, nato primerjaj njene časovne podatke.',
-    question: 'Ob kateri uri je bila fotografija hodnik.jpg glede na metapodatke posneta? Vnesi uro in minute v obliki HH:MM.',
+    intro: 'V dokazni mapi sta dve fotografiji in posnetek zaslona.',
+    question: 'Izberi hodnik.jpg in odpri metapodatke. Vnesi čas nastanka fotografije v obliki HH:MM.',
     note: 'Učna simulacija: slike so lokalne ilustracije, izpisi pa pripravljeni primeri in niso prebrani iz ilustracij. Časi v vseh treh primerih uporabljajo odmik +01:00. Ime in vsebino datoteke preveri pred branjem njenih metapodatkov.',
     metadata: 'FileName: hodnik.jpg\nDateTimeOriginal: 2026:11:20 10:42:17\nOffsetTimeOriginal: +01:00\nModifyDate: 2026:11:20 11:15:00',
     artifacts: [
@@ -175,8 +175,8 @@ const stages: StageContent[] = [
     title: 'Kdo je dostopal do skrivne datoteke?',
     topic: 'Dnevniki',
     kind: 'logs',
-    intro: 'Preiskovalna mapa združuje vzorec omrežnega prometa in ločeno zavarovan aplikacijski dnevnik. Filtriraj pakete, odpri njihove podrobnosti ter primerjaj pripadajoče zapise dnevnika. Za sklep potrebuješ pravo datoteko, dejanje in rezultat.',
-    question: 'Kateri uporabniški račun je uspešno prenesel datoteko /zaupno/nacrt.pdf?',
+    intro: 'Omrežni izbor je povezan z ločenim aplikacijskim dnevnikom.',
+    question: 'Odpri paket in povezani aplikacijski zapis. Vnesi račun, pri katerem so skupaj DOWNLOAD, /zaupno/nacrt.pdf in SUCCESS.',
     note: 'Simulacija • 20. 11. 2026, lokalni časi. Paketni pregled je pripravljen izbor dogodkov, ne celoten zajem. Šifriran promet TLS sam ne razkrije uporabniškega računa ali poti datoteke. Povezave do ločenega aplikacijskega dnevnika so vnaprej pripravljena učna korelacija; aplikacija ne zajema prometa in ne pošilja pravih zahtev. DOWNLOAD = prenos, VIEW = ogled, SUCCESS = uspešno, DENIED = zavrnjeno, LOGIN = prijava, LOGOUT = odjava.',
     logs: [
       { time: '10:39:48', ip: '10.0.0.10', account: 'ucenec03', event: 'LOGIN', file: '—', result: 'SUCCESS' },
@@ -241,8 +241,8 @@ const stages: StageContent[] = [
     title: 'Najdi ponarejeno spletno stran',
     topic: 'Domene',
     kind: 'domains',
-    intro: 'Tri kopije prijavne strani imajo skoraj enako vsebino. Oblika strani ni dovolj: primerjaj njihove naslovne vrstice in podatke o šolskih storitvah.',
-    question: 'Kateri naslov se predstavlja kot šolski, vendar pripada drugi domeni?',
+    intro: 'Tri podobne prijavne strani uporabljajo različne naslove.',
+    question: 'Potrjena šolska domena je sola.example. Izberi naslov, ki se predstavlja kot šolski, vendar pripada drugi domeni.',
     note: 'V tem učnem primeru je potrjena domena šole sola.example. Vse naslovne vrstice so simulirane; povezave niso aktivne.',
     choices: [
       { id: 'A', label: 'https://sola.example/prijava' },
@@ -260,8 +260,8 @@ const stages: StageContent[] = [
     title: 'Računalnik govori v ničlah in enicah',
     topic: 'Binarni zapis',
     kind: 'binary',
-    intro: 'Zaključna mapa vsebuje izvoz petih bajtov ter opombe o formatu. Primerjaj binarni zapis s tabelo znakov, preveri vrstni red in poišči zadnjo kodo.',
-    question: 'Pretvori binarni zapis v besedilo in vnesi zadnjo kodo.',
+    intro: 'Zaključno mapo odpre koda iz petih bajtov.',
+    question: 'Pretvori osembitne skupine v besedilo ASCII in vnesi zadnjo kodo.',
     evidence: '01001011 01001100 01001010 01010101 01000011',
     note: 'Vsako skupino osmih bitov loči s presledkom ali novo vrstico. Pomagaš si lahko tudi s tabelo ASCII za črke A–Z.',
     investigations: [
@@ -282,7 +282,7 @@ const hints: Record<number, [string, string]> = {
   5: ['Preveri, da je izbrana datoteka hodnik.jpg. V njenem izpisu loči čas nastanka posnetka od časa spremembe datoteke.', 'V metapodatkih hodnik.jpg poišči DateTimeOriginal in prepiši samo uro ter minute.'],
   6: ['Odpri povezani aplikacijski zapis pri paketu TLS. Šifriran paket sam ne pove računa. Iščeš uspešen prenos točno določene datoteke, ne njen ogled.', 'V ločenem aplikacijskem dnevniku poišči vrstico, v kateri so hkrati DOWNLOAD, /zaupno/nacrt.pdf in SUCCESS.'],
   7: ['Ime šole se lahko pojavi tudi v poddomeni druge domene.', 'Pri enem naslovu se za sola.example pojavi še .prijava-varno.example.'],
-  8: ['Primerjaj pet skupin z glavo izvoza. Vsaka skupina osmih bitov predstavlja en znak ASCII.', 'Prva skupina 01001011 predstavlja črko K. Preostale skupine pretvori v istem vrstnem redu.'],
+  8: ['Vsaka skupina osmih bitov predstavlja en znak ASCII. Pretvori vseh pet skupin v istem vrstnem redu.', 'Prva skupina 01001011 predstavlja črko K. Preostale skupine pretvori v istem vrstnem redu.'],
 };
 
 const explanations: Record<number, string> = {
@@ -293,7 +293,7 @@ const explanations: Record<number, string> = {
   5: 'Najprej je treba izbrati pravo datoteko: čas druge fotografije ne pojasni nastanka hodnik.jpg. DateTimeOriginal označuje nastanek posnetka; čas spremembe ModifyDate ni nujno čas fotografiranja. Posnetek zaslona v tej mapi tega podatka nima. Metapodatki lahko manjkajo ali so spremenjeni, zato sami po sebi niso nezmotljiv dokaz.',
   6: 'Paketni pregled in aplikacijski dnevnik sta različna vira. Šifrirani TLS-paketi ne razkrijejo računa ali poti; tukaj je njuna povezava pripravljena učna korelacija. Ločen dnevniški zapis ob 10:45:12 potrjuje uspešen prenos /zaupno/nacrt.pdf z računom ucenec17. Zavrnjen prenos, uspešen ogled, prenos druge datoteke in TCP ACK niso enak dokaz. Zapis potrjuje uporabo računa, sam pa ne dokazuje, katera oseba je bila za tipkovnico.',
   7: 'Naslov C pripada domeni prijava-varno.example. Protokol je https://, gostitelj je sola.example.prijava-varno.example, pot je /prijava. Šolsko ime sola.example je tukaj le del pred tujo domeno. Pri A je gostitelj potrjena domena sola.example, pri B pa je ucilnica njena poddomena. Prisotnost HTTPS ne naredi strani samodejno zaupanja vredne. Ta razčlenitev velja za konkretne učne primere; pri vseh naslovih registrirana domena ni nujno sestavljena iz zadnjih dveh delov.',
-  8: 'Binarni zapis je način predstavitve podatkov. Glava izvoza je potrdila pet bajtov, opomba o formatu pa znake ASCII. Šele ta dogovor daje številom pomen črk; druga kodiranja lahko iste bajte razložijo drugače. Ta primer ni šifriranje. Odprla sta končno preiskovalno mapo.',
+  8: 'Binarni zapis je način predstavitve podatkov. V tem primeru pet bajtov predstavlja pet znakov ASCII. Šele ta dogovor daje številom pomen črk; druga kodiranja lahko iste bajte razložijo drugače. Ta primer ni šifriranje. Odprla sta končno preiskovalno mapo.',
 };
 
 const feedback: Record<number, string> = {

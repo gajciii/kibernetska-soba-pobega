@@ -45,7 +45,6 @@ export function Mailbox({ mails, answer, onAnswer, disabled }: {
 
   return <section className="iv-mailbox" aria-label="Simuliran e-poštni predal">
     <div className="iv-app-toolbar">
-      <div className="iv-app-heading"><span className="iv-app-name">POŠTA / MOST</span><span>Simuliran e-poštni predal</span></div>
       <span className="iv-app-count">{mails.length} sporočil · {unreadCount} neprebranih</span>
     </div>
     <div className="iv-inbox-search">
@@ -82,11 +81,11 @@ export function Mailbox({ mails, answer, onAnswer, disabled }: {
           </dl></details>
           <div className="iv-mail-body"><p>{opened.body}</p>{opened.linkUrl && <div className="iv-mail-url"><span>{opened.linkLabel || 'Povezava v sporočilu'}</span><small>Dejanski naslov povezave · neaktivno</small><code>{opened.linkUrl}</code></div>}</div>
           {opened.attachment && <p className="iv-mail-attachment"><span>Priloženo</span><code>{opened.attachment}</code></p>}
-          <div className="iv-mail-action"><button type="button" className="secondary" disabled={disabled} aria-pressed={answer === opened.id} onClick={() => onAnswer(opened.id)}>Označi sporočilo {opened.id} kot sumljivo</button><p>{answer === opened.id ? `Sporočilo ${opened.id} je izbrano. Opozorilne znake označita pri vajini ugotovitvi.` : 'Odpiranje sporočila še ne izbere odgovora.'}</p></div>
-        </article> : <div className="iv-reader-empty"><span aria-hidden="true">[ prejeto ]</span><h3>Odprita prvo sporočilo.</h3><p>Preberita vsebino, preverita dejanskega pošiljatelja in preglejta podatke sporočila. Nato izberita, katero se vama zdi sumljivo.</p></div>}
+          <div className="iv-mail-action"><button type="button" className="secondary" disabled={disabled} aria-pressed={answer === opened.id} onClick={() => onAnswer(opened.id)}>Označi sporočilo {opened.id} kot sumljivo</button></div>
+        </article> : <div className="iv-reader-empty"><p>Izberita sporočilo.</p></div>}
       </div>
     </div>
-    <div className="iv-viewer-status"><span role="status">{chosen ? `Izbrano kot sumljivo: sporočilo ${chosen.id}` : 'Sumljivo sporočilo še ni izbrano.'}</span><span>Vse povezave in priponke so neaktivni učni podatki.</span></div>
+    <div className="iv-viewer-status"><span role="status">{chosen ? `Izbrano kot sumljivo: sporočilo ${chosen.id}` : 'Brez označenega sporočila'}</span></div>
   </section>;
 }
 
@@ -131,25 +130,24 @@ export function TrafficViewer({ packets, logs }: { packets: TrafficPacket[]; log
   }
 
   return <section className="iv-traffic" aria-label="Simuliran pregledovalnik omrežnega prometa">
-    <div className="iv-app-toolbar"><div className="iv-app-heading"><span className="iv-app-name">PROMET / MOST</span><span>Simuliran zajem prometa</span></div><span className="iv-app-count">20. 11. 2026 · lokalni časi</span></div>
+    <div className="iv-app-toolbar"><span className="iv-app-count">20. 11. 2026 · lokalni časi</span></div>
     <div className="iv-traffic-filter">
-      <div className="iv-packet-search"><label htmlFor={`${id}-packet-search`}>Išči po prometu in povezanih dnevnikih</label><input id={`${id}-packet-search`} type="search" value={query} onChange={event => applyFilters(event.target.value, protocol)} placeholder="IP, protokol, račun, datoteka ali dejanje" autoComplete="off"/></div>
+      <div className="iv-packet-search"><label htmlFor={`${id}-packet-search`}>Besedilni filter</label><input id={`${id}-packet-search`} aria-label="Išči po prometu in povezanih dnevnikih" type="search" value={query} onChange={event => applyFilters(event.target.value, protocol)} placeholder="IP, protokol, račun, datoteka ali dejanje" autoComplete="off"/></div>
       <div className="iv-protocol-filter"><label htmlFor={`${id}-protocol`}>Protokol</label><select id={`${id}-protocol`} value={protocol} onChange={event => applyFilters(query, event.target.value)}><option value="">Vsi protokoli</option>{protocols.map(value => <option key={value} value={value}>{value}</option>)}</select></div>
       <button type="button" className="iv-text-control" disabled={!query && !protocol} onClick={() => applyFilters('', '')}>Počisti filtre</button>
     </div>
-    <p className="iv-traffic-help">Izberita paket za podrobnosti. Iskanje vključuje tudi povezane strežniške dogodke; njihovi podatki niso prebrani iz šifrirane vsebine TLS.</p>
     <div className="iv-packet-scroll" role="region" aria-label="Paketi, pomična tabela" tabIndex={0}>
-      <table className="iv-packet-table"><caption className="sr-only">Lokalni učni zajem omrežnega prometa, {filtered.length} prikazanih paketov.</caption><thead><tr><th scope="col">Št.</th><th scope="col">Čas</th><th scope="col">Izvor</th><th scope="col">Cilj</th><th scope="col">Protokol</th><th scope="col">Bajti</th><th scope="col">Podatki</th></tr></thead><tbody>{filtered.map(packet => <tr key={packet.number} data-selected={selected?.number === packet.number} onClick={() => setSelectedNumber(packet.number)}>
+      <table className="iv-packet-table"><caption className="sr-only">Lokalni učni zajem omrežnega prometa, {filtered.length} prikazanih paketov.</caption><thead><tr><th scope="col">Št.</th><th scope="col">Čas</th><th scope="col">Izvor</th><th scope="col">Cilj</th><th scope="col">Protokol</th><th scope="col">Bajti</th><th scope="col">Podatki</th></tr></thead><tbody>{filtered.map(packet => <tr key={packet.number} data-selected={selected?.number === packet.number} data-protocol={packet.protocol} onClick={() => setSelectedNumber(packet.number)}>
         <td><button type="button" className="iv-packet-open" aria-label={`Odpri paket ${packet.number}`} aria-pressed={selected?.number === packet.number} aria-controls={`${id}-packet-detail`} onClick={() => setSelectedNumber(packet.number)}>{packet.number}</button></td><td>{packet.time}</td><td>{packet.source}</td><td>{packet.destination}</td><td>{packet.protocol}</td><td className="iv-byte-count">{packet.length}</td><td>{packet.info}</td>
       </tr>)}</tbody></table>
     </div>
     {!filtered.length && <div className="iv-empty-packets" role="status"><p>Noben paket ne ustreza izbranim filtrom.</p><button type="button" className="iv-text-control" onClick={() => applyFilters('', '')}>Prikaži vse pakete</button></div>}
-    <div className="iv-packet-status"><span role="status">Prikazano: {filtered.length} od {packets.length} paketov</span><span>{selected ? `Izbran paket: ${selected.number}` : 'Paket še ni izbran.'}</span></div>
+    <div className="iv-packet-status"><span role="status">Prikazano: {filtered.length} od {packets.length} paketov</span><span>{selected ? `Izbran paket: ${selected.number}` : 'Brez izbranega paketa'}</span></div>
     <div className="iv-packet-inspector" id={`${id}-packet-detail`}>
       {selected ? <>
-        <section className="iv-packet-detail" aria-labelledby={`${id}-packet-title`}><div className="iv-inspector-caption">01 / PODATKI PAKETA</div><h3 id={`${id}-packet-title`} ref={packetHeading} tabIndex={-1}>Paket {selected.number} · {selected.protocol}</h3><dl className="iv-packet-fields"><div><dt>Čas</dt><dd>{selected.time}</dd></div><div><dt>Izvor</dt><dd><code>{selected.source}</code></dd></div><div><dt>Cilj</dt><dd><code>{selected.destination}</code></dd></div><div><dt>Dolžina</dt><dd>{selected.length} bajtov</dd></div></dl><p className="iv-packet-description">{selected.detail}</p>{selected.protocol === 'TLS' && <p className="iv-encryption-note">TLS šifrira vsebino prenosa. Ta prikaz ne razkriva gesel, uporabniških imen ali vsebine datotek iz paketa.</p>}</section>
-        <section className="iv-correlated-log" aria-labelledby={`${id}-log-title`}><div className="iv-inspector-caption">02 / LOČEN VIR: STREŽNIŠKI DNEVNIK</div><h3 id={`${id}-log-title`}>Povezan strežniški dogodek</h3>{correlated ? <><p className="iv-correlation-note">Učna povezava z dogodkom ob {correlated.time}. Spodnji zapis izvira iz simuliranega aplikacijskega dnevnika.</p><dl className="iv-log-fields"><div><dt>Čas dogodka</dt><dd>{correlated.time}</dd></div><div><dt>IP</dt><dd><code>{correlated.ip}</code></dd></div><div><dt>Uporabniški račun</dt><dd><code>{correlated.account}</code></dd></div><div><dt>Dogodek</dt><dd><code>{correlated.event}</code></dd></div><div><dt>Datoteka</dt><dd><code>{correlated.file}</code></dd></div><div><dt>Rezultat</dt><dd><code>{correlated.result}</code></dd></div></dl></> : <p className="iv-correlation-note">Za ta paket v učni zbirki ni povezanega strežniškega dogodka. Za pregled drugega dogodka izberita drug paket.</p>}</section>
-      </> : <div className="iv-inspector-empty"><span aria-hidden="true">[ ni izbranega paketa ]</span><p>V tabeli izberita številko paketa. Tu se prikažejo njegovi podatki in morebiten povezan dogodek iz strežniškega dnevnika.</p></div>}
+        <section className="iv-packet-detail" aria-labelledby={`${id}-packet-title`}><h3 id={`${id}-packet-title`} ref={packetHeading} tabIndex={-1}>Paket {selected.number} · {selected.protocol}</h3><dl className="iv-packet-fields"><div><dt>Čas</dt><dd>{selected.time}</dd></div><div><dt>Izvor</dt><dd><code>{selected.source}</code></dd></div><div><dt>Cilj</dt><dd><code>{selected.destination}</code></dd></div><div><dt>Dolžina</dt><dd>{selected.length} bajtov</dd></div></dl><p className="iv-packet-description">{selected.detail}</p>{selected.protocol === 'TLS' && <p className="iv-encryption-note">TLS: vsebina je šifrirana. Računi in datoteke so razvidni le iz ločenega strežniškega dnevnika.</p>}</section>
+        <section className="iv-correlated-log" aria-labelledby={`${id}-log-title`}><h3 id={`${id}-log-title`}>Simuliran strežniški dnevnik</h3>{correlated ? <><dl className="iv-log-fields"><div><dt>Čas dogodka</dt><dd>{correlated.time}</dd></div><div><dt>IP</dt><dd><code>{correlated.ip}</code></dd></div><div><dt>Uporabniški račun</dt><dd><code>{correlated.account}</code></dd></div><div><dt>Dogodek</dt><dd><code>{correlated.event}</code></dd></div><div><dt>Datoteka</dt><dd><code>{correlated.file}</code></dd></div><div><dt>Rezultat</dt><dd><code>{correlated.result}</code></dd></div></dl></> : <p className="iv-correlation-note">Ni povezanega strežniškega dogodka.</p>}</section>
+      </> : <div className="iv-inspector-empty"><p>Izberita paket za podrobnosti.</p></div>}
     </div>
     <div className="iv-traffic-legend"><span>DOWNLOAD = prenos datoteke</span><span>VIEW = ogled</span><span>SUCCESS = uspešno</span><span>DENIED = zavrnjeno</span><span>LOGIN / LOGOUT = prijava / odjava</span></div>
     <details className="iv-protocol-legend"><summary>Legenda omrežnih protokolov</summary><dl><div><dt>ARP</dt><dd>iskanje naslova naprave v lokalnem omrežju</dd></div><div><dt>DNS</dt><dd>pretvorba imena gostitelja v omrežni naslov</dd></div><div><dt>TCP</dt><dd>vzpostavitev in prenos podatkov po povezavi</dd></div><div><dt>TLS</dt><dd>šifrirana povezava; vsebina ni prikazana</dd></div><div><dt>HTTP</dt><dd>spletni zahtevek v tem učnem zajemu</dd></div></dl></details>

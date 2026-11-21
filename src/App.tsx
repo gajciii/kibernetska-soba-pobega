@@ -3,8 +3,8 @@ import type { FormEvent, ReactNode } from 'react';
 import type { AnswerResponse, Bootstrap, Finale, SessionView, StageContent, StageResponse, StageSummary } from '../shared/types';
 import ConverterWorkbench from './ConverterWorkbench';
 import { Mailbox, TrafficViewer } from './InvestigationViewers';
-import { BrowserDesk, InvestigationNotes, MetadataDesk, ProfileDesk } from './EvidenceDesks';
-import SpotlightTitle from './SpotlightTitle';
+import { BrowserDesk, MetadataDesk, ProfileDesk } from './EvidenceDesks';
+import Landing from './Landing';
 
 type IconName = 'lock' | 'check' | 'clock' | 'folder' | 'key' | 'mail' | 'shield' | 'image' | 'terminal' | 'globe' | 'bulb' | 'reset' | 'close';
 function Icon({ name, size = 20 }: { name: IconName; size?: number }) {
@@ -28,7 +28,7 @@ function Icon({ name, size = 20 }: { name: IconName; size?: number }) {
 function Explanation({ text }: { text: string }) {
   return <>{text.split(/(\b[a-z0-9-]+(?:\.[a-z0-9-]+)+\b)/gi).map((part, index) => index % 2 === 1 ? <strong className="explanation-domain" key={index}>{part}</strong> : part)}</>;
 }
-const stageIcons: IconName[] = ['key', 'terminal', 'mail', 'shield', 'image', 'terminal', 'globe', 'lock'];
+const applications: Record<StageContent['kind'], { name: string; icon: IconName }> = { caesar: { name: 'Šifrirnik', icon: 'key' }, base64: { name: 'Pretvornik', icon: 'terminal' }, phishing: { name: 'Pošta', icon: 'mail' }, password: { name: 'Javni profil', icon: 'shield' }, metadata: { name: 'Datoteke', icon: 'folder' }, logs: { name: 'Omrežni promet', icon: 'terminal' }, domains: { name: 'Brskalnik', icon: 'globe' }, binary: { name: 'Binarni pretvornik', icon: 'terminal' } };
 const base = import.meta.env.BASE_URL;
 function elapsed(session: SessionView | null, now: number) {
   if (!session) return '00:00';
@@ -105,7 +105,7 @@ export default function App() {
     finally { setBusy(false); }
   }
   const continueInvestigation = () => session?.completedAt ? void openFinale() : void openStage(session?.currentStage ?? 1);
-  return <>
+  return <div className={`app-shell ${view === 'intro' ? 'is-landing' : 'is-workspace'}`}>
     <a className="skip-link" href="#main">Preskoči na vsebino</a>
     <header className="topbar">
       <button className="brand" onClick={() => setView('intro')} aria-label="Operacija 404, začetni zaslon">
@@ -120,62 +120,21 @@ export default function App() {
     </header>
     {error && <div className="global-error" role="alert"><span>{error}</span>{!boot ? <button onClick={() => void bootstrap()} disabled={busy}>Poskusi znova</button> : <button aria-label="Zapri obvestilo" onClick={() => setError('')}><Icon name="close"/></button>}</div>}
     {!boot ? <main id="main" className="loading-screen"><span className="loading-symbol"><Icon name="shield" size={36}/></span><h1>{busy ? 'Pripravljamo preiskovalno mapo …' : 'Povezava ni uspela'}</h1></main> : view === 'intro' ?
-      <Intro session={session} busy={busy} onStart={start} onContinue={continueInvestigation} onReset={() => setResetOpen(true)} headingRef={headingRef}/>
-      : <div className="workspace">
-        <main id="main" className="investigation-main" aria-busy={busy}>
-          {view === 'stage' && stageData && <Stage key={stageData.stage.id} data={stageData} session={session!} csrf={csrf} busy={busy} setBusy={setBusy} onSession={updateSession} onData={setStageData} onNext={() => stageData.stage.id === 8 ? void openFinale() : void openStage(stageData.stage.id + 1)} onFinale={openFinale} headingRef={headingRef}/>}
-          {view === 'finale' && finale && session && <FinaleView finale={finale} session={session} stages={boot.stages} time={elapsed(session, now)} headingRef={headingRef} onReview={() => void openStage(1)} onReset={() => setResetOpen(true)}/>}
-        </main>
-        <Sidebar stages={boot.stages} session={session!} active={view === 'stage' ? stageData?.stage.id : undefined} busy={busy} onSelect={openStage} onFinale={openFinale} onReset={() => setResetOpen(true)}/>
-      </div>}
+      <Landing session={session} busy={busy} onStart={start} onContinue={continueInvestigation} onReset={() => setResetOpen(true)} headingRef={headingRef}/>
+      : view === 'stage' && stageData ? <Stage key={stageData.stage.id} data={stageData} csrf={csrf} busy={busy} setBusy={setBusy} onSession={updateSession} onData={setStageData} onNext={() => stageData.stage.id === 8 ? void openFinale() : void openStage(stageData.stage.id + 1)} onFinale={openFinale} headingRef={headingRef}
+        navigation={<Sidebar stages={boot.stages} session={session!} active={stageData.stage.id} busy={busy} onSelect={openStage} onFinale={openFinale} onReset={() => setResetOpen(true)}/>}/>
+      : <div className="workspace finale-workspace"><main id="main" className="investigation-main" aria-busy={busy}>
+        {finale && session && <FinaleView finale={finale} session={session} stages={boot.stages} time={elapsed(session, now)} headingRef={headingRef} onReview={() => void openStage(1)} onReset={() => setResetOpen(true)}/>}
+        </main><aside className="sidebar"><Sidebar stages={boot.stages} session={session!} busy={busy} onSelect={openStage} onFinale={openFinale} onReset={() => setResetOpen(true)}/></aside></div>}
     <footer className="footer"><span><strong>FERI</strong><span className="footer-divider">/</span> Kibernetska soba pobega</span><span>Šola Most · izmišljena učna simulacija</span></footer>
     {resetOpen && <ResetDialog busy={busy} onCancel={() => setResetOpen(false)} onReset={reset}/>}
-  </>;
-}
-
-function Intro({ session, busy, onStart, onContinue, onReset, headingRef }: {
-  session: SessionView | null; busy: boolean; onStart: (name: string) => Promise<void>; onContinue: () => void; onReset: () => void; headingRef: React.RefObject<HTMLHeadingElement | null>;
-}) {
-  const [name, setName] = useState('');
-  return <main id="main" className="intro">
-    <div className="intro-index"><span>DELAVNICA DIGITALNE FORENZIKE</span><span>ŠOLA MOST / PRIMER 404</span></div>
-    <div className="intro-heading">
-      <p className="eyebrow">// dostop do preiskovalne mape</p>
-      <h1 ref={headingRef} tabIndex={-1}>Operacija<br/><span>404.</span></h1>
-    </div>
-    <div className="intro-summary">
-      <h2>Kdo je vdrl v šolski sistem?</h2>
-      <p className="intro-lead">Nekdo je pustil sledi.<br/>Vidva jih bosta povezala.</p>
-      <p className="intro-story">Na izmišljeni šoli Most so odkrili sumljivo prijavno stran in nenavaden prenos zaupne datoteke. Varnostna ekipa je zavarovala nekaj digitalnih sledi, končna preiskovalna mapa pa je še zaklenjena. Kot par digitalnih preiskovalcev morata razvozlati sporočila, pregledati dokaze in ugotoviti, kateri uporabniški račun je bil uporabljen za prenos. Osem rešenih ugank vaju pripelje do zaključnega poročila.</p>
-    </div>
-    <div className="intro-console">
-      <div className="console-caption"><span>preiskovalna_mapa</span><span>[ samo za branje ]</span></div>
-      <div className="console-lines" aria-label="Povzetek preiskovalne mape">
-        <p><span className="line-number" aria-hidden="true">01</span><code>primer: <span>"šola Most"</span></code></p>
-        <p><span className="line-number" aria-hidden="true">02</span><code>dokazi: <span>8</span></code></p>
-        <p><span className="line-number" aria-hidden="true">03</span><code>status: <span>"zavarovano"</span></code></p>
-        <p><span className="line-number" aria-hidden="true">04</span><code>poročilo: <span>"zaklenjeno"</span></code></p>
-      </div>
-    </div>
-    {session ? <div className="start-form resume-card">
-      <p>Preiskovalna mapa je shranjena{session.teamName ? ` · ${session.teamName}` : ''}.</p>
-      <button className="primary large" disabled={busy} onClick={onContinue}>{busy ? 'Odpiranje …' : session.completedAt ? 'Odpri zaključeno preiskavo' : 'Nadaljuj preiskavo'}</button>
-      <button className="text-button" onClick={onReset} disabled={busy}>Začni novo preiskavo</button>
-    </div> : <form className="start-form" onSubmit={(e) => { e.preventDefault(); void onStart(name); }}>
-      <label htmlFor="team-name">Ime ekipe <span className="muted">(neobvezno)</span></label>
-      <div className="start-controls"><input id="team-name" value={name} onChange={e => setName(e.target.value)} maxLength={60} placeholder="Vajino preiskovalno ime" autoComplete="off"/><button className="primary large" disabled={busy}>{busy ? 'Odpiranje …' : 'Začni preiskavo'}</button></div>
-      <small>Brez registracije. Napredek se shrani v tem brskalniku.</small>
-    </form>}
-    <div className="intro-facts"><span>01 / delo v paru</span><span>02 / osem ugank</span><span>03 / 45–60 minut, brez odštevanja</span></div>
-    <div className="simulation-note"><p>Izmišljena izobraževalna simulacija. Vse dokaze in pripomočke najdeta tukaj. Ne potrebujeta drugih strani, programov ali pravih prijavnih podatkov.</p></div>
-  </main>;
+  </div>;
 }
 
 function Sidebar({ stages, session, active, busy, onSelect, onFinale, onReset }: {
   stages: StageSummary[]; session: SessionView; active?: number; busy: boolean; onSelect: (id: number) => Promise<void>; onFinale: () => Promise<void>; onReset: () => void;
 }) {
-  return <aside className="sidebar">
-    <div className="sidebar-heading"><span className="eyebrow">PREISKOVALNA MAPA</span><span className="case-label">PRIMER 404</span></div>
+  return <section className="progress-panel" aria-label="Napredek preiskave">
     <div className="progress-label"><span>Napredek preiskave</span><strong>{session.solved.length} / 8</strong></div>
     <progress max="8" value={session.solved.length} aria-label="Število rešenih stopenj"/>
     <nav aria-label="Stopnje preiskave"><ol className="stages-list">{stages.map(stage => {
@@ -183,16 +142,16 @@ function Sidebar({ stages, session, active, busy, onSelect, onFinale, onReset }:
       return <li key={stage.id}><button disabled={locked || busy} aria-current={active === stage.id ? 'step' : undefined} className={`stage-nav ${solved ? 'solved' : ''} ${active === stage.id ? 'active' : ''}`} onClick={() => void onSelect(stage.id)}>
         <span className="step-dot" aria-hidden="true"/>
         <span className="step-number">{String(stage.id).padStart(2, '0')}</span>
-        <span className="stage-nav-copy"><strong>{stage.title}</strong><small>{solved ? 'Rešeno' : locked ? 'Zaklenjeno' : 'Trenutna stopnja'}</small></span>
+        <span className="stage-nav-copy"><strong>{stage.title}</strong><small className="sr-only">{solved ? 'Rešeno' : locked ? 'Zaklenjeno' : 'Trenutna stopnja'}</small></span>
       </button></li>;
     })}</ol></nav>
     {session.completedAt && <button className="secondary finale-nav" onClick={() => void onFinale()} disabled={busy}><Icon name="folder"/>Zaključno poročilo</button>}
-    <div className="sidebar-bottom"><div className="team-chip"><Icon name="shield"/><span>{session.teamName || 'Preiskovalna ekipa'}<small>Napredek se samodejno shranjuje.</small></span></div><button className="text-button reset-button" disabled={busy} onClick={onReset}><Icon name="reset" size={16}/>Ponastavi preiskavo</button></div>
-  </aside>;
+    <div className="sidebar-bottom"><div className="team-chip"><Icon name="shield"/><span>{session.teamName || 'Preiskovalna ekipa'}</span></div><button className="text-button reset-button" disabled={busy} onClick={onReset}><Icon name="reset" size={16}/>Ponastavi preiskavo</button></div>
+  </section>;
 }
 
-function Stage({ data, session, csrf, busy, setBusy, onSession, onData, onNext, onFinale, headingRef }: {
-  data: StageResponse; session: SessionView; csrf: string; busy: boolean; setBusy: (busy: boolean) => void; onSession: (s: SessionView) => void; onData: (s: StageResponse) => void; onNext: () => void; onFinale: () => Promise<void>; headingRef: React.RefObject<HTMLHeadingElement | null>;
+function Stage({ data, csrf, busy, setBusy, onSession, onData, onNext, onFinale, headingRef, navigation }: {
+  data: StageResponse; navigation: ReactNode; csrf: string; busy: boolean; setBusy: (busy: boolean) => void; onSession: (s: SessionView) => void; onData: (s: StageResponse) => void; onNext: () => void; onFinale: () => Promise<void>; headingRef: React.RefObject<HTMLHeadingElement | null>;
 }) {
   const stage = data.stage;
   const [answer, setAnswer] = useState('');
@@ -220,60 +179,50 @@ function Stage({ data, session, csrf, busy, setBusy, onSession, onData, onNext, 
     finally { setBusy(false); }
   }
   const isChoice = ['phishing', 'password', 'domains'].includes(stage.kind);
-  return <>
-    <div className="stage-breadcrumb"><span>OPERACIJA 404</span><span>/</span><span>Stopnja {stage.id} od 8</span>{data.solved && <span className="solved-badge"><Icon name="check" size={14}/>Rešeno</span>}</div>
-    <div className="stage-title-row"><span className="stage-icon"><Icon name={stageIcons[stage.id - 1]} size={28}/></span><div><span className="eyebrow">{stage.topic}</span><SpotlightTitle key={stage.id} title={stage.title} headingRef={headingRef}/></div></div>
-    <p className="stage-intro">{stage.intro}</p>
-    <div className={`stage-layout ${['phishing', 'password', 'metadata', 'logs', 'domains'].includes(stage.kind) ? 'stage-layout--workspace' : ''}`}>
-      <div className="evidence-column">
-        <section className="panel evidence-panel" aria-labelledby="evidence-title"><div className="panel-top"><h2 id="evidence-title"><Icon name="folder"/>Dokazno gradivo</h2><span className="file-id">DOKAZ {String(stage.id).padStart(2, '0')}</span></div>
-          <div className="panel-body"><Evidence stage={stage} answer={answer} setAnswer={setAnswer} disabled={data.solved || busy}/></div>
-        </section>
-        {['caesar', 'base64', 'binary'].includes(stage.kind) && <ConverterWorkbench stage={stage}/>}
-        {stage.investigations && <InvestigationNotes notes={stage.investigations}/>}
-        {data.solved && stage.kind === 'domains' && <DomainBreakdown stage={stage}/>}
+  const app = applications[stage.kind];
+  const selectedLabel = stage.kind === 'password' ? stage.choices?.find(choice => choice.id === answer)?.label : answer ? `${stage.kind === 'phishing' ? 'Sporočilo' : 'Naslov'} ${answer}` : '';
+  return <div className="workspace" data-stage={stage.kind}>
+    <main id="main" className="investigation-main" aria-busy={busy}>
+      <div className="stage-heading">
+        <div className="stage-breadcrumb"><span>IZZIV {String(stage.id).padStart(2, '0')} / 08</span><span>{stage.topic}</span>{data.solved && <span className="solved-badge"><Icon name="check" size={14}/>Rešeno</span>}</div>
+        <h1 ref={headingRef} tabIndex={-1}>{stage.title}</h1>
       </div>
-      <div className="action-column">
-        <section className="panel answer-panel"><div className="panel-top"><h2><Icon name="key"/>Vajina ugotovitev</h2></div><div className="panel-body">
-          <p className="question">{stage.question}</p>
-          <form onSubmit={submit}>
-            {stage.kind === 'phishing' && <fieldset className="reasons"><legend>Označita vsaj dva opozorilna znaka</legend>{stage.reasons?.map(reason => <label className="reason" key={reason.id}><input type="checkbox" checked={reasons.includes(reason.id)} onChange={e => setReasons(previous => e.target.checked ? [...previous, reason.id] : previous.filter(id => id !== reason.id))} disabled={data.solved || busy}/><span>{reason.label}</span></label>)}</fieldset>}
-            {!isChoice && <><label htmlFor="stage-answer">{stage.kind === 'metadata' ? 'Ura in minute' : stage.kind === 'logs' ? 'Uporabniški račun' : 'Odgovor'}</label><input id="stage-answer" className="answer-input" autoComplete="off" spellCheck={false} maxLength={300} value={answer} onChange={e => setAnswer(e.target.value)} placeholder={stage.kind === 'metadata' ? 'HH:MM' : 'Vnesita ugotovitev'} disabled={data.solved || busy}/></>}
-            {isChoice && !data.solved && <p className="selection-help">{answer ? `Izbrana možnost: ${answer}` : stage.kind === 'phishing' ? 'Najprej izberita sporočilo v dokaznem gradivu.' : 'Izberita eno možnost v dokaznem gradivu.'}</p>}
-            {!data.solved && <button className="primary check-button" disabled={busy || !answer.trim()}>{busy ? 'Preverjanje …' : 'Preveri odgovor'}</button>}
-          </form>
-          {feedback && <div className={`feedback ${feedback.success ? 'success' : 'error'}`} role={feedback.success ? 'status' : 'alert'}>{feedback.success && <Icon name="check"/>}<span>{feedback.text}</span></div>}
-          {data.solved && <div className="solved-result"><span className="result-label"><Icon name="check"/>Dokaz je razvozlan</span><p><Explanation text={data.explanation ?? ''}/></p><button className="primary check-button" onClick={onNext} disabled={busy}>{stage.id === 8 ? 'Odpri zaključno poročilo' : 'Nadaljuj'}</button></div>}
-        </div></section>
-        <section className="panel hints-panel"><div className="panel-top"><h2><Icon name="bulb"/>Potrebujeta namig?</h2><span className="hint-count">{data.hints.length} / 2</span></div><div className="panel-body"><p className="muted hint-intro">Vzemita si čas. Če se zatakne, razkrijta naslednjo sled.</p>{[1, 2].map(index => {
-          const revealed = data.hints.find(h => h.index === index);
-          return revealed ? <div className="hint" key={index}><strong>Namig {index}</strong><p>{revealed.text}</p></div> : <button className="hint-button" key={index} onClick={() => void revealHint(index)} disabled={busy || (index === 2 && !data.hints.some(h => h.index === 1))}><Icon name="bulb" size={17}/>Razkrij namig {index}</button>;
-        })}{hintError && <p className="error-text" role="alert">{hintError}</p>}</div></section>
-        <p className="save-note"><Icon name="shield" size={16}/> {session.attempts[String(stage.id)] ?? 0} poskusov · napredek je shranjen</p>
-      </div>
-    </div>
-  </>;
-}
-
-function Evidence({ stage, answer, setAnswer, disabled }: { stage: StageContent; answer: string; setAnswer: (s: string) => void; disabled: boolean }) {
-  const isWorkspace = ['phishing', 'password', 'metadata', 'logs', 'domains'].includes(stage.kind);
-  return <>
-    {stage.note && !isWorkspace && <p className="evidence-note">{stage.note}</p>}
-    {stage.kind === 'phishing' && <p className="evidence-note">Potrjena šolska domena: <code>sola.example</code>. Primerjajta dejanske naslove z njo.</p>}
-    {stage.evidence && <div className="code-evidence"><span className="eyebrow">{stage.kind === 'caesar' ? 'ZAŠIFRIRANO SPOROČILO' : stage.kind === 'base64' ? 'NAJDENI ZAPIS' : 'BINARNO SPOROČILO'}</span><code>{stage.evidence}</code><span className="code-decoration" aria-hidden="true">[ ZAVAROVAN DOKAZ ]</span></div>}
-    {stage.kind === 'phishing' && <Mailbox mails={stage.mails ?? []} answer={answer} onAnswer={setAnswer} disabled={disabled}/>}
-    {stage.kind === 'password' && <ProfileDesk stage={stage} answer={answer} onAnswer={setAnswer} disabled={disabled}/>}
-    {stage.kind === 'metadata' && <MetadataDesk artifacts={stage.artifacts ?? []}/>}
-    {stage.kind === 'logs' && <TrafficViewer packets={stage.packets ?? []} logs={stage.logs ?? []}/>}
-    {stage.kind === 'domains' && <BrowserDesk choices={stage.choices ?? []} answer={answer} onAnswer={setAnswer} disabled={disabled}/>}
-    {stage.note && isWorkspace && <details className="evidence-context"><summary>O izvoru dokazov in simulaciji</summary><p>{stage.note}</p></details>}
-  </>;
-}
-
-function DomainBreakdown({ stage }: { stage: StageContent }) {
-  return <section className="panel breakdown"><div className="panel-top"><h2><Icon name="globe"/>Kako preberemo te naslove</h2></div><div className="panel-body"><p>Protokolu sledi gostitelj, nato pot. Primerjajta celoten zapis gostitelja s potrjeno šolsko domeno.</p>{stage.choices?.map(choice => {
-    try { const url = new URL(choice.label); return <div className="url-breakdown" key={choice.id}><strong>Možnost {choice.id}</strong><dl><div><dt>Protokol</dt><dd><code>{url.protocol}//</code></dd></div><div className="hostname"><dt>Gostitelj</dt><dd><code>{url.hostname}</code></dd></div><div><dt>Pot</dt><dd><code>{url.pathname}</code></dd></div></dl></div>; } catch { return null; }
-  })}</div></section>;
+      <section className="task-instruction" aria-labelledby="instruction-heading"><h2 id="instruction-heading">NAVODILO</h2><p>{stage.question}</p></section>
+      <a className="mobile-answer-link" href="#answer-panel">Vnesi odgovor</a>
+      <section className="desktop-window" aria-label={`${app.name} — delovno okno`}>
+        <header className="window-toolbar"><div className="window-app"><Icon name={app.icon} size={17}/><strong>{app.name}</strong></div><span className="window-file">PRIMER 404 / {String(stage.id).padStart(2, '0')}</span><span className="window-controls" aria-hidden="true"><i/><i/><i/></span></header>
+        <div className="window-body">
+          {stage.evidence && <div className="source-evidence"><span>DOKAZ</span><code>{stage.evidence}</code></div>}
+          {['caesar', 'base64', 'binary'].includes(stage.kind) && <ConverterWorkbench stage={stage}/>}
+          {stage.kind === 'phishing' && <Mailbox mails={stage.mails ?? []} answer={answer} onAnswer={setAnswer} disabled={data.solved || busy}/>}
+          {stage.kind === 'password' && <ProfileDesk stage={stage} answer={answer} onAnswer={setAnswer} disabled={data.solved || busy}/>}
+          {stage.kind === 'metadata' && <MetadataDesk artifacts={stage.artifacts ?? []}/>}
+          {stage.kind === 'logs' && <TrafficViewer packets={stage.packets ?? []} logs={stage.logs ?? []}/>}
+          {stage.kind === 'domains' && <BrowserDesk choices={stage.choices ?? []} answer={answer} onAnswer={setAnswer} disabled={data.solved || busy}/>}
+        </div>
+        <div className="window-status"><span><i aria-hidden="true"/>Učna simulacija</span><span>{stage.kind === 'logs' ? '32 paketov / lokalna zbirka' : stage.kind === 'phishing' ? '7 sporočil / neaktivne povezave' : 'Šola Most'}</span></div>
+      </section>
+    </main>
+    <aside className="sidebar" aria-label="Odgovor in napredek">
+      <section className="answer-panel" id="answer-panel" aria-labelledby="answer-heading" tabIndex={-1}>
+        <div className="answer-panel-heading"><h2 id="answer-heading">ODGOVOR</h2><span>{String(stage.id).padStart(2, '0')} / 08</span></div>
+        <form onSubmit={submit}>
+          <label htmlFor="stage-answer">{isChoice ? 'Izbrani odgovor' : stage.kind === 'metadata' ? 'Ura in minute' : stage.kind === 'logs' ? 'Uporabniški račun' : 'Odgovor'}</label>
+          <input id="stage-answer" className="answer-input" autoComplete="off" spellCheck={false} maxLength={300} value={isChoice ? selectedLabel ?? '' : answer} onChange={e => setAnswer(e.target.value)} readOnly={isChoice} placeholder={data.solved ? 'Odgovor potrjen' : isChoice ? 'Izberi v delovnem oknu' : stage.kind === 'metadata' ? 'HH:MM' : stage.kind === 'logs' ? 'npr. ucenec01' : 'Vnesi kodo'} disabled={data.solved || busy}/>
+          {stage.kind === 'phishing' && <fieldset className="reasons"><legend>Vsaj dva opozorilna znaka</legend>{stage.reasons?.map(reason => <label className="reason" key={reason.id}><input type="checkbox" checked={reasons.includes(reason.id)} onChange={e => setReasons(previous => e.target.checked ? [...previous, reason.id] : previous.filter(id => id !== reason.id))} disabled={data.solved || busy}/><span>{reason.label}</span></label>)}</fieldset>}
+          {!data.solved && <button className="primary check-button" disabled={busy || !answer.trim()}>{busy ? 'Preverjanje …' : 'Preveri odgovor'}</button>}
+        </form>
+        {feedback && !feedback.success && <div className="feedback error" role="alert">{feedback.text}</div>}
+        <div className="answer-status" role="status">{data.solved ? 'Izziv opravljen' : ''}</div>
+        {data.solved && <div className="solved-result"><button className="primary check-button" onClick={onNext} disabled={busy}>{stage.id === 8 ? 'Odpri zaključno poročilo' : 'Nadaljuj'}</button><details className="answer-explanation"><summary>Razlaga rešitve</summary><p><Explanation text={data.explanation ?? ''}/></p></details></div>}
+      </section>
+      <details className="hints-panel"><summary>Namigi <span>{data.hints.length} / 2</span></summary><div className="hints-content">{[1, 2].map(index => {
+        const revealed = data.hints.find(h => h.index === index);
+        return revealed ? <div className="hint" key={index}><strong>Namig {index}</strong><p>{revealed.text}</p></div> : <button className="hint-button" key={index} onClick={() => void revealHint(index)} disabled={busy || (index === 2 && !data.hints.some(h => h.index === 1))}>Razkrij namig {index}</button>;
+      })}{hintError && <p className="error-text" role="alert">{hintError}</p>}</div></details>
+      {navigation}
+    </aside>
+  </div>;
 }
 
 function FinaleView({ finale, session, stages, time, headingRef, onReview, onReset }: { finale: Finale; session: SessionView; stages: StageSummary[]; time: string; headingRef: React.RefObject<HTMLHeadingElement | null>; onReview: () => void; onReset: () => void }) {

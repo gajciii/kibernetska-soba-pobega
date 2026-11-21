@@ -10,6 +10,8 @@ Odpri aplikacijo na računalnikih in preveri dostop do strežnika. Vsaka dvojica
 
 Preizkusi en celoten prehod. Nastavitev `APP_ORIGIN`, varen piškotek in HTTPS morajo ustrezati dejanskemu naslovu. Aplikacija potrebuje povezavo s svojim strežnikom, vsi dokazi in pripomočki pa ostanejo na istem spletnem mestu. Ne zahteva resničnega gesla, fotografije ali osebnih podatkov dijakov. Ime ekipe je neobvezno; priporočene so izmišljene oznake. Predstavitev dokazov je razširjena z izbiranjem sporočil, datotek in paketov. Odgovori so ostali enaki, zato obstoječe shranjene seje ostajajo veljavne.
 
+Vsaka naloga ima eno kratko navodilo in delovni pripomoček. Polje oziroma izbira odgovora je zgoraj desno, namigi in razlaga pa so dostopni v stranskem panelu. Na ozkem zaslonu se elementi zložijo navpično. Dodatni dokazni zapiski niso več prikazani v glavnem delu; spodnje opombe so pomoč izvajalki pri pogovoru.
+
 ## Predlog poteka: 45–60 minut
 
 | Čas | Dejavnost |
@@ -27,7 +29,7 @@ Preizkusi en celoten prehod. Nastavitev `APP_ORIGIN`, varen piškotek in HTTPS m
 
 **Dokaz:** `NRGD MH PRVW`. Cezarjeva šifra uporablja A–Z brez šumnikov in premik 3. V pripomočku naj nastavita premik 3 in dešifrirata nazaj. Rezultat je `KODA JE MOST`; koda je **`MOST`**. Sprejet je tudi celoten stavek, ne glede na velikost črk in odvečne presledke.
 
-**Pregled dokazov:** trije razširljivi zapiski opisujejo izvor datoteke, ohranjen prepis in dogovorjeno abecedo. Uporabita jih za preverjanje rezultata, ne kot dodatne uganke. Ime `sporocilo.txt` ni koda; presledki in vrstni red omogočajo preverjanje smiselnosti treh besed. V pripomočku lahko poskusita tudi drugačen premik in primerjata rezultat.
+**Opomba za izvajalko:** ime `sporocilo.txt` ni koda; presledki in vrstni red omogočajo preverjanje smiselnosti treh besed. V pripomočku lahko poskusita tudi drugačen premik in primerjata rezultat.
 
 - Namig 1: »Vsako črko premakni za enako število mest.«
 - Namig 2: »Pri dešifriranju se premakni za 3 mesta nazaj: N postane K.«
@@ -41,7 +43,7 @@ Preizkusi en celoten prehod. Nastavitev `APP_ORIGIN`, varen piškotek in HTTPS m
 - Namig 1: »Oglej si nabor znakov in zaključna znaka =. Katera metoda v laboratoriju uporablja tak zapis?«
 - Namig 2: »Izberi Base64. Po dekodiranju je iskana beseda za dvopičjem.«
 
-**Pregled dokazov:** trije zapiski pojasnijo izvor `.dat`, nabor znakov in pričakovani besedilni rezultat. Končnica ne določa kodiranja. Neuspešen poskus v pripomočku ne poveča števila oddanih odgovorov.
+**Opomba za izvajalko:** končnica `.dat` ne določa kodiranja; pri izbiri metode pomagata nabor znakov in smiselnost rezultata. Neuspešen poskus v pripomočku ne poveča števila oddanih odgovorov.
 
 **Učni cilj:** izbrati pretvorbo na podlagi značilnosti zapisa in smiselnosti rezultata ter razlikovati kodiranje od šifriranja. Za dekodiranje Base64 ne potrebujemo skrivnega ključa in Base64 ne zagotavlja zaupnosti. Naključnemu videzu zapisa ne pripisujemo varnosti.
 
@@ -94,7 +96,7 @@ Drugi datoteki sta `ucilnica.jpg` (nastanek ob 08:16:09, sprememba ob 08:25:44) 
 
 ## 6. Kdo je dostopal do skrivne datoteke?
 
-Forenzični pregledovalnik vsebuje **32 simuliranih paketov** in **16 ločenih zapisov aplikacijskega dnevnika**. Vsi dogodki so z dne 20. 11. 2026; časi so lokalni. Paketni izbor vključuje ARP, DNS, TCP, TLS in HTTP ter ni celoten zajem povezav. Par filtrira prikaz, izbere paket ter odpre njegove podrobnosti in morebitno povezavo z aplikacijskim zapisom. Pomagajo tudi zapiski o protokolih, korelaciji in omejitvah dokazov.
+Forenzični pregledovalnik vsebuje **32 simuliranih paketov** in **16 ločenih zapisov aplikacijskega dnevnika**. Vsi dogodki so z dne 20. 11. 2026; časi so lokalni. Paketni izbor vključuje ARP, DNS, TCP, TLS in HTTP ter ni celoten zajem povezav. Par filtrira prikaz, izbere paket ter odpre njegove podrobnosti in morebitno povezavo z aplikacijskim zapisom.
 
 Pravilen račun je **`ucenec17`**: ob **10:45:12** je z IP `10.0.0.17` izvedel `DOWNLOAD` datoteke `/zaupno/nacrt.pdf` z rezultatom `SUCCESS`. S tem zapisom je v učnem primeru povezan **paket 28**. Omrežna vrstica kaže šifriran odziv s strežnika `10.0.0.5` proti `10.0.0.17`; račun, dejanje, pot in rezultat izvirajo iz ločenega dnevnika.
 
@@ -107,7 +109,7 @@ Primerjaj tri pogoje hkrati: prenos, prava datoteka in uspeh. `ucenec12` je imel
 
 ## 7. Najdi ponarejeno spletno stran
 
-Potrjena domena šole v tem primeru je `sola.example`. Pregledovalnik vsebuje tri simulirane zavihke. Par preklaplja med njimi, razčleni protokol, gostitelja in pot ter posebej označi izbrani naslov. Povezave ostanejo neaktivne. Podporni zapiski vsebujejo šolski imenik, primerjavo enakega videza strani in omejitev oznake HTTPS. Pravilen izbor je **C**:
+Potrjena domena šole v tem primeru je `sola.example`. Pregledovalnik vsebuje tri simulirane zavihke. Par preklaplja med njimi, razčleni protokol, gostitelja in pot ter posebej označi izbrani naslov. Povezave ostanejo neaktivne. Pravilen izbor je **C**:
 
 ```text
 https://sola.example.prijava-varno.example/prijava
@@ -122,9 +124,9 @@ Po rešitvi razčleni konkretni naslov: protokol `https`, gostitelj `sola.exampl
 
 ## 8. Računalnik govori v ničlah in enicah
 
-**Dokaz:** `01001011 01001100 01001010 01010101 01000011`. Pretvornik in referenčna tabela ASCII pokažeta **`KLJUC`**. Sprejet je tudi `KLJUČ`, ne glede na velikost črk in robne presledke. Trije razširljivi zapiski dopolnjujejo dokaz: izvoz vsebuje pet bajtov, uporablja ASCII in ohranja vrstni red. Presledki med skupinami so ločila in ne del končnega sporočila.
+**Dokaz:** `01001011 01001100 01001010 01010101 01000011`. Pretvornik in referenčna tabela ASCII pokažeta **`KLJUC`**. Sprejet je tudi `KLJUČ`, ne glede na velikost črk in robne presledke. Izvoz vsebuje pet bajtov, uporablja ASCII in ohranja vrstni red. Presledki med skupinami so ločila in ne del končnega sporočila.
 
-- Namig 1: »Primerjaj pet skupin z glavo izvoza. Vsaka skupina osmih bitov predstavlja en znak ASCII.«
+- Namig 1: »Vsaka skupina osmih bitov predstavlja en znak ASCII. Pretvori vseh pet skupin v istem vrstnem redu.«
 - Namig 2: »Prva skupina 01001011 predstavlja črko K. Preostale skupine pretvori v istem vrstnem redu.«
 
 **Učni cilj:** razumeti binarno predstavitev znakov in osembitne skupine. Pretvornik sprejme presledke ali nove vrstice, nepravilne skupine pa pojasni z napako. Ta primer ni šifriranje. Pravilen odgovor odpre finale; devete uganke ni.

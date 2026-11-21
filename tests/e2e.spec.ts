@@ -54,6 +54,7 @@ test('vseh osem stopenj, lokalni pripomočki, nadaljevanje in zaključek', async
   await page.keyboard.press('ArrowRight'); await page.keyboard.press('ArrowRight'); await page.keyboard.press('ArrowRight');
   await page.getByRole('button', { name: 'Dešifriraj', exact: true }).click();
   await expect(page.locator('output')).toHaveText('KODA JE MOST');
+  await page.locator('.hints-panel > summary').click();
   await page.getByRole('button', { name: 'Razkrij namig 1', exact: true }).click();
   await page.reload();
   await page.getByRole('button', { name: 'Nadaljuj preiskavo', exact: true }).click();
@@ -64,6 +65,7 @@ test('vseh osem stopenj, lokalni pripomočki, nadaljevanje in zaključek', async
   await expect(page.getByLabel('Odgovor', { exact: true })).toHaveValue('napacno');
   await expect(page.getByRole('alert')).toBeVisible();
   await submit(page, '  koda  je most  ');
+  await expect(page.getByRole('status').filter({ hasText: 'Izziv opravljen' })).toBeVisible();
   await page.screenshot({ path: `.local/qa-${testInfo.project.name}-stage.png`, fullPage: true });
   await next(page);
   await expect(page.getByLabel('Kodiranje', { exact: true })).toHaveValue('');
@@ -177,7 +179,7 @@ test('vseh osem stopenj, lokalni pripomočki, nadaljevanje in zaključek', async
   await page.getByRole('button', { name: 'Razčleni naslov', exact: true }).click();
   await page.screenshot({ path: `.local/qa-${testInfo.project.name}-browser.png`, fullPage: true });
   await submit(page);
-  await expect(page.getByRole('heading', { name: 'Kako preberemo te naslove' })).toBeVisible();
+  await page.getByText('Razlaga rešitve', { exact: true }).click();
   await expect(page.locator('.solved-result')).toContainText('prijava-varno.example');
   await next(page);
   await page.getByLabel('Besedilo za pretvorbo').fill('101');
@@ -291,7 +293,7 @@ test('zaprt in ponovno odprt brskalnik ohrani trajno sejo', async ({ playwright,
     const otherPage = await context.newPage();
     await otherPage.goto('http://127.0.0.1:4173/');
     await otherPage.getByRole('button', { name: 'Nadaljuj preiskavo', exact: true }).click();
-    await expect(otherPage.getByText('Stopnja 2 od 8', { exact: true })).toBeVisible();
+    await expect(otherPage.getByText('IZZIV 02 / 08', { exact: true })).toBeVisible();
     await expect(otherPage.getByTestId('dark-entry')).toHaveCount(0);
   } finally {
     await context?.close();
@@ -299,68 +301,71 @@ test('zaprt in ponovno odprt brskalnik ohrani trajno sejo', async ({ playwright,
   }
 });
 
-test('svetilka spremlja naslov vsake naloge brez dodatnega uvoda in ohrani berljivo vsebino', async ({ page }, testInfo) => {
+test('uvodna svetloba sledi kazalcu; naloge imajo navodilo in stalni odgovor', async ({ page }, testInfo) => {
   await page.goto('/');
+  const landing = page.getByTestId('landing');
+  const light = page.getByTestId('landing-light');
+  await expect(landing.getByRole('heading', { level: 1 })).toBeVisible();
+  const enabled = await page.evaluate(() => window.matchMedia('(hover: hover) and (pointer: fine)').matches && !window.matchMedia('(prefers-reduced-motion: reduce)').matches && CSS.supports('mask-image', 'radial-gradient(circle, black, transparent)'));
+  if (enabled) {
+    await expect(light).toHaveAttribute('aria-hidden', 'true');
+    const bounds = await landing.boundingBox();
+    await page.mouse.move(bounds!.x + 30, bounds!.y + 40);
+    await expect(landing).toHaveAttribute('style', /--landing-pointer-x:\s*[\d.]+px/);
+    const previous = await landing.getAttribute('style');
+    await page.mouse.move(bounds!.x + bounds!.width / 2, bounds!.y + 180);
+    await expect(landing).not.toHaveAttribute('style', previous!);
+  } else await expect(light).toHaveCount(0);
+  await checkLayout(page);
+  await page.screenshot({ path: `.local/qa-${testInfo.project.name}-landing-light.png`, fullPage: true });
   await page.getByRole('button', { name: 'Začni preiskavo', exact: true }).click();
   await expectFirstStage(page);
-  const title = page.getByTestId('spotlight-title');
-  const light = page.getByTestId('title-light');
-  await expect(title.getByRole('heading', { name: 'Razbij skrivno sporočilo', exact: true })).toBeVisible();
-  await expect(page.getByRole('heading', { name: 'Dokazno gradivo', exact: true })).toBeVisible();
-  await expect(page.getByLabel('Odgovor', { exact: true })).toBeVisible();
-  const supportsPointerLight = await page.evaluate(() =>
-    window.matchMedia('(hover: hover) and (pointer: fine)').matches && !window.matchMedia('(prefers-reduced-motion: reduce)').matches
-      && CSS.supports('mask-image', 'radial-gradient(circle, transparent, black)'),
-  );
-  if (supportsPointerLight) {
-    await expect(light).toHaveCount(1);
-    await expect(light).toHaveAttribute('aria-hidden', 'true');
-    const bounds = await title.boundingBox();
-    expect(bounds).not.toBeNull();
-    await page.mouse.move(bounds!.x + 12, bounds!.y + 12);
-    await expect(light).toHaveAttribute('style', /--light-x:\s*[\d.]+px/);
-    const previousStyle = await light.getAttribute('style');
-    await page.mouse.move(bounds!.x + bounds!.width - 12, bounds!.y + bounds!.height - 12);
-    await expect(light).not.toHaveAttribute('style', previousStyle!);
+  await expect(landing).toHaveCount(0);
+  await expect(page.getByRole('heading', { name: 'NAVODILO', exact: true })).toBeVisible();
+  await expect(page.locator('.task-instruction')).toContainText('3');
+  await expect(page.locator('.task-instruction')).toContainText('nazaj');
+  await expect(page.locator('.desktop-window')).toBeVisible();
+  await expect(page.locator('.stage-intro')).toHaveCount(0);
+  await expect(page.locator('.investigation-notes')).toHaveCount(0);
+  await expect(page.locator('.hints-panel')).not.toHaveAttribute('open', '');
+  if ((page.viewportSize()?.width ?? 0) > 800) {
+    const answer = await page.locator('.answer-panel').boundingBox();
+    const progress = await page.locator('.progress-panel').boundingBox();
+    const main = await page.locator('.investigation-main').boundingBox();
+    expect(answer!.x).toBeGreaterThanOrEqual(main!.x + main!.width);
+    expect(answer!.y + answer!.height).toBeLessThan(progress!.y);
+    await page.evaluate(() => window.scrollTo(0, document.body.scrollHeight));
+    const pinned = await page.locator('.answer-panel').boundingBox();
+    expect(pinned!.y).toBeGreaterThanOrEqual(0);
+    expect(pinned!.y).toBeLessThan(150);
   } else {
-    await expect(light).toHaveCount(0);
+    await page.getByRole('link', { name: 'Vnesi odgovor', exact: true }).click();
+    await expect(page.locator('#answer-panel')).toBeInViewport();
   }
-  await checkLayout(page);
-  await page.screenshot({ path: `.local/qa-${testInfo.project.name}-title-light.png`, fullPage: true });
-  await submit(page, 'MOST');
-  await next(page);
-  await expect(title.getByRole('heading', { name: 'Kaj se skriva za čudnimi znaki?', exact: true })).toBeVisible();
-  await expect(light).toHaveCount(supportsPointerLight ? 1 : 0);
-  await expect(page.getByLabel('Besedilo za pretvorbo')).toBeVisible();
-  await page.getByRole('navigation', { name: 'Stopnje preiskave' }).getByRole('button', { name: /Razbij skrivno sporočilo/ }).click();
-  await expectFirstStage(page);
-  await expect(light).toHaveCount(supportsPointerLight ? 1 : 0);
+  await submit(page, 'MOST'); await next(page);
+  await expect(page.getByLabel('Odgovor', { exact: true })).toBeVisible();
+  await expect(page.locator('.task-instruction')).toBeVisible();
   await page.reload();
   await page.getByRole('button', { name: 'Nadaljuj preiskavo', exact: true }).click();
-  await expect(page.getByText('Stopnja 2 od 8', { exact: true })).toBeVisible();
-  await expect(title.getByRole('heading', { name: 'Kaj se skriva za čudnimi znaki?', exact: true })).toBeVisible();
-  await expect(light).toHaveCount(supportsPointerLight ? 1 : 0);
-  await expect(page.getByTestId('dark-entry')).toHaveCount(0);
+  await expect(page.getByRole('heading', { name: 'Kaj se skriva za čudnimi znaki?', exact: true })).toBeVisible();
 });
 
-test('zmanjšano gibanje ohrani naslove in naloge brez svetilke ter uporabo s tipkovnico', async ({ page }) => {
+test('zmanjšano gibanje ohrani uvod brez svetilke in omogoča reševanje s tipkovnico', async ({ page }) => {
   await page.emulateMedia({ reducedMotion: 'reduce' });
   await page.goto('/');
+  await expect(page.getByTestId('landing')).toBeVisible();
+  await expect(page.getByTestId('landing-light')).toHaveCount(0);
   await page.getByRole('button', { name: 'Začni preiskavo', exact: true }).click();
   await expectFirstStage(page);
-  await expect(page.getByTestId('spotlight-title')).toBeVisible();
-  await expect(page.getByTestId('title-light')).toHaveCount(0);
-  await expect(page.getByRole('heading', { name: 'Dokazno gradivo', exact: true })).toBeVisible();
-  await expect(page.locator('.code-evidence code')).toHaveText('NRGD MH PRVW');
+  await expect(page.getByRole('heading', { name: 'NAVODILO', exact: true })).toBeVisible();
+  await expect(page.locator('.source-evidence code')).toHaveText('NRGD MH PRVW');
   await checkLayout(page);
   await page.getByLabel('Odgovor', { exact: true }).focus();
   await page.keyboard.type('MOST');
   await page.keyboard.press('Enter');
-  await expect(page.getByText('Dokaz je razvozlan', { exact: true })).toBeVisible();
+  await expect(page.getByText('Izziv opravljen', { exact: true })).toBeVisible();
   await page.getByRole('button', { name: 'Nadaljuj', exact: true }).focus();
   await page.keyboard.press('Enter');
   await expect(page.getByRole('heading', { name: 'Kaj se skriva za čudnimi znaki?', exact: true })).toBeVisible();
-  await expect(page.getByTestId('title-light')).toHaveCount(0);
-  await expect(page.getByTestId('dark-entry')).toHaveCount(0);
   await expect(page.getByLabel('Besedilo za pretvorbo')).toBeVisible();
 });
