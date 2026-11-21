@@ -7,8 +7,5 @@ data/
 *.sqlite*
 *.db*
 *.dump
-coverage/
-playwright-report/
-test-results/
 .DS_Store
 .local/

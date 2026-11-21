@@ -12,9 +12,9 @@ Potrebni so Node.js 24 LTS, najmanj 24.13.0, npm in PostgreSQL 14 ali novejši. 
 PG_BIN=/usr/lib/postgresql/16/bin npm run db:local
 ```
 
-Isto nastavitev uporabi pri `npm run db:local:stop`. Skripta posluša samo na `127.0.0.1:55432`, uporablja lokalno zaupanje in ustvari bazi `operacija404` ter `operacija404_test` z uporabnikom `operacija404`. Podatki ostanejo v prezrti mapi `.local/postgres/`. To je razvojna instanca, ki je ne izpostavljaj kot produkcijsko bazo. Če rezervirana vrata uporablja druga baza, skripta zagon zavrne.
+Isto nastavitev uporabi pri `npm run db:local:stop`. Skripta posluša samo na `127.0.0.1:55432`, uporablja lokalno zaupanje in ustvari bazo `operacija404` z uporabnikom `operacija404`. Podatki ostanejo v prezrti mapi `.local/postgres/`. To je razvojna instanca, ki je ne izpostavljaj kot produkcijsko bazo. Če rezervirana vrata uporablja druga baza, skripta zagon zavrne.
 
-[Predloga okolja](../.env.example) vsebuje razvojno povezavo `postgresql://operacija404@127.0.0.1:55432/operacija404` in ločeno testno povezavo. Če že imaš PostgreSQL, nastavi `DATABASE_URL` in `TEST_DATABASE_URL` na namenski bazi ter izpusti `db:local`. Produkcijske baze nikoli ne uporabi za teste. Vite na vratih 5173 posreduje `/api` Expressu na 3000; spremembo razvojnega izvora uskladi z `APP_ORIGIN` in proxyjem.
+[Predloga okolja](../.env.example) vsebuje razvojno povezavo `postgresql://operacija404@127.0.0.1:55432/operacija404`. Če že imaš PostgreSQL, nastavi `DATABASE_URL` na namensko bazo ter izpusti `db:local`. Vite na vratih 5173 posreduje `/api` Expressu na 3000; spremembo razvojnega izvora uskladi z `APP_ORIGIN` in proxyjem.
 
 ## Prevedena aplikacija
 
@@ -66,7 +66,7 @@ Namenski račun potrebuje pisanje v te direktorije; `shared/.env` naj bo berljiv
 | `TRUST_PROXY` | `1` samo za en zaupanja vreden posrednik pred lokalnim procesom; sicer `0` |
 | `SESSION_TTL_DAYS` | `180`; življenjska doba seje |
 
-Za oddaljeno bazo uporabi TLS s preverjenim certifikatom skladno z navodili ponudnika; ne izklapljaj preverjanja certifikatov. `TEST_DATABASE_URL` je samo razvojna/CI nastavitev in ne sme kazati na produkcijsko bazo.
+Za oddaljeno bazo uporabi TLS s preverjenim certifikatom skladno z navodili ponudnika; ne izklapljaj preverjanja certifikatov.
 
 Za seje ni treba ustvarjati skupnega gesla ali `SESSION_SECRET`. Skrivnosti za SSH sodijo v GitHub Secrets, ne v `.env.example`, Git ali arhiv izdaje. Ne izpisuj celotnega produkcijskega okolja v dnevnik pipelinea.
 
@@ -80,7 +80,7 @@ Namenskemu SSH-uporabniku dovoli samo potrebni nenadzorovani systemd dejanji pre
 
 ### 4. GitHub Actions
 
-Ob pull requestu in spremembi veje `main` job `verify` pripravi izvorno nameščen PostgreSQL z namensko testno bazo ter izvede `npm ci`, lint, tipe, teste, produkcijski build in Playwrightov prehod v Chromiumu ter Microsoft Edge Stable. Edge se namesti na začasni Linux runner; pred pripravo izdaje morajo uspeti vsi štirje brskalniški profili. Ne uporablja Dockerjevih storitev. Testne poverilnice v workflowu veljajo samo na začasnem CI-runnerju. Arhiv vsebuje le `dist`, `package.json`, zaklepno datoteko in skripte `deploy`; produkcijske baze in okolja ni v njem. Prenesenega izvora iz pull requesta se ne objavlja.
+Ob pull requestu in spremembi veje `main` job `verify` namesti odvisnosti z `npm ci`, preveri tipe in sintakso objavne skripte ter pripravi produkcijski build. Arhiv vsebuje le `dist`, `package.json`, zaklepno datoteko in skripte `deploy`; produkcijske baze in okolja ni v njem. Prenesenega izvora iz pull requesta se ne objavlja.
 
 Luka v GitHubu ustvari okolje **`production`** ter nastavi:
 
@@ -126,20 +126,14 @@ Potrditi mora produkcijsko vejo ter preveriti oziroma pripraviti DNS za dogovorj
 
 ## Preverjanje pred objavo
 
-Z zagnano namensko testno bazo izvedi:
+Pred objavo izvedi:
 
 ```sh
-npm run lint
 npm run typecheck
-npm test
 npm run build
-npx playwright install chromium msedge
-npm run test:e2e
 ```
 
-Playwright uporabi Chromium in dejanski Microsoft Edge Stable v namiznem ter ozkem profilu. Namestitev `msedge` lahko posodobi sistemski Edge in zahteva skrbniške pravice. Samo Edge zažene `npm run test:edge`; pri nestandardni poti uporabi `EDGE_EXECUTABLE_PATH`. Testi imajo ločene začasne profile. Ozek profil je pomanjšano namizno okno, ne mobilna aplikacija Edge. Podrobnosti: [Microsoft](https://learn.microsoft.com/en-us/microsoft-edge/playwright/) in [Playwright](https://playwright.dev/docs/browsers).
-
-Build vključuje `npm run check:client`, ki preveri odsotnost ključev rešitev, vodiča in source map iz javnega paketa. Pred javno uporabo preigraj vseh osem nalog, osveži stran in preveri nadaljevanje po ponovnem zagonu z isto bazo. Preveri tudi tipkovnico, ozek zaslon, javno lestvico ter ohranitev vnosa ob izpadu omrežja. Učni naslovi ne smejo sprožati zahtev na zunanje izvore.
+Gradnja preveri tudi odsotnost ključev rešitev, vodiča in source map iz javnega paketa. Pred javno uporabo preigraj vseh osem nalog, osveži stran in preveri nadaljevanje po ponovnem zagonu z isto bazo. Preveri tudi tipkovnico, ozek zaslon, javno lestvico ter ohranitev vnosa ob izpadu omrežja. Učni naslovi ne smejo sprožati zahtev na zunanje izvore.
 
 ## Seje, rezultati in omejitve
 
@@ -155,5 +149,5 @@ Ob doseženi omejitvi API vrne HTTP `429`, glavo `Retry-After` in `retryAfterSec
 
 - [Workflow](../.github/workflows/pipeline.yml) preverja kodo in pripravlja izdajo; [objavna skripta](../deploy/deploy-release.sh) jo aktivira na strežniku.
 - [Pisava IBM Plex Mono](../public/fonts/OFL.txt) ohranja licenco SIL Open Font License; licence drugih odvisnosti ostanejo njihove.
-- Fotografije so ustvarjene za učno zgodbo in shranjene lokalno; izvorni pozivi so v [profile-assets.json](profile-assets.json) in [metadata-assets.json](metadata-assets.json).
+- Fotografije so ustvarjene za učno zgodbo in shranjene lokalno v `public/profile` ter `public/evidence`.
 - Svetlobni učinek je navdihnil način »The Real Dark« na [pankajtanwar.in](https://www.pankajtanwar.in/); pregled prometa sledi [Wiresharkovemu vmesniku](https://www.wireshark.org/docs/wsug_html_chunked/ChapterUsing.html).

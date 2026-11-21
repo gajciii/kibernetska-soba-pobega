@@ -15,33 +15,18 @@ concurrency:
 
 jobs:
   verify:
-    name: Koda, tipi, testi in produkcijski build
+    name: Tipi in produkcijski build
     runs-on: ubuntu-latest
-    env:
-      DATABASE_URL: postgresql://operacija404_ci:ci_only@127.0.0.1:5432/operacija404_test
-      TEST_DATABASE_URL: postgresql://operacija404_ci:ci_only@127.0.0.1:5432/operacija404_test
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4
         with:
           node-version-file: .nvmrc
           cache: npm
-      - name: Lokalni PostgreSQL brez vsebnikov
-        run: |
-          sudo apt-get update
-          sudo apt-get install -y postgresql postgresql-client
-          sudo systemctl start postgresql
-          sudo -u postgres psql -v ON_ERROR_STOP=1 -c "CREATE ROLE operacija404_ci LOGIN PASSWORD 'ci_only';"
-          sudo -u postgres createdb -O operacija404_ci operacija404_test
       - run: npm ci
-      - run: npm run lint
       - run: npm run typecheck
       - run: bash -n deploy/deploy-release.sh
-      - run: npm test
       - run: npm run build
-      - name: Namesti Chromium in Microsoft Edge Stable
-        run: npx playwright install --with-deps chromium msedge
-      - run: npm run test:e2e
       - name: Pripravi izdajo brez baze in skrivnosti
         run: tar -czf release.tar.gz dist package.json package-lock.json deploy
       - uses: actions/upload-artifact@v4

@@ -27,7 +27,7 @@ npm run db:local
 npm run dev
 ```
 
-`db:local` ustvari razvojno in testno bazo na `127.0.0.1:55432`; podatki ostanejo v `.local/postgres/`. Če ne najde PostgreSQL, nastavi `PG_BIN` na mapo z njegovimi orodji. Bazo ustaviš z `npm run db:local:stop`. `.env.example` vsebuje pripravljene lokalne nastavitve; datoteke `.env` ne objavljaj.
+`db:local` ustvari razvojno bazo na `127.0.0.1:55432`; podatki ostanejo v `.local/postgres/`. Če ne najde PostgreSQL, nastavi `PG_BIN` na mapo z njegovimi orodji. Bazo ustaviš z `npm run db:local:stop`. `.env.example` vsebuje pripravljene lokalne nastavitve; datoteke `.env` ne objavljaj.
 
 ## Postavitev na strežnik
 

@@ -21,9 +21,8 @@ if (process.argv[2] === 'stop') {
   // Refuse a foreign service at the reserved port instead of modifying it.
   const actual = run('psql', ['-h', '127.0.0.1', '-p', '55432', '-U', 'operacija404', '-d', 'postgres', '-Atc', 'SHOW data_directory'], { encoding: 'utf8', stdio: ['ignore', 'pipe', 'inherit'] }).trim();
   if (resolve(actual) !== data || !readFileSync(join(data, 'PG_VERSION'), 'utf8').trim()) throw new Error('Vrata 55432 uporablja druga baza.');
-  for (const name of ['operacija404', 'operacija404_test']) {
-    const found = run('psql', ['-h', '127.0.0.1', '-p', '55432', '-U', 'operacija404', '-d', 'postgres', '-Atc', `SELECT 1 FROM pg_database WHERE datname='${name}'`], { encoding: 'utf8', stdio: ['ignore', 'pipe', 'inherit'] }).trim();
-    if (!found) run('createdb', ['-h', '127.0.0.1', '-p', '55432', '-U', 'operacija404', name]);
-  }
+  const name = 'operacija404';
+  const found = run('psql', ['-h', '127.0.0.1', '-p', '55432', '-U', 'operacija404', '-d', 'postgres', '-Atc', `SELECT 1 FROM pg_database WHERE datname='${name}'`], { encoding: 'utf8', stdio: ['ignore', 'pipe', 'inherit'] }).trim();
+  if (!found) run('createdb', ['-h', '127.0.0.1', '-p', '55432', '-U', 'operacija404', name]);
   console.log('Razvojni PostgreSQL: postgres://operacija404@127.0.0.1:55432/operacija404');
 }
