@@ -2,6 +2,8 @@
 
 Slovenska izobraževalna spletna igra za pare srednješolcev. Osem zaporednih nalog povezuje Cezarjevo šifro, kodiranja, phishing, predvidljiva gesla, metapodatke, omrežni promet in strežniške dnevnike, domene ter binarni zapis. Dokazi, lokalne ilustracije in delujoči pretvorniki so v aplikaciji; za igranje niso potrebni zunanji računi ali spletna orodja. Šola Most in vsi predstavljeni podatki so izmišljeni učni primeri.
 
+**Avtorica: Gaja Gujt.** Projekt je objavljen pod [licenco MIT](LICENSE), s [standardnim besedilom licence MIT](https://opensource.org/license/mit). Kopija za povezavo v nogi spletne strani je v `public/license.txt`. Vključena pisava IBM Plex Mono ohranja svojo [licenco SIL Open Font License](public/fonts/OFL.txt); odvisnosti ohranjajo svoje licence.
+
 ## Lokalni zagon
 
 Uporabi **Node.js 24 LTS, najmanj 24.13.0**, ter PostgreSQL 14 ali novejši; podprta glavna različica je zapisana v `.nvmrc`, natančne različice odvisnosti pa v `package-lock.json`. Projekt uporablja React, TypeScript, Vite, Express in PostgreSQL prek `pg`. Docker ni potreben.

@@ -128,7 +128,7 @@ export default function App() {
       : <div className="workspace finale-workspace"><main id="main" className="investigation-main" aria-busy={busy}>
         {finale && session && <FinaleView finale={finale} session={session} stages={boot.stages} time={elapsed(session, now)} headingRef={headingRef} onReview={() => void openStage(1)} onReset={() => setResetOpen(true)}/>}
         </main><aside className="sidebar"><Sidebar stages={boot.stages} session={session!} busy={busy} onSelect={openStage} onFinale={openFinale} onReset={() => setResetOpen(true)}/></aside></div>}
-    <footer className="footer"><span><strong>FERI</strong><span className="footer-divider">/</span> Kibernetska soba pobega</span></footer>
+    <footer className="footer"><span><strong>FERI</strong><span className="footer-divider">/</span> Kibernetska soba pobega</span><span className="footer-credit"><span>Avtorica: Gaja Gujt</span><a href={`${base}license.txt`} target="_blank" rel="noopener noreferrer">Licenca MIT</a></span></footer>
     {resetOpen && <ResetDialog busy={busy} onCancel={() => setResetOpen(false)} onReset={reset}/>}
   </div>;
 }

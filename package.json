@@ -4,6 +4,8 @@
   "private": true,
   "type": "module",
   "description": "Kibernetska soba pobega za srednješolce",
+  "author": "Gaja Gujt",
+  "license": "MIT",
   "engines": {
     "node": ">=24.13.0 <25"
   },

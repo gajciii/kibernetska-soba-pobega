@@ -69,6 +69,7 @@ textarea { resize: vertical; }
 .footer { display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: .6rem 1rem; margin-top: auto; padding: 1.5rem 2.5rem; color: var(--quiet); font-size: .75rem; }
 .footer strong { color: var(--muted); font-weight: 500; }
 .footer-divider { margin: 0 .6rem; color: var(--line-strong); }
+.footer-credit { display: flex; flex-wrap: wrap; gap: .6rem 1.25rem; }
 .global-error { border-radius: var(--panel-radius); display: flex; align-items: center; gap: 1rem; margin: .5rem 2.5rem 1rem; padding: 1rem; background: #342433; color: #ffced4; }
 .global-error button { border: 0; background: none; margin-left: auto; }
 .loading-screen { display: grid; place-content: center; min-height: 65vh; text-align: center; padding: 2rem; }
