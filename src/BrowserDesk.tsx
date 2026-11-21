@@ -57,7 +57,6 @@ export function BrowserDesk({ choices, selectedId, onSelect, disabled }: Browser
   }}>
     <div className="link-browser-tabbar">
       <div className="link-browser-tab"><span className="link-browser-favicon" aria-hidden="true">M</span><span>Šola Most</span><span className="link-browser-tab-close" aria-hidden="true">×</span></div>
-      <span className="link-browser-tab-caption">Zbrane povezave</span>
     </div>
     <div className="link-browser-toolbar">
       <div className="link-browser-navigation">
@@ -68,7 +67,6 @@ export function BrowserDesk({ choices, selectedId, onSelect, disabled }: Browser
       <details className="link-browser-history" ref={historyRef}>
         <summary ref={summaryRef}><BrowserIcon name="history"/><span>Zgodovina</span></summary>
         <div className="link-browser-history-panel">
-          <div className="link-browser-history-heading"><h3>Zbrane povezave</h3><span>{choices.length} povezav</span></div>
           <ol>{choices.map((choice, index) => {
             const active = choice.id === selected.id;
             const status = active ? 'Prikazano' : viewedIds.has(choice.id) ? 'Pregledano' : 'Še ni pregledano';
@@ -93,6 +91,5 @@ function CapturedSchoolPage() {
       <div className="link-browser-search-capture"><BrowserIcon name="search"/><span>Poišči po šoli</span></div>
       <ul className="link-browser-shortcuts"><li><span><BrowserIcon name="book"/></span>Učilnica</li><li><span><BrowserIcon name="bell"/></span>Obvestila</li><li><span><BrowserIcon name="calendar"/></span>Urnik</li></ul>
     </div>
-    <div className="link-browser-page-bottom"><span>Prostor za učenje.</span><span>Šola Most</span></div>
   </div>;
 }
