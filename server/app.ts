@@ -5,7 +5,7 @@ import { resolve } from 'node:path';
 import type pg from 'pg';
 import type { AppConfig } from './config.js';
 import { changeSession, type SessionRow } from './db.js';
-import { stageSummaries, getStage, getHint, getExplanation, validateAnswer, getFeedback, finale } from './content.js';
+import { stageSummaries, getStage, getHint, getExplanation, validateAnswer, validateProfilePassword, getFeedback, finale } from './content.js';
 import type { SessionView } from '../shared/types.js';
 
 const hashToken = (token: string) => createHash('sha256').update(token).digest('hex');
@@ -70,21 +70,31 @@ export function createApp(pool: pg.Pool, config: AppConfig) {
     const id = Number(req.params.id);
     const session = allowed(res.locals.row, id);
     const solved = session.solved.includes(id);
-    res.json({ stage: getStage(id), solved, hints: hintsFor(session, id), ...(solved ? { explanation: getExplanation(id) } : {}) });
+    res.json({ stage: getStage(id), solved, hints: hintsFor(session, id), ...(id === 4 ? { passwordVerified: solved || session.profilePasswordVerified === true } : {}), ...(solved ? { explanation: getExplanation(id) } : {}) });
   });
   app.post('/api/stages/:id/answer', async (req, res) => {
     const id = Number(req.params.id);
     const result = await changeSession(pool, res.locals.row.token_hash, row => {
       const session = allowed(row, id);
-      if (session.solved.includes(id)) return { correct: true, message: 'Ta stopnja je že rešena.', explanation: getExplanation(id), session };
+      if (session.solved.includes(id)) return { correct: true, message: 'Ta stopnja je že rešena.', explanation: getExplanation(id), ...(id === 4 ? { passwordVerified: true } : {}), session };
       session.attempts[id] = (session.attempts[id] || 0) + 1;
+      if (id === 4 && !session.profilePasswordVerified) {
+        const passwordVerified = validateProfilePassword(req.body?.answer);
+        if (passwordVerified) session.profilePasswordVerified = true;
+        return {
+          correct: false,
+          passwordVerified,
+          message: passwordVerified ? 'Predvidljivo geslo je prepoznano. Zdaj izberi priporočila za varnejšo uporabo gesel in zaščito računa.' : 'Geslo še ni prepoznano. Preveri javni profil in poskusi znova.',
+          session,
+        };
+      }
       const correct = validateAnswer(id, req.body?.answer);
       if (correct) {
         session.solved.push(id);
         session.currentStage = Math.min(id + 1, 8);
         if (id === 8) session.completedAt = new Date().toISOString();
       }
-      return { correct, message: correct ? 'Dokaz potrjen. Stopnja je rešena.' : getFeedback(id), ...(correct ? { explanation: getExplanation(id) } : {}), session };
+      return { correct, message: correct ? 'Dokaz potrjen. Stopnja je rešena.' : getFeedback(id), ...(id === 4 ? { passwordVerified: true } : {}), ...(correct ? { explanation: getExplanation(id) } : {}), session };
     });
     res.json(result);
   });

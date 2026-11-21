@@ -135,24 +135,28 @@ const stages: StageContent[] = [
     title: 'Ugotovi predvidljivo geslo',
     topic: 'Predvidljiva gesla',
     kind: 'password',
-    intro: 'Varnostna ekipa razmišlja tudi o tem, koliko lahko neznanec izve iz javnih objav. V mapo je zato dodala posnetek Nikinega javnega profila: nekaj šolskih utrinkov, hobijev in vsakdanjih dogodkov. Ob njem so trije predlogi gesel. Morda se v enem od njih skriva nekaj, kar je profil že nehote povedal.',
-    question: 'Katero od ponujenih gesel je glede na javne objave najlažje predvideti?',
-    note: 'To je izbirna učna naloga. Ne ugibamo dejanskega gesla in ne izvajamo prijavnih poskusov.',
+    intro: 'Luka je svoj profil odprl vsem, da bi prijatelji lažje sledili njegovim izletom. V opisu je pustil nekaj vrstic o sebi, pod fotografijami pa čisto običajne utrinke. Šele ko je po nenavadnem sporočilu še enkrat pogledal svoje objave, se je ustavil: stvari, ki si jih sam najlažje zapomni, so bile ves čas na očeh tudi neznancem.',
+    question: 'Vnesi predvidljivo geslo iz javnih podatkov, nato izberi priporočila za varnejšo uporabo gesel in zaščito računa.',
+    note: 'Vnos se preveri samo v učni igri in se ne uporabi za prijavo. Potrditev predvidljivega gesla odpre drugi del naloge; naslednjo stopnjo odklene šele pravilen izbor priporočil.',
     profile: {
-      name: 'Nika — učni profil.',
-      username: '@nika_ucni_profil',
+      name: 'Luka Kovač',
+      username: '@luka.kovac',
+      bio: '🎂 2009. 🏫 Šola Most. Najraje zunaj, na snegu ⛷️ ali na poti v hribe. 🏔️',
+      avatar: '/profile/luka.jpg',
+      avatarAlt: 'Portret Luke Kovača.',
       posts: [
-        'Letnik 2009.',
-        'Včeraj smo s fotografskim krožkom lovili zanimive sence na šolskem dvorišču.',
-        'Moja psička Luna je danes spet ukradla vso pozornost.',
-        'Za vikend izbiram med kolesarskim izletom in branjem kriminalke. Oboje je dobra ideja.',
-        'Projekt za šolski sejem napreduje. Najboljši del je delo z ekipo!',
+        { id: 'luna', image: '/profile/luna.jpg', alt: 'Psička na sprehodu na prostem.', caption: 'Luna je danes spet ukradla vso pozornost. Z njo tudi kratek sprehod postane dogodivščina.', location: 'Popoldanski sprehod' },
+        { id: 'smucanje', image: '/profile/smucanje.jpg', alt: 'Luka na zasneženem smučišču.', caption: 'Prva vožnja, mrzel zrak in cel dan na snegu. Takih vikendov se ne naveličam.', location: 'Na smučišču' },
+        { id: 'gore', image: '/profile/gore.jpg', alt: 'Gorska pot med alpskimi vrhovi.', caption: 'Zgodnje vstajanje se je splačalo. Razgled na vrhu je bil boljši od vseh fotografij.', location: 'V gorah' },
       ],
     },
-    choices: [
-      { id: 'A', label: 'Luna2009!' },
-      { id: 'B', label: 'Miza783?' },
-      { id: 'C', label: 'vQ7#rT9!pL2' },
+    recommendations: [
+      { id: 'long', label: 'Uporabljaj dolga, naključno sestavljena gesla ali fraze iz nepovezanih besed.' },
+      { id: 'reuse', label: 'Isto geslo uporabljaj na več računih, da si ga lažje zapomniš.' },
+      { id: 'manager', label: 'Za ustvarjanje in shranjevanje gesel uporabi upravljalnik gesel.' },
+      { id: 'personal', label: 'Geslo sestavi iz imena ljubljenčka in rojstne letnice ter dodaj klicaj.' },
+      { id: 'unique', label: 'Za vsak račun uporabi drugo geslo.' },
+      { id: 'mfa', label: 'Za dodatno zaščito računa vklopi večfaktorsko prijavo.' },
     ],
   },
   {
@@ -278,7 +282,7 @@ const hints: Record<number, [string, string]> = {
   1: ['V zgodbi poišči, kako je prejemnik razbral Cezarjevo sporočilo. Enak premik uporabi za vajin dokaz.', 'Pri dešifriranju se premakni za tri mesta nazaj: N postane K. Isto preslikavo uporabi za vse črke.'],
   2: ['Upoštevaj vrstni red: najprej zunanji zapis s šestnajstimi znaki v parih, nato notranji z naborom štiriinšestdesetih znakov.', 'Najprej dekodiraj Šestnajstiško (HEX). Celoten rezultat ročno prekopiraj v vhod, izberi Base64 in ponovno dekodiraj. Odgovor je samo koda naslednje mape.'],
   3: ['Primerjaj dejanski naslov pošiljatelja in cilj povezave z domeno most.si. Ime, ki ga prepoznaš, samo po sebi še ni dokaz pristnosti.', 'Primerjaj zahteve sporočil: eno združuje tuji domeni, grožnjo takojšnje blokade in zahtevo po geslu ter enkratni kodi.'],
-  4: ['Poglej, katere osebne podatke lahko prebere vsak obiskovalec profila.', 'Primerjaj ime psičke in letnico rojstva s ponujenimi gesli.'],
+  4: ['Katera javna podatka bi si lastnik zlahka zapomnil in ju združil? Pri priporočilih razmisli tudi o ponavljanju gesel med računi.', 'Poveži ime psičke in letnico v opisu profila v eno besedo. Nato izberi priporočila za dolžino, različna gesla, upravljalnik in dodatno zaščito prijave.'],
   5: ['Preveri, da je izbrana datoteka hodnik.jpg. V njenem izpisu loči čas nastanka posnetka od časa spremembe datoteke.', 'V metapodatkih hodnik.jpg poišči DateTimeOriginal in prepiši samo uro ter minute.'],
   6: ['Odpri povezani aplikacijski zapis pri paketu TLS. Šifriran paket sam ne pove računa. Iščeš uspešen prenos točno določene datoteke, ne njen ogled.', 'V ločenem aplikacijskem dnevniku poišči vrstico, v kateri so hkrati DOWNLOAD, /zaupno/nacrt.pdf in SUCCESS.'],
   7: ['Ime šole se lahko pojavi tudi v poddomeni druge domene.', 'Pri enem naslovu se za most.si pojavi še .prijava-varno.example.'],
@@ -289,7 +293,7 @@ const explanations: Record<number, string> = {
   1: 'Cezarjeva šifra zamenja črke s stalnim premikom po abecedi. V tem primeru je šifriranje premaknilo črke za tri mesta naprej, dešifriranje pa jih je vrnilo nazaj. Zgodba je razkrila premik, primerjava abeced pa preslikavo posameznih črk. Presledki in vrstni red so pomagali preveriti smiselnost sporočila. Takšna šifra je primerna za razumevanje osnov, ne za sodobno varovanje podatkov.',
   2: 'Zapis je vseboval dve plasti: dekodiranje HEX je razkrilo zapis Base64, šele njegovo dekodiranje pa besedilo. Vrstni red je pomemben, ker mora biti rezultat prvega postopka veljaven vhod za drugega. HEX in Base64 sta kodiranji, ne šifriranje; tudi njuna kombinacija ne zagotavlja zaupnosti. Besedilo obvestila samo po sebi še ne pojasni celotnega poteka incidenta.',
   3: 'Phishing skuša uporabnika zavesti v razkritje podatkov ali nevarno dejanje. Sporočilo B združuje tuji domeni pošiljatelja in povezave, grožnjo blokade ter zahtevo po prijavnih podatkih. Nujno obvestilo o učilnici in pričakovana priponka v drugih sporočilih sama po sebi nista phishing. V tem pripravljenem primeru ostalih šest sporočil ni zlonamernih; v resničnem svetu tudi ujemajoča se domena sama ne jamči varnosti. HTTPS šifrira povezavo, vendar sam ne potrjuje legitimnosti strani.',
-  4: 'Imena ljubljenčkov in letnice rojstva so predvidljivi gradniki gesel. Dodan klicaj te predvidljivosti ne odpravi. Uporabljaj dolga, enkratna gesla, upravljalnik gesel in večfaktorsko prijavo. Tudi Miza783? ni zgled dobrega gesla. Iz te učne izbire ne moremo sklepati, katero geslo je bilo uporabljeno v incidentu.',
+  4: 'Ime ljubljenčka in rojstna letnica sta javna in predvidljiva gradnika. Dodan klicaj ali preprosta zamenjava črke z znakom tega ne odpravita. Boljša izbira so dolga, naključna in za vsak račun različna gesla; pri ustvarjanju ter shranjevanju pomaga upravljalnik gesel. Večfaktorska prijava doda zaščito računa, ne spremeni pa šibkega gesla v močno. Ta vaja ne razkriva Lukovega pravega gesla in ne dokazuje, kaj je bilo uporabljeno pri incidentu.',
   5: 'Najprej je treba izbrati pravo datoteko: čas druge fotografije ne pojasni nastanka hodnik.jpg. DateTimeOriginal označuje nastanek posnetka; čas spremembe ModifyDate ni nujno čas fotografiranja. Posnetek zaslona v tej mapi tega podatka nima. Metapodatki lahko manjkajo ali so spremenjeni, zato sami po sebi niso nezmotljiv dokaz.',
   6: 'Paketni pregled in aplikacijski dnevnik sta različna vira. Šifrirani TLS-paketi ne razkrijejo računa ali poti; tukaj je njuna povezava pripravljena učna korelacija. Ločen dnevniški zapis ob 10:45:12 potrjuje uspešen prenos /zaupno/nacrt.pdf z računom ucenec17. Zavrnjen prenos, uspešen ogled, prenos druge datoteke in TCP ACK niso enak dokaz. Zapis potrjuje uporabo računa, sam pa ne dokazuje, katera oseba je bila za tipkovnico.',
   7: 'Naslov C pripada domeni prijava-varno.example. Protokol je https://, gostitelj je most.si.prijava-varno.example, pot je /prijava. Šolsko ime most.si je tukaj le del pred tujo domeno. Pri A je gostitelj potrjena domena most.si, pri B pa je ucilnica njena poddomena. Prisotnost HTTPS ne naredi strani samodejno zaupanja vredne. Ta razčlenitev velja za konkretne učne primere; pri vseh naslovih registrirana domena ni nujno sestavljena iz zadnjih dveh delov.',
@@ -300,7 +304,7 @@ const feedback: Record<number, string> = {
   1: 'Še ni pravilno. Preveri smer in velikost premika ter poišči besedo, ki jo sporočilo označuje kot kodo.',
   2: 'Še ni pravilno. Preveri oba koraka in njun vrstni red ter celovitost prekopiranega vmesnega rezultata. Prvi rezultat še ni sporočilo; v odgovor sodi samo koda iz končnega obvestila.',
   3: 'Še ni pravilno. Izberi eno sporočilo in vsaj dva različna opozorilna znaka. Vsak označeni razlog mora opisovati resnično opozorilo; preveri tudi morebitne odvečne izbire.',
-  4: 'Še ni pravilno. Primerjaj javne podatke profila z gradniki vsakega ponujenega gesla.',
+  4: 'Izbor priporočil še ni pravilen. Preveri, ali izbrani ukrepi zmanjšajo predvidljivost in ponovno uporabo gesel ter bolje zaščitijo račun.',
   5: 'Še ni pravilno. Preveri izbrano datoteko in loči nastanek posnetka od poznejše spremembe datoteke. Odgovori v obliki HH:MM.',
   6: 'Še ni pravilno. Podatke poišči v povezanem aplikacijskem zapisu. Hkrati preveri dejanje, natančno pot datoteke in rezultat; ogled ter zavrnjen prenos ne zadostujeta.',
   7: 'Še ni pravilno. Preberi celotnega gostitelja. Pojav šolskega imena v naslovu še ne pomeni, da je stran na šolski domeni.',
@@ -328,6 +332,10 @@ function words(answer: unknown): string | undefined {
   return typeof answer === 'string' ? answer.trim().replace(/\s+/gu, ' ').toUpperCase() : undefined;
 }
 
+export function validateProfilePassword(answer: unknown): boolean {
+  return typeof answer === 'string' && /^(?:luna2009|2009luna)!?$/iu.test(answer.trim());
+}
+
 export function validateAnswer(id: number, answer: unknown): boolean {
   switch (id) {
     case 1:
@@ -343,8 +351,13 @@ export function validateAnswer(id: number, answer: unknown): boolean {
       const allowed = new Set(['domain', 'link', 'urgency', 'credentials']);
       return reasons.every((reason) => typeof reason === 'string' && allowed.has(reason)) && new Set(reasons).size >= 2;
     }
-    case 4:
-      return answer === 'A';
+    case 4: {
+      if (!answer || typeof answer !== 'object' || Array.isArray(answer)) return false;
+      const { recommendations } = answer as { recommendations?: unknown };
+      if (!Array.isArray(recommendations) || recommendations.length !== 4 || new Set(recommendations).size !== 4) return false;
+      const allowed = new Set(['long', 'unique', 'manager', 'mfa']);
+      return recommendations.every(value => typeof value === 'string' && allowed.has(value));
+    }
     case 5:
       return typeof answer === 'string' && ['10:42', '10.42', '10:42:17'].includes(answer.trim());
     case 6:

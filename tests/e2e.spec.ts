@@ -255,22 +255,69 @@ test('vseh osem stopenj, lokalni pripomočki, nadaljevanje in zaključek', async
   await expect(page.getByRole('button', { name: 'Označi sporočilo B kot v redu' })).toBeDisabled();
   await expect(page.getByRole('button', { name: 'Označi sporočilo B kot sumljivo' })).toBeDisabled();
   await next(page);
-  await expect(page.locator('.public-posts article')).toHaveCount(5);
-  await page.getByRole('button', { name: 'Shrani sled iz objave 1', exact: true }).click();
-  await expect(page.getByRole('complementary', { name: 'Beležnica javnih sledi' }).locator('li')).toHaveCount(1);
-  await page.getByRole('button', { name: 'Odstrani sled iz objave 1', exact: true }).click();
-  await expect(page.getByRole('complementary', { name: 'Beležnica javnih sledi' }).locator('li')).toHaveCount(0);
-  await page.getByRole('radio', { name: /Možnost A/ }).check();
+  const profile = page.locator('.social-profile');
+  await expect(profile.locator('.social-profile-gallery button')).toHaveCount(3);
+  await expect(profile.locator('.social-profile-bio')).toContainText('2009');
+  await expect(profile.locator('.social-profile-bio')).toContainText('Luka Kovač');
+  await expect(page.getByRole('complementary', { name: 'Beležnica javnih sledi' })).toHaveCount(0);
+  await expect(page.getByRole('radio')).toHaveCount(0);
+  await expect(page.locator('.social-post-caption')).toHaveCount(0);
+  await expect.poll(() => profile.locator('img').evaluateAll(images => images.every(image => (image as HTMLImageElement).complete && (image as HTMLImageElement).naturalWidth > 0))).toBe(true);
+  await page.screenshot({ path: `.local/qa-${testInfo.project.name}-profile.png`, fullPage: true });
+  for (let number = 1; number <= 3; number++) {
+    const tile = page.getByRole('button', { name: `Odpri objavo ${number}`, exact: true });
+    await tile.click();
+    const post = page.getByRole('dialog');
+    await expect(post).toBeVisible();
+    await expect(post.locator('.social-post-caption')).not.toHaveText('');
+    if (number === 1) {
+      await expect(post.locator('.social-post-caption')).toContainText('Luna');
+      await page.screenshot({ path: `.local/qa-${testInfo.project.name}-profile-post.png`, fullPage: true });
+      await expect(page.getByRole('button', { name: 'Zapri objavo' })).toBeFocused();
+      await page.keyboard.press('Tab');
+      // Native dialog lahko preda fokus orodni vrstici brskalnika, ne pa ozadju strani.
+      expect(await post.evaluate(dialog => document.activeElement === document.body || dialog.contains(document.activeElement))).toBe(true);
+      await page.keyboard.press('Escape');
+    } else await page.getByRole('button', { name: 'Zapri objavo', exact: true }).click();
+    await expect(post).toHaveCount(0);
+    await expect(tile).toBeFocused();
+  }
+  const profilePassword = page.getByLabel('Predvidljivo geslo', { exact: true });
+  const advice = page.getByRole('group', { name: 'Priporočila za varnejši račun', exact: true });
+  await expect(advice).toHaveCount(0);
+  await profilePassword.fill('luka2009');
+  await page.getByRole('button', { name: 'Preveri geslo', exact: true }).click();
+  await expect(page.getByRole('alert')).toBeVisible();
+  await expect(advice).toHaveCount(0);
+  await profilePassword.fill(testInfo.project.name.includes('ozek') ? '2009luna' : 'LUNA2009');
+  await page.getByRole('button', { name: 'Preveri geslo', exact: true }).click();
+  await expect(advice).toBeVisible();
+  await expect(page.getByRole('button', { name: 'Nadaljuj', exact: true })).toHaveCount(0);
+  await expect(page.locator('.stage-breadcrumb')).toContainText('04 / 08');
+  await expect(profilePassword).toHaveAttribute('readonly', '');
+  await expect(advice.getByRole('checkbox')).toHaveCount(6);
+  await page.reload(); // Prvi korak ostane potrjen tudi po ponovnem odprtju.
+  await page.getByRole('button', { name: 'Nadaljuj preiskavo', exact: true }).click();
+  await expect(advice).toBeVisible();
+  await expect(profilePassword).toHaveAttribute('readonly', '');
+  await advice.locator('input[value="long"]').check();
+  await page.getByRole('button', { name: 'Potrdi priporočila', exact: true }).click();
+  await expect(page.getByRole('alert')).toBeVisible();
+  await expect(page.getByRole('button', { name: 'Nadaljuj', exact: true })).toHaveCount(0);
+  for (const id of ['unique', 'manager', 'mfa', 'personal']) await advice.locator(`input[value="${id}"]`).check();
+  await page.getByRole('button', { name: 'Potrdi priporočila', exact: true }).click();
+  await expect(page.getByRole('alert')).toBeVisible();
+  await expect(page.getByRole('button', { name: 'Nadaljuj', exact: true })).toHaveCount(0);
+  await advice.locator('input[value="personal"]').uncheck();
+  await page.screenshot({ path: `.local/qa-${testInfo.project.name}-password-advice.png`, fullPage: true });
   let releaseAnswer!: () => void;
   const answerGate = new Promise<void>(resolve => { releaseAnswer = resolve; });
   await page.route('**/api/stages/4/answer', async route => { await answerGate; await route.continue(); });
   try {
-    await page.getByRole('button', { name: 'Preveri odgovor', exact: true }).click();
-    await expect(page.getByRole('radio', { name: /Možnost A/ })).toBeDisabled();
-    await expect(page.getByRole('radio', { name: /Možnost B/ })).toBeDisabled();
+    await page.getByRole('button', { name: 'Potrdi priporočila', exact: true }).click();
+    for (const checkbox of await advice.getByRole('checkbox').all()) await expect(checkbox).toBeDisabled();
   } finally { releaseAnswer(); }
   await expect(page.getByRole('button', { name: 'Nadaljuj', exact: true })).toBeVisible();
-  await expect(page.getByRole('radio', { name: /Možnost A/ })).toBeChecked();
   await page.unroute('**/api/stages/4/answer');
   await next(page);
   await page.getByRole('button', { name: /ucilnica.jpg/ }).click();

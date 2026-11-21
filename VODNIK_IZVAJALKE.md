@@ -8,7 +8,7 @@ Delavnica je izmišljena izobraževalna simulacija za srednješolce. Dvojica upo
 
 Odpri aplikacijo na računalnikih in preveri dostop do strežnika. Vsaka dvojica potrebuje svoj profil brskalnika oziroma svoj računalnik. Dva zavihka istega profila delita isto sejo. Če se pari pri računalniku zamenjajo, naj novi par potrdi ponastavitev prejšnje igre.
 
-Preizkusi en celoten prehod. Nastavitev `APP_ORIGIN`, varen piškotek in HTTPS morajo ustrezati dejanskemu naslovu. Aplikacija potrebuje povezavo s svojim strežnikom, vsi dokazi in pripomočki pa ostanejo na istem spletnem mestu. Ne zahteva resničnega gesla, fotografije ali osebnih podatkov dijakov. Ime ekipe je neobvezno; priporočene so izmišljene oznake. Predstavitev dokazov je razširjena z izbiranjem sporočil, datotek in paketov. Odgovori so ostali enaki, zato obstoječe shranjene seje ostajajo veljavne.
+Preizkusi en celoten prehod. Nastavitev `APP_ORIGIN`, varen piškotek in HTTPS morajo ustrezati dejanskemu naslovu. Aplikacija potrebuje povezavo s svojim strežnikom, vsi dokazi in pripomočki pa ostanejo na istem spletnem mestu. Ne zahteva resničnega gesla, fotografije ali osebnih podatkov dijakov. Ime ekipe je neobvezno; priporočene so izmišljene oznake. Predstavitev dokazov vključuje izbiranje sporočil, datotek in paketov. Četrta naloga zdaj zahteva ročni vnos predvidljivega gesla in nato priporočila; prej že rešene stopnje ostanejo rešene.
 
 Vsako nalogo uvede kratka zgodba, ki dokaze poveže s preiskavo. Pri nalogah 3–8 navodilo opredeli iskani podatek ali odločitev; konkretni postopki so v namigih. Druga naloga nima ločene sekcije NAVODILO. Polje oziroma izbira odgovora je zgoraj desno, namigi in razlaga pa so dostopni v stranskem panelu. Na ozkem zaslonu se elementi zložijo navpično. Dodatni dokazni zapiski niso prikazani v glavnem delu; spodnje opombe so pomoč izvajalki pri pogovoru.
 
@@ -90,12 +90,21 @@ Pravilen izbor je **sporočilo B** in **najmanj dva** od teh opozorilnih znakov,
 
 ## 4. Ugotovi predvidljivo geslo
 
-Učni profil Nika (`@nika_ucni_profil`) vsebuje **pet javnih objav** o fotografiji, hobijih, projektu, letniku in psički. Par lahko pomembne objave pripne oziroma označi za primerjavo. Dve relevantni objavi ostajata »Letnik 2009.« in »Moja psička Luna je danes spet ukradla vso pozornost.« Pravilen izbor je **A: `Luna2009!`**. Označevanje objav je pripomoček, ne dodaten pogoj za napredovanje.
+Javni profil Luke Kovača (`@luka.kovac`) nadaljuje zgodbo njegovega poštnega predala. Ima profilno fotografijo, opis z letnikom **2009** in **tri fotografske objave**: psičko **Luno**, smučanje in gorsko pot. Podatek o imenu psičke je v pripisu prve objave. Opis je »🎂 2009. 🏫 Šola Most. Najraje zunaj, na snegu ⛷️ ali na poti v hribe. 🏔️«. Pod kartico profila je privzeto zaprt razdelek »Pogosta slaba gesla« s šestimi vzorci: zaporedje številk, ime hišnega ljubljenčka, zaporedje tipk na tipkovnici, beseda »geslo« ali »password«, letnica rojstva ter ponavljanje istega znaka. Ime ljubljenčka in letnica sta ločena. Vse slike so ustvarjene za učno zgodbo in se nalagajo lokalno; poti in pozivi so v [zapisu slik](docs/profile-assets.json).
 
-- Namig 1: »Poglej, katere osebne podatke lahko prebere vsak obiskovalec profila.«
-- Namig 2: »Primerjaj ime psičke in letnico rojstva s ponujenimi gesli.«
+Naloga ima dva zaporedna dela:
 
-**Učni cilj:** prepoznati predvidljivost gesla, sestavljenega iz javnih podatkov. Klicaj ne odpravi predvidljivosti. `Miza783?` ni predstavljen kot dober zgled gesla. Priporoči dolga, enkratna gesla, upravljalnik gesel in večfaktorsko prijavo. Dijaki primerjajo izmišljene možnosti; ne ugibajo resničnega gesla in ne izvajajo prijavnih poskusov.
+1. Par ročno vnese **`luna2009`** ali **`2009luna`**. Velikost črk in robni presledki niso pomembni; sprejet je tudi en končni klicaj. Ponujenih gesel ni. Pravilen vnos odpre priporočila, vendar še ne reši stopnje in ne odklene pete naloge.
+2. Par med šestimi možnostmi označi **vsa štiri ustrezna priporočila**, brez napačnih: dolga, naključna gesla oziroma fraze iz nepovezanih besed; drugačno geslo za vsak račun; upravljalnik gesel; večfaktorska prijava. Ponovna uporaba istega gesla in kombinacija osebnih podatkov s klicajem sta napačni možnosti. Šele pravilen izbor zaključi stopnjo.
+
+Potrditev prvega dela se shrani v sejo in preživi osvežitev ali ponovni zagon strežnika. Po vrnitvi par nadaljuje pri priporočilih; vneseno geslo se na strežniku ne hrani. Vsaka oddaja v obeh delih šteje kot poskus. Ponovna oddaja že rešene stopnje števila ne poveča.
+
+- Namig 1: »Katera javna podatka bi si lastnik zlahka zapomnil in ju združil? Pri priporočilih razmisli tudi o ponavljanju gesel med računi.«
+- Namig 2: »Poveži ime psičke in letnico v opisu profila v eno besedo. Nato izberi priporočila za dolžino, različna gesla, upravljalnik in dodatno zaščito prijave.«
+
+**Učni cilj:** prepoznati predvidljivost gesla iz javnih podatkov in izbrati učinkovite zaščitne ukrepe. Klicaj ali preprosta zamenjava črke z znakom predvidljivosti ne odpravita. Prednost imajo dolga, naključna in za vsak račun različna gesla, pri ustvarjanju ter shranjevanju pomaga upravljalnik. Večfaktorska prijava dodatno zaščiti račun, ne spremeni pa šibkega gesla v močno. Ne zahtevamo obveznih simbolov ali redne menjave brez razloga. Priporočila sledijo [CISA: močna gesla](https://www.cisa.gov/sites/default/files/2024-09/Secure-Our-World-Passwords-Tip-Sheet.pdf), [CISA: dodatna zaščita z MFA](https://www.cisa.gov/sites/default/files/2024-09/Secure-Our-World-4-Easy-Ways-Stay-Safe-Online-Tip-Sheet.pdf) in [NIST: gesla](https://pages.nist.gov/800-63-4/sp800-63b.html#passwordver).
+
+Dijaki sestavijo hipotetično predvidljivo geslo za ta učni primer. Ne iščejo Lukovega dejanskega gesla, ne izvajajo prijavnih poskusov in iz rešitve ne sklepajo, katero geslo je bilo uporabljeno pri incidentu.
 
 ## 5. Fotografija skriva namig
 
@@ -160,7 +169,7 @@ Po rešitvi razčleni konkretni naslov: protokol `https`, gostitelj `most.si.pri
 
 Dokazi v poročilu omogočajo naslednje ugotovitve: prepoznano je sumljivo sporočilo in lažna domena; iz simuliranih metapodatkov je razbran čas nastanka fotografije; dnevnik vsebuje uspešen prenos `/zaupno/nacrt.pdf` z računom `ucenec17`; preiskovalna mapa je odklenjena.
 
-**Ne sklepamo**, da je lastnik tega računa dokazano storilec, da je bilo učniško geslo `Luna2009!` dejansko uporabljeno pri vdoru ali da prikazani dokazi potrjujejo ves potek napada. Fotografija sama ne pove, kdo je uporabljal račun, časovna bližina dogodkov pa ni dokaz vzroka.
+**Ne sklepamo**, da je lastnik tega računa dokazano storilec, da je bilo iz javnih podatkov sestavljeno geslo dejansko uporabljeno pri vdoru ali da prikazani dokazi potrjujejo ves potek napada. Fotografija sama ne pove, kdo je uporabljal račun, časovna bližina dogodkov pa ni dokaz vzroka.
 
 Pogovor odpri z vprašanjema:
 

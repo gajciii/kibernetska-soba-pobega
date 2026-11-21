@@ -8,6 +8,7 @@ export interface SessionView {
   hints: Record<string, number[]>;
   currentStage: number;
   hintCount: number;
+  profilePasswordVerified?: boolean;
 }
 export interface Bootstrap { csrfToken: string; session: SessionView | null; stages: StageSummary[] }
 export interface Choice { id: string; label: string }
@@ -45,6 +46,14 @@ export interface EvidenceArtifact {
   description: string;
   metadata: string;
 }
+export interface PublicProfile {
+  name: string;
+  username: string;
+  bio: string;
+  avatar: string;
+  avatarAlt: string;
+  posts: { id: string; image: string; alt: string; caption: string; location: string }[];
+}
 export interface StageContent extends StageSummary {
   intro: string;
   question: string;
@@ -58,7 +67,8 @@ export interface StageContent extends StageSummary {
   packets?: TrafficPacket[];
   investigations?: InvestigationNote[];
   artifacts?: EvidenceArtifact[];
-  profile?: { name: string; username: string; posts: string[] };
+  profile?: PublicProfile;
+  recommendations?: Choice[];
   metadata?: string;
 }
 export interface StageResponse {
@@ -66,8 +76,9 @@ export interface StageResponse {
   solved: boolean;
   hints: { index: number; text: string }[];
   explanation?: string;
+  passwordVerified?: boolean;
 }
-export interface AnswerResponse { correct: boolean; message: string; explanation?: string; session: SessionView }
+export interface AnswerResponse { correct: boolean; message: string; explanation?: string; passwordVerified?: boolean; session: SessionView }
 export interface Finale {
   title: string;
   findings: string[];

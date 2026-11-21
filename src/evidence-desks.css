@@ -1,32 +1,11 @@
-.profile-desk, .file-desk, .browser-desk { container: evidence / inline-size; min-width: 0; min-height: 420px; color: var(--text); background: var(--surface); }
-.profile-desk, .file-desk { padding: 16px; }
+.file-desk, .browser-desk { container: evidence / inline-size; min-width: 0; min-height: 420px; color: var(--text); background: var(--surface); }
+.file-desk { padding: 16px; }
 .desk-heading { display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 10px 16px; margin: 0 0 16px; }
 .desk-heading h3 { margin: 0 0 4px; font-size: 1rem; font-weight: 600; overflow-wrap: anywhere; }
 .desk-heading p, .desk-counter { color: var(--muted); font-size: .875rem; }
 .desk-heading p { margin: 0; }
 .desk-heading > code { font-size: .875rem; }
-.profile-workspace { display: grid; grid-template-columns: minmax(0, 1.45fr) minmax(0, 1fr); gap: 18px; }
-.public-posts { max-height: 400px; overflow: auto; padding-right: 5px; scrollbar-width: thin; }
-.public-posts article { margin: 0 0 12px; padding: 0 0 12px; border-bottom: 1px solid var(--line); }
-.public-posts article:last-child { margin-bottom: 0; }
-.post-meta { display: flex; flex-wrap: wrap; gap: 6px 12px; align-items: center; justify-content: space-between; color: var(--muted); font-size: .8rem; }
-.post-meta button { min-height: 34px; border: 0; padding: 4px 6px; background: none; color: var(--accent); font: inherit; text-decoration: underline; text-underline-offset: 3px; }
-.post-meta button[aria-pressed="true"] { color: var(--success); }
-.public-posts article > p { margin: 6px 0 0; line-height: 1.6; }
-.profile-notebook { min-width: 0; padding: 14px; background: var(--bg); border: 1px solid var(--line); border-radius: var(--control-radius); align-self: start; }
-.profile-notebook h4 { margin: 0 0 12px; font-size: .875rem; font-weight: 600; }
-.profile-notebook p { margin: 0 0 12px; }
-.profile-notebook li { margin-bottom: 10px; color: var(--text); line-height: 1.5; }
-.profile-notebook ul { margin: 0 0 10px; padding-left: 18px; }
-.profile-notebook > small, .empty-desk { color: var(--muted); font-size: .8rem; }
-.password-candidates { margin-top: 18px; display: flex; flex-wrap: wrap; gap: 10px 20px; }
-.password-candidates legend { margin-bottom: 6px; font-size: .875rem; }
-.password-candidates label { display: flex; gap: 10px; min-width: 165px; padding: 8px 10px; margin: 0; border: 1px solid var(--line); border-radius: var(--button-radius); background: var(--bg); }
-.password-candidates label span { display: grid; gap: 3px; }
-.password-candidates small { color: var(--muted); font-size: .8rem; }
-.password-candidates code { font-size: 1rem; }
-.password-candidates .selected { border-color: var(--accent); }
-.password-candidates .selected code { color: var(--accent); }
+.empty-desk { color: var(--muted); font-size: .8rem; }
 .file-workspace { display: grid; grid-template-columns: 190px minmax(0, 1fr); min-height: 340px; gap: 18px; }
 .artifact-list { display: flex; flex-direction: column; align-items: stretch; gap: 4px; min-width: 0; border-right: 1px solid var(--line); padding-right: 10px; }
 .artifact-list button { display: flex; gap: 10px; align-items: center; width: 100%; padding: 10px 8px; background: none; border: 0; border-radius: var(--button-radius); text-align: left; }
@@ -75,8 +54,6 @@
 .browser-decision { display: flex; flex-wrap: wrap; align-items: center; gap: 10px 16px; padding: 14px 16px; border-top: 1px solid var(--line); }
 .browser-decision .selected-evidence { color: var(--success); margin: 0; font-size: .875rem; }
 @container evidence (max-width: 580px) {
-  .profile-workspace { grid-template-columns: minmax(0, 1fr); gap: 14px; }
-  .public-posts { max-height: 340px; }
   .file-workspace { grid-template-columns: minmax(0, 1fr); gap: 14px; }
   .artifact-list { flex-direction: row; overflow-x: auto; padding: 0 0 8px; border-right: 0; border-bottom: 1px solid var(--line); }
   .artifact-list button { min-width: 155px; width: auto; }
@@ -88,7 +65,7 @@
   .browser-address button { margin-left: auto; }
 }
 @media (max-width: 600px) {
-  .profile-desk, .file-desk { padding: 14px; }
-  .profile-desk, .file-desk, .browser-desk { min-height: 0; }
+  .file-desk { padding: 14px; }
+  .file-desk, .browser-desk { min-height: 0; }
   .artifact-empty { min-height: 210px; }
 }

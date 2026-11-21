@@ -50,11 +50,15 @@ async function start(client = team, teamName?: string): Promise<SessionView> {
 
 const correctAnswers: unknown[] = [
   'MOST', 'SOVA', { message: 'B', reasons: ['domain', 'link'] },
-  'A', '10:42', 'ucenec17', 'C', 'KLJUC',
+  { recommendations: ['long', 'unique', 'manager', 'mfa'] }, '10:42', 'ucenec17', 'C', 'KLJUC',
 ];
 
 async function solveThrough(end: number, client = team) {
   for (let id = 1; id <= end; id++) {
+    if (id === 4) {
+      const password = await post(client, '/api/stages/4/answer', { answer: 'luna2009' }).expect(200);
+      expect(password.body.passwordVerified).toBe(true);
+    }
     const response = await post(client, `/api/stages/${id}/answer`, { answer: correctAnswers[id - 1] }).expect(200);
     expect(response.body.correct).toBe(true);
   }
@@ -125,7 +129,7 @@ describe('anonimne seje in zaščita API-ja', () => {
 
   it('prepreči branje, odgovor in namig za zaklenjene stopnje ter prezgodnji finale', async () => {
     await start();
-    for (const id of [2, 8]) {
+    for (const id of [2, 4, 8]) {
       await team.agent.get(`/api/stages/${id}`).expect(403);
       await post(team, `/api/stages/${id}/answer`, { answer: correctAnswers[id - 1] }).expect(403);
       await post(team, `/api/stages/${id}/hints`, { index: 1 }).expect(403);
@@ -202,11 +206,17 @@ describe('potek igre, namigi in shranjevanje', () => {
       expect(wrong.body.message).toBeTruthy();
       expect(wrong.body.explanation).toBeUndefined();
       expect(wrong.body.session.currentStage).toBe(id);
+      if (id === 4) {
+        const password = await post(team, '/api/stages/4/answer', { answer: 'Luna2009' }).expect(200);
+        expect(password.body.correct).toBe(false);
+        expect(password.body.passwordVerified).toBe(true);
+        expect(password.body.session.currentStage).toBe(4);
+      }
       const solved = await post(team, `/api/stages/${id}/answer`, { answer: correctAnswers[id - 1] }).expect(200);
       expect(solved.body.correct).toBe(true);
       expect(solved.body.explanation).toBeTruthy();
       expect(solved.body.session.solved).toEqual(Array.from({ length: id }, (_, index) => index + 1));
-      expect(solved.body.session.attempts[id]).toBe(2);
+      expect(solved.body.session.attempts[id]).toBe(id === 4 ? 3 : 2);
       expect(solved.body.session.currentStage).toBe(Math.min(id + 1, 8));
       const revisit = await team.agent.get(`/api/stages/${id}`).expect(200);
       expect(revisit.body.solved).toBe(true);
@@ -244,7 +254,8 @@ describe('potek igre, namigi in shranjevanje', () => {
       expect(result.body.correct).toBe(false);
     }
     await post(team, '/api/stages/3/answer', { answer: correctAnswers[2] }).expect(200);
-    await post(team, '/api/stages/4/answer', { answer: 'A' }).expect(200);
+    await post(team, '/api/stages/4/answer', { answer: 'luna2009' }).expect(200);
+    await post(team, '/api/stages/4/answer', { answer: correctAnswers[3] }).expect(200);
     const modified = await post(team, '/api/stages/5/answer', { answer: '11:15' }).expect(200);
     expect(modified.body.correct).toBe(false);
     const original = await post(team, '/api/stages/5/answer', { answer: '10:42:17' }).expect(200);
@@ -255,6 +266,95 @@ describe('potek igre, namigi in shranjevanje', () => {
     }
     const transfer = await post(team, '/api/stages/6/answer', { answer: ' UCENEC17 ' }).expect(200);
     expect(transfer.body.correct).toBe(true);
+  });
+
+  it('pred priporočili zahteva ročno geslo in do zaključka obeh delov ne odklene pete naloge', async () => {
+    await start();
+    await solveThrough(3);
+    const initial = await team.agent.get('/api/stages/4').expect(200);
+    expect(initial.body.passwordVerified).toBe(false);
+    expect(initial.body.stage.choices).toBeUndefined();
+    expect(initial.body.stage.recommendations).toHaveLength(6);
+    expect(JSON.stringify(initial.body)).not.toMatch(/luna2009|2009luna|correctAnswer|isCorrect/iu);
+
+    for (const answer of [correctAnswers[3], 'A', 'luna2008']) {
+      const rejected = await post(team, '/api/stages/4/answer', { answer }).expect(200);
+      expect(rejected.body.correct).toBe(false);
+      expect(rejected.body.passwordVerified).toBe(false);
+      expect(rejected.body.session.profilePasswordVerified).toBeUndefined();
+      expect(rejected.body.session.solved).toEqual([1, 2, 3]);
+      expect(rejected.body.session.currentStage).toBe(4);
+      expect(rejected.body.explanation).toBeUndefined();
+    }
+
+    const password = await post(team, '/api/stages/4/answer', { answer: 'luna2009' }).expect(200);
+    expect(password.body.correct).toBe(false);
+    expect(password.body.passwordVerified).toBe(true);
+    expect(password.body.session.profilePasswordVerified).toBe(true);
+    expect(password.body.session.attempts[4]).toBe(4);
+    expect(password.body.session.currentStage).toBe(4);
+    expect(password.body.session.solved).toEqual([1, 2, 3]);
+    expect(password.body.explanation).toBeUndefined();
+    await team.agent.get('/api/stages/5').expect(403);
+    await post(team, '/api/stages/5/answer', { answer: '10:42' }).expect(403);
+    const reload = await team.agent.get('/api/stages/4').expect(200);
+    expect(reload.body.passwordVerified).toBe(true);
+    expect(reload.body.solved).toBe(false);
+    expect(reload.body.explanation).toBeUndefined();
+
+    for (const answer of [
+      'luna2009',
+      { recommendations: ['long', 'unique', 'manager'] },
+      { recommendations: ['long', 'unique', 'manager', 'reuse'] },
+      { recommendations: ['long', 'unique', 'manager', 'manager'] },
+      { recommendations: ['long', 'unique', 'manager', 'unknown'] },
+    ]) {
+      const rejected = await post(team, '/api/stages/4/answer', { answer }).expect(200);
+      expect(rejected.body.correct).toBe(false);
+      expect(rejected.body.passwordVerified).toBe(true);
+      expect(rejected.body.session.solved).toEqual([1, 2, 3]);
+      expect(rejected.body.session.currentStage).toBe(4);
+      expect(rejected.body.explanation).toBeUndefined();
+    }
+
+    const advice = await post(team, '/api/stages/4/answer', { answer: correctAnswers[3] }).expect(200);
+    expect(advice.body.correct).toBe(true);
+    expect(advice.body.passwordVerified).toBe(true);
+    expect(advice.body.session.solved).toEqual([1, 2, 3, 4]);
+    expect(advice.body.session.currentStage).toBe(5);
+    expect(advice.body.session.attempts[4]).toBe(10);
+    expect(advice.body.explanation).toBeTruthy();
+    await team.agent.get('/api/stages/5').expect(200);
+    const repeated = await post(team, '/api/stages/4/answer', { answer: correctAnswers[3] }).expect(200);
+    expect(repeated.body.session).toEqual(advice.body.session);
+  });
+
+  it.each([' LuNa2009 ', ' 2009LUNA '])('sprejme ročno geslo %s brez samodejne rešitve celotne naloge', async (answer) => {
+    await start();
+    await solveThrough(3);
+    const result = await post(team, '/api/stages/4/answer', { answer }).expect(200);
+    expect(result.body.correct).toBe(false);
+    expect(result.body.passwordVerified).toBe(true);
+    expect(result.body.session.profilePasswordVerified).toBe(true);
+    expect(result.body.session.currentStage).toBe(4);
+    expect(result.body.session.solved).toEqual([1, 2, 3]);
+    expect(result.body.session.attempts[4]).toBe(1);
+  });
+
+  it('ohrani že rešeno četrto stopnjo iz stare seje brez nove oznake prvega dela', async () => {
+    await start();
+    await solveThrough(4);
+    const tokenHash = createHash('sha256').update(team.cookie.split('=')[1]).digest('hex');
+    await pool.query("UPDATE game_sessions SET progress=progress - 'profilePasswordVerified' WHERE token_hash=$1", [tokenHash]);
+    const stage = await team.agent.get('/api/stages/4').expect(200);
+    expect(stage.body.solved).toBe(true);
+    expect(stage.body.passwordVerified).toBe(true);
+    expect(stage.body.explanation).toBeTruthy();
+    const repeated = await post(team, '/api/stages/4/answer', { answer: 'A' }).expect(200);
+    expect(repeated.body.correct).toBe(true);
+    expect(repeated.body.passwordVerified).toBe(true);
+    expect(repeated.body.session.attempts[4]).toBe(2);
+    expect(repeated.body.session.currentStage).toBe(5);
   });
 
   it('odkriva dva postopna namiga in šteje vsak namig samo enkrat, tudi po osvežitvi', async () => {
@@ -307,7 +407,9 @@ describe('potek igre, namigi in shranjevanje', () => {
     expect(other.csrf).not.toBe(team.csrf);
     await start(team, 'Prva ekipa');
     await start(other, 'Druga ekipa');
-    await solveThrough(2, team);
+    await solveThrough(3, team);
+    const password = await post(team, '/api/stages/4/answer', { answer: '2009luna' }).expect(200);
+    expect(password.body.session.profilePasswordVerified).toBe(true);
     await solveThrough(1, other);
     await post(other, '/api/stages/2/hints', { index: 1 }).expect(200);
     const otherBefore = await other.agent.get('/api/session');
@@ -324,14 +426,16 @@ describe('potek igre, namigi in shranjevanje', () => {
     expect(fresh.solved).toEqual([]);
     expect(fresh.attempts).toEqual({});
     expect(fresh.hintCount).toBe(0);
+    expect(fresh.profilePasswordVerified).toBeUndefined();
   });
 
   it('ohrani napredek, poskuse, namige in sejo po zaprtju povezav ter ponovnem zagonu aplikacije', async () => {
     await start(team, 'Vztrajna ekipa');
     await post(team, '/api/stages/1/hints', { index: 1 }).expect(200);
     await post(team, '/api/stages/1/answer', { answer: 'napačno' }).expect(200);
-    await solveThrough(2);
-    await post(team, '/api/stages/3/hints', { index: 1 }).expect(200);
+    await solveThrough(3);
+    await post(team, '/api/stages/4/answer', { answer: '2009Luna' }).expect(200);
+    await post(team, '/api/stages/4/hints', { index: 1 }).expect(200);
     const before = await team.agent.get('/api/session').expect(200);
     const cookie = team.cookie;
     await pool.end();
@@ -339,14 +443,18 @@ describe('potek igre, namigi in shranjevanje', () => {
     app = createApp(pool, config);
     const after = await request(app).get('/api/session').set('Cookie', cookie).expect(200);
     expect(after.body).toEqual(before.body);
-    expect(after.body.session.attempts).toEqual({ 1: 2, 2: 1 });
+    expect(after.body.session.attempts).toEqual({ 1: 2, 2: 1, 3: 1, 4: 1 });
     expect(after.body.session.hintCount).toBe(2);
-    const stage = await request(app).get('/api/stages/3').set('Cookie', cookie).expect(200);
+    expect(after.body.session.profilePasswordVerified).toBe(true);
+    expect(after.body.session.currentStage).toBe(4);
+    const stage = await request(app).get('/api/stages/4').set('Cookie', cookie).expect(200);
     expect(stage.body.hints).toHaveLength(1);
-    const continuation = await request(app).post('/api/stages/3/answer')
+    expect(stage.body.passwordVerified).toBe(true);
+    expect(stage.body.solved).toBe(false);
+    const continuation = await request(app).post('/api/stages/4/answer')
       .set('Cookie', cookie).set('Origin', config.origin).set('X-CSRF-Token', team.csrf)
-      .send({ answer: correctAnswers[2] }).expect(200);
+      .send({ answer: correctAnswers[3] }).expect(200);
     expect(continuation.body.correct).toBe(true);
-    expect(continuation.body.session.currentStage).toBe(4);
+    expect(continuation.body.session.currentStage).toBe(5);
   });
 });

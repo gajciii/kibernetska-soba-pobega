@@ -1,20 +1,8 @@
 import { useState } from 'react';
-import type { Choice, EvidenceArtifact, StageContent } from '../shared/types';
+import type { Choice, EvidenceArtifact } from '../shared/types';
 import './evidence-desks.css';
 
 type AnswerProps = { answer: string; onAnswer: (answer: string) => void; disabled: boolean };
-
-export function ProfileDesk({ stage, answer, onAnswer, disabled }: { stage: StageContent } & AnswerProps) {
-  const [pinned, setPinned] = useState<number[]>([]);
-  const posts = stage.profile?.posts ?? [];
-  return <div className="profile-desk">
-    <header className="desk-heading"><div><h3>{stage.profile?.name}</h3><p>{stage.profile?.username}</p></div><span className="desk-counter">{posts.length} objav</span></header>
-    <div className="profile-workspace"><div className="public-posts">{posts.map((post, index) => <article key={post} className={pinned.includes(index) ? 'pinned-post' : ''}><div className="post-meta"><span>Objava {String(index + 1).padStart(2, '0')}</span><button type="button" aria-pressed={pinned.includes(index)} aria-label={`${pinned.includes(index) ? 'Odstrani' : 'Shrani'} sled iz objave ${index + 1}`} onClick={() => setPinned(previous => previous.includes(index) ? previous.filter(item => item !== index) : [...previous, index])}>{pinned.includes(index) ? 'Shranjeno' : 'Shrani sled'}</button></div><p>{post}</p></article>)}</div>
-      <aside className="profile-notebook" aria-label="Beležnica javnih sledi"><h4>Beležnica</h4>{pinned.length ? <ul>{pinned.map(index => <li key={index}>{posts[index]}</li>)}</ul> : <p className="empty-desk">Ni shranjenih sledi.</p>}<small>Samo za ta ogled.</small></aside>
-    </div>
-    <fieldset className="password-candidates"><legend>Kandidati za geslo</legend>{stage.choices?.map(choice => <label key={choice.id} className={answer === choice.id ? 'selected' : ''}><input type="radio" name="password-choice" checked={answer === choice.id} onChange={() => onAnswer(choice.id)} disabled={disabled}/><span><small>Možnost {choice.id}</small><code>{choice.label}</code></span></label>)}</fieldset>
-  </div>;
-}
 
 export function MetadataDesk({ artifacts }: { artifacts: EvidenceArtifact[] }) {
   const [selectedId, setSelectedId] = useState<string | null>(null);

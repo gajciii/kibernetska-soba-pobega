@@ -4,7 +4,8 @@ import type { AnswerResponse, Bootstrap, Finale, SessionView, StageContent, Stag
 import ConverterWorkbench from './ConverterWorkbench';
 import CaesarWorkbench from './CaesarWorkbench';
 import { Mailbox, TrafficViewer } from './InvestigationViewers';
-import { BrowserDesk, MetadataDesk, ProfileDesk } from './EvidenceDesks';
+import { BrowserDesk, MetadataDesk } from './EvidenceDesks';
+import { PasswordPatterns, ProfileDesk } from './ProfileDesk';
 import Landing from './Landing';
 
 type IconName = 'lock' | 'check' | 'clock' | 'folder' | 'key' | 'mail' | 'shield' | 'image' | 'terminal' | 'globe' | 'bulb' | 'reset' | 'close';
@@ -157,13 +158,20 @@ function Stage({ data, csrf, busy, setBusy, onSession, onData, onNext, onFinale,
   const stage = data.stage;
   const [answer, setAnswer] = useState('');
   const [reasons, setReasons] = useState<string[]>([]);
+  const [recommendations, setRecommendations] = useState<string[]>([]);
+  const recommendationsRef = useRef<HTMLFieldSetElement>(null);
+  const passwordVerified = stage.kind === 'password' && (data.passwordVerified || data.solved);
+  useEffect(() => {
+    if (passwordVerified && !data.solved) recommendationsRef.current?.focus();
+  }, [passwordVerified, data.solved]);
   const [feedback, setFeedback] = useState<{ text: string; success: boolean } | null>(null);
   const [hintError, setHintError] = useState('');
   async function submit(e: FormEvent) {
     e.preventDefault(); setBusy(true); setFeedback(null);
     try {
-      const result = await request<AnswerResponse>(`/stages/${stage.id}/answer`, csrf, { answer: stage.kind === 'phishing' ? { message: answer, reasons } : answer });
-      onSession(result.session); setFeedback({ text: result.message, success: result.correct });
+      const result = await request<AnswerResponse>(`/stages/${stage.id}/answer`, csrf, { answer: stage.kind === 'phishing' ? { message: answer, reasons } : passwordVerified ? { recommendations } : answer });
+      onSession(result.session); setFeedback({ text: result.message, success: result.correct || (!passwordVerified && !!result.passwordVerified) });
+      if (result.passwordVerified) onData({ ...data, passwordVerified: true });
       if (result.correct) {
         onData({ ...data, solved: true, explanation: result.explanation });
         if (stage.id === 8) await onFinale();
@@ -179,9 +187,9 @@ function Stage({ data, csrf, busy, setBusy, onSession, onData, onNext, onFinale,
     } catch (e) { setHintError((e as Error).message); }
     finally { setBusy(false); }
   }
-  const isChoice = ['phishing', 'password', 'domains'].includes(stage.kind);
+  const isChoice = ['phishing', 'domains'].includes(stage.kind);
   const app = applications[stage.kind];
-  const selectedLabel = stage.kind === 'password' ? stage.choices?.find(choice => choice.id === answer)?.label : answer ? `${stage.kind === 'phishing' ? 'Sporočilo' : 'Naslov'} ${answer}` : '';
+  const selectedLabel = answer ? `${stage.kind === 'phishing' ? 'Sporočilo' : 'Naslov'} ${answer}` : '';
   return <div className="workspace" data-stage={stage.kind}>
     <main id="main" className="investigation-main" aria-busy={busy}>
       <div className="stage-heading">
@@ -199,22 +207,31 @@ function Stage({ data, csrf, busy, setBusy, onSession, onData, onNext, onFinale,
           {stage.kind === 'caesar' && <CaesarWorkbench/>}
           {['encoding', 'binary'].includes(stage.kind) && <ConverterWorkbench stage={stage}/>}
           {stage.kind === 'phishing' && <Mailbox mails={stage.mails ?? []} answer={answer} onAnswer={setAnswer} disabled={data.solved || busy}/>}
-          {stage.kind === 'password' && <ProfileDesk stage={stage} answer={answer} onAnswer={setAnswer} disabled={data.solved || busy}/>}
+          {stage.kind === 'password' && stage.profile && <ProfileDesk profile={stage.profile}/>}
           {stage.kind === 'metadata' && <MetadataDesk artifacts={stage.artifacts ?? []}/>}
           {stage.kind === 'logs' && <TrafficViewer packets={stage.packets ?? []} logs={stage.logs ?? []}/>}
           {stage.kind === 'domains' && <BrowserDesk choices={stage.choices ?? []} answer={answer} onAnswer={setAnswer} disabled={data.solved || busy}/>}
         </div>
         {(stage.kind === 'logs' || stage.kind === 'phishing') && <div className="window-status">{stage.kind === 'logs' ? '32 paketov / lokalna zbirka' : '7 sporočil / neaktivne povezave'}</div>}
       </section>
+      {stage.kind === 'password' && <PasswordPatterns/>}
     </main>
     <aside className="sidebar" aria-label="Odgovor in napredek">
       <section className="answer-panel" id="answer-panel" aria-labelledby="answer-heading" tabIndex={-1}>
         <div className="answer-panel-heading"><h2 id="answer-heading">ODGOVOR</h2><span>{String(stage.id).padStart(2, '0')} / 08</span></div>
         <form onSubmit={submit}>
-          <label htmlFor="stage-answer">{isChoice ? 'Izbrani odgovor' : stage.kind === 'metadata' ? 'Ura in minute' : stage.kind === 'logs' ? 'Uporabniški račun' : 'Odgovor'}</label>
-          <input id="stage-answer" className="answer-input" autoComplete="off" spellCheck={false} maxLength={300} value={isChoice ? selectedLabel ?? '' : answer} onChange={e => setAnswer(e.target.value)} readOnly={isChoice} placeholder={data.solved ? 'Odgovor potrjen' : isChoice ? 'Izberi v delovnem oknu' : stage.kind === 'metadata' ? 'HH:MM' : stage.kind === 'logs' ? 'npr. ucenec01' : 'Vnesi kodo'} disabled={data.solved || busy}/>
+          <label htmlFor="stage-answer">{isChoice ? 'Izbrani odgovor' : stage.kind === 'password' ? 'Predvidljivo geslo' : stage.kind === 'metadata' ? 'Ura in minute' : stage.kind === 'logs' ? 'Uporabniški račun' : 'Odgovor'}</label>
+          <input id="stage-answer" className="answer-input" autoComplete="off" spellCheck={false} maxLength={300} value={isChoice ? selectedLabel ?? '' : answer} onChange={e => setAnswer(e.target.value)} readOnly={isChoice || passwordVerified} placeholder={data.solved ? 'Odgovor potrjen' : passwordVerified ? 'Geslo prepoznano' : stage.kind === 'password' ? 'Vnesi sestavljeno geslo' : isChoice ? 'Izberi v delovnem oknu' : stage.kind === 'metadata' ? 'HH:MM' : stage.kind === 'logs' ? 'npr. ucenec01' : 'Vnesi kodo'} disabled={data.solved || busy}/>
           {stage.kind === 'phishing' && <fieldset className="reasons"><legend>Vsaj dva opozorilna znaka</legend>{stage.reasons?.map(reason => <label className="reason" key={reason.id}><input type="checkbox" checked={reasons.includes(reason.id)} onChange={e => setReasons(previous => e.target.checked ? [...previous, reason.id] : previous.filter(id => id !== reason.id))} disabled={data.solved || busy}/><span>{reason.label}</span></label>)}</fieldset>}
-          {!data.solved && <button className="primary check-button" disabled={busy || !answer.trim()}>{busy ? 'Preverjanje …' : 'Preveri odgovor'}</button>}
+          {passwordVerified && !data.solved && <>
+            <p className="password-confirmation" role="status"><Icon name="check" size={16}/>Geslo prepoznano.</p>
+            <fieldset className="reasons password-recommendations" ref={recommendationsRef} tabIndex={-1}>
+              <legend>Priporočila za varnejši račun</legend>
+              <p>Označi dobre prakse.</p>
+              {stage.recommendations?.map(recommendation => <label className="reason" key={recommendation.id}><input type="checkbox" value={recommendation.id} checked={recommendations.includes(recommendation.id)} onChange={event => setRecommendations(previous => event.target.checked ? [...previous, recommendation.id] : previous.filter(id => id !== recommendation.id))} disabled={busy}/><span>{recommendation.label}</span></label>)}
+            </fieldset>
+          </>}
+          {!data.solved && <button className="primary check-button" disabled={busy || (passwordVerified ? !recommendations.length : !answer.trim())}>{busy ? 'Preverjanje …' : passwordVerified ? 'Potrdi priporočila' : stage.kind === 'password' ? 'Preveri geslo' : 'Preveri odgovor'}</button>}
         </form>
         {feedback && !feedback.success && <div className="feedback error" role="alert">{feedback.text}</div>}
         <div className="answer-status" role="status">{data.solved ? 'Izziv opravljen' : ''}</div>

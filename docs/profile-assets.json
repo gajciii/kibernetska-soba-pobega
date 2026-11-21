@@ -1,0 +1,32 @@
+{
+  "generationMode": "built-in image_gen",
+  "date": "2026-11-21",
+  "description": "Generated photographs for the fictional Luka Kovač profile in challenge 4.",
+  "assets": [
+    {
+      "name": "luka",
+      "file": "public/profile/luka.jpg",
+      "prompt": "Use case: photorealistic-natural. Asset type: square profile avatar for a fictional Slovenian secondary-school student's Instagram-like profile in an educational web game. Primary request: a natural casual smartphone portrait of a fictional 17-year-old boy named Luka, short brown hair, friendly relaxed expression, wearing an ordinary dark-blue hoodie outdoors in a leafy park. Head and shoulders centered with enough margin for circular crop. Realistic skin texture, soft overcast daylight, candid everyday photo, slightly imperfect phone photography, not a commercial headshot. Square image. No writing, no logo, no watermark, no interface."
+    },
+    {
+      "name": "luna",
+      "file": "public/profile/luna.jpg",
+      "prompt": "Use case: photorealistic-natural. Asset type: square social-media photo post for a fictional student's profile. Primary request: an affectionate candid smartphone photo of a medium-size golden retriever dog sitting in the grass during a park walk, looking toward camera, tongue slightly out, simple dark collar. The fictional dog is called Luna, but show no text or name label. Natural late-afternoon daylight, green grass and softly blurred trees, ordinary amateur pet photography, realistic fur and anatomy. Dog fully in frame with comfortable crop margins. Square image. No people, no writing, no logos, no watermark, no UI."
+    },
+    {
+      "name": "smucanje",
+      "file": "public/profile/smucanje.jpg",
+      "prompt": "Use case: photorealistic-natural. Asset type: square social-media skiing photo from a fictional Slovenian student's profile. Primary request: a casual smartphone photo from a snowy Alpine ski slope, a skier in a dark-blue jacket and helmet viewed from behind looking downhill, bright snow, pistes and distant mountain ridges under a pale blue winter sky. Realistic skiing equipment, scenic but ordinary holiday snapshot, natural exposure and subtle phone grain, not dramatic advertising. Square framing, skier small enough to show landscape. No legible text, no logos, no watermark, no interface."
+    },
+    {
+      "name": "gore",
+      "file": "public/profile/gore.jpg",
+      "prompt": "Use case: photorealistic-natural. Asset type: square social-media mountain hiking photo from a fictional Slovenian student's profile. Primary request: a candid smartphone landscape photograph from a hiking path in the Julian Alps, pale limestone peaks, a winding narrow gravel footpath through green alpine meadow, partly cloudy summer sky. Peaceful ordinary weekend hiking snapshot, believable geology and vegetation, natural balanced colors and realistic phone-camera detail, not hyper-saturated advertising. Square composition. No people, no writing, no logos, no watermark, no interface."
+    }
+  ],
+  "webExport": {
+    "format": "JPEG",
+    "quality": 82,
+    "sourceImages": "Original generated PNG files were preserved separately; web assets use JPEG encoding."
+  }
+}

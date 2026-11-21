@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { finale, getExplanation, getFeedback, getHint, getStage, stageSummaries, validateAnswer } from '../server/content.js';
+import { finale, getExplanation, getFeedback, getHint, getStage, stageSummaries, validateAnswer, validateProfilePassword } from '../server/content.js';
 import { convertText, hexToText, textToHex } from '../shared/converters.js';
 
 const stage2Intermediate = 'UFJFTk9TIFpBQkVMRVpFTi4gS09EQSBOQVNMRUROSkUgTUFQRTogU09WQS4=';
@@ -7,7 +7,7 @@ const stage2Intermediate = 'UFJFTk9TIFpBQkVMRVpFTi4gS09EQSBOQVNMRUROSkUgTUFQRTog
 describe('strežniško preverjanje osmih stopenj', () => {
   const correct: [number, unknown][] = [
     [1, 'MOST'], [2, 'SOVA'], [3, { message: 'B', reasons: ['domain', 'link'] }],
-    [4, 'A'], [5, '10:42'], [6, 'ucenec17'], [7, 'C'], [8, 'KLJUC'],
+    [4, { recommendations: ['long', 'unique', 'manager', 'mfa'] }], [5, '10:42'], [6, 'ucenec17'], [7, 'C'], [8, 'KLJUC'],
   ];
 
   it.each(correct)('sprejme pravilen odgovor stopnje %i', (id, answer) => {
@@ -32,14 +32,37 @@ describe('strežniško preverjanje osmih stopenj', () => {
     expect(validateAnswer(8, 'KL JUČ')).toBe(false);
   });
 
-  it('uporablja stabilne izbirne identifikatorje in ne odstranjuje ločil gesel', () => {
+  it('ločuje ročni vnos gesla od izbirnih priporočil in ohrani identifikatorje domen', () => {
     expect(validateAnswer(4, 'a')).toBe(false);
     expect(validateAnswer(4, 'B')).toBe(false);
     expect(validateAnswer(4, 'C')).toBe(false);
     expect(validateAnswer(4, 'Luna2009')).toBe(false);
-    expect(getStage(4)?.choices?.map(({ label }) => label)).toEqual(['Luna2009!', 'Miza783?', 'vQ7#rT9!pL2']);
+    expect(getStage(4)?.choices).toBeUndefined();
     expect(validateAnswer(7, 'A')).toBe(false);
     expect(validateAnswer(7, 'B')).toBe(false);
+  });
+
+  it('sprejme obe zaporedji predvidljivega gesla, velikost črk in izrecno dovoljeni klicaj', () => {
+    for (const answer of ['luna2009', '2009luna', ' LUNA2009 ', '2009Luna', 'Luna2009!', ' 2009LUNA! ']) {
+      expect(validateProfilePassword(answer)).toBe(true);
+      expect(validateAnswer(4, answer)).toBe(false);
+    }
+    for (const answer of ['A', 'Luna', '2009', 'luna 2009', '2009-luna', 'luna2009!!', 'luna2009?', 'Luna2008', '', null, {}, 2009]) {
+      expect(validateProfilePassword(answer)).toBe(false);
+    }
+  });
+
+  it('zahteva vsa štiri različna ustrezna priporočila brez odvečnih, napačnih ali neznanih možnosti', () => {
+    expect(validateAnswer(4, { recommendations: ['mfa', 'manager', 'unique', 'long'] })).toBe(true);
+    for (const recommendations of [
+      [], ['long'], ['long', 'unique', 'manager'],
+      ['long', 'unique', 'manager', 'reuse'],
+      ['long', 'unique', 'manager', 'personal'],
+      ['long', 'unique', 'manager', 'unknown'],
+      ['long', 'unique', 'manager', 'mfa', 'reuse'],
+      ['long', 'unique', 'manager', 'manager'],
+      ['long', 'unique', 'manager', 1], 'long,unique,manager,mfa',
+    ]) expect(validateAnswer(4, { recommendations })).toBe(false);
   });
 
   it('pogojuje phishing s sporočilom B in vsaj dvema različnima pravilnima razlogoma', () => {
@@ -116,11 +139,26 @@ describe('razširjeni dokazi ostanejo skladni z obstoječimi rešitvami', () => 
     expect(getExplanation(3)).toContain('ujemajoča se domena sama ne jamči varnosti');
   });
 
-  it('ohrani oba pomembna podatka profila med petimi objavami in tri izbirne domene', () => {
+  it('poveže Lukov profil z lokalnimi fotografijami in javnima podatkoma brez ključa odgovorov', () => {
     const profile = getStage(4)!.profile!;
-    expect(profile.posts).toHaveLength(5);
-    expect(profile.posts).toContain('Letnik 2009.');
-    expect(profile.posts).toContain('Moja psička Luna je danes spet ukradla vso pozornost.');
+    expect(profile.name).toBe('Luka Kovač');
+    expect(profile.username).toBe('@luka.kovac');
+    expect(profile.bio).toContain('2009');
+    expect(profile.avatar).toBe('/profile/luka.jpg');
+    expect(profile.posts).toHaveLength(3);
+    expect(profile.posts.some(post => post.caption.includes('Luna'))).toBe(true);
+    for (const post of profile.posts) {
+      expect(post.image).toMatch(/^\/profile\/[a-z]+\.jpg$/u);
+      expect(post.alt).toBeTruthy();
+      expect(post.caption).toBeTruthy();
+      expect(post.location).toBeTruthy();
+    }
+    const stage = getStage(4)!;
+    expect(stage.recommendations?.map(choice => choice.id)).toEqual(['long', 'reuse', 'manager', 'personal', 'unique', 'mfa']);
+    expect(JSON.stringify(stage)).not.toMatch(/luna2009|2009luna|correctAnswer|isCorrect/iu);
+  });
+
+  it('ohrani tri izbirne domene', () => {
     const choices = getStage(7)!.choices!;
     expect(choices).toHaveLength(3);
     expect(choices.map(choice => validateAnswer(7, choice.id))).toEqual([false, false, true]);
