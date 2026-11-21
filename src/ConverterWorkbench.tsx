@@ -12,15 +12,14 @@ const methods: { id: EncodingMethod; label: string }[] = [
   { id: 'hex', label: 'Šestnajstiško (HEX)' },
   { id: 'url', label: 'URL – odstotkovno' },
 ];
-const alphabet = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
 type FieldErrors = { method?: string; input?: string; direction?: string };
 
 export default function ConverterWorkbench({ stage }: { stage: StageContent }) {
   const uid = useId();
   const manualSetup = stage.kind === 'encoding';
-  const [input, setInput] = useState(manualSetup ? '' : stage.evidence ?? '');
-  const [method, setMethod] = useState<EncodingMethod | ''>(stage.kind === 'binary' ? 'binary' : '');
-  const [direction, setDirection] = useState<ConversionDirection | ''>(manualSetup ? '' : 'decode');
+  const [input, setInput] = useState('');
+  const [method, setMethod] = useState<EncodingMethod | ''>('');
+  const [direction, setDirection] = useState<ConversionDirection | ''>('');
   const [result, setResult] = useState<string | null>(null);
   const [conversionNotice, setConversionNotice] = useState('');
   const [toolError, setToolError] = useState('');
@@ -92,6 +91,5 @@ export default function ConverterWorkbench({ stage }: { stage: StageContent }) {
       </div>
       <div className="workbench-actions"><button className="primary" type="submit">Pretvori</button></div>
     </form>
-    {stage.kind === 'binary' && <details className="workbench-ascii"><summary>Referenčna tabela ASCII · črke A–Z</summary><p>Vse prikazane črke imajo v ASCII in UTF-8 enak osembitni zapis.</p><div className="workbench-ascii-scroll"><table><caption className="sr-only">Črke A do Z z decimalnim in binarnim zapisom ASCII</caption><thead><tr><th scope="col">Črka</th><th scope="col">Decimalno</th><th scope="col">Binarno</th></tr></thead><tbody>{Array.from(alphabet, letter => <tr key={letter}><th scope="row">{letter}</th><td>{letter.charCodeAt(0)}</td><td>{letter.charCodeAt(0).toString(2).padStart(8, '0')}</td></tr>)}</tbody></table></div></details>}
   </section>;
 }

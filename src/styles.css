@@ -171,33 +171,19 @@ progress::-moz-progress-bar { background: var(--accent); }
 
 /* Zaključek in potrditveno okno. */
 .finale { max-width: 1000px; }
-.finale-hero { padding: 1.5rem 0 2rem; }
-.finale-seal { display: block; color: var(--success); margin-bottom: 1rem; }
 .finale h1 { margin: 1rem 0; font-size: clamp(2rem, 4vw, 3.5rem); }
-.finale-hero > p { color: var(--muted); }
 .finale-stats { display: flex; flex-wrap: wrap; gap: 2rem; margin-top: 2rem; }
 .finale-stats > div { display: flex; flex-direction: column; gap: .3rem; }
 .finale-stats strong { color: var(--accent); font-family: var(--code); font-size: 1.8rem; font-weight: 400; }
 .finale-stats span { color: var(--muted); font-size: .875rem; }
-.panel { margin-bottom: 2rem; }
-.panel-top { display: flex; align-items: center; justify-content: space-between; gap: 1rem; padding-bottom: 1rem; border-bottom: 1px solid var(--line); }
-.panel-top h2 { display: flex; gap: .6rem; margin: 0; align-items: center; }
-.file-id { color: var(--quiet); font-family: var(--code); font-size: .7rem; }
-.panel-body { padding-top: 1rem; }
 .findings { list-style: none; padding: 0; margin: 0; }
 .findings li { display: flex; align-items: start; gap: .8rem; margin-bottom: 1rem; }
 .findings svg { color: var(--success); margin-top: .2rem; }
-.limitation { border-radius: var(--panel-radius); display: flex; align-items: start; gap: .8rem; padding: 1rem; margin: 1.4rem 0; background: #17243a; }
-.limitation p { margin: 0; color: var(--muted); }
 .completed-stages { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; }
 .completed-stages > div { display: flex; gap: .6rem; }
 .completed-icon { color: var(--success); }
 .completed-stages strong { font-size: .875rem; font-weight: 500; }
 .completed-stages small { display: block; color: var(--quiet); font-size: .75rem; }
-.learning-summary { margin: 1.5rem 0; color: var(--muted); font-size: .875rem; }
-.learning .panel-body > p:last-child { color: var(--muted); }
-.discussion > p { margin-top: 1rem; display: flex; gap: 1rem; }
-.discussion > p > span { font-family: var(--code); color: var(--accent); font-size: .875rem; }
 .finale-actions { display: flex; flex-wrap: wrap; gap: .8rem; margin: 2rem 0; }
 .reset-dialog { width: calc(100% - 2rem); max-width: 500px; padding: 1.7rem; border: 1px solid var(--line-strong); border-radius: var(--panel-radius); background: var(--surface); color: var(--text); }
 .reset-dialog::backdrop { background: #020712c9; }

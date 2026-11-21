@@ -172,18 +172,39 @@ Izbrana povezava in vnesena domena se morata ujemati. Celoten URL, šolska domen
 
 ## 8. Računalnik govori v ničlah in enicah
 
-**Dokaz:** `01001011 01001100 01001010 01010101 01000011`. Pretvornik in referenčna tabela ASCII pokažeta **`KLJUC`**. Sprejet je tudi `KLJUČ`, ne glede na velikost črk in robne presledke. Izvoz vsebuje pet bajtov, uporablja ASCII in ohranja vrstni red. Presledki med skupinami so ločila in ne del končnega sporočila.
+**Dokaz:** `01001011 01001100 01001010 01010101 01000011`. Izvoz vsebuje pet bajtov v zapisu ASCII. Presledki ločujejo skupine in niso del končnega sporočila. Vrstni red skupin se ohrani.
 
-- Namig 1: »Vsaka skupina osmih bitov predstavlja en znak ASCII. Pretvori vseh pet skupin v istem vrstnem redu.«
-- Namig 2: »Prva skupina 01001011 predstavlja črko K. Preostale skupine pretvori v istem vrstnem redu.«
+**Potek reševanja:** par izbere eno skupino in prebere osem bitov od leve proti desni. Mesta imajo uteži **128, 64, 32, 16, 8, 4, 2, 1**. Pri bitu **1** prišteje utež mesta, pri bitu **0** jo preskoči. Dobljeno decimalno število poišče v zložljivem pregledu ASCII s pari števil in črk A–Z ter si zapiše črko. Ločen učni primer `01000001 = 64 + 1 = 65 → A` pokaže postopek na drugem bajtu.
 
-**Učni cilj:** razumeti binarno predstavitev znakov in osembitne skupine. Pretvornik sprejme presledke ali nove vrstice, nepravilne skupine pa pojasni z napako. Ta primer ni šifriranje. Pravilen odgovor odpre finale; devete uganke ni.
+Pripomoček omogoča pregled posameznega bita in njegovega prispevka, ne izračuna pa skupne vsote ali črke. Oznaka »Skupina pregledana« in števec beležita pregled, ne pravilnosti. V njem ni izbire kodiranja, smeri ali gumba »Pretvori«. Rešitev se sestavi ročno:
+
+| Skupina | Prištete uteži | Decimalno število | Znak ASCII |
+| --- | --- | --- | --- |
+| `01001011` | 64 + 8 + 2 + 1 | 75 | K |
+| `01001100` | 64 + 8 + 4 | 76 | L |
+| `01001010` | 64 + 8 + 2 | 74 | J |
+| `01010101` | 64 + 16 + 4 + 1 | 85 | U |
+| `01000011` | 64 + 2 + 1 | 67 | C |
+
+V edino polje za odgovor v sekciji **ODGOVOR** zgoraj desno par vpiše **`KLJUC`**. Sprejet je tudi `KLJUČ`, ne glede na velikost črk in robne presledke. Na ozkem zaslonu je sekcija pod pripomočkom. Posameznih vsot ali črk ni treba oddajati.
+
+- Namig 1: »Uteži mest od leve proti desni so 128, 64, 32, 16, 8, 4, 2 in 1. Seštej samo uteži mest z enico; ničle ne prispevajo ničesar. Vsota enega bajta določi eno črko v tabeli ASCII.«
+- Namig 2: »Pri prvem bajtu 01001011 so enice na mestih z utežmi 64, 8, 2 in 1. Vsota je 75, v tabeli ASCII pa to pomeni K. Enako obdelaj preostale štiri bajte in ohrani njihov vrstni red.«
+
+**Učni cilj:** povezati mesta v binarnem zapisu s potencami števila dve, ročno izračunati decimalno vrednost bajta ter po dogovorjenem kodiranju ASCII razbrati črko. Vsota dobi pomen znaka šele s tem dogovorom; ta primer ni šifriranje. Pravilen odgovor odpre finale; devete uganke ni. Večnamenski pretvornik ostaja pripomoček druge naloge.
 
 ## Zaključek in pogovor
 
 »Preiskava zaključena« pokaže osem rešenih stopenj, informativni čas in število uporabljenih namigov. Ponoven ogled istega namiga ne poveča števila. Namigi naj podpirajo delo, ne razvrščanja ekip.
 
-Dokazi v poročilu omogočajo naslednje ugotovitve: prepoznano je sumljivo sporočilo in lažna domena; iz simuliranih metapodatkov je razbran čas nastanka fotografije; dnevnik vsebuje uspešen prenos `/zaupno/nacrt.pdf` z računom `ucenec17`; preiskovalna mapa je odklenjena.
+Časovnica poveže tri časovno označene sledi in zaključek igre:
+
+- **09:57:** phishing sporočilo v Lukovem predalu.
+- **10:42:17:** zapisani čas nastanka fotografije `hodnik.jpg`. Čas spremembe **11:15:00** je ločen podatek, ne čas fotografiranja.
+- **10:45:12:** dnevnik potrjuje uspešen prenos `/zaupno/nacrt.pdf` z računom `ucenec17`.
+- **Zdaj:** vseh osem izzivov je rešenih in poročilo je odprto. To je zaključek igre, ne nov zgodovinski dogodek z izmišljenim časom.
+
+Odprto sporočilo skrbnika šole Most z naslovom »Poročilo prevzeto — nadaljujemo preiskavo« je ločen epilog preiskave. Skrbnik opiše odprto poročilo in utišana opozorila, se zahvali za natančno presojo ter preda zbrane sledi šolski varnostni ekipi. Omejitve sklepanja so pojasnjene v samostojnem delu poročila; epilog ni dodatni dokaz o osebi ali vzroku prenosa.
 
 **Ne sklepamo**, da je lastnik tega računa dokazano storilec, da je bilo iz javnih podatkov sestavljeno geslo dejansko uporabljeno pri vdoru ali da prikazani dokazi potrjujejo ves potek napada. Fotografija sama ne pove, kdo je uporabljal račun, časovna bližina dogodkov pa ni dokaz vzroka.
 

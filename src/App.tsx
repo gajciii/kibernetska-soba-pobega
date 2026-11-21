@@ -3,6 +3,8 @@ import type { FormEvent, ReactNode } from 'react';
 import type { AnswerResponse, Bootstrap, Finale, SessionView, StageContent, StageResponse, StageSummary } from '../shared/types';
 import ConverterWorkbench from './ConverterWorkbench';
 import CaesarWorkbench from './CaesarWorkbench';
+import BinaryWorkbench from './BinaryWorkbench';
+import FinaleView from './FinaleView';
 import { Mailbox, TrafficViewer } from './InvestigationViewers';
 import { MetadataDesk } from './EvidenceDesks';
 import { BrowserDesk } from './BrowserDesk';
@@ -31,7 +33,7 @@ function Icon({ name, size = 20 }: { name: IconName; size?: number }) {
 function Explanation({ text }: { text: string }) {
   return <>{text.split(/(\b[a-z0-9-]+(?:\.[a-z0-9-]+)+\b)/gi).map((part, index) => index % 2 === 1 ? <strong className="explanation-domain" key={index}>{part}</strong> : part)}</>;
 }
-const applications: Record<StageContent['kind'], { name: string; icon: IconName }> = { caesar: { name: 'Šifrirnik', icon: 'key' }, encoding: { name: 'Pretvornik', icon: 'terminal' }, phishing: { name: 'Pošta', icon: 'mail' }, password: { name: 'Javni profil', icon: 'shield' }, metadata: { name: 'Datoteke', icon: 'folder' }, logs: { name: 'Omrežni promet', icon: 'terminal' }, domains: { name: 'Brskalnik', icon: 'globe' }, binary: { name: 'Binarni pretvornik', icon: 'terminal' } };
+const applications: Record<StageContent['kind'], { name: string; icon: IconName }> = { caesar: { name: 'Šifrirnik', icon: 'key' }, encoding: { name: 'Pretvornik', icon: 'terminal' }, phishing: { name: 'Pošta', icon: 'mail' }, password: { name: 'Javni profil', icon: 'shield' }, metadata: { name: 'Datoteke', icon: 'folder' }, logs: { name: 'Omrežni promet', icon: 'terminal' }, domains: { name: 'Brskalnik', icon: 'globe' }, binary: { name: 'Bitna konzola', icon: 'terminal' } };
 const base = import.meta.env.BASE_URL;
 function elapsed(session: SessionView | null, now: number) {
   if (!session) return '00:00';
@@ -207,9 +209,10 @@ function Stage({ data, csrf, busy, setBusy, onSession, onData, onNext, onFinale,
       <section className="desktop-window" aria-label={`${app.name} — delovno okno`}>
         <header className="window-toolbar"><div className="window-app"><Icon name={app.icon} size={17}/><strong>{app.name}</strong></div><span className="window-file">PRIMER 404 / {String(stage.id).padStart(2, '0')}</span><span className="window-controls" aria-hidden="true"><i/><i/><i/></span></header>
         <div className="window-body">
-          {stage.kind !== 'encoding' && stage.evidence && <div className="source-evidence"><span>DOKAZ</span><code>{stage.evidence}</code></div>}
+          {stage.kind !== 'encoding' && stage.kind !== 'binary' && stage.evidence && <div className="source-evidence"><span>DOKAZ</span><code>{stage.evidence}</code></div>}
           {stage.kind === 'caesar' && <CaesarWorkbench/>}
-          {['encoding', 'binary'].includes(stage.kind) && <ConverterWorkbench stage={stage}/>}
+          {stage.kind === 'encoding' && <ConverterWorkbench stage={stage}/>}
+          {stage.kind === 'binary' && <BinaryWorkbench evidence={stage.evidence ?? ''}/>}
           {stage.kind === 'phishing' && <Mailbox mails={stage.mails ?? []} answer={answer} onAnswer={setAnswer} disabled={data.solved || busy}/>}
           {stage.kind === 'password' && stage.profile && <ProfileDesk profile={stage.profile}/>}
           {stage.kind === 'metadata' && <MetadataDesk artifacts={stage.artifacts ?? []}/>}
@@ -251,9 +254,6 @@ function Stage({ data, csrf, busy, setBusy, onSession, onData, onNext, onFinale,
   </div>;
 }
 
-function FinaleView({ finale, session, stages, time, headingRef, onReview, onReset }: { finale: Finale; session: SessionView; stages: StageSummary[]; time: string; headingRef: React.RefObject<HTMLHeadingElement | null>; onReview: () => void; onReset: () => void }) {
-  return <div className="finale"><div className="finale-hero"><span className="finale-seal"><Icon name="shield" size={44}/></span><span className="eyebrow">PREISKOVALNA MAPA JE ODKLENJENA</span><h1 ref={headingRef} tabIndex={-1}>{finale.title}</h1><p>Digitalne sledi so povezane. Zdaj veš, kaj dokazi povedo — in kje so njihove meje.</p><div className="finale-stats"><div><strong>8 / 8</strong><span>rešenih stopenj</span></div><div><strong>{time}</strong><span>čas preiskave</span></div><div><strong>{session.hintCount}</strong><span>uporabljenih namigov</span></div></div></div><section className="panel report"><div className="panel-top"><h2><Icon name="folder"/>Zaključno poročilo</h2><span className="file-id">PRIMER 404</span></div><div className="panel-body"><ul className="findings">{finale.findings.map(finding => <li key={finding}><Icon name="check"/><span>{finding}</span></li>)}</ul><div className="limitation"><Icon name="shield"/><p>{finale.limitation}</p></div></div></section><section className="panel learning"><div className="panel-top"><h2>Osem korakov. Nove veščine.</h2></div><div className="panel-body"><div className="completed-stages">{stages.map(stage => <div key={stage.id}><span className="completed-icon"><Icon name="check" size={17}/></span><span><strong>{stage.topic}</strong><small>Stopnja {stage.id} · opravljeno</small></span></div>)}</div><p className="learning-summary">{finale.topics.join(' · ')}</p><p>Binarni zapis je način predstavitve podatkov. Ta primer ni šifriranje.</p></div></section><section className="discussion"><span className="eyebrow">ZA POGOVOR PO PREISKAVI</span>{finale.discussion.map((question, index) => <p key={question}><span>0{index + 1}</span>{question}</p>)}</section><div className="finale-actions"><button className="primary" onClick={onReview}>Ponovno preglej dokaze</button><button className="secondary" onClick={onReset}>Nova preiskava</button></div></div>;
-}
 
 function ResetDialog({ busy, onCancel, onReset }: { busy: boolean; onCancel: () => void; onReset: () => Promise<void> }) {
   const ref = useRef<HTMLDialogElement>(null);

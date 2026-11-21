@@ -279,14 +279,14 @@ const stages: StageContent[] = [
     title: 'Računalnik govori v ničlah in enicah',
     topic: 'Binarni zapis',
     kind: 'binary',
-    intro: 'Preiskovalna mapa je skoraj popolna. Na njenem zadnjem zavihku je ostalo sporočilo, sestavljeno samo iz ničel in enic. Presledki ga razdelijo v skupine; nobena ni daljša ali krajša od osmih mest. Skrbnik je pripisal le: »Računalnik tu še vedno govori z besedami.« Med temi znaki se skriva zadnja koda.',
-    question: 'Katera koda je skrita v zadnjem sporočilu?',
+    intro: 'Zaključno poročilo čaka za zadnjimi zaprtimi vrati arhiva. Skrbnik je ob njih pustil pet bajtov in pripis: »Vsaka enica nekaj šteje. Njeno mesto pove, koliko.« Pet skupin skriva kodo za dostop. Ko vsaka skupina dobi svojo črko, se odpre zadnja mapa.',
+    question: 'Za vsak bajt seštej uteži mest z enico. Vsoto poišči v tabeli ASCII, sestavi kodo in jo vpiši v polje za odgovor.',
     evidence: '01001011 01001100 01001010 01010101 01000011',
-    note: 'Vsako skupino osmih bitov loči s presledkom ali novo vrstico. Pomagaš si lahko tudi s tabelo ASCII za črke A–Z.',
+    note: 'Uteži osmih mest od leve proti desni so 128, 64, 32, 16, 8, 4, 2 in 1. Enica prispeva utež svojega mesta, ničla pa nič. Za vsak bajt posebej seštej prispevke in decimalno vsoto poišči v tabeli ASCII za črke A–Z.',
     investigations: [
-      { id: 'glava', title: 'Glava izvoza: 5 bajtov', text: 'Izvoz vsebuje pet skupin po osem bitov. Med skupinami so samo ločilni presledki; ti niso znaki končnega sporočila.' },
+      { id: 'glava', title: 'Glava izvoza: 5 bajtov', text: 'Izvoz vsebuje pet skupin po osem bitov. Vsako skupino obdelaj posebej; presledki med njimi niso znaki končnega sporočila.' },
       { id: 'format', title: 'Dogovorjeni format: ASCII', text: 'V tem učnem izvozu vsak bajt predstavlja en znak ASCII. Sporočilo je zapisano brez šumnikov. Pri drugih besedilih je treba preveriti, katero znakovno kodiranje uporabljajo.' },
-      { id: 'vrstni-red', title: 'Kontrolna opomba', text: 'Skupine beri od leve proti desni. Biti in črke niso premešani; iskana je ena beseda, ne vsota binarnih števil.' },
+      { id: 'vrstni-red', title: 'Kontrolna opomba', text: 'Bajte beri od leve proti desni in za vsakega poišči eno črko. Uteži seštevaj znotraj posameznega bajta, ne čez vseh pet skupin. Črke ohranijo vrstni red bajtov.' },
     ],
   },
 ];
@@ -301,7 +301,7 @@ const hints: Record<number, [string, string]> = {
   5: ['Med slikami poišči hodnik z rdečim nahrbtnikom in odpri njegove metapodatke. Čas poznejše spremembe ni nujno čas fotografiranja.', 'Pri datoteki hodnik.jpg primerjaj polji Čas nastanka posnetka in Čas spremembe. V odgovor prepiši uro in minute iz prvega.'],
   6: ['V iskalnik »Besedilni filter« vnesi ime iskane datoteke. Pri preostalih paketih primerjaj povezane strežniške zapise: uspešen prenos ni isto kot ogled ali zavrnjen poskus.', 'V ločenem aplikacijskem dnevniku poišči vrstico, v kateri so hkrati DOWNLOAD, /zaupno/nacrt.pdf in SUCCESS.'],
   7: ['Preberi celotnega gostitelja med https:// in prvo naslednjo poševnico ter ga primerjaj s potrjenima šolskima gostiteljema. Sam pojav imena most.si še ne potrjuje pripadnosti šoli.', 'Če je most.si na začetku daljšega gostitelja, preveri, katere tuje domene je poddomena. Če je za poševnico, je del poti. Vnesi tujo domeno izbranega ponaredka, brez poddomene most.si ali poti.'],
-  8: ['Vsaka skupina osmih bitov predstavlja en znak ASCII. Pretvori vseh pet skupin v istem vrstnem redu.', 'Prva skupina 01001011 predstavlja črko K. Preostale skupine pretvori v istem vrstnem redu.'],
+  8: ['Uteži mest od leve proti desni so 128, 64, 32, 16, 8, 4, 2 in 1. Seštej samo uteži mest z enico; ničle ne prispevajo ničesar. Vsota enega bajta določi eno črko v tabeli ASCII.', 'Pri prvem bajtu 01001011 so enice na mestih z utežmi 64, 8, 2 in 1. Vsota je 75, v tabeli ASCII pa to pomeni K. Enako obdelaj preostale štiri bajte in ohrani njihov vrstni red.'],
 };
 
 const explanations: Record<number, string> = {
@@ -312,7 +312,7 @@ const explanations: Record<number, string> = {
   5: 'Rdeč nahrbtnik na hodniku je pomagal prepoznati pravo fotografijo med drugimi slikami. Polje Čas nastanka posnetka beleži 10:42:17, polje Čas spremembe pa 11:15:00. Poznejše urejanje ali ponovno shranjevanje lahko spremeni čas datoteke, zato 11:15 ne pomeni nujno časa fotografiranja. Sam zapis spremembe ne pove, kaj je bilo spremenjeno. Metapodatki lahko manjkajo ali so spremenjeni; so sled za preverjanje, ne nezmotljiv dokaz.',
   6: 'Paketni pregled in aplikacijski dnevnik sta različna vira. Šifrirani TLS-paketi ne razkrijejo računa ali poti; tukaj je njuna povezava pripravljena učna korelacija. Ločen dnevniški zapis ob 10:45:12 potrjuje uspešen prenos /zaupno/nacrt.pdf z računom ucenec17. Zavrnjen prenos, uspešen ogled, prenos druge datoteke in TCP ACK niso enak dokaz. Zapis potrjuje uporabo računa, sam pa ne dokazuje, katera oseba je bila za tipkovnico.',
   7: 'Domnevni arhiv na most.si.arhiv-nacrtov.example pripada tuji domeni arhiv-nacrtov.example; most.si je le njena zavajajoča poddomena. Podobno zapisani most-si.example je druga tuja domena. Pri prijava.example/most.si/prijava pa je tuja domena prijava.example, šolsko ime je samo del poti. Potrjena gostitelja sta most.si in ucilnica.most.si; dodatek ?jezik=sl ne spremeni gostitelja. Izbira ponaredka je utemeljena z njegovo tujo domeno. Kopirana podoba in HTTPS sama ne potrjujeta pripadnosti šoli. Razčlenitev velja za te naslove; registrirana domena ni vedno sestavljena iz zadnjih dveh delov.',
-  8: 'Binarni zapis je način predstavitve podatkov. V tem primeru pet bajtov predstavlja pet znakov ASCII. Šele ta dogovor daje številom pomen črk; druga kodiranja lahko iste bajte razložijo drugače. Ta primer ni šifriranje. Končna preiskovalna mapa je odprta.',
+  8: 'Mesta v bajtu imajo uteži 128, 64, 32, 16, 8, 4, 2 in 1. Enica prispeva pripadajočo utež, ničla pa nič; seštevek je decimalna vrednost bajta. Tabela ASCII to vrednost poveže z znakom. Pet bajtov tako da pet črk, ki ohranijo prvotni vrstni red. Gre za predstavitev podatkov, ne za šifriranje; druga znakovna kodiranja lahko iste bajte razložijo drugače. Končno poročilo je odprto.',
 };
 
 const feedback: Record<number, string> = {
@@ -323,7 +323,7 @@ const feedback: Record<number, string> = {
   5: 'Še ni pravilno. Preveri fotografijo hodnika z rdečim nahrbtnikom in loči nastanek posnetka od poznejše spremembe datoteke. Odgovori v obliki HH:MM.',
   6: 'Še ni pravilno. Podatke poišči v povezanem aplikacijskem zapisu. Hkrati preveri dejanje, natančno pot datoteke in rezultat; ogled ter zavrnjen prenos ne zadostujeta.',
   7: 'Še ni pravilno. Izberi ponarejeno povezavo in vnesi tujo domeno, ki ji pripada. Ne prepisuj celotnega URL-ja, zavajajoče poddomene most.si ali poti.',
-  8: 'Še ni pravilno. Preveri vseh pet osembitnih skupin in vrstni red črk v rezultatu pretvorbe.',
+  8: 'Še ni pravilno. Pri vsakem bajtu prištej samo uteži mest z enico, nato preveri decimalno vsoto v tabeli ASCII. Vpiši pet črk v vrstnem redu bajtov, brez vmesnih presledkov.',
 };
 
 export function getStage(id: number): StageContent | undefined {
@@ -395,6 +395,7 @@ export function validateAnswer(id: number, answer: unknown): boolean {
 
 export const finale: Finale = {
   title: 'Preiskava zaključena',
+  lead: 'Alarm je utihnil. Dokazi so ostali.',
   findings: [
     'Sumljivo sporočilo in lažna domena sta prepoznana.',
     'Iz prikazanih metapodatkov je razbran čas nastanka fotografije: 10:42.',
@@ -407,4 +408,19 @@ export const finale: Finale = {
     'Kateri podatek je bil najbolj prepričljiv dokaz in kakšne so njegove omejitve?',
     'Kaj bi lahko šola in uporabniki naredili za boljšo zaščito?',
   ],
+  timeline: [
+    { time: '09:57', title: 'Sumljivo sporočilo v predalu', detail: 'V Lukovem predalu je sporočilo z zahtevo po geslu in enkratni kodi ter grožnjo blokade računa.' },
+    { time: '10:42:17', title: 'Zapisani čas fotografije', detail: 'Fotografija hodnika z rdečim nahrbtnikom ima zapisan čas nastanka 10:42:17 in čas spremembe 11:15:00.' },
+    { time: '10:45:12', title: 'Uspešen prenos dokumenta', detail: 'Aplikacijski dnevnik beleži uspešen prenos /zaupno/nacrt.pdf z računom ucenec17.' },
+    { time: 'Zdaj', title: 'Zaključno poročilo je odprto', detail: 'Vseh osem izzivov je rešenih in zbrane sledi so pripravljene za predajo šolskemu skrbniku.' },
+  ],
+  dispatch: {
+    sender: 'Skrbnik šole Most',
+    subject: 'Poročilo prevzeto — nadaljujemo preiskavo',
+    paragraphs: [
+      'Na mojem zaslonu je utihnilo še zadnje opozorilo. Ob njem je odprto tvoje poročilo: vsak pomemben zapis ima čas, vir in mesto v zgodbi.',
+      'Hvala za vztrajnost in za vsako podrobnost, ki jo preveriš, preden ji zaupaš. Zbrane sledi prevzema šolska varnostna ekipa; jaz pa za danes zapiram svojo konzolo.',
+    ],
+  },
+  closing: 'Tvoj del preiskave je končan. Ohrani navado: preveri, preden zaupaš.',
 };

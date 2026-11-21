@@ -83,8 +83,12 @@ export interface StageResponse {
 export interface AnswerResponse { correct: boolean; message: string; explanation?: string; passwordVerified?: boolean; session: SessionView }
 export interface Finale {
   title: string;
+  lead: string;
   findings: string[];
   limitation: string;
   topics: string[];
   discussion: string[];
+  timeline: { time: string; title: string; detail: string }[];
+  dispatch: { sender: string; subject: string; paragraphs: string[] };
+  closing: string;
 }

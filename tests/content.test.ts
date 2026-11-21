@@ -340,6 +340,60 @@ describe('razširjeni dokazi ostanejo skladni z obstoječimi rešitvami', () => 
     expect(() => hexToText(`${evidence} F`)).toThrow('natanko dva znaka');
     expect(() => hexToText(`${evidence} GG`)).toThrow('samo števke');
   });
+
+  it('ročno seštevanje uteži vsakega bajta vodi do kode ASCII, ne do številskega odgovora', () => {
+    const stage = getStage(8)!;
+    const weights = Array.from({ length: 8 }, (_, index) => 2 ** (7 - index));
+    expect(stage.note?.match(/\d+/gu)?.map(Number)).toEqual(weights);
+    expect(getHint(8, 1)?.match(/\d+/gu)?.map(Number)).toEqual(weights);
+    expect(stage.note).toContain('ASCII');
+    const bytes = stage.evidence!.split(' ');
+    const values = bytes.map(byte => {
+      expect(byte).toMatch(/^[01]{8}$/u);
+      return [...byte].reduce((sum, bit, index) => sum + (bit === '1' ? weights[index] : 0), 0);
+    });
+    const code = String.fromCodePoint(...values);
+    expect(validateAnswer(8, code)).toBe(true);
+    expect(validateAnswer(8, values.join(' '))).toBe(false);
+    expect(validateAnswer(8, values.reduce((sum, value) => sum + value, 0))).toBe(false);
+    expect(validateAnswer(8, [...code].reverse().join(''))).toBe(false);
+    expect(JSON.stringify(stage)).not.toMatch(/\bKLJU[CČ]\b|correctAnswer|isCorrect/iu);
+  });
+});
+
+describe('zaključek povezuje preverljive sledi in ločen epilog', () => {
+  it('časovnico uredi po času ter ohrani čase in podatke iz prvotnih dokazov', () => {
+    const phishing = getStage(3)!.mails!.find(mail => mail.id === 'B')!;
+    const photo = getStage(5)!.artifacts!.find(artifact => artifact.id === 'hodnik')!;
+    const shotTime = /Čas nastanka posnetka: [^\n]+ (\d{2}:\d{2}:\d{2})/u.exec(photo.metadata)![1];
+    const modifiedTime = /Čas spremembe: [^\n]+ (\d{2}:\d{2}:\d{2})/u.exec(photo.metadata)![1];
+    const transfer = getStage(6)!.logs!.find(log => log.event === 'DOWNLOAD' && log.file === '/zaupno/nacrt.pdf' && log.result === 'SUCCESS')!;
+    const historical = finale.timeline.filter(event => event.time !== 'Zdaj');
+    expect(historical.map(event => event.time)).toEqual([phishing.time, shotTime, transfer.time]);
+    const seconds = historical.map(event => {
+      expect(event.time).toMatch(/^\d{2}:\d{2}(?::\d{2})?$/u);
+      const [hours, minutes, seconds = 0] = event.time.split(':').map(Number);
+      return hours * 3600 + minutes * 60 + seconds;
+    });
+    expect(seconds).toEqual([...seconds].sort((left, right) => left - right));
+    expect(historical[1].detail).toContain(shotTime);
+    expect(historical[1].detail).toContain(modifiedTime);
+    expect(historical[2].detail).toContain(transfer.file);
+    expect(historical[2].detail).toContain(transfer.account);
+    expect(historical.every(event => event.title && event.detail)).toBe(true);
+  });
+
+  it('oddeli zaključek igre in epilog od časa incidenta ter ohrani pojasnilo omejitev', () => {
+    expect(finale.timeline.filter(event => event.time === 'Zdaj')).toEqual([finale.timeline.at(-1)]);
+    expect(finale.timeline.at(-1)!.detail.trim()).not.toBe('');
+    expect(finale.limitation).toMatch(/uporabo računa, ne identitete osebe/u);
+    expect(finale.dispatch.sender).toMatch(/skrbnik/iu);
+    expect(finale.dispatch.subject.trim()).not.toBe('');
+    expect(finale.dispatch.paragraphs.length).toBeGreaterThan(0);
+    expect(finale.dispatch.paragraphs.every(paragraph => paragraph.trim().length > 0)).toBe(true);
+    expect(finale.closing.trim()).not.toBe('');
+    expect(getStage(stageSummaries.length + 1)).toBeUndefined();
+  });
 });
 
 describe('ločeno razkrivanje učne vsebine', () => {
