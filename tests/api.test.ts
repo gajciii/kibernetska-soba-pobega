@@ -159,8 +159,8 @@ describe('anonimne seje in zaščita API-ja', () => {
     await team.agent.post('/api/reset').send({}).expect(403);
   });
 
-  it('ne streže izvajalkinega vodiča, strežniške kode ali konfiguracije', async () => {
-    for (const path of ['/VODNIK_IZVAJALKE.md', '/server/content.ts', '/.env', '/package.json']) {
+  it('ne streže vodiča za izvajalca, strežniške kode ali konfiguracije', async () => {
+    for (const path of ['/VODNIK_IZVAJALCA.md', '/server/content.ts', '/.env', '/package.json']) {
       const response = await request(app).get(path).expect(404);
       expect(response.text).not.toContain('BRUCOVANJE');
       expect(response.text).not.toContain('DATABASE_URL');

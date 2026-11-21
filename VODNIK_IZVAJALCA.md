@@ -2,7 +2,7 @@
 
 To je gradivo za izvajalca. Vsebuje rešitve in ni del javne aplikacije. Ne premakni ga v `public/` ali `dist/client/`. V javnem repozitoriju je izvorna koda skupaj z rešitvami seveda dostopna; za igro uporabljaj naslov aplikacije.
 
-Delavnica je izmišljena izobraževalna simulacija za srednješolce. Dvojica uporablja en računalnik in isti brskalnik, brez registracije in zunanjih spletnih orodij. Vmesnik igralca nagovarja v ednini tudi pri delu v paru; ta vodič opisuje izvedbo delavnice z dvojicami. Igralca sta preiskovalca dogodka na šoli Piramida. Že na začetku vesta, da iščeta kodno ime projekta, ki mu pripada preneseni načrt `/zaupno/nacrt.pdf`. Osem ugank vodi do imena **BRUCOVANJE**.
+Delavnica je izmišljena izobraževalna simulacija. Dvojica uporablja en računalnik in isti brskalnik, brez registracije in zunanjih spletnih orodij. Vmesnik igralca nagovarja v ednini tudi pri delu v paru; ta vodič opisuje izvedbo delavnice z dvojicami. Igralca sta preiskovalca dogodka na šoli Piramida. Že na začetku vesta, da iščeta kodno ime projekta, ki mu pripada preneseni načrt `/zaupno/nacrt.pdf`. Osem ugank vodi do imena **BRUCOVANJE**.
 
 ## Rdeča nit zgodbe
 

@@ -4,7 +4,7 @@ Iz šolskega arhiva je bil prenesen zaupni načrt. Skrbnik ima nenavadno sporoč
 
 ## Namen
 
-Slovenska izobraževalna soba pobega za srednješolce, predvidoma **45–60 minut v paru**. Obravnava Cezarjevo šifro, kodiranja, phishing, gesla, metapodatke, omrežne dnevnike, domene in binarni zapis. Šola Piramida, osebe in dokazi so izmišljeni; igra ne izvaja pravih vdorov ali prijav v tuje račune.
+Slovenska izobraževalna soba pobega, predvidoma **45–60 minut v paru**. Obravnava Cezarjevo šifro, kodiranja, phishing, gesla, metapodatke, omrežne dnevnike, domene in binarni zapis. Šola Piramida, osebe in dokazi so izmišljeni; igra ne izvaja pravih vdorov ali prijav v tuje račune.
 
 Registracija ni potrebna. Obvezno je ime skupine, ki je javno na lestvici, zato izberi izmišljeno oznako. Napredek se shranjuje v PostgreSQL in nadaljuje v istem brskalniku. Lestvica primerja rešene izzive, nato manj namigov in krajši čas; prejšnji rezultati ostanejo tudi po ponastavitvi.
 
@@ -42,9 +42,7 @@ Express streže aplikacijo in API v enem procesu. [Navodila za postavitev](docs/
 
 ## Gradivo
 
-[Vodič za izvajalca](VODNIK_IZVAJALKE.md) vsebuje potek delavnice, namige, razlage in rešitve. Namenjen je pripravi izvajalca.
-
-**Avtorica: Gaja Gujt.**
+[Vodič za izvajalca](VODNIK_IZVAJALCA.md) vsebuje potek delavnice, namige, razlage in rešitve. Namenjen je pripravi izvajalca.
 
 ## Rešitve
 

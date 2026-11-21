@@ -1,6 +1,6 @@
 # Postavitev in vzdrževanje Operacije 404
 
-[Kratek opis in zagon](../README.md) · [Vodič za izvajalca z rešitvami](../VODNIK_IZVAJALKE.md)
+[Kratek opis in zagon](../README.md) · [Vodič za izvajalca z rešitvami](../VODNIK_IZVAJALCA.md)
 
 Ukaze izvajaj iz korena repozitorija. Dogovorjeni javni naslov je [https://escaperoom.feri.um.si](https://escaperoom.feri.um.si), lestvica pa [https://escaperoom.feri.um.si/lestvica](https://escaperoom.feri.um.si/lestvica). Ob preverjanju DNS še ni bil dosegljiv. Lokalni razvoj uporablja [http://localhost:5173](http://localhost:5173).
 
