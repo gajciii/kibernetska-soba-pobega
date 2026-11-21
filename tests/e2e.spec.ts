@@ -439,7 +439,7 @@ test('uvodna svetloba sledi kazalcu; naloge imajo navodilo in stalni odgovor', a
   await submit(page, 'MOST'); await next(page);
   await expect(page.locator('.encoding-story')).toBeVisible();
   await expect(page.getByLabel('Odgovor', { exact: true })).toBeVisible();
-  await expect(page.locator('.task-instruction')).toBeVisible();
+  await expect(page.locator('.task-instruction')).toHaveCount(0);
   await page.reload();
   await page.getByRole('button', { name: 'Nadaljuj preiskavo', exact: true }).click();
   await expect(page.getByRole('heading', { name: 'Kaj se skriva za čudnimi znaki?', exact: true })).toBeVisible();
