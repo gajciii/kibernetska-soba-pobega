@@ -92,7 +92,6 @@ export default function Landing({ session, busy, onStart, onContinue, onReset, h
         <p className="landing-save-note">Brez registracije. Napredek se shrani v tem brskalniku.</p>
       </form>}
       <ul className="landing-facts" aria-label="O delavnici"><li><strong>8</strong> izzivov</li><li>Delo v paru</li><li><strong>45–60</strong> minut</li></ul>
-      <p className="landing-simulation">Učna simulacija. Vsi dokazi in pripomočki so tukaj.</p>
     </div>
     <svg className="landing-wave" viewBox="0 0 1440 110" preserveAspectRatio="none" aria-hidden="true"><path d="M0 50C170 88 300 88 460 49C630 8 780 8 950 48C1130 91 1290 86 1440 44V110H0Z"/></svg>
   </main>;
