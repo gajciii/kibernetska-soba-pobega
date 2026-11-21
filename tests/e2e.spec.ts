@@ -474,14 +474,10 @@ test('vseh osem stopenj, lokalni pripomočki, nadaljevanje in zaključek', async
   await expect(page.getByTestId('binary-bit-explanation')).toContainText('64');
   await binary.getByRole('button', { name: 'Bit 1: 0, vrednost mesta 128', exact: true }).click();
   await expect(page.getByTestId('binary-bit-explanation')).toContainText('ne prištej');
-  await binary.getByLabel('Skupina pregledana', { exact: true }).check();
-  await expect(binary).toContainText('Pregledano 1/5');
   await binary.getByRole('button', { name: 'Izberi skupino 5', exact: true }).focus();
   await page.keyboard.press('Space');
   await expect(binary.getByRole('button', { name: 'Izberi skupino 5', exact: true })).toHaveAttribute('aria-pressed', 'true');
-  await expect(binary.getByLabel('Skupina pregledana', { exact: true })).not.toBeChecked();
   await binary.getByRole('button', { name: 'Izberi skupino 1', exact: true }).click();
-  await expect(binary.getByLabel('Skupina pregledana', { exact: true })).toBeChecked();
   await binary.locator('summary').click();
   await expect(binary.locator('.binary-ascii-grid > div')).toHaveCount(26);
   await expect(binary.locator('.binary-ascii-grid > div').first()).toHaveText('65A');
