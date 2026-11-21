@@ -12,6 +12,7 @@ import { PasswordPatterns, ProfileDesk } from './ProfileDesk';
 import Landing from './Landing';
 import AmbientBackground from './AmbientBackground';
 import LeaderboardView from './LeaderboardView';
+import NotFound from './NotFound';
 
 type IconName = 'lock' | 'check' | 'clock' | 'folder' | 'key' | 'mail' | 'shield' | 'image' | 'terminal' | 'globe' | 'bulb' | 'reset' | 'close';
 function Icon({ name, size = 20 }: { name: IconName; size?: number }) {
@@ -37,8 +38,13 @@ function Explanation({ text }: { text: string }) {
 }
 const applications: Record<StageContent['kind'], { name: string; icon: IconName }> = { caesar: { name: 'Šifrirnik', icon: 'key' }, encoding: { name: 'Pretvornik', icon: 'terminal' }, phishing: { name: 'Pošta', icon: 'mail' }, password: { name: 'Javni profil', icon: 'shield' }, metadata: { name: 'Datoteke', icon: 'folder' }, logs: { name: 'Omrežni promet', icon: 'terminal' }, domains: { name: 'Brskalnik', icon: 'globe' }, binary: { name: 'Bitna konzola', icon: 'terminal' } };
 const base = import.meta.env.BASE_URL;
-type PageView = 'intro' | 'stage' | 'finale' | 'leaderboard';
-const isLeaderboardPath = () => window.location.pathname.replace(/\/$/u, '') === `${base}lestvica`.replace(/\/$/u, '');
+type PageView = 'intro' | 'stage' | 'finale' | 'leaderboard' | 'not-found';
+function pathView(): 'intro' | 'leaderboard' | 'not-found' {
+  const path = window.location.pathname.replace(/\/$/u, '');
+  if (path === base.replace(/\/$/u, '')) return 'intro';
+  if (path === `${base}lestvica`.replace(/\/$/u, '')) return 'leaderboard';
+  return 'not-found';
+}
 class RequestError extends Error {
   constructor(message: string, readonly status: number, readonly retryAfterSeconds?: number) {
     super(message);
@@ -71,8 +77,8 @@ async function request<T>(path: string, csrf: string, body?: unknown): Promise<T
 
 export default function App() {
   const [boot, setBoot] = useState<Bootstrap | null>(null);
-  const [view, setView] = useState<PageView>(() => isLeaderboardPath() ? 'leaderboard' : 'intro');
-  const gameView = useRef<Exclude<PageView, 'leaderboard'>>('intro');
+  const [view, setView] = useState<PageView>(pathView);
+  const gameView = useRef<'intro' | 'stage' | 'finale'>('intro');
   const [stageData, setStageData] = useState<StageResponse | null>(null);
   const [finale, setFinale] = useState<Finale | null>(null);
   const [busy, setBusy] = useState(false);
@@ -88,15 +94,17 @@ export default function App() {
     catch (e) { setError((e as Error).message); }
     finally { setBusy(false); }
   }, []);
-  useEffect(() => { void bootstrap(); }, [bootstrap]);
+  const needsBootstrap = view !== 'not-found' && !boot;
+  useEffect(() => { if (needsBootstrap) void bootstrap(); }, [bootstrap, needsBootstrap]);
   useEffect(() => {
-    const onPopState = () => { setView(isLeaderboardPath() ? 'leaderboard' : gameView.current); };
+    const onPopState = () => { const route = pathView(); setView(route === 'intro' ? gameView.current : route); };
     window.addEventListener('popstate', onPopState);
     return () => window.removeEventListener('popstate', onPopState);
   }, []);
   useEffect(() => { const timer = window.setInterval(() => setNow(Date.now()), 1000); return () => window.clearInterval(timer); }, []);
-  useEffect(() => { headingRef.current?.focus(); }, [view, stageData?.stage.id]);
-  function changeView(next: PageView) {
+  useEffect(() => { headingRef.current?.focus(); }, [view, stageData?.stage.id, needsBootstrap]);
+  useEffect(() => { document.title = view === 'not-found' ? '404 · Stran ni najdena · Operacija 404' : 'Operacija 404 · Kibernetska soba pobega'; }, [view]);
+  function changeView(next: Exclude<PageView, 'not-found'>) {
     const path = next === 'leaderboard' ? `${base}lestvica` : base;
     if (window.location.pathname !== path) window.history.pushState({}, '', path);
     if (next !== 'leaderboard') gameView.current = next;
@@ -151,7 +159,7 @@ export default function App() {
     }
     else changeView('intro');
   };
-  return <div className={`app-shell ${view === 'intro' ? 'is-landing' : view === 'finale' ? 'is-finale' : view === 'leaderboard' ? 'is-leaderboard' : 'is-workspace'}`}>
+  return <div className={`app-shell ${view === 'intro' || view === 'not-found' ? 'is-landing' : view === 'finale' ? 'is-finale' : view === 'leaderboard' ? 'is-leaderboard' : 'is-workspace'}`}>
     <AmbientBackground/>
     <a className="skip-link" href="#main">Preskoči na vsebino</a>
     <header className="topbar">
@@ -165,8 +173,8 @@ export default function App() {
         <span className="workshop-badge">UČNA SIMULACIJA</span>
       </div>}</div>
     </header>
-    {error && <div className="global-error" role="alert"><span>{error}</span>{!boot ? <button onClick={() => void bootstrap()} disabled={busy}>Poskusi znova</button> : <button aria-label="Zapri obvestilo" onClick={() => setError('')}><Icon name="close"/></button>}</div>}
-    {!boot ? <main id="main" className="loading-screen"><span className="loading-symbol"><Icon name="shield" size={36}/></span><h1>{busy ? 'Pripravljamo preiskovalno mapo …' : 'Povezava ni uspela'}</h1></main> : view === 'intro' ?
+    {error && view !== 'not-found' && <div className="global-error" role="alert"><span>{error}</span>{!boot ? <button onClick={() => void bootstrap()} disabled={busy}>Poskusi znova</button> : <button aria-label="Zapri obvestilo" onClick={() => setError('')}><Icon name="close"/></button>}</div>}
+    {view === 'not-found' ? <NotFound headingRef={headingRef} onHome={() => changeView('intro')}/> : !boot ? <main id="main" className="loading-screen"><span className="loading-symbol"><Icon name="shield" size={36}/></span><h1>{busy ? 'Pripravljamo preiskovalno mapo …' : 'Povezava ni uspela'}</h1></main> : view === 'intro' ?
       <Landing session={session} nextStartAt={boot.nextStartAt} now={now} busy={busy} onStart={start} onContinue={continueInvestigation} onReset={() => setResetOpen(true)} headingRef={headingRef}/>
       : view === 'leaderboard' ? <LeaderboardView headingRef={headingRef} onBack={leaveLeaderboard}/>
       : view === 'stage' && stageData ? <Stage key={stageData.stage.id} data={stageData} csrf={csrf} busy={busy} setBusy={setBusy} onSession={updateSession} onData={setStageData} onNext={() => stageData.stage.id === 8 ? void openFinale() : void openStage(stageData.stage.id + 1)} onFinale={openFinale} headingRef={headingRef}

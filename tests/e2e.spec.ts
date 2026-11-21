@@ -48,6 +48,41 @@ async function next(page: Page) {
   expect(story!.y + story!.height).toBeLessThanOrEqual(workbench!.y);
 }
 
+test('stran 404 ohrani slog, zgodovino in shranjeno preiskavo', async ({ page }, testInfo) => {
+  const sessionRequests: string[] = [];
+  page.on('request', request => { if (request.url().includes('/api/session')) sessionRequests.push(request.url()); });
+  const response = await page.goto('/izgubljena/sled');
+  expect(response?.status()).toBe(404);
+  await expect(page.getByTestId('not-found')).toBeVisible();
+  await expect(page).toHaveTitle('404 · Stran ni najdena · Operacija 404');
+  await expect(page.getByRole('heading', { level: 1 })).toContainText('Ta sled se tu konča.');
+  await expect(page.getByRole('heading', { level: 1 })).toBeFocused();
+  await expect(page.getByTestId('ambient-background')).toBeVisible();
+  expect(sessionRequests).toHaveLength(0);
+  await checkLayout(page);
+  await page.mouse.move(180, 280);
+  await page.screenshot({ path: `.local/qa-${testInfo.project.name}-404.png`, fullPage: true });
+  const home = page.getByRole('link', { name: 'Na začetek', exact: true });
+  await home.focus();
+  await page.keyboard.press('Enter');
+  await expect(page.getByTestId('landing')).toBeVisible();
+  await expect(page).toHaveURL('/');
+  await page.goBack();
+  await expect(page.getByTestId('not-found')).toBeVisible();
+  await page.goForward();
+  await expect(page.getByTestId('landing')).toBeVisible();
+  await begin(page, 'Preiskava po izgubljeni sledi');
+  await submit(page, 'PIRAMIDA');
+  await next(page);
+  await page.goto('/neobstojeca-stran');
+  await expect(page.getByTestId('not-found')).toBeVisible();
+  await page.emulateMedia({ reducedMotion: 'reduce' });
+  await expect(page.getByTestId('ambient-light')).toHaveCount(0);
+  await page.getByRole('link', { name: 'Na začetek', exact: true }).click();
+  await page.getByRole('button', { name: 'Nadaljuj preiskavo', exact: true }).click();
+  await expect(page.getByRole('heading', { name: 'Kaj se skriva za čudnimi znaki?', exact: true })).toBeVisible();
+});
+
 test('vseh osem stopenj, lokalni pripomočki, nadaljevanje in zaključek', async ({ page }, testInfo) => {
   const foreignRequests: string[] = [];
   const browserErrors: string[] = [];

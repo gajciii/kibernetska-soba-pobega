@@ -1,0 +1,12 @@
+.not-found .landing-content { max-width: 1000px; }
+.not-found .landing-eyebrow { margin-bottom: 1rem; }
+.not-found-code { display: block; color: #b9ccef; font-size: clamp(8rem, 22vw, 18rem); font-weight: 500; line-height: .95; letter-spacing: -.07em; }
+.not-found-code > span { color: #86a9e5; }
+.not-found-caption { display: block; margin-top: 1.5rem; color: #edf3ff; font-size: clamp(1.65rem, 4vw, 3rem); font-weight: 400; line-height: 1.25; letter-spacing: -.035em; }
+.not-found-title.ambient-heading-light span { color: #fff; }
+.not-found .landing-story { margin: 1.5rem 0 2rem; }
+.not-found .landing-start-button { text-decoration: none; max-width: 280px; }
+
+@media (forced-colors: active) {
+  .not-found-code, .not-found-code > span, .not-found-caption { color: CanvasText; }
+}

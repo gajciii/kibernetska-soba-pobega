@@ -153,7 +153,13 @@ export function createApp(pool: pg.Pool, config: AppConfig, now: () => number = 
   app.use('/api', (_req, _res) => { throw new HttpError(404, 'Ta zahteva ne obstaja.'); });
   app.use(express.static(resolve('dist/client'), { index: 'index.html', dotfiles: 'deny', etag: true }));
   app.get('/lestvica', (_req, res) => res.sendFile(resolve('dist/client/index.html')));
-  app.use((_req, res) => res.status(404).type('text').send('Stran ne obstaja. Vrni se na začetek preiskave.'));
+  app.use((req, res) => {
+    res.status(404);
+    if ((req.method === 'GET' || req.method === 'HEAD') && req.get('Accept')?.includes('text/html')) {
+      res.set('Cache-Control', 'no-store');
+      res.sendFile(resolve('dist/client/index.html'));
+    } else res.type('text').send('Stran ne obstaja. Vrni se na začetek preiskave.');
+  });
   app.use((error: unknown, _req: express.Request, res: express.Response, _next: express.NextFunction) => {
     if (error instanceof RateLimitError) {
       res.set('Retry-After', String(error.retryAfterSeconds));
