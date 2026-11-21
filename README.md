@@ -29,7 +29,7 @@ npm run dev
 
 `db:local` ustvari razvojno bazo na `127.0.0.1:55432`; podatki ostanejo v `.local/postgres/`. Če ne najde PostgreSQL, nastavi `PG_BIN` na mapo z njegovimi orodji. Bazo ustaviš z `npm run db:local:stop`. `.env.example` vsebuje pripravljene lokalne nastavitve; datoteke `.env` ne objavljaj.
 
-## Postavitev na strežnik
+## Vzpostavitev na strežnik
 
 Projekt uporablja React, TypeScript, Vite in Express. Za produkcijo pripravi trajni PostgreSQL, `.env` s pravim `APP_ORIGIN`, HTTPS in varen piškotek, nato:
 
@@ -38,7 +38,7 @@ npm run build
 npm start
 ```
 
-Express streže aplikacijo in API v enem procesu. [Navodila za postavitev](docs/DEPLOYMENT.md) vsebujejo konfiguracijo, systemd/Nginx, GitHub Actions, preverjanje, kopije in obnovitev. Samodejna objava zahteva pripravljen strežnik in nastavitev `ENABLE_DEPLOY=true`. Strežnik preverja odgovore; med začetkoma iger v istem brskalniku zahteva 60 sekund in dodatno omejuje prepogoste zahteve.
+Express streže aplikacijo in API v enem procesu. [Navodila za vzpostavitev](docs/DEPLOYMENT.md) vsebujejo konfiguracijo, systemd/Nginx, GitHub Actions, preverjanje, kopije in obnovitev. Samodejna objava zahteva pripravljen strežnik in nastavitev `ENABLE_DEPLOY=true`. Strežnik preverja odgovore; med začetkoma iger v istem brskalniku zahteva 60 sekund in dodatno omejuje prepogoste zahteve.
 
 ## Gradivo
 

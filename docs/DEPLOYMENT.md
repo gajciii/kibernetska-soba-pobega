@@ -1,4 +1,4 @@
-# Postavitev in vzdrževanje Operacije 404
+# Vzpostavitev in vzdrževanje Operacije 404
 
 [Kratek opis in zagon](../README.md) · [Vodič za izvajalca z rešitvami](../VODNIK_IZVAJALCA.md)
 
@@ -27,13 +27,13 @@ npm start
 
 Odpri [http://localhost:3000](http://localhost:3000). Express streže `dist/client` in API v enem procesu. Baza se inicializira oziroma migrira ob zagonu; ročno lahko po buildu izvedeš `npm run db:init`. V produkciji uporabi `NODE_ENV=production`, HTTPS, varen piškotek in potrjeni `APP_ORIGIN` po spodnjih navodilih. Aplikacija se namesti v koren domene, ne v podmapo.
 
-## Produkcijska postavitev
+## Produkcijska vzpostavitev
 
 **Pripravljeno je preverjanje v GitHub Actions in nastavljiva SSH-objava. Povezava pipelinea s produkcijskim strežnikom še ni preverjena.** Javni naslov je `https://escaperoom.feri.um.si`; dostopi in strežniške nastavitve potrebujejo pregled. Aplikacija pričakuje namestitev v korenu domene; `APP_ORIGIN` določa njen polni izvor (protokol, gostitelj in po potrebi port), ne podmape.
 
 ### 1. Strežnik in trajni podatki
 
-Potreben je Linux z Node.js 24 LTS (najmanj 24.13.0), npm, Bash, tar, curl, util-linux (`flock`), OpenSSH, systemd in orodji PostgreSQL (`pg_dump`, `pg_restore`). PostgreSQL je samostojna lokalna ali upravljana storitev; podprta je različica 14 ali novejša, za novo postavitev izberi vzdrževano različico 16 ali novejšo. Različica odjemalca `pg_dump` mora podpirati različico strežnika. Nobena storitev ne zahteva Dockerja. Strežnik uredi proces aplikacije, DNS, HTTPS in obratni posrednik. Express posluša samo na `127.0.0.1`, en proces na vrata. Primeri predpostavljajo namenski sistemski uporabniški račun `operacija404`.
+Potreben je Linux z Node.js 24 LTS (najmanj 24.13.0), npm, Bash, tar, curl, util-linux (`flock`), OpenSSH, systemd in orodji PostgreSQL (`pg_dump`, `pg_restore`). PostgreSQL je samostojna lokalna ali upravljana storitev; podprta je različica 14 ali novejša, za novo vzpostavitev izberi vzdrževano različico 16 ali novejšo. Različica odjemalca `pg_dump` mora podpirati različico strežnika. Nobena storitev ne zahteva Dockerja. Strežnik uredi proces aplikacije, DNS, HTTPS in obratni posrednik. Express posluša samo na `127.0.0.1`, en proces na vrata. Primeri predpostavljajo namenski sistemski uporabniški račun `operacija404`.
 
 Luka enkrat pripravi strukturo in lastništvo:
 
@@ -103,7 +103,7 @@ Ko je `ENABLE_DEPLOY=true`, uspešna sprememba `main` samodejno sproži objavo. 
 
 Objavna skripta zaklene hkratne objave, preveri nastavitev povezave PostgreSQL, razpakira novo izdajo in namesti samo produkcijske odvisnosti z `npm ci --omit=dev`. `.env` v izdaji je povezava na nespremenjeni `shared/.env`. Pred zagonom izdaje naredi konsistentno varnostno kopijo obstoječe baze s `pg_dump` v custom formatu, tudi ko aplikacija še teče. Če kopija ne uspe, izdaje ne aktivira. Nato atomsko zamenja povezavo `current`, ponovno zažene storitev in do 20-krat preveri `http://127.0.0.1:PORT/api/health`.
 
-Health endpoint odgovori `{"status":"ok"}` samo ob dosegljivi bazi. Ob neuspehu skripta ponovno aktivira prejšnjo izdajo in ponovno zažene storitev; trenutne baze ne prepisuje. Ob neuspešni prvi objavi storitev ustavi. Lokalni zdravstveni pregled ne dokazuje pravilne nastavitve javnega DNS/HTTPS; Luka naj ob prvi postavitvi dodatno preveri javni naslov in v brskalniku zaključi poskusno igro.
+Health endpoint odgovori `{"status":"ok"}` samo ob dosegljivi bazi. Ob neuspehu skripta ponovno aktivira prejšnjo izdajo in ponovno zažene storitev; trenutne baze ne prepisuje. Ob neuspešni prvi objavi storitev ustavi. Lokalni zdravstveni pregled ne dokazuje pravilne nastavitve javnega DNS/HTTPS; Luka naj ob prvi vzpostavitvi dodatno preveri javni naslov in v brskalniku zaključi poskusno igro.
 
 Ročno kopijo naredi iz aktivne izdaje, npr.:
 
