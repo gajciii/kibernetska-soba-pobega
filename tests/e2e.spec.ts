@@ -148,6 +148,17 @@ test('vseh osem stopenj, lokalni pripomočki, nadaljevanje in zaključek', async
   await direction.selectOption('decode');
   await expect(output).toHaveText('—');
   await convert.click();
+  await expect(output).toHaveText('UFJFTk9TIFpBQkVMRVpFTi4gS09EQSBOQVNMRUROSkUgTUFQRTogU09WQS4=');
+  await expect(input).toHaveValue(evidence);
+  await expect(page.getByLabel('Odgovor', { exact: true })).toHaveValue('moj vnos');
+  const intermediate = (await output.textContent())!;
+  await page.screenshot({ path: `.local/qa-${testInfo.project.name}-converter-first-pass.png`, fullPage: true });
+  await input.fill(intermediate); // Vmesni rezultat par ročno prekopira nazaj v vhod.
+  await method.selectOption('base64');
+  await expect(direction).toHaveValue('decode');
+  await expect(output).toHaveText('—');
+  await convert.click();
+  await expect(input).toHaveValue(intermediate);
   await expect(output).toHaveText('PRENOS ZABELEZEN. KODA NASLEDNJE MAPE: SOVA.');
   await expect(page.getByLabel('Odgovor', { exact: true })).toHaveValue('moj vnos');
   await page.screenshot({ path: `.local/qa-${testInfo.project.name}-converter.png`, fullPage: true });

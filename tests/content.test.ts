@@ -2,6 +2,8 @@ import { describe, expect, it } from 'vitest';
 import { finale, getExplanation, getFeedback, getHint, getStage, stageSummaries, validateAnswer } from '../server/content.js';
 import { convertText, hexToText, textToHex } from '../shared/converters.js';
 
+const stage2Intermediate = 'UFJFTk9TIFpBQkVMRVpFTi4gS09EQSBOQVNMRUROSkUgTUFQRTogU09WQS4=';
+
 describe('strežniško preverjanje osmih stopenj', () => {
   const correct: [number, unknown][] = [
     [1, 'MOST'], [2, 'SOVA'], [3, { message: 'B', reasons: ['domain', 'link'] }],
@@ -197,21 +199,37 @@ describe('razširjeni dokazi ostanejo skladni z obstoječimi rešitvami', () => 
     expect(`${coding.intro} ${coding.question}`).not.toContain('HEX');
     expect(coding.intro).toContain('šestnajst');
     expect(getHint(2, 2)).toContain('HEX');
-    expect(finale.topics).toContain('Kodiranja (HEX)');
+    expect(getHint(2, 2)).toContain('Base64');
+    expect(finale.topics).toContain('Kodiranja (HEX in Base64)');
   });
 
-  it('dejansko dekodira novi dokaz HEX in iz sporočila pridobi nespremenjeno kodo', () => {
+  it('odpre obe plasti HEX in Base64 ter šele nato pridobi kodo', () => {
     const evidence = getStage(2)!.evidence!;
     expect(evidence.split(' ').every(pair => /^[0-9A-F]{2}$/u.test(pair))).toBe(true);
-    const decoded = convertText(evidence, 'hex', 'decode');
+    const intermediate = convertText(evidence, 'hex', 'decode');
+    expect(intermediate).toBe(stage2Intermediate);
+    expect(validateAnswer(2, intermediate)).toBe(false);
+    expect(validateAnswer(2, evidence)).toBe(false);
+    const decoded = convertText(intermediate, 'base64', 'decode');
     expect(decoded).toBe('PRENOS ZABELEZEN. KODA NASLEDNJE MAPE: SOVA.');
     const code = /KODA NASLEDNJE MAPE: ([A-Z]+)\./u.exec(decoded)?.[1];
     expect(code).toBe('SOVA');
     expect(validateAnswer(2, code)).toBe(true);
     expect(validateAnswer(2, decoded)).toBe(false);
-    expect(textToHex(decoded)).toBe(evidence);
-    expect(hexToText(evidence.toLowerCase().replaceAll(' ', '\n'))).toBe(decoded);
-    expect(hexToText(evidence.replaceAll(' ', ''))).toBe(decoded);
+    expect(textToHex(convertText(decoded, 'base64', 'encode'))).toBe(evidence);
+    expect(hexToText(evidence.toLowerCase().replaceAll(' ', '\n'))).toBe(intermediate);
+    expect(hexToText(evidence.replaceAll(' ', ''))).toBe(intermediate);
+  });
+
+  it('nobena posamezna pretvorba začetnega dokaza ne razkrije končnega sporočila', () => {
+    const evidence = getStage(2)!.evidence!;
+    for (const method of ['hex', 'base64', 'binary', 'decimal', 'url'] as const) {
+      let result: string;
+      try { result = convertText(evidence, method, 'decode'); }
+      catch { continue; }
+      expect(result).not.toContain('SOVA');
+      expect(validateAnswer(2, result)).toBe(false);
+    }
   });
 
   it('pretvornik HEX obravnava tudi drugo besedilo in poškodovan prepis', () => {
@@ -229,7 +247,7 @@ describe('ločeno razkrivanje učne vsebine', () => {
     expect(stageSummaries).toHaveLength(8);
     for (const summary of stageSummaries) expect(Object.keys(summary).sort()).toEqual(['id', 'title', 'topic']);
     expect(getStage(1)?.evidence).toBe('NRGD MH PRVW');
-    expect(getStage(2)?.evidence).toBe('50 52 45 4E 4F 53 20 5A 41 42 45 4C 45 5A 45 4E 2E 20 4B 4F 44 41 20 4E 41 53 4C 45 44 4E 4A 45 20 4D 41 50 45 3A 20 53 4F 56 41 2E');
+    expect(getStage(2)?.evidence).toBe(textToHex(stage2Intermediate));
     expect(getStage(8)?.evidence).toBe('01001011 01001100 01001010 01010101 01000011');
     for (let id = 1; id <= 8; id++) {
       const stage = getStage(id);

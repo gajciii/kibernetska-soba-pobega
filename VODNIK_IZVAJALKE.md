@@ -45,19 +45,26 @@ Vsaka naloga ima eno kratko navodilo in delovni pripomoček. Polje oziroma izbir
 **Dokaz:** pod zgodbenim odstavkom je naslednji zapis. Par ga mora sam prekopirati v prazni vhod pretvornika; v delovnem oknu ni dodatne kopije dokaza.
 
 ```text
-50 52 45 4E 4F 53 20 5A 41 42 45 4C 45 5A 45 4E 2E 20 4B 4F 44 41 20 4E 41 53 4C 45 44 4E 4A 45 20 4D 41 50 45 3A 20 53 4F 56 41 2E
+55 46 4A 46 54 6B 39 54 49 46 70 42 51 6B 56 4D 52 56 70 46 54 69 34 67 53 30 39 45 51 53 42 4F 51 56 4E 4D 52 55 52 4F 53 6B 55 67 54 55 46 51 52 54 6F 67 55 30 39 57 51 53 34 3D
 ```
 
-Zgodba zapis poveže z zavarovanim izvozom šolskih sistemskih obvestil. Omenjenih **šestnajst znakov, 0–9 in A–F, ter branje v parih** namigujejo na šestnajstiški zapis. Par izbere **Šestnajstiško (HEX)** in dekodiranje. Laboratorij še vedno ponuja tudi druga kodiranja za primerjavo; izbira ni samodejna.
+Zgodba zapis poveže z zavarovanim izvozom šolskih sistemskih obvestil in pove, da ima **dve plasti**. Zunanja uporablja **šestnajst znakov, 0–9 in A–F, v parih**; notranja nabor **štiriinšestdesetih znakov** in morebitno končno dopolnilo `=`. Znak `=` ni eden od 64 znakov osnovnega nabora. Postopka je treba uporabiti v tem vrstnem redu, brez samodejnega prenosa rezultatov:
 
-Rezultat je **`PRENOS ZABELEZEN. KODA NASLEDNJE MAPE: SOVA.`** V polje za odgovor zgoraj desno sodi samo **`SOVA`**. Celotno novo obvestilo ni odgovor; zaradi združljivosti ostaja sprejet tudi stari vnos `KODA: SOVA`. Velikost črk in odvečni presledki niso pomembni.
+1. Izbereta **Šestnajstiško (HEX)** in dekodiranje. Prvi rezultat je še vedno kodiran zapis:
 
-- Namig 1: »V zgodbi je omenjenih šestnajst znakov, zapis pa je razdeljen v pare. Poišči ustrezno ime kodiranja v izbirnem meniju.«
-- Namig 2: »Izberi Šestnajstiško (HEX) in dekodiranje. Iz razkritega sporočila prepiši samo kodo naslednje mape.«
+   ```text
+   UFJFTk9TIFpBQkVMRVpFTi4gS09EQSBOQVNMRUROSkUgTUFQRTogU09WQS4=
+   ```
 
-**Opomba za izvajalko:** končnica `.dat` ne določa kodiranja. Če pretvorba ne uspe, naj preverita celovitost prekopiranih parov, nabor znakov in izbrano smer. Neuspešen poskus v pripomočku ne poveča števila oddanih odgovorov. Besedilo obvestila je sled v zgodbi, ne dokaz celotnega poteka incidenta.
+2. Celoten vmesni rezultat **ročno prekopirata v vhod**, izbereta **Base64** in ponovno dekodirata. Končno besedilo je **`PRENOS ZABELEZEN. KODA NASLEDNJE MAPE: SOVA.`**
+3. V polje za odgovor zgoraj desno vneseta samo **`SOVA`**. Celotno obvestilo ni odgovor; zaradi združljivosti ostaja sprejet tudi stari vnos `KODA: SOVA`. Velikost črk in odvečni presledki niso pomembni.
 
-**Učni cilj:** izbrati pretvorbo na podlagi značilnosti zapisa in smiselnosti rezultata ter razlikovati kodiranje od šifriranja. Par šestnajstiških znakov v tem primeru predstavlja en bajt. Za pretvorbo HEX ne potrebujemo skrivnega ključa; zapis ne zagotavlja zaupnosti.
+- Namig 1: »Upoštevaj vrstni red: najprej zunanji zapis s šestnajstimi znaki v parih, nato notranji z naborom štiriinšestdesetih znakov.«
+- Namig 2: »Najprej dekodiraj Šestnajstiško (HEX). Celoten rezultat ročno prekopiraj v vhod, izberi Base64 in ponovno dekodiraj. Odgovor je samo koda naslednje mape.«
+
+**Opomba za izvajalko:** končnica `.dat` ne določa kodiranja. Če pretvorba ne uspe, naj preverita vrstni red, celovitost prekopiranih parov in vmesnega rezultata ter smer dekodiranja. Vmesni niz vsebuje 60 znakov in se konča z enim `=`; končno sporočilo vsebuje 44 bajtov ASCII. Neuspešen poskus v pripomočku ne poveča števila oddanih odgovorov. Besedilo obvestila je sled v zgodbi, ne dokaz celotnega poteka incidenta.
+
+**Učni cilj:** prepoznati dve zaporedni kodiranji in uporabiti rezultat prvega kot vhod drugega. Par šestnajstiških znakov predstavlja en bajt zapisa Base64, ta pa predstavlja končno besedilo. HEX in Base64 sta kodiranji, ne šifriranje; za obratno pretvorbo ne potrebujemo skrivnega ključa in njuna kombinacija ne zagotavlja zaupnosti.
 
 ## 3. Poišči phishing sporočilo
 
