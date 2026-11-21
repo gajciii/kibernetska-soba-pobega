@@ -11,7 +11,7 @@ const stages: StageContent[] = [
     kind: 'caesar',
     intro: 'Iz šolskega arhiva je bil prenesen zaupni načrt /zaupno/nacrt.pdf. Opozorilo ne razkrije, kateremu projektu pripada — prav to moraš odkriti. Skrbnik je sledi zbral v preiskovalno mapo, njen prvi del pa odpre zapis iz sporocilo.txt. Pri skrivanju kode se je zgledoval po Juliju Cezarju: prejemnik je sporočilo razbral tako, da je vsako črko premaknil za tri mesta nazaj. Po abecedi A–Z se pomikaj v levo, pred A pa nadaljuj pri Z.',
     question: 'Z abecednim pripomočkom razvozlaj sporočilo. V polje za odgovor vnesi samo besedo, ki jo sporočilo določi kot kodo.',
-    evidence: 'NRGD MH PRVW',
+    evidence: 'NRGD MH SLUDPLGD',
     note: 'Uporabljaj abecedo A–Z brez šumnikov. Premik in smer razberi iz zgodbe, nato črke primerjaj s pomočjo abecednega pripomočka. Presledke in ločila ohrani.',
     investigations: [
       { id: 'arhiv', title: 'Izvor: začasna mapa', text: 'Zapis je bil najden v datoteki sporocilo.txt. Njeno ime opisuje vrsto datoteke in ni geslo.' },
@@ -39,86 +39,86 @@ const stages: StageContent[] = [
     title: 'Poišči phishing sporočilo',
     topic: 'Phishing',
     kind: 'phishing',
-    intro: 'Razkrito obvestilo te pripelje do dijaka Luke Kovača. Še pred opozorilom o prenosu je skrbniku prijavil nenavadno e-pošto in mu predal kopijo svojega predala. Med običajnimi šolskimi sporočili iščeš tisto, ki bi lahko pojasnilo poskus dostopa do računa. Lukin naslov je luka.kovac@most.si, šola uporablja domeno most.si. Preglej sedem sporočil in označi sumljivega, da napreduješ.',
+    intro: 'Razkrito obvestilo te pripelje do dijaka Luke Kovača. Še pred opozorilom o prenosu je skrbniku prijavil nenavadno e-pošto in mu predal kopijo svojega predala. Med običajnimi šolskimi sporočili iščeš tisto, ki bi lahko pojasnilo poskus dostopa do računa. Lukin naslov je luka.kovac@piramida.si, šola uporablja domeno piramida.si. Preglej sedem sporočil in označi sumljivega, da napreduješ.',
     question: 'Katero sporočilo je phishing? Utemelji izbiro.',
-    note: 'Izmišljena šola uporablja domeno most.si. Vsa sporočila so z dne 20. 11. 2026, časi so lokalni. Predal, priponke in povezave so neaktivna učna simulacija. Prikazno ime, nujnost ali sama prisotnost priponke še ne zadoščajo za sklep.',
+    note: 'Izmišljena šola uporablja domeno piramida.si. Vsa sporočila so z dne 20. 11. 2026, časi so lokalni. Predal, priponke in povezave so neaktivna učna simulacija. Prikazno ime, nujnost ali sama prisotnost priponke še ne zadoščajo za sklep.',
     mails: [
       {
         id: 'A',
-        sender: 'Šolska knjižnica <knjiznica@most.si>',
-        recipient: 'Luka Kovač <luka.kovac@most.si>',
+        sender: 'Šolska knjižnica <knjiznica@piramida.si>',
+        recipient: 'Luka Kovač <luka.kovac@piramida.si>',
         time: '08:12',
         preview: 'V petek poteče rok za vračilo izposojene knjige.',
-        replyTo: 'knjiznica@most.si',
+        replyTo: 'knjiznica@piramida.si',
         subject: 'Opomnik za vračilo knjige',
         body: 'Pozdravljen, Luka, v petek poteče rok za vračilo tvoje izposojene knjige. Če si jo že vrnil, lahko opomnik prezreš. Lep pozdrav, šolska knjižnica.',
       },
       {
         id: 'C',
-        sender: 'Mentorica <mentorica@most.si>',
-        recipient: 'Luka Kovač <luka.kovac@most.si>',
+        sender: 'Mentorica <mentorica@piramida.si>',
+        recipient: 'Luka Kovač <luka.kovac@piramida.si>',
         time: '08:44',
         preview: 'Jutrišnja delavnica bo ob 10. uri v računalniški učilnici.',
-        replyTo: 'mentorica@most.si',
+        replyTo: 'mentorica@piramida.si',
         subject: 'Termin delavnice',
         body: 'Pozdravljen, Luka, jutrišnja delavnica bo ob 10. uri v računalniški učilnici. Za delo potrebuješ le šolski računalnik. Se vidimo, mentorica.',
       },
       {
         id: 'D',
-        sender: 'Šolska IT podpora <podpora@most.si>',
-        recipient: 'Luka Kovač <luka.kovac@most.si>',
+        sender: 'Šolska IT podpora <podpora@piramida.si>',
+        recipient: 'Luka Kovač <luka.kovac@piramida.si>',
         time: '07:50',
         preview: 'Danes od 16. do 17. ure bo potekalo načrtovano vzdrževanje.',
         subject: 'Načrtovano vzdrževanje šolske učilnice',
         body: 'Pozdravljeni, danes od 16. do 17. ure bo spletna učilnica občasno nedosegljiva zaradi načrtovanega vzdrževanja. Od vas ne potrebujemo nobenih podatkov ali dejanj. Po zaključku bo obvestilo objavljeno na običajni strani učilnice.',
         linkLabel: 'Obvestila spletne učilnice',
-        linkUrl: 'https://ucilnica.most.si/obvestila',
-        replyTo: 'podpora@most.si',
+        linkUrl: 'https://ucilnica.piramida.si/obvestila',
+        replyTo: 'podpora@piramida.si',
       },
       {
         id: 'B',
-        sender: 'Šolska IT podpora <podpora@most-preverjanje.example>',
-        recipient: 'Luka Kovač <luka.kovac@most.si>',
+        sender: 'Šolska IT podpora <podpora@piramida-preverjanje.example>',
+        recipient: 'Luka Kovač <luka.kovac@piramida.si>',
         time: '09:57',
         preview: 'Zaznali smo težavo s tvojim računom. Odzovi se v 10 minutah.',
-        replyTo: 'podpora@most-preverjanje.example',
+        replyTo: 'podpora@piramida-preverjanje.example',
         subject: 'NUJNO: tvoj račun bo čez 10 minut blokiran',
         body: 'Pozdravljen, Luka Kovač, zaznali smo težavo s tvojim šolskim računom. V naslednjih 10 minutah odpri spodnjo povezavo ter vnesi geslo in enkratno prijavno kodo, sicer bo račun blokiran.',
         linkLabel: 'Preveri šolski račun',
-        linkUrl: 'https://most.si.arhiv-nacrtov.example/prijava',
+        linkUrl: 'https://piramida.si.arhiv-nacrtov.example/prijava',
       },
       {
         id: 'E',
-        sender: 'Tajništvo šole <tajnistvo@most.si>',
-        recipient: 'Luka Kovač <luka.kovac@most.si>',
+        sender: 'Tajništvo šole <tajnistvo@piramida.si>',
+        recipient: 'Luka Kovač <luka.kovac@piramida.si>',
         time: '09:30',
         preview: 'Sprememba učilnice velja že za naslednjo šolsko uro.',
         subject: 'Pomembno: naslednja ura je v učilnici 204',
         body: 'Pozdravljeni, zaradi okvare projektorja se naslednja ura prestavi v učilnico 204. Spremembo lahko preverite na oglasni deski ali pri razredniku. To obvestilo ne zahteva prijave ali pošiljanja osebnih podatkov.',
-        replyTo: 'tajnistvo@most.si',
+        replyTo: 'tajnistvo@piramida.si',
       },
       {
         id: 'F',
-        sender: 'Šolski krožek fotografije <foto@most.si>',
-        recipient: 'Luka Kovač <luka.kovac@most.si>',
+        sender: 'Šolski krožek fotografije <foto@piramida.si>',
+        recipient: 'Luka Kovač <luka.kovac@piramida.si>',
         time: '09:08',
         preview: 'V priponki je že napovedani razpored fotografiranja razredov.',
         subject: 'Razpored fotografiranja za prihodnji teden',
         body: 'Živjo, Luka, pošiljamo razpored, ki smo ga dogovorili na srečanju krožka. Enak seznam je na oglasni deski pri knjižnici. Če opaziš napako v terminu svojega razreda, odgovori mentorici. Dokument ne vsebuje obrazca za prijavo.',
         attachment: 'razpored_fotografiranja.pdf · 84 KB · simulirana priponka',
-        replyTo: 'foto@most.si',
+        replyTo: 'foto@piramida.si',
       },
       {
         id: 'G',
-        sender: 'Šolska prehrana <prehrana@most.si>',
-        recipient: 'Luka Kovač <luka.kovac@most.si>',
+        sender: 'Šolska prehrana <prehrana@piramida.si>',
+        recipient: 'Luka Kovač <luka.kovac@piramida.si>',
         time: '10:05',
         preview: 'Jedilnik za prihodnji teden je objavljen na šolski strani.',
         subject: 'Jedilnik za prihodnji teden',
         body: 'Pozdravljeni, na šolski strani je objavljen jedilnik za prihodnji teden. Za ogled ni potrebna prijava. Običajen postopek odjave malice ostaja nespremenjen. Lep pozdrav, organizacija prehrane.',
         linkLabel: 'Poglej jedilnik',
-        linkUrl: 'https://most.si/prehrana/jedilnik',
-        replyTo: 'prehrana@most.si',
+        linkUrl: 'https://piramida.si/prehrana/jedilnik',
+        replyTo: 'prehrana@piramida.si',
       },
     ],
     reasons: [
@@ -141,7 +141,7 @@ const stages: StageContent[] = [
     profile: {
       name: 'Luka Kovač',
       username: '@luka.kovac',
-      bio: '🎂 2009. 🏫 Šola Most. Najraje zunaj, na snegu ⛷️ ali na poti v hribe. 🏔️',
+      bio: '🎂 2009. 🏫 Šola Piramida. Najraje zunaj, na snegu ⛷️ ali na poti v hribe. 🏔️',
       avatar: '/profile/luka.jpg',
       avatarAlt: 'Portret Luke Kovača.',
       posts: [
@@ -212,8 +212,8 @@ const stages: StageContent[] = [
     packets: [
       { number: 1, time: '10:39:41.010', source: '02:40:40:00:00:10', destination: 'ff:ff:ff:ff:ff:ff', protocol: 'ARP', length: 42, info: 'Naprava 10.0.0.10 išče strojni naslov naprave 10.0.0.1.', detail: 'ARP poišče strojni naslov (MAC), ki pripada znanemu naslovu IP v lokalnem omrežju. Pri ARP sta prikazana strojna naslova; ff:ff:ff:ff:ff:ff pomeni oddajanje vsem na lokalni povezavi. ARP ne uporablja TCP.' },
       { number: 2, time: '10:39:41.012', source: '02:40:40:00:00:01', destination: '02:40:40:00:00:10', protocol: 'ARP', length: 42, info: 'Strojni naslov naprave 10.0.0.1 je 02:40:40:00:00:01.', detail: 'Odgovor lokalnega prehoda na poizvedbo ARP. Izmišljeni strojni naslov je del simulacije in ni podatek o uporabniku.' },
-      { number: 3, time: '10:39:43.015', source: '10.0.0.10', destination: '10.0.0.53', protocol: 'DNS', length: 72, info: 'Poizvedba A: most.si', detail: 'Računalnik vpraša lokalni strežnik DNS za naslov gostitelja. Poizvedba ne dokazuje prijave ali prenosa datoteke.' },
-      { number: 4, time: '10:39:43.019', source: '10.0.0.53', destination: '10.0.0.10', protocol: 'DNS', length: 88, info: 'Odgovor A: most.si → 10.0.0.5', detail: 'V učnem omrežju je spletni strežnik na 10.0.0.5. Naslovi niso namenjeni obiskovanju zunaj simulacije.' },
+      { number: 3, time: '10:39:43.015', source: '10.0.0.10', destination: '10.0.0.53', protocol: 'DNS', length: 72, info: 'Poizvedba A: piramida.si', detail: 'Računalnik vpraša lokalni strežnik DNS za naslov gostitelja. Poizvedba ne dokazuje prijave ali prenosa datoteke.' },
+      { number: 4, time: '10:39:43.019', source: '10.0.0.53', destination: '10.0.0.10', protocol: 'DNS', length: 88, info: 'Odgovor A: piramida.si → 10.0.0.5', detail: 'V učnem omrežju je spletni strežnik na 10.0.0.5. Naslovi niso namenjeni obiskovanju zunaj simulacije.' },
       { number: 5, time: '10:39:47.100', source: '10.0.0.10', destination: '10.0.0.5', protocol: 'TCP', length: 74, info: '52810 → 443 · SYN', detail: 'Začetek vzpostavljanja povezave TCP. Vrata 443 so običajna za HTTPS, vendar sama številka vrat še ne pove, kaj je uporabnik naredil.' },
       { number: 6, time: '10:39:47.104', source: '10.0.0.5', destination: '10.0.0.10', protocol: 'TCP', length: 74, info: '443 → 52810 · SYN, ACK', detail: 'Strežnik potrjuje začetek povezave. Izbor ne vsebuje vseh paketov rokovanja; številke so vrstni red prikazanih dokazov.' },
       { number: 7, time: '10:39:48.130', source: '10.0.0.10', destination: '10.0.0.5', protocol: 'TLS', length: 602, info: 'TLS 1.3 · šifrirani aplikacijski podatki', detail: 'Vsebina paketa je šifrirana. Dodatna učna povezava vodi na ločeno zavarovan zapis aplikacijskega dnevnika istega dogodka.', logTime: '10:39:48' },
@@ -221,8 +221,8 @@ const stages: StageContent[] = [
       { number: 9, time: '10:40:02.318', source: '10.0.0.11', destination: '10.0.0.5', protocol: 'TLS', length: 618, info: 'TLS 1.3 · šifrirani aplikacijski podatki', detail: 'TLS varuje vsebino. Račun in dejanje lahko preveriš v povezanem aplikacijskem zapisu, ne v bajtih tega paketa.', logTime: '10:40:02' },
       { number: 10, time: '10:40:03.009', source: '10.0.0.5', destination: '10.0.0.9', protocol: 'HTTP', length: 184, info: 'HTTP/1.1 200 OK · status storitve', detail: 'Odgovor lokalnemu nadzoru. Koda 200 se nanaša na javni status storitve in ne dokazuje uspešnega prenosa katerekoli druge datoteke.' },
       { number: 11, time: '10:40:14.619', source: '10.0.0.5', destination: '10.0.0.10', protocol: 'TLS', length: 1266, info: 'TLS 1.3 · šifrirani aplikacijski podatki', detail: 'Odziv strežnika prek TLS. Velikost in smer paketa sami ne ločita ogleda dokumenta od njegovega prenosa.', logTime: '10:40:14' },
-      { number: 12, time: '10:40:30.102', source: '10.0.0.12', destination: '10.0.0.53', protocol: 'DNS', length: 72, info: 'Poizvedba A: most.si', detail: 'Poizvedba DNS drugega računalnika. Uporabniškega računa v tem paketu ni.' },
-      { number: 13, time: '10:40:30.107', source: '10.0.0.53', destination: '10.0.0.12', protocol: 'DNS', length: 88, info: 'Odgovor A: most.si → 10.0.0.5', detail: 'Odgovor lokalnega DNS določi cilj povezave. Ne potrjuje uspešne prijave v aplikacijo.' },
+      { number: 12, time: '10:40:30.102', source: '10.0.0.12', destination: '10.0.0.53', protocol: 'DNS', length: 72, info: 'Poizvedba A: piramida.si', detail: 'Poizvedba DNS drugega računalnika. Uporabniškega računa v tem paketu ni.' },
+      { number: 13, time: '10:40:30.107', source: '10.0.0.53', destination: '10.0.0.12', protocol: 'DNS', length: 88, info: 'Odgovor A: piramida.si → 10.0.0.5', detail: 'Odgovor lokalnega DNS določi cilj povezave. Ne potrjuje uspešne prijave v aplikacijo.' },
       { number: 14, time: '10:40:39.284', source: '10.0.0.12', destination: '10.0.0.5', protocol: 'TLS', length: 612, info: 'TLS 1.3 · šifrirani aplikacijski podatki', detail: 'Za vsebinski pomen izbranega dogodka je na voljo ločen aplikacijski zapis. Gre za pripravljeno korelacijo učnega primera.', logTime: '10:40:39' },
       { number: 15, time: '10:40:55.940', source: '10.0.0.14', destination: '10.0.0.5', protocol: 'TCP', length: 74, info: '53114 → 443 · SYN', detail: 'Nov računalnik vzpostavlja povezavo. Sam začetek povezave ne pomeni dostopa do zaupnih podatkov.' },
       { number: 16, time: '10:41:05.352', source: '10.0.0.14', destination: '10.0.0.5', protocol: 'TLS', length: 606, info: 'TLS 1.3 · šifrirani aplikacijski podatki', detail: 'Paket ne vsebuje berljivega uporabniškega imena. Oglej si ločen dnevnik, če želiš ugotoviti dejanje.', logTime: '10:41:05' },
@@ -232,7 +232,7 @@ const stages: StageContent[] = [
       { number: 20, time: '10:42:00.600', source: '02:40:40:00:00:19', destination: 'ff:ff:ff:ff:ff:ff', protocol: 'ARP', length: 42, info: 'Naprava 10.0.0.19 išče strojni naslov naprave 10.0.0.1.', detail: 'Lokalna poizvedba ARP z izmišljenima strojnima naslovoma. Ne gre za pošiljanje zahteve zunanjemu spletnemu mestu.' },
       { number: 21, time: '10:42:31.527', source: '10.0.0.5', destination: '10.0.0.14', protocol: 'TLS', length: 1434, info: 'TLS 1.3 · šifrirani aplikacijski podatki', detail: 'Iz samega šifriranega odziva ni mogoče ugotoviti vrste uporabnikovega dejanja. Primerjaj Dogodek in Rezultat v pripadajočem dnevniku.', logTime: '10:42:31' },
       { number: 22, time: '10:42:56.191', source: '10.0.0.19', destination: '10.0.0.5', protocol: 'TLS', length: 614, info: 'TLS 1.3 · šifrirani aplikacijski podatki', detail: 'Povezava je vzpostavljena, vendar to še ne pomeni uspešne prijave v aplikacijo. Preveri povezani dnevnik.', logTime: '10:42:56' },
-      { number: 23, time: '10:43:00.012', source: '10.0.0.17', destination: '10.0.0.53', protocol: 'DNS', length: 72, info: 'Poizvedba A: most.si', detail: 'Poizvedba po šolskem strežniku. Račun uporabnika ni del tega DNS-paketa.' },
+      { number: 23, time: '10:43:00.012', source: '10.0.0.17', destination: '10.0.0.53', protocol: 'DNS', length: 72, info: 'Poizvedba A: piramida.si', detail: 'Poizvedba po šolskem strežniku. Račun uporabnika ni del tega DNS-paketa.' },
       { number: 24, time: '10:43:05.724', source: '10.0.0.17', destination: '10.0.0.5', protocol: 'TLS', length: 610, info: 'TLS 1.3 · šifrirani aplikacijski podatki', detail: 'Aplikacijsko vsebino varuje TLS. Podrobnosti računa so na voljo samo v ločenem učnem zapisu aplikacije.', logTime: '10:43:05' },
       { number: 25, time: '10:43:28.309', source: '10.0.0.5', destination: '10.0.0.14', protocol: 'TLS', length: 1434, info: 'TLS 1.3 · šifrirani aplikacijski podatki', detail: 'Odgovor strežnika vsebuje šifrirane podatke. Ista velikost paketa se lahko pojavi pri različnih dokumentih.', logTime: '10:43:28' },
       { number: 26, time: '10:44:08.442', source: '10.0.0.5', destination: '10.0.0.11', protocol: 'TLS', length: 1434, info: 'TLS 1.3 · šifrirani aplikacijski podatki', detail: 'Povezani zapis dopolnjuje omrežni dokaz s potjo datoteke. Podatka nismo razbrali iz šifriranega paketa.', logTime: '10:44:08' },
@@ -254,20 +254,20 @@ const stages: StageContent[] = [
     title: 'Najdi ponarejeno spletno stran',
     topic: 'Domene',
     kind: 'domains',
-    intro: 'Dnevnik je pokazal račun in naslov IP računalnika, s katerega je bil sprožen prenos načrta. Skrbnik zdaj odpre zavarovano zgodovino tega računalnika. Med šestimi naslovi je tudi povezava iz Lukove sumljive pošte. Prijavne strani so videti enako, zato preveri URL: gostitelj je del za https:// in pred naslednjo poševnico. Šola uporablja most.si in ucilnica.most.si. Ponaredek lahko šolsko ime skrije v tujo poddomeno ali pot; dodatek za vprašajem je parameter. Pred iskanjem načrta loči šolski arhiv od tujih strani.',
+    intro: 'Dnevnik je pokazal račun in naslov IP računalnika, s katerega je bil sprožen prenos načrta. Skrbnik zdaj odpre zavarovano zgodovino tega računalnika. Med šestimi naslovi je tudi povezava iz Lukove sumljive pošte. Prijavne strani so videti enako, zato preveri URL: gostitelj je del za https:// in pred naslednjo poševnico. Šola uporablja piramida.si in ucilnica.piramida.si. Ponaredek lahko šolsko ime skrije v tujo poddomeno ali pot; dodatek za vprašajem je parameter. Pred iskanjem načrta loči šolski arhiv od tujih strani.',
     question: 'V zgodovini izberi eno ponarejeno povezavo. Kateri tuji domeni pripada? Vpiši samo domeno, brez https:// in poti.',
     note: 'Zgodovina vsebuje šest pripravljenih naslovov. Prikaz prijavne strani ostane enak; spreminja se naslovna vrstica. Noben naslov se ne odpre v omrežju in obrazec ne zbira prijavnih podatkov.',
     choices: [
-      { id: 'A', label: 'https://most.si/prijava' },
-      { id: 'B', label: 'https://ucilnica.most.si/prijava' },
-      { id: 'C', label: 'https://most.si.arhiv-nacrtov.example/prijava' },
-      { id: 'D', label: 'https://most-si.example/prijava' },
-      { id: 'E', label: 'https://prijava.example/most.si/prijava' },
-      { id: 'F', label: 'https://most.si/prijava?jezik=sl' },
+      { id: 'A', label: 'https://piramida.si/prijava' },
+      { id: 'B', label: 'https://ucilnica.piramida.si/prijava' },
+      { id: 'C', label: 'https://piramida.si.arhiv-nacrtov.example/prijava' },
+      { id: 'D', label: 'https://piramida-si.example/prijava' },
+      { id: 'E', label: 'https://prijava.example/piramida.si/prijava' },
+      { id: 'F', label: 'https://piramida.si/prijava?jezik=sl' },
     ],
     investigations: [
       { id: 'zgodovina', title: 'Izpis zgodovine', text: 'Skrbnik je zavaroval šest zapisov obiskov. Njihov vrstni red ni ocena varnosti in ne pove, kdo je posamezno stran odprl.' },
-      { id: 'imenik', title: 'Izsek iz šolskega imenika', text: 'Šola uporablja domeno most.si. Njena spletna učilnica je na gostitelju ucilnica.most.si.' },
+      { id: 'imenik', title: 'Izsek iz šolskega imenika', text: 'Šola uporablja domeno piramida.si. Njena spletna učilnica je na gostitelju ucilnica.piramida.si.' },
       { id: 'videz', title: 'Primerjava videza', text: 'Pri vseh šestih zapisih se pokaže ista podoba prijavne strani. Logotip, barve in besedilo obrazca lahko kopira tudi druga stran.' },
       { id: 'sifrirana-povezava', title: 'Podatek o povezavi', text: 'Vsi prikazani naslovi se začnejo s https://. To opisuje zaščito prenosa, ne potrjuje pa pripadnosti šoli.' },
       { id: 'pot', title: 'Pot do strani', text: 'Besedilo za poševnico za gostiteljem določa pot na izbranem strežniku. Tudi ime druge organizacije je lahko del takšne poti.' },
@@ -279,14 +279,14 @@ const stages: StageContent[] = [
     title: 'Računalnik govori v ničlah in enicah',
     topic: 'Binarni zapis',
     kind: 'binary',
-    intro: 'Prepoznal si ponarejeno prijavo. Skrbnik je v pravem arhivu po računu, času in poti prenosa našel ustrezno različico načrta. Iz njegove oznake projekta je pripravil izvoz petih bajtov ASCII in pripisal: »Vsaka enica nekaj šteje. Njeno mesto pove, koliko.« V teh petih skupinah je kodno ime projekta, ki ga iščeš od začetka. Ko ga razbereš, bo jasno, kateri načrt je bil ogrožen.',
+    intro: 'Prepoznal si ponarejeno prijavo. Skrbnik je v pravem arhivu po računu, času in poti prenosa našel ustrezno različico načrta. Iz njegove oznake projekta je pripravil izvoz desetih bajtov ASCII in pripisal: »Vsaka enica nekaj šteje. Njeno mesto pove, koliko.« V teh desetih skupinah je kodno ime projekta, ki ga iščeš od začetka. Ko ga razbereš, bo jasno, kateri načrt je bil ogrožen.',
     question: 'Za vsak bajt seštej uteži mest z enico. Vsoto poišči v tabeli ASCII in sestavi kodno ime projekta. Vpiši ga v polje za odgovor.',
-    evidence: '01001001 01010011 01001011 01010010 01000001',
+    evidence: '01000010 01010010 01010101 01000011 01001111 01010110 01000001 01001110 01001010 01000101',
     note: 'Uteži osmih mest od leve proti desni so 128, 64, 32, 16, 8, 4, 2 in 1. Enica prispeva utež svojega mesta, ničla pa nič. Za vsak bajt posebej seštej prispevke in decimalno vsoto poišči v tabeli ASCII za črke A–Z.',
     investigations: [
-      { id: 'glava', title: 'Glava izvoza: 5 bajtov', text: 'Izvoz vsebuje pet skupin po osem bitov. Vsako skupino obdelaj posebej; presledki med njimi niso znaki končnega sporočila.' },
+      { id: 'glava', title: 'Glava izvoza: 10 bajtov', text: 'Izvoz vsebuje deset skupin po osem bitov. Vsako skupino obdelaj posebej; presledki med njimi niso znaki končnega sporočila.' },
       { id: 'format', title: 'Dogovorjeni format: ASCII', text: 'V tem učnem izvozu vsak bajt predstavlja en znak ASCII. Sporočilo je zapisano brez šumnikov. Pri drugih besedilih je treba preveriti, katero znakovno kodiranje uporabljajo.' },
-      { id: 'vrstni-red', title: 'Kontrolna opomba', text: 'Bajte beri od leve proti desni in za vsakega poišči eno črko. Uteži seštevaj znotraj posameznega bajta, ne čez vseh pet skupin. Črke ohranijo vrstni red bajtov.' },
+      { id: 'vrstni-red', title: 'Kontrolna opomba', text: 'Bajte beri od leve proti desni in za vsakega poišči eno črko. Uteži seštevaj znotraj posameznega bajta, ne čez vseh deset skupin. Črke ohranijo vrstni red bajtov.' },
     ],
   },
 ];
@@ -296,23 +296,23 @@ export const stageSummaries: StageSummary[] = stages.map(({ id, title, topic }) 
 const hints: Record<number, [string, string]> = {
   1: ['V zgodbi poišči, kako je prejemnik razbral Cezarjevo sporočilo. Enak premik uporabi za svoj dokaz.', 'Pri dešifriranju se premakni za tri mesta nazaj: N postane K. Isto preslikavo uporabi za vse črke.'],
   2: ['Upoštevaj vrstni red: najprej zunanji zapis s šestnajstimi znaki v parih, nato notranji z naborom štiriinšestdesetih znakov.', 'Najprej dekodiraj Šestnajstiško (HEX). Celoten rezultat ročno prekopiraj v vhod, izberi Base64 in ponovno dekodiraj. Odgovor je samo koda naslednje mape.'],
-  3: ['Primerjaj dejanski naslov pošiljatelja in cilj povezave z domeno most.si. Ime, ki ga prepoznaš, samo po sebi še ni dokaz pristnosti.', 'Primerjaj zahteve sporočil: eno združuje tuji domeni, grožnjo takojšnje blokade in zahtevo po geslu ter enkratni kodi.'],
+  3: ['Primerjaj dejanski naslov pošiljatelja in cilj povezave z domeno piramida.si. Ime, ki ga prepoznaš, samo po sebi še ni dokaz pristnosti.', 'Primerjaj zahteve sporočil: eno združuje tuji domeni, grožnjo takojšnje blokade in zahtevo po geslu ter enkratni kodi.'],
   4: ['Katera javna podatka bi si lastnik zlahka zapomnil in ju združil? Pri priporočilih razmisli tudi o ponavljanju gesel med računi.', 'Poveži ime psičke in letnico v opisu profila v eno besedo. Nato izberi priporočila za dolžino, različna gesla, upravljalnik in dodatno zaščito prijave.'],
   5: ['Med slikami poišči hodnik z rdečim nahrbtnikom in odpri njegove metapodatke. Čas poznejše spremembe ni nujno čas fotografiranja.', 'Pri datoteki hodnik.jpg primerjaj polji Čas nastanka posnetka in Čas spremembe. V odgovor prepiši uro in minute iz prvega.'],
   6: ['V iskalnik »Besedilni filter« vnesi ime iskane datoteke. Pri preostalih paketih primerjaj povezane strežniške zapise: uspešen prenos ni isto kot ogled ali zavrnjen poskus.', 'V ločenem aplikacijskem dnevniku poišči vrstico, v kateri so hkrati DOWNLOAD, /zaupno/nacrt.pdf in SUCCESS.'],
-  7: ['Preberi celotnega gostitelja med https:// in prvo naslednjo poševnico ter ga primerjaj s potrjenima šolskima gostiteljema. Sam pojav imena most.si še ne potrjuje pripadnosti šoli.', 'Če je most.si na začetku daljšega gostitelja, preveri, katere tuje domene je poddomena. Če je za poševnico, je del poti. Vnesi tujo domeno izbranega ponaredka, brez poddomene most.si ali poti.'],
-  8: ['Uteži mest od leve proti desni so 128, 64, 32, 16, 8, 4, 2 in 1. Seštej samo uteži mest z enico; ničle ne prispevajo ničesar. Vsota enega bajta določi eno črko v tabeli ASCII.', 'Pri prvem bajtu 01001001 so enice na mestih z utežmi 64, 8 in 1. Vsota je 73, v tabeli ASCII pa to pomeni I. Enako obdelaj preostale štiri bajte in ohrani njihov vrstni red.'],
+  7: ['Preberi celotnega gostitelja med https:// in prvo naslednjo poševnico ter ga primerjaj s potrjenima šolskima gostiteljema. Sam pojav imena piramida.si še ne potrjuje pripadnosti šoli.', 'Če je piramida.si na začetku daljšega gostitelja, preveri, katere tuje domene je poddomena. Če je za poševnico, je del poti. Vnesi tujo domeno izbranega ponaredka, brez poddomene piramida.si ali poti.'],
+  8: ['Uteži mest od leve proti desni so 128, 64, 32, 16, 8, 4, 2 in 1. Seštej samo uteži mest z enico; ničle ne prispevajo ničesar. Vsota enega bajta določi eno črko v tabeli ASCII.', 'Pri prvem bajtu 01000010 sta enici na mestih z utežmi 64 in 2. Vsota je 66, v tabeli ASCII pa to pomeni B. Enako obdelaj preostalih devet bajtov in ohrani njihov vrstni red.'],
 };
 
 const explanations: Record<number, string> = {
-  1: 'Koda MOST odpre mapo s skrbnikovim izvozom prve prijave. Cezarjeva šifra zamenja črke s stalnim premikom po abecedi. V tem primeru je šifriranje premaknilo črke za tri mesta naprej, dešifriranje pa jih je vrnilo nazaj. Zgodba je razkrila premik, primerjava abeced pa preslikavo posameznih črk. Presledki in vrstni red so pomagali preveriti smiselnost sporočila. Takšna šifra je primerna za razumevanje osnov, ne za sodobno varovanje podatkov.',
+  1: 'Koda PIRAMIDA odpre mapo s skrbnikovim izvozom prve prijave. Cezarjeva šifra zamenja črke s stalnim premikom po abecedi. V tem primeru je šifriranje premaknilo črke za tri mesta naprej, dešifriranje pa jih je vrnilo nazaj. Zgodba je razkrila premik, primerjava abeced pa preslikavo posameznih črk. Presledki in vrstni red so pomagali preveriti smiselnost sporočila. Takšna šifra je primerna za razumevanje osnov, ne za sodobno varovanje podatkov.',
   2: 'Obvestilo razkrije prijavitelja Luko Kovača in kodo SOVA za mapo z njegovo prijavo ter kopijo poštnega predala. Zapis je vseboval dve plasti: dekodiranje HEX je razkrilo zapis Base64, šele njegovo dekodiranje pa besedilo. Vrstni red je pomemben, ker mora biti rezultat prvega postopka veljaven vhod za drugega. HEX in Base64 sta kodiranji, ne šifriranje; tudi njuna kombinacija ne zagotavlja zaupnosti. Besedilo obvestila samo po sebi še ne pojasni celotnega poteka incidenta.',
   3: 'Phishing skuša uporabnika zavesti v razkritje podatkov ali nevarno dejanje. Sporočilo B združuje tuji domeni pošiljatelja in povezave, grožnjo blokade ter zahtevo po prijavnih podatkih. Nujno obvestilo o učilnici in pričakovana priponka v drugih sporočilih sama po sebi nista phishing. V tem pripravljenem primeru ostalih šest sporočil ni zlonamernih; v resničnem svetu tudi ujemajoča se domena sama ne jamči varnosti. HTTPS šifrira povezavo, vendar sam ne potrjuje legitimnosti strani.',
   4: 'Ime ljubljenčka in rojstna letnica sta javna in predvidljiva gradnika. Dodan klicaj ali preprosta zamenjava črke z znakom tega ne odpravita. Boljša izbira so dolga, naključna in za vsak račun različna gesla; pri ustvarjanju ter shranjevanju pomaga upravljalnik gesel. Večfaktorska prijava doda zaščito računa, ne spremeni pa šibkega gesla v močno. Ta vaja ne razkriva Lukovega pravega gesla in ne dokazuje, kaj je bilo uporabljeno pri incidentu.',
   5: 'Čas 10:42 usmeri naslednji pregled na dogodke okoli domnevnega Lukovega odhoda iz učilnice; ne dokazuje, kdo je ostal za računalnikom. Rdeč nahrbtnik na hodniku je pomagal prepoznati pravo fotografijo med drugimi slikami. Polje Čas nastanka posnetka beleži 10:42:17, polje Čas spremembe pa 11:15:00. Poznejše urejanje ali ponovno shranjevanje lahko spremeni čas datoteke, zato 11:15 ne pomeni nujno časa fotografiranja. Sam zapis spremembe ne pove, kaj je bilo spremenjeno. Metapodatki lahko manjkajo ali so spremenjeni; so sled za preverjanje, ne nezmotljiv dokaz.',
   6: 'Paketni pregled in aplikacijski dnevnik sta različna vira. Šifrirani TLS-paketi ne razkrijejo računa ali poti; tukaj je njuna povezava pripravljena učna korelacija. Ločen dnevniški zapis ob 10:45:12 potrjuje uspešen prenos /zaupno/nacrt.pdf z računom ucenec17. Zavrnjen prenos, uspešen ogled, prenos druge datoteke in TCP ACK niso enak dokaz. Naslov IP 10.0.0.17 poveže dogodek z računalnikom, katerega zgodovino pregledaš v naslednjem koraku. Zapis potrjuje uporabo računa, sam pa ne dokazuje, katera oseba je bila za tipkovnico.',
-  7: 'Povezava iz Lukove pošte se pojavi tudi v zavarovani zgodovini; to še ne dokazuje, kdo jo je odprl oziroma ali je kdo vnesel geslo. Domnevni arhiv na most.si.arhiv-nacrtov.example pripada tuji domeni arhiv-nacrtov.example; most.si je le njena zavajajoča poddomena. Podobno zapisani most-si.example je druga tuja domena. Pri prijava.example/most.si/prijava pa je tuja domena prijava.example, šolsko ime je samo del poti. Potrjena gostitelja sta most.si in ucilnica.most.si; dodatek ?jezik=sl ne spremeni gostitelja. Izbira ponaredka je utemeljena z njegovo tujo domeno. Kopirana podoba in HTTPS sama ne potrjujeta pripadnosti šoli. Razčlenitev velja za te naslove; registrirana domena ni vedno sestavljena iz zadnjih dveh delov.',
-  8: 'Mesta v bajtu imajo uteži 128, 64, 32, 16, 8, 4, 2 in 1. Enica prispeva pripadajočo utež, ničla pa nič; seštevek je decimalna vrednost bajta. Tabela ASCII to vrednost poveže z znakom. Pet bajtov da besedo ISKRA: kodno ime projekta, ki mu pripada preneseni načrt. S tem si našel podatek, zaradi katerega si odprl preiskavo. Gre za predstavitev podatkov, ne za šifriranje; druga znakovna kodiranja lahko iste bajte razložijo drugače. Preiskava je zaključena.',
+  7: 'Povezava iz Lukove pošte se pojavi tudi v zavarovani zgodovini; to še ne dokazuje, kdo jo je odprl oziroma ali je kdo vnesel geslo. Domnevni arhiv na piramida.si.arhiv-nacrtov.example pripada tuji domeni arhiv-nacrtov.example; piramida.si je le njena zavajajoča poddomena. Podobno zapisani piramida-si.example je druga tuja domena. Pri prijava.example/piramida.si/prijava pa je tuja domena prijava.example, šolsko ime je samo del poti. Potrjena gostitelja sta piramida.si in ucilnica.piramida.si; dodatek ?jezik=sl ne spremeni gostitelja. Izbira ponaredka je utemeljena z njegovo tujo domeno. Kopirana podoba in HTTPS sama ne potrjujeta pripadnosti šoli. Razčlenitev velja za te naslove; registrirana domena ni vedno sestavljena iz zadnjih dveh delov.',
+  8: 'Mesta v bajtu imajo uteži 128, 64, 32, 16, 8, 4, 2 in 1. Enica prispeva pripadajočo utež, ničla pa nič; seštevek je decimalna vrednost bajta. Tabela ASCII to vrednost poveže z znakom. Deset bajtov da besedo BRUCOVANJE: kodno ime projekta, ki mu pripada preneseni načrt. S tem si našel podatek, zaradi katerega si odprl preiskavo. Gre za predstavitev podatkov, ne za šifriranje; druga znakovna kodiranja lahko iste bajte razložijo drugače. Preiskava je zaključena.',
 };
 
 const feedback: Record<number, string> = {
@@ -322,8 +322,8 @@ const feedback: Record<number, string> = {
   4: 'Izbor priporočil še ni pravilen. Preveri, ali izbrani ukrepi zmanjšajo predvidljivost in ponovno uporabo gesel ter bolje zaščitijo račun.',
   5: 'Še ni pravilno. Preveri fotografijo hodnika z rdečim nahrbtnikom in loči nastanek posnetka od poznejše spremembe datoteke. Odgovori v obliki HH:MM.',
   6: 'Še ni pravilno. Podatke poišči v povezanem aplikacijskem zapisu. Hkrati preveri dejanje, natančno pot datoteke in rezultat; ogled ter zavrnjen prenos ne zadostujeta.',
-  7: 'Še ni pravilno. Izberi ponarejeno povezavo in vnesi tujo domeno, ki ji pripada. Ne prepisuj celotnega URL-ja, zavajajoče poddomene most.si ali poti.',
-  8: 'Še ni pravilno. Pri vsakem bajtu prištej samo uteži mest z enico, nato preveri decimalno vsoto v tabeli ASCII. Vpiši pet črk v vrstnem redu bajtov, brez vmesnih presledkov.',
+  7: 'Še ni pravilno. Izberi ponarejeno povezavo in vnesi tujo domeno, ki ji pripada. Ne prepisuj celotnega URL-ja, zavajajoče poddomene piramida.si ali poti.',
+  8: 'Še ni pravilno. Pri vsakem bajtu prištej samo uteži mest z enico, nato preveri decimalno vsoto v tabeli ASCII. Vpiši deset črk v vrstnem redu bajtov, brez vmesnih presledkov.',
 };
 
 export function getStage(id: number): StageContent | undefined {
@@ -354,7 +354,7 @@ export function validateProfilePassword(answer: unknown): boolean {
 export function validateAnswer(id: number, answer: unknown): boolean {
   switch (id) {
     case 1:
-      return ['MOST', 'KODA JE MOST'].includes(words(answer) ?? '');
+      return ['PIRAMIDA', 'KODA JE PIRAMIDA'].includes(words(answer) ?? '');
     case 2: {
       const value = words(answer);
       return value === 'SOVA' || (value !== undefined && /^KODA\s*:\s*SOVA$/u.test(value));
@@ -382,18 +382,18 @@ export function validateAnswer(id: number, answer: unknown): boolean {
       const { sourceId, domain } = answer as { sourceId?: unknown; domain?: unknown };
       if (typeof sourceId !== 'string' || typeof domain !== 'string') return false;
       const foreignDomains = new Map([
-        ['C', 'arhiv-nacrtov.example'], ['D', 'most-si.example'], ['E', 'prijava.example'],
+        ['C', 'arhiv-nacrtov.example'], ['D', 'piramida-si.example'], ['E', 'prijava.example'],
       ]);
       return domain.trim().toLowerCase() === foreignDomains.get(sourceId);
     }
     case 8:
-      return typeof answer === 'string' && answer.trim().toUpperCase() === 'ISKRA';
+      return typeof answer === 'string' && answer.trim().toUpperCase() === 'BRUCOVANJE';
     default:
       return false;
   }
 }
 
 export const finale: Finale = {
-  title: 'Odkril si projekt ISKRA.',
+  title: 'Odkril si projekt BRUCOVANJE.',
   topics: stageSummaries.map(({ id, topic }) => id === 2 ? 'Kodiranja (HEX in Base64)' : topic),
 };

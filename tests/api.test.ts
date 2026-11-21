@@ -49,9 +49,9 @@ async function start(client = team, teamName = 'Testna skupina'): Promise<Sessio
 }
 
 const correctAnswers: unknown[] = [
-  'MOST', 'SOVA', { message: 'B', reasons: ['domain', 'link'] },
+  'PIRAMIDA', 'SOVA', { message: 'B', reasons: ['domain', 'link'] },
   { recommendations: ['long', 'unique', 'manager', 'mfa'] }, '10:42', 'ucenec17',
-  { sourceId: 'C', domain: 'arhiv-nacrtov.example' }, 'ISKRA',
+  { sourceId: 'C', domain: 'arhiv-nacrtov.example' }, 'BRUCOVANJE',
 ];
 
 async function solveThrough(end: number, client = team) {
@@ -101,7 +101,7 @@ describe('anonimne seje in zaščita API-ja', () => {
     expect(bootstrap.body.stages).toHaveLength(8);
     for (const stage of bootstrap.body.stages) expect(Object.keys(stage).sort()).toEqual(['id', 'title', 'topic']);
     const initial = JSON.stringify(bootstrap.body);
-    for (const secret of ['KODA JE MOST', 'SOVA', 'ucenec17', '10:42', 'ISKRA', 'correctAnswer', 'isCorrect']) {
+    for (const secret of ['KODA JE PIRAMIDA', 'SOVA', 'ucenec17', '10:42', 'BRUCOVANJE', 'correctAnswer', 'isCorrect']) {
       expect(initial).not.toContain(secret);
     }
     const session = await start();
@@ -113,7 +113,7 @@ describe('anonimne seje in zaščita API-ja', () => {
     const stage = await team.agent.get('/api/stages/1').expect(200);
     expect(stage.body.hints).toEqual([]);
     expect(stage.body.explanation).toBeUndefined();
-    expect(stage.body.stage.evidence).toBe('NRGD MH PRVW');
+    expect(stage.body.stage.evidence).toBe('NRGD MH SLUDPLGD');
     expect(stage.body.stage.correctAnswer).toBeUndefined();
     expect(stage.body.stage.hints).toBeUndefined();
     expect(stage.body.stage.explanation).toBeUndefined();
@@ -124,7 +124,7 @@ describe('anonimne seje in zaščita API-ja', () => {
     await request(app).get('/api/stages/1').set('Cookie', 'operacija404=neveljavno').expect(401);
     await team.agent.get('/api/stages/1').expect(409);
     await team.agent.get('/api/finale').expect(409);
-    await post(team, '/api/stages/1/answer', { answer: 'MOST' }).expect(409);
+    await post(team, '/api/stages/1/answer', { answer: 'PIRAMIDA' }).expect(409);
     await post(team, '/api/stages/1/hints', { index: 1 }).expect(409);
   });
 
@@ -138,7 +138,7 @@ describe('anonimne seje in zaščita API-ja', () => {
     await team.agent.get('/api/finale').expect(403);
     for (const id of ['0', '9', '-1', '1.5', 'ni-stevilo']) {
       await team.agent.get(`/api/stages/${id}`).expect(404);
-      await post(team, `/api/stages/${id}/answer`, { answer: 'MOST' }).expect(404);
+      await post(team, `/api/stages/${id}/answer`, { answer: 'PIRAMIDA' }).expect(404);
     }
     const response = await team.agent.get('/api/session');
     expect(response.body.session.attempts).toEqual({});
@@ -162,7 +162,7 @@ describe('anonimne seje in zaščita API-ja', () => {
   it('ne streže izvajalkinega vodiča, strežniške kode ali konfiguracije', async () => {
     for (const path of ['/VODNIK_IZVAJALKE.md', '/server/content.ts', '/.env', '/package.json']) {
       const response = await request(app).get(path).expect(404);
-      expect(response.text).not.toContain('ISKRA');
+      expect(response.text).not.toContain('BRUCOVANJE');
       expect(response.text).not.toContain('DATABASE_URL');
     }
   });
@@ -225,13 +225,13 @@ describe('potek igre, namigi in shranjevanje', () => {
       if (id < 8) await team.agent.get('/api/finale').expect(403);
     }
     const finished = await team.agent.get('/api/finale').expect(200);
-    expect(finished.body.finale.title).toBe('Odkril si projekt ISKRA.');
+    expect(finished.body.finale.title).toBe('Odkril si projekt BRUCOVANJE.');
     expect(finished.body.finale.topics).toHaveLength(8);
     expect(finished.body.session.solved).toHaveLength(8);
     expect(finished.body.session.startedAt).toBe(beginning.startedAt);
     expect(Date.parse(finished.body.session.completedAt)).toBeGreaterThanOrEqual(Date.parse(beginning.startedAt));
     const completedAt = finished.body.session.completedAt;
-    await post(team, '/api/stages/8/answer', { answer: 'iskra' }).expect(200);
+    await post(team, '/api/stages/8/answer', { answer: 'brucovanje' }).expect(200);
     const afterDuplicate = await team.agent.get('/api/finale');
     expect(afterDuplicate.body.session.completedAt).toBe(completedAt);
     expect(afterDuplicate.body.session.attempts['8']).toBe(2);
@@ -272,12 +272,12 @@ describe('potek igre, namigi in shranjevanje', () => {
     await solveThrough(6);
     const failures: unknown[] = [
       ...['A', 'B', 'F'].map(sourceId => ({ sourceId, domain: 'arhiv-nacrtov.example' })),
-      { sourceId: 'C', domain: 'most-si.example' },
+      { sourceId: 'C', domain: 'piramida-si.example' },
       { sourceId: 'D', domain: 'prijava.example' },
       { sourceId: 'E', domain: 'arhiv-nacrtov.example' },
       { sourceId: 'C', domain: 'https://arhiv-nacrtov.example' },
-      { sourceId: 'E', domain: 'prijava.example/most.si/prijava' },
-      { sourceId: 'C', url: 'https://most.si/prijava' },
+      { sourceId: 'E', domain: 'prijava.example/piramida.si/prijava' },
+      { sourceId: 'C', url: 'https://piramida.si/prijava' },
       'C',
     ];
     for (const answer of failures) {
@@ -288,13 +288,13 @@ describe('potek igre, namigi in shranjevanje', () => {
       expect(rejected.body.session.currentStage).toBe(7);
       await team.agent.get('/api/stages/8').expect(403);
     }
-    await post(team, '/api/stages/8/answer', { answer: 'ISKRA' }).expect(403);
+    await post(team, '/api/stages/8/answer', { answer: 'BRUCOVANJE' }).expect(403);
     const unsolved = await team.agent.get('/api/stages/7').expect(200);
     expect(unsolved.body.solved).toBe(false);
     expect(unsolved.body.explanation).toBeUndefined();
 
     const identified = await post(team, '/api/stages/7/answer', {
-      answer: { sourceId: 'D', domain: '  MOST-SI.EXAMPLE  ' },
+      answer: { sourceId: 'D', domain: '  PIRAMIDA-SI.EXAMPLE  ' },
     }).expect(200);
     expect(identified.body.correct).toBe(true);
     expect(identified.body.explanation).toBeTruthy();
@@ -326,7 +326,7 @@ describe('potek igre, namigi in shranjevanje', () => {
     const stage = await team.agent.get('/api/stages/7').expect(200);
     expect(stage.body.solved).toBe(true);
     expect(stage.body.explanation).toBeTruthy();
-    for (const answer of ['C', { sourceId: 'C', url: 'https://most.si/prijava' }, correctAnswers[6]]) {
+    for (const answer of ['C', { sourceId: 'C', url: 'https://piramida.si/prijava' }, correctAnswers[6]]) {
       const repeated = await post(team, '/api/stages/7/answer', { answer }).expect(200);
       expect(repeated.body.correct).toBe(true);
       expect(repeated.body.explanation).toBe(stage.body.explanation);
@@ -448,8 +448,8 @@ describe('potek igre, namigi in shranjevanje', () => {
   it('serijsko shrani sočasne odgovore in namige brez podvojenega napredka', async () => {
     await start();
     const answers = await Promise.all([
-      post(team, '/api/stages/1/answer', { answer: 'MOST' }),
-      post(team, '/api/stages/1/answer', { answer: 'KODA JE MOST' }),
+      post(team, '/api/stages/1/answer', { answer: 'PIRAMIDA' }),
+      post(team, '/api/stages/1/answer', { answer: 'KODA JE PIRAMIDA' }),
     ]);
     for (const answer of answers) {
       expect(answer.status).toBe(200);

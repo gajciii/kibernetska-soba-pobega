@@ -58,7 +58,7 @@ describe('trajne omejitve novih sej in iger', () => {
     expect(responses.every(response => response.body.nextStartAt === new Date(clock + 60_000).toISOString())).toBe(true);
     expect(await counts()).toEqual({ sessions: 1, runs: 1 });
     expect((await pool.query("SELECT cardinality(accepted_at_ms) AS n FROM request_limits WHERE action='start'")).rows[0].n).toBe(1);
-    const answer = await post(browser, '/api/stages/1/answer', { answer: 'MOST' }).expect(200);
+    const answer = await post(browser, '/api/stages/1/answer', { answer: 'PIRAMIDA' }).expect(200);
     expect(answer.body.correct).toBe(true);
     const repeated = await start(browser).expect(200);
     expect(repeated.body.session.solved).toEqual([1]);
@@ -136,7 +136,7 @@ describe('trajne omejitve novih sej in iger', () => {
     await start(active).expect(200);
     const hint = await post(active, '/api/stages/1/hints', { index: 1 }).expect(200);
     expect(hint.body.session.hintCount).toBe(1);
-    expect((await post(active, '/api/stages/1/answer', { answer: 'MOST' }).expect(200)).body.correct).toBe(true);
+    expect((await post(active, '/api/stages/1/answer', { answer: 'PIRAMIDA' }).expect(200)).body.correct).toBe(true);
     const pending = await request(apps[0]).get('/api/session').set('Cookie', waiting.cookie).expect(200);
     expect(pending.body.session).toBeNull();
     expect(pending.body.nextStartAt).toBeNull();
@@ -167,7 +167,7 @@ describe('trajne omejitve novih sej in iger', () => {
   it('dopolni ime stare igre brez novega začetka tudi med izčrpano omejitvijo', async () => {
     const browser = await anonymous();
     const response = await start(browser).expect(200);
-    await post(browser, '/api/stages/1/answer', { answer: 'MOST' }).expect(200);
+    await post(browser, '/api/stages/1/answer', { answer: 'PIRAMIDA' }).expect(200);
     await pool.query("UPDATE game_sessions SET progress=jsonb_set(progress,'{teamName}','\"\"') WHERE token_hash=$1", [hash(browser)]);
     await pool.query("UPDATE request_limits SET accepted_at_ms=$1 WHERE action='start'", [Array(60).fill(clock)]);
     const named = await post(browser, '/api/session', { teamName: 'Dopolnjeno ime' }).expect(200);
@@ -179,7 +179,7 @@ describe('trajne omejitve novih sej in iger', () => {
   it('migrira v2 enkrat ob sočasnih zagonih in ohrani sejo, rezultat ter čas začetka', async () => {
     const browser = await anonymous();
     const started = await start(browser).expect(200);
-    await post(browser, '/api/stages/1/answer', { answer: 'MOST' }).expect(200);
+    await post(browser, '/api/stages/1/answer', { answer: 'PIRAMIDA' }).expect(200);
     const before = (await pool.query('SELECT progress,run_id,csrf,expires_at FROM game_sessions WHERE token_hash=$1', [hash(browser)])).rows[0];
     const score = (await pool.query('SELECT * FROM leaderboard_runs')).rows[0];
     // Samo izolirana testna shema predstavlja bazo pred novo migracijo.

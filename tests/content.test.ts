@@ -1,13 +1,13 @@
 import { describe, expect, it } from 'vitest';
 import { finale, getExplanation, getFeedback, getHint, getStage, stageSummaries, validateAnswer, validateProfilePassword } from '../server/content.js';
-import { convertText, hexToText, textToHex } from '../shared/converters.js';
+import { caesarDecrypt, convertText, hexToText, textToHex } from '../shared/converters.js';
 
 const stage2Intermediate = 'UFJJSkFWSVRFTEo6IExVS0EgS09WQUMuIEtPREEgTUFQRTogU09WQS4=';
 
 describe('strežniško preverjanje osmih stopenj', () => {
   const correct: [number, unknown][] = [
-    [1, 'MOST'], [2, 'SOVA'], [3, { message: 'B', reasons: ['domain', 'link'] }],
-    [4, { recommendations: ['long', 'unique', 'manager', 'mfa'] }], [5, '10:42'], [6, 'ucenec17'], [7, { sourceId: 'C', domain: 'arhiv-nacrtov.example' }], [8, 'ISKRA'],
+    [1, 'PIRAMIDA'], [2, 'SOVA'], [3, { message: 'B', reasons: ['domain', 'link'] }],
+    [4, { recommendations: ['long', 'unique', 'manager', 'mfa'] }], [5, '10:42'], [6, 'ucenec17'], [7, { sourceId: 'C', domain: 'arhiv-nacrtov.example' }], [8, 'BRUCOVANJE'],
   ];
 
   it.each(correct)('sprejme pravilen odgovor stopnje %i', (id, answer) => {
@@ -21,17 +21,27 @@ describe('strežniško preverjanje osmih stopenj', () => {
   });
 
   it('prilagodi normalizacijo besednim kodam', () => {
-    expect(validateAnswer(1, '  koda   je \n most  ')).toBe(true);
-    expect(validateAnswer(1, '  most  ')).toBe(true);
-    expect(validateAnswer(1, 'M O S T')).toBe(false);
+    expect(validateAnswer(1, '  koda   je \n piramida  ')).toBe(true);
+    expect(validateAnswer(1, '  piramida  ')).toBe(true);
+    expect(validateAnswer(1, 'P I R A M I D A')).toBe(false);
+    expect(validateAnswer(1, 'MOST')).toBe(false);
+    expect(validateAnswer(1, 'KODA JE MOST')).toBe(false);
     expect(validateAnswer(2, ' koda :  sova ')).toBe(true);
     expect(validateAnswer(2, 'KODA:SOVA')).toBe(true);
     expect(validateAnswer(2, ' sOvA ')).toBe(true);
     expect(validateAnswer(6, ' UceNec17  ')).toBe(true);
-    expect(validateAnswer(8, '  iSkRa\n')).toBe(true);
-    expect(validateAnswer(8, 'IS KRA')).toBe(false);
+    expect(validateAnswer(8, '  bRuCoVaNjE\n')).toBe(true);
+    expect(validateAnswer(8, 'BRU COVANJE')).toBe(false);
+    expect(validateAnswer(8, 'ISKRA')).toBe(false);
     expect(validateAnswer(8, 'KLJUC')).toBe(false);
     expect(validateAnswer(8, 'KLJUČ')).toBe(false);
+  });
+
+  it('Cezarjev dokaz razkrije novo kodo PIRAMIDA', () => {
+    const decoded = caesarDecrypt(getStage(1)!.evidence!, 3);
+    expect(decoded).toBe('KODA JE PIRAMIDA');
+    expect(validateAnswer(1, decoded)).toBe(true);
+    expect(validateAnswer(1, decoded.split(' ').at(-1))).toBe(true);
   });
 
   it('ločuje ročni vnos gesla od priporočil in zahteva tujo domeno', () => {
@@ -106,8 +116,8 @@ describe('strežniško preverjanje osmih stopenj', () => {
   it('ne izmisli dodatne devete uganke', () => {
     expect(getStage(9)).toBeUndefined();
     expect(getStage(-1)).toBeUndefined();
-    expect(validateAnswer(9, 'ISKRA')).toBe(false);
-    expect(finale.title).toBe('Odkril si projekt ISKRA.');
+    expect(validateAnswer(9, 'BRUCOVANJE')).toBe(false);
+    expect(finale.title).toBe('Odkril si projekt BRUCOVANJE.');
     expect(finale.topics).toHaveLength(8);
     expect(Object.keys(finale).sort()).toEqual(['title', 'topics']);
   });
@@ -118,26 +128,26 @@ describe('razširjeni dokazi ostanejo skladni z obstoječimi rešitvami', () => 
     const stage = getStage(3)!;
     const mails = stage.mails!;
     expect(stage.intro).toMatch(/Luk[ae] Kovača?/u);
-    expect(stage.intro).toContain('most.si');
+    expect(stage.intro).toContain('piramida.si');
     expect(mails.map(mail => mail.id)).toEqual(['A', 'C', 'D', 'B', 'E', 'F', 'G']);
     expect(new Set(mails.map(mail => mail.subject)).size).toBe(7);
     for (const mail of mails) {
-      expect(mail.recipient).toBe('Luka Kovač <luka.kovac@most.si>');
+      expect(mail.recipient).toBe('Luka Kovač <luka.kovac@piramida.si>');
       expect(mail.preview).toBeTruthy();
       expect(mail.time).toMatch(/^\d{2}:\d{2}$/u);
       expect(mail.sender).toContain('@');
       expect(validateAnswer(3, { message: mail.id, reasons: ['domain', 'link'] })).toBe(mail.id === 'B');
       if (mail.id !== 'B') {
-        expect(mail.sender).toMatch(/@most\.si>$/u);
+        expect(mail.sender).toMatch(/@piramida\.si>$/u);
         if (mail.linkUrl) {
           const host = new URL(mail.linkUrl).hostname;
-          expect(host === 'most.si' || host === 'ucilnica.most.si').toBe(true);
+          expect(host === 'piramida.si' || host === 'ucilnica.piramida.si').toBe(true);
         }
       }
     }
-    expect(mails.find(mail => mail.id === 'B')!.linkUrl).toBe('https://most.si.arhiv-nacrtov.example/prijava');
+    expect(mails.find(mail => mail.id === 'B')!.linkUrl).toBe('https://piramida.si.arhiv-nacrtov.example/prijava');
     expect(getStage(7)!.choices!.map(choice => choice.label)).toContain(mails.find(mail => mail.id === 'B')!.linkUrl);
-    expect(mails.find(mail => mail.id === 'D')!.sender).toBe('Šolska IT podpora <podpora@most.si>');
+    expect(mails.find(mail => mail.id === 'D')!.sender).toBe('Šolska IT podpora <podpora@piramida.si>');
     expect(mails.find(mail => mail.id === 'F')!.attachment).toBeTruthy();
     expect(getExplanation(3)).toContain('ujemajoča se domena sama ne jamči varnosti');
   });
@@ -165,8 +175,8 @@ describe('razširjeni dokazi ostanejo skladni z obstoječimi rešitvami', () => 
     const choices = getStage(7)!.choices!;
     expect(choices).toHaveLength(6);
     expect(choices.map(choice => choice.id)).toEqual(['A', 'B', 'C', 'D', 'E', 'F']);
-    expect(choices[2].label).toBe('https://most.si.arhiv-nacrtov.example/prijava');
-    const domains = { C: 'arhiv-nacrtov.example', D: 'most-si.example', E: 'prijava.example' };
+    expect(choices[2].label).toBe('https://piramida.si.arhiv-nacrtov.example/prijava');
+    const domains = { C: 'arhiv-nacrtov.example', D: 'piramida-si.example', E: 'prijava.example' };
     for (const [sourceId, domain] of Object.entries(domains)) {
       expect(validateAnswer(7, { sourceId, domain })).toBe(true);
       expect(validateAnswer(7, { sourceId, domain: `  ${domain.toUpperCase()}  ` })).toBe(true);
@@ -176,14 +186,14 @@ describe('razširjeni dokazi ostanejo skladni z obstoječimi rešitvami', () => 
     }
     for (const choice of choices) {
       const host = new URL(choice.label).hostname;
-      expect(['most.si', 'ucilnica.most.si'].includes(host) || host.endsWith('.example')).toBe(true);
+      expect(['piramida.si', 'ucilnica.piramida.si'].includes(host) || host.endsWith('.example')).toBe(true);
     }
   });
 
   it('zavrne šolsko domeno, celoten URL, pot, nepopolno domeno in stare odgovore', () => {
     for (const domain of [
-      'most.si', 'ucilnica.most.si', 'most.si.arhiv-nacrtov.example',
-      'https://arhiv-nacrtov.example', 'https://most.si.arhiv-nacrtov.example/prijava',
+      'piramida.si', 'ucilnica.piramida.si', 'piramida.si.arhiv-nacrtov.example',
+      'https://arhiv-nacrtov.example', 'https://piramida.si.arhiv-nacrtov.example/prijava',
       'arhiv-nacrtov.example/prijava', 'arhiv-nacrtov.example?jezik=sl',
       'arhiv-nacrtov', '.example', 'example', 'arhiv-nacrtov.example.',
       'www.arhiv-nacrtov.example', 'arhiv-nacrtov.example:443',
@@ -192,7 +202,7 @@ describe('razširjeni dokazi ostanejo skladni z obstoječimi rešitvami', () => 
     for (const sourceId of ['A', 'B', 'F', 'c', 'Z', '', null, 7, ['C']]) {
       expect(validateAnswer(7, { sourceId, domain: 'arhiv-nacrtov.example' })).toBe(false);
     }
-    for (const answer of ['C', 'arhiv-nacrtov.example', { sourceId: 'C' }, { domain: 'arhiv-nacrtov.example' }, { sourceId: 'C', url: 'https://most.si/prijava' }, [{ sourceId: 'C', domain: 'arhiv-nacrtov.example' }]]) {
+    for (const answer of ['C', 'arhiv-nacrtov.example', { sourceId: 'C' }, { domain: 'arhiv-nacrtov.example' }, { sourceId: 'C', url: 'https://piramida.si/prijava' }, [{ sourceId: 'C', domain: 'arhiv-nacrtov.example' }]]) {
       expect(validateAnswer(7, answer)).toBe(false);
     }
   });
@@ -284,7 +294,7 @@ describe('razširjeni dokazi ostanejo skladni z obstoječimi rešitvami', () => 
   });
 
   it('zapiski usmerjajo pregled dokazov brez izpisanih končnih kod', () => {
-    for (const [id, solution] of [[1, 'MOST'], [2, 'SOVA'], [8, 'ISKRA']] as const) {
+    for (const [id, solution] of [[1, 'PIRAMIDA'], [2, 'SOVA'], [8, 'BRUCOVANJE']] as const) {
       const notes = getStage(id)!.investigations!;
       expect(notes).toHaveLength(3);
       expect(new Set(notes.map(note => note.id)).size).toBe(3);
@@ -352,17 +362,23 @@ describe('razširjeni dokazi ostanejo skladni z obstoječimi rešitvami', () => 
     expect(getHint(8, 1)?.match(/\d+/gu)?.map(Number)).toEqual(weights);
     expect(stage.note).toContain('ASCII');
     const bytes = stage.evidence!.split(' ');
+    expect(bytes).toHaveLength(10);
     const values = bytes.map(byte => {
       expect(byte).toMatch(/^[01]{8}$/u);
       return [...byte].reduce((sum, bit, index) => sum + (bit === '1' ? weights[index] : 0), 0);
     });
     const code = String.fromCodePoint(...values);
+    expect(values).toEqual([66, 82, 85, 67, 79, 86, 65, 78, 74, 69]);
+    expect(code).toBe('BRUCOVANJE');
+    expect(getHint(8, 2)).toContain(`${bytes[0]} sta enici na mestih z utežmi 64 in 2`);
+    expect(getHint(8, 2)).toContain('Vsota je 66');
+    expect(getHint(8, 2)).toContain('preostalih devet bajtov');
     expect(validateAnswer(8, code)).toBe(true);
     expect(finale.title).toContain(code);
     expect(validateAnswer(8, values.join(' '))).toBe(false);
     expect(validateAnswer(8, values.reduce((sum, value) => sum + value, 0))).toBe(false);
     expect(validateAnswer(8, [...code].reverse().join(''))).toBe(false);
-    expect(JSON.stringify(stage)).not.toMatch(/\bISKRA\b|correctAnswer|isCorrect/iu);
+    expect(JSON.stringify(stage)).not.toMatch(/\bBRUCOVANJE\b|correctAnswer|isCorrect/iu);
   });
 });
 
@@ -370,9 +386,9 @@ describe('ločeno razkrivanje učne vsebine', () => {
   it('vrne javne povzetke brez rešitev in ohrani izvirno gradivo', () => {
     expect(stageSummaries).toHaveLength(8);
     for (const summary of stageSummaries) expect(Object.keys(summary).sort()).toEqual(['id', 'title', 'topic']);
-    expect(getStage(1)?.evidence).toBe('NRGD MH PRVW');
+    expect(getStage(1)?.evidence).toBe('NRGD MH SLUDPLGD');
     expect(getStage(2)?.evidence).toBe(textToHex(stage2Intermediate));
-    expect(getStage(8)?.evidence).toBe('01001001 01010011 01001011 01010010 01000001');
+    expect(getStage(8)?.evidence).toBe('01000010 01010010 01010101 01000011 01001111 01010110 01000001 01001110 01001010 01000101');
     for (let id = 1; id <= 8; id++) {
       const stage = getStage(id);
       expect(stage).toBeDefined();
@@ -380,7 +396,7 @@ describe('ločeno razkrivanje učne vsebine', () => {
       expect(stage).not.toHaveProperty('isCorrect');
       expect(stage).not.toHaveProperty('hints');
       expect(stage).not.toHaveProperty('explanation');
-      expect(JSON.stringify(stage)).not.toMatch(/\bISKRA\b/u);
+      expect(JSON.stringify(stage)).not.toMatch(/\bBRUCOVANJE\b/u);
       expect(getHint(id, 1)).toBeTruthy();
       expect(getHint(id, 2)).toBeTruthy();
       expect(getExplanation(id)).toBeTruthy();
@@ -391,7 +407,7 @@ describe('ločeno razkrivanje učne vsebine', () => {
   it('vrne samostojno kopijo podatkov in zavrne neobstoječ namig', () => {
     const stage = getStage(1)!;
     stage.evidence = 'spremenjeno';
-    expect(getStage(1)?.evidence).toBe('NRGD MH PRVW');
+    expect(getStage(1)?.evidence).toBe('NRGD MH SLUDPLGD');
     expect(getHint(1, 0)).toBeUndefined();
     expect(getHint(1, 3)).toBeUndefined();
     expect(getHint(9, 1)).toBeUndefined();

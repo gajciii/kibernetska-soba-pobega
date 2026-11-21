@@ -143,7 +143,7 @@
 .link-browser-page-top { display: flex; align-items: center; justify-content: flex-end; gap: 24px; min-height: 62px; padding: 18px 26px; color: #c3cddc; font-size: .875rem; }
 .link-browser-page-top > svg { width: 19px; height: 19px; color: #acb9cb; }
 .link-browser-page-main { max-width: 600px; margin: 0 auto; padding: 35px 28px 68px; text-align: center; }
-.link-browser-wordmark { margin: 0; color: #e5ebf4; font-size: clamp(3.3rem, 8cqw, 5rem); font-weight: 500; letter-spacing: -.065em; line-height: 1; }
+.link-browser-wordmark { margin: 0; color: #e5ebf4; font-size: clamp(2rem, 8cqw, 4.5rem); font-weight: 500; letter-spacing: -.065em; line-height: 1; }
 .link-browser-wordmark > span { color: #a7c8e6; }
 .link-browser-page-main > p { margin: 13px 0 28px; color: #a7b5c8; font-size: .875rem; letter-spacing: .08em; }
 .link-browser-search-capture { display: flex; align-items: center; gap: 14px; min-height: 50px; padding: 12px 17px; border: 1px solid #4b596c; border-radius: var(--control-radius); color: #b8c5d7; background: #252e3b; font-size: .875rem; text-align: left; }

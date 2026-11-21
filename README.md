@@ -4,7 +4,7 @@ Iz šolskega arhiva je bil prenesen zaupni načrt. Skrbnik ima nenavadno sporoč
 
 ## Namen
 
-Slovenska izobraževalna soba pobega za srednješolce, predvidoma **45–60 minut v paru**. Obravnava Cezarjevo šifro, kodiranja, phishing, gesla, metapodatke, omrežne dnevnike, domene in binarni zapis. Igralca nagovarja v ednini. Šola Most, osebe in dokazi so izmišljeni; igra ne izvaja pravih vdorov ali prijav v tuje račune.
+Slovenska izobraževalna soba pobega za srednješolce, predvidoma **45–60 minut v paru**. Obravnava Cezarjevo šifro, kodiranja, phishing, gesla, metapodatke, omrežne dnevnike, domene in binarni zapis. Igralca nagovarja v ednini. Šola Piramida, osebe in dokazi so izmišljeni; igra ne izvaja pravih vdorov ali prijav v tuje račune.
 
 Registracija ni potrebna. Obvezno je ime skupine, ki je javno na lestvici, zato izberi izmišljeno oznako. Napredek se shranjuje v PostgreSQL in nadaljuje v istem brskalniku. Lestvica primerja rešene izzive, nato manj namigov in krajši čas; prejšnji rezultati ostanejo tudi po ponastavitvi.
 
@@ -53,13 +53,13 @@ Express streže aplikacijo in API v enem procesu. [Navodila za postavitev](docs/
 
 | Izziv | Rešitev |
 | --- | --- |
-| 1. Cezarjeva šifra | `MOST` — premik za tri mesta nazaj. |
+| 1. Cezarjeva šifra | `PIRAMIDA` — premik za tri mesta nazaj. |
 | 2. Kodirano obvestilo | `SOVA` — najprej HEX, nato Base64. |
 | 3. Phishing | Sporočilo **B**, četrto na seznamu, in vsaj dva pravilna razloga: tuja domena pošiljatelja, tuja domena povezave, grožnja/nujnost, zahteva po geslu in enkratni kodi. Brez napačnih razlogov. |
 | 4. Predvidljivo geslo | `luna2009` ali `2009luna`, nato vsa štiri priporočila: dolgo naključno geslo/fraza, drugačno geslo za vsak račun, upravljalnik gesel in večfaktorska prijava. |
 | 5. Fotografija | `10:42` — čas nastanka posnetka `hodnik.jpg`. |
 | 6. Prenos datoteke | `ucenec17` — uspešen prenos `/zaupno/nacrt.pdf`. |
-| 7. Tuja domena | Eden od pravilnih parov: **C / 3. povezava** → `arhiv-nacrtov.example`; **D / 4.** → `most-si.example`; **E / 5.** → `prijava.example`. |
-| 8. Binarni zapis | `ISKRA` — decimalne vrednosti ASCII 73, 83, 75, 82, 65. |
+| 7. Tuja domena | Eden od pravilnih parov: **C / 3. povezava** → `arhiv-nacrtov.example`; **D / 4.** → `piramida-si.example`; **E / 5.** → `prijava.example`. |
+| 8. Binarni zapis | `BRUCOVANJE` — deset vrednosti ASCII: 66, 82, 85, 67, 79, 86, 65, 78, 74, 69. |
 
 </details>

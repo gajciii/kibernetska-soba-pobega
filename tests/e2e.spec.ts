@@ -60,6 +60,7 @@ test('vseh osem stopenj, lokalni pripomočki, nadaljevanje in zaključek', async
   await page.screenshot({ path: `.local/qa-${testInfo.project.name}-intro.png`, fullPage: true });
   await begin(page);
   await expectFirstStage(page);
+  await expect(page.locator('.source-evidence code')).toHaveText('NRGD MH SLUDPLGD');
   const timeline = page.getByRole('navigation', { name: 'Stopnje preiskave' });
   await expect(timeline.locator('.step-dot')).toHaveCount(8);
   await expect(timeline.getByRole('button').first()).toContainText('01');
@@ -95,7 +96,7 @@ test('vseh osem stopenj, lokalni pripomočki, nadaljevanje in zaključek', async
   await expect(caesar.locator('.cw-output-cell[data-selected="true"]')).toHaveText('K');
   await expect(caesar.getByRole('button', { name: 'Izberi črko N', exact: true })).toHaveAttribute('aria-pressed', 'true');
   await expect(page.getByLabel('Odgovor', { exact: true })).toHaveValue('mo');
-  await expect(page.locator('.investigation-main')).not.toContainText('KODA JE MOST');
+  await expect(page.locator('.investigation-main')).not.toContainText('KODA JE PIRAMIDA');
   await caesar.getByRole('button', { name: 'Izberi črko A', exact: true }).click();
   await expect(page.getByTestId('caesar-mapping')).toHaveText('A → X');
   await expect(caesar.locator('.cw-output-cell[data-selected="true"]')).toHaveText('X');
@@ -116,7 +117,7 @@ test('vseh osem stopenj, lokalni pripomočki, nadaljevanje in zaključek', async
   await submit(page, 'napacno');
   await expect(page.getByLabel('Odgovor', { exact: true })).toHaveValue('napacno');
   await expect(page.getByRole('alert')).toBeVisible();
-  await submit(page, '  koda  je most  ');
+  await submit(page, '  koda  je piramida  ');
   await expect(page.getByRole('status').filter({ hasText: 'Izziv opravljen' })).toBeVisible();
   await page.screenshot({ path: `.local/qa-${testInfo.project.name}-stage.png`, fullPage: true });
   await next(page);
@@ -193,7 +194,7 @@ test('vseh osem stopenj, lokalni pripomočki, nadaljevanje in zaključek', async
   await expect(mailButtons).toHaveCount(7);
   await expect(mailButtons.nth(3)).toHaveAttribute('aria-label', /^Odpri sporočilo B:/);
   await expect(page.locator('.iv-mail-owner')).toContainText('Luka Kovač');
-  await expect(page.locator('.iv-mail-owner')).toContainText('luka.kovac@most.si');
+  await expect(page.locator('.iv-mail-owner')).toContainText('luka.kovac@piramida.si');
   await expect(mailA).toContainText('Neprebrano');
   const unreadWeight = Number(await mailA.locator('.iv-mail-list-subject').evaluate(element => getComputedStyle(element).fontWeight));
   await mailA.click();
@@ -210,13 +211,13 @@ test('vseh osem stopenj, lokalni pripomočki, nadaljevanje in zaključek', async
   await page.getByLabel('Išči po poštnem predalu').fill('čez 10 minut');
   await mailB.click();
   await expect(page.getByText('Glave in podatki sporočila', { exact: true })).toHaveCount(0);
-  await expect(page.locator('.iv-mail-addresses')).toContainText('podpora@most-preverjanje.example');
-  await expect(page.locator('.iv-mail-addresses')).toContainText('luka.kovac@most.si');
+  await expect(page.locator('.iv-mail-addresses')).toContainText('podpora@piramida-preverjanje.example');
+  await expect(page.locator('.iv-mail-addresses')).toContainText('luka.kovac@piramida.si');
   const mailLink = page.getByRole('button', { name: 'Preveri šolski račun — pokaži dejanski naslov', exact: true });
   const mailTooltip = page.getByRole('tooltip');
   await expect(mailTooltip).toHaveCount(0);
   await mailLink.focus();
-  await expect(mailTooltip).toContainText('https://most.si.arhiv-nacrtov.example/prijava');
+  await expect(mailTooltip).toContainText('https://piramida.si.arhiv-nacrtov.example/prijava');
   await page.keyboard.press('Escape');
   await expect(mailTooltip).toHaveCount(0);
   await expect(mailLink).toBeFocused();
@@ -408,12 +409,14 @@ test('vseh osem stopenj, lokalni pripomočki, nadaljevanje in zaključek', async
   await expect(page.getByRole('alert')).toBeVisible();
   await submit(page, 'ucenec17', 'Uporabniški račun'); await next(page);
   const browserDesk = page.locator('.link-browser');
+  await expect(browserDesk.locator('.link-browser-wordmark')).toHaveText('PIRAMIDA.');
+  await expect(browserDesk.locator('.link-browser-favicon')).toHaveText('P');
   const address = browserDesk.locator('.link-browser-address');
   const capturedPage = browserDesk.locator('.link-browser-page');
   const originalPage = await capturedPage.innerHTML();
   const domainInput = page.getByLabel('Tuja domena', { exact: true });
   const checkDomain = page.getByRole('button', { name: 'Preveri domeno', exact: true });
-  await expect(address).toContainText('https://most.si/prijava');
+  await expect(address).toContainText('https://piramida.si/prijava');
   await expect(domainInput).toHaveValue('');
   await expect(checkDomain).toBeDisabled();
   await expect(browserDesk.locator('a, input')).toHaveCount(0);
@@ -422,7 +425,7 @@ test('vseh osem stopenj, lokalni pripomočki, nadaljevanje in zaključek', async
   await checkDomain.click();
   await expect(page.getByRole('alert')).toBeVisible();
   await page.getByRole('button', { name: 'Naslednja povezava', exact: true }).click();
-  await expect(address).toContainText('https://ucilnica.most.si/prijava');
+  await expect(address).toContainText('https://ucilnica.piramida.si/prijava');
   await expect(domainInput).toHaveValue('');
   await page.getByRole('button', { name: 'Prejšnja povezava', exact: true }).click();
   await expect(domainInput).toHaveValue('arhiv-nacrtov.example');
@@ -430,9 +433,9 @@ test('vseh osem stopenj, lokalni pripomočki, nadaljevanje in zaključek', async
   await browserDesk.locator('summary').filter({ hasText: 'Zgodovina' }).click();
   await expect(browserDesk.getByRole('button', { name: /^Odpri povezavo [1-6]$/ })).toHaveCount(6);
   await browserDesk.getByRole('button', { name: 'Odpri povezavo 3', exact: true }).click();
-  await expect(address).toContainText('https://most.si.arhiv-nacrtov.example/prijava');
+  await expect(address).toContainText('https://piramida.si.arhiv-nacrtov.example/prijava');
   await expect(domainInput).toHaveValue('');
-  await domainInput.fill('https://most.si.arhiv-nacrtov.example/prijava');
+  await domainInput.fill('https://piramida.si.arhiv-nacrtov.example/prijava');
   await checkDomain.click();
   await expect(page.getByRole('alert')).toBeVisible();
   await expect(page.locator('.answer-status')).not.toContainText('Izziv opravljen');
@@ -443,13 +446,13 @@ test('vseh osem stopenj, lokalni pripomočki, nadaljevanje in zaključek', async
   };
   await openHistory();
   await browserDesk.getByRole('button', { name: 'Odpri povezavo 6', exact: true }).click();
-  await expect(address).toContainText('https://most.si/prijava?jezik=sl');
+  await expect(address).toContainText('https://piramida.si/prijava?jezik=sl');
   await expect(page.getByRole('button', { name: 'Naslednja povezava', exact: true })).toBeDisabled();
   await expect(domainInput).toHaveValue('');
   await expect(capturedPage).toHaveJSProperty('innerHTML', originalPage);
   await openHistory();
   await browserDesk.getByRole('button', { name: 'Odpri povezavo 3', exact: true }).click();
-  await expect(domainInput).toHaveValue('https://most.si.arhiv-nacrtov.example/prijava');
+  await expect(domainInput).toHaveValue('https://piramida.si.arhiv-nacrtov.example/prijava');
   const targetNumber = testInfo.project.name.startsWith('edge') ? 5 : testInfo.project.name.includes('ozek') ? 4 : 3;
   await openHistory();
   const targetLink = browserDesk.getByRole('button', { name: `Odpri povezavo ${targetNumber}`, exact: true });
@@ -457,7 +460,7 @@ test('vseh osem stopenj, lokalni pripomočki, nadaljevanje in zaključek', async
   await page.keyboard.press('Enter');
   await expect(capturedPage).toHaveJSProperty('innerHTML', originalPage);
   await expect(page.locator('.answer-source')).toHaveText(`Izbrana povezava ${targetNumber} od 6`);
-  const foreignDomain = targetNumber === 3 ? 'ARHIV-NACRTOV.EXAMPLE' : targetNumber === 4 ? 'MOST-SI.EXAMPLE' : 'PRIJAVA.EXAMPLE';
+  const foreignDomain = targetNumber === 3 ? 'ARHIV-NACRTOV.EXAMPLE' : targetNumber === 4 ? 'PIRAMIDA-SI.EXAMPLE' : 'PRIJAVA.EXAMPLE';
   await domainInput.fill(foreignDomain);
   await checkLayout(page);
   await page.screenshot({ path: `.local/qa-${testInfo.project.name}-browser.png`, fullPage: true });
@@ -474,6 +477,8 @@ test('vseh osem stopenj, lokalni pripomočki, nadaljevanje in zaključek', async
   await next(page);
   const binary = page.getByTestId('binary-workbench');
   await expect(binary).toBeVisible();
+  await expect(binary.locator('.binary-groups > button')).toHaveCount(10);
+  await expect(binary.locator('.binary-heading')).toContainText('10 × 8 bitov');
   await expect(page.getByLabel('Besedilo za pretvorbo')).toHaveCount(0);
   await expect(page.getByRole('button', { name: /^(Pretvori|Kodiraj|Dekodiraj)$/ })).toHaveCount(0);
   await expect(binary.locator('textarea, input:not([type="checkbox"]), output')).toHaveCount(0);
@@ -487,23 +492,23 @@ test('vseh osem stopenj, lokalni pripomočki, nadaljevanje in zaključek', async
   await expect(page.getByTestId('binary-bit-explanation')).toContainText('64');
   await binary.getByRole('button', { name: 'Bit 1: 0, vrednost mesta 128', exact: true }).click();
   await expect(page.getByTestId('binary-bit-explanation')).toContainText('ne prištej');
-  await binary.getByRole('button', { name: 'Izberi skupino 5', exact: true }).focus();
+  await binary.getByRole('button', { name: 'Izberi skupino 10', exact: true }).focus();
   await page.keyboard.press('Space');
-  await expect(binary.getByRole('button', { name: 'Izberi skupino 5', exact: true })).toHaveAttribute('aria-pressed', 'true');
+  await expect(binary.getByRole('button', { name: 'Izberi skupino 10', exact: true })).toHaveAttribute('aria-pressed', 'true');
   await binary.getByRole('button', { name: 'Izberi skupino 1', exact: true }).click();
   await binary.locator('summary').click();
   await expect(binary.locator('.binary-ascii-grid > div')).toHaveCount(26);
   await expect(binary.locator('.binary-ascii-grid > div').first()).toHaveText('65A');
   await expect(binary.locator('.binary-ascii-grid > div').last()).toHaveText('90Z');
-  await expect(binary.locator('.binary-ascii-grid')).not.toContainText('01001001');
+  await expect(binary.locator('.binary-ascii-grid')).not.toContainText('01000010');
   await expect(binaryAnswer).toHaveValue('moj zapis');
   expect(submittedAnswers.length).toBe(answersBeforeBits);
-  await expect(binary).not.toContainText('ISKRA');
+  await expect(binary).not.toContainText('BRUCOVANJE');
   const binaryViewport = page.viewportSize()!;
   for (const width of [900, 320]) {
     await page.setViewportSize({ width, height: 900 });
     await checkLayout(page);
-    await expect(binary.getByRole('button', { name: 'Bit 8: 1, vrednost mesta 1', exact: true })).toBeVisible();
+    await expect(binary.getByRole('button', { name: 'Bit 8: 0, vrednost mesta 1', exact: true })).toBeVisible();
     if (width === 320) await page.screenshot({ path: `.local/qa-${testInfo.project.name}-binary-320.png`, fullPage: true });
   }
   await page.setViewportSize(binaryViewport);
@@ -511,8 +516,8 @@ test('vseh osem stopenj, lokalni pripomočki, nadaljevanje in zaključek', async
   await submit(page, 'A');
   await expect(page.getByRole('alert')).toBeVisible();
   await expect(page.locator('.stage-breadcrumb')).toContainText('08 / 08');
-  await submit(page, 'iskra');
-  await expect(page.getByRole('heading', { name: 'Odkril si projekt ISKRA.', exact: true })).toBeVisible();
+  await submit(page, 'brucovanje');
+  await expect(page.getByRole('heading', { name: 'Odkril si projekt BRUCOVANJE.', exact: true })).toBeVisible();
   await expect(page.getByTestId('dark-entry')).toHaveCount(0);
   await expect(page.locator('.finale-stats')).toContainText('8 / 8');
   await expect(page.locator('.finale-stats')).toContainText('1uporabljen namig');
@@ -545,7 +550,7 @@ test('vseh osem stopenj, lokalni pripomočki, nadaljevanje in zaključek', async
   await expect(page.getByTestId('finale')).toBeVisible();
   await page.reload();
   await page.getByRole('button', { name: 'Odpri zaključeno preiskavo' }).click();
-  await expect(page.getByRole('heading', { name: 'Odkril si projekt ISKRA.', exact: true })).toBeVisible();
+  await expect(page.getByRole('heading', { name: 'Odkril si projekt BRUCOVANJE.', exact: true })).toBeVisible();
   await expect(page.getByTestId('dark-entry')).toHaveCount(0);
   expect(foreignRequests).toEqual([]);
   expect(browserErrors).toEqual([]);
@@ -581,7 +586,8 @@ test('ime skupine je obvezno in lestvica v živo spremlja nov poskus', async ({ 
     await expect(row.locator('.board-metrics > div').first()).toContainText('0 / 8');
     await page.locator('.hints-panel > summary').click();
     await page.getByRole('button', { name: 'Razkrij namig 1', exact: true }).click();
-    await submit(page, 'MOST');
+    await submit(page, 'PIRAMIDA');
+    await board.bringToFront();
     await expect(row.locator('.board-metrics > div').first()).toContainText('1 / 8', { timeout: 10000 });
     await expect(row.locator('.board-metrics > div').nth(1).locator('dd')).toHaveText('1');
     expect(refreshes).toBeGreaterThanOrEqual(2);
@@ -704,7 +710,7 @@ test('časovna omejitev nove igre preživi osvežitev in 429 ohrani ime', async 
 test('pretvornik menja formate, ohrani vhod in podpira ročno kopiranje', async ({ page }) => {
   await page.goto('/');
   await begin(page);
-  await submit(page, 'MOST'); await next(page);
+  await submit(page, 'PIRAMIDA'); await next(page);
   const input = page.getByLabel('Besedilo za pretvorbo');
   const method = page.getByLabel('Kodiranje', { exact: true });
   const direction = page.getByLabel('Smer pretvorbe', { exact: true });
@@ -752,9 +758,9 @@ test('napaka omrežja ohrani odgovor; ponastavitev zahteva potrditev', async ({ 
   await begin(page);
   await expectFirstStage(page);
   await page.route('**/api/stages/1/answer', route => route.abort());
-  await submit(page, 'MOST');
+  await submit(page, 'PIRAMIDA');
   await expect(page.getByRole('alert')).toContainText('Vnos je ohranjen');
-  await expect(page.getByLabel('Odgovor', { exact: true })).toHaveValue('MOST');
+  await expect(page.getByLabel('Odgovor', { exact: true })).toHaveValue('PIRAMIDA');
   await page.unroute('**/api/stages/1/answer');
   await submit(page);
   await page.getByRole('button', { name: 'Ponastavi preiskavo' }).click();
@@ -784,7 +790,7 @@ test('zaprt in ponovno odprt brskalnik ohrani trajno sejo', async ({ playwright,
     await page.goto('http://127.0.0.1:4173/');
     await begin(page);
     await expectFirstStage(page);
-    await submit(page, 'MOST');
+    await submit(page, 'PIRAMIDA');
     expect((await context.cookies())[0].expires).toBeGreaterThan(Date.now() / 1000);
     // Zapre tudi proces brskalnika; drugi zagon prebere piškotke iz istega profila.
     await context.close();
@@ -860,7 +866,7 @@ test('enotna svetloba sledi kazalcu; naloge imajo navodilo in stalni odgovor', a
     }
   }
   await page.setViewportSize(originalViewport);
-  await submit(page, 'MOST'); await next(page);
+  await submit(page, 'PIRAMIDA'); await next(page);
   await expect(page.locator('.encoding-story')).toBeVisible();
   await expect(page.getByLabel('Odgovor', { exact: true })).toBeVisible();
   await expect(page.locator('.task-instruction')).toHaveCount(0);
@@ -877,7 +883,7 @@ test('zmanjšano gibanje ohrani uvod brez svetilke in omogoča reševanje s tipk
   await begin(page);
   await expectFirstStage(page);
   await expect(page.getByRole('heading', { name: 'NAVODILO', exact: true })).toBeVisible();
-  await expect(page.locator('.source-evidence code')).toHaveText('NRGD MH PRVW');
+  await expect(page.locator('.source-evidence code')).toHaveText('NRGD MH SLUDPLGD');
   await checkLayout(page);
   const caesar = page.getByTestId('caesar-workbench');
   const firstLetter = caesar.getByRole('button', { name: 'Izberi črko A', exact: true });
@@ -900,7 +906,7 @@ test('zmanjšano gibanje ohrani uvod brez svetilke in omogoča reševanje s tipk
   await caesar.getByRole('button', { name: 'Ponastavi premik', exact: true }).click();
   await expect(page.getByTestId('caesar-mapping')).toHaveText('A → A');
   await page.getByLabel('Odgovor', { exact: true }).focus();
-  await page.keyboard.type('MOST');
+  await page.keyboard.type('PIRAMIDA');
   await page.keyboard.press('Enter');
   await expect(page.getByText('Izziv opravljen', { exact: true })).toBeVisible();
   await page.getByRole('button', { name: 'Nadaljuj', exact: true }).focus();

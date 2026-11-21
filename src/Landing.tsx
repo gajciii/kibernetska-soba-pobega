@@ -49,7 +49,7 @@ export default function Landing({ session, nextStartAt, now, busy, onStart, onCo
         <h1 className="landing-title" ref={headingRef} tabIndex={-1}><TitleLines/></h1>
         <div className="landing-title ambient-heading-light" aria-hidden="true"><TitleLines/></div>
       </div>
-      <p className="landing-story">Na šoli Most so zaznali sumljiv prenos zaupnega načrta.<br className="landing-desktop-break"/> Kateri šolski projekt je ogrožen? Odpri preiskovalno mapo in odkrij njegovo kodno ime.</p>
+      <p className="landing-story">Na šoli Piramida so zaznali sumljiv prenos zaupnega načrta.<br className="landing-desktop-break"/> Kateri šolski projekt je ogrožen? Odpri preiskovalno mapo in odkrij njegovo kodno ime.</p>
       {session && namedSession ? <div className="landing-resume">
         <p><strong>{session.teamName}</strong> · Shranjena preiskava</p>
         <button type="button" className="landing-start-button" disabled={busy} onClick={onContinue}>{busy ? 'Odpiranje …' : session.completedAt ? 'Odpri zaključeno preiskavo' : 'Nadaljuj preiskavo'}</button>

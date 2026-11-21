@@ -2,11 +2,11 @@
 
 To je gradivo za izvajalko. Vsebuje rešitve in ni del javne aplikacije. Ne premakni ga v `public/` ali `dist/client/`. V javnem repozitoriju je izvorna koda skupaj z rešitvami seveda dostopna; za igro uporabljaj naslov aplikacije.
 
-Delavnica je izmišljena izobraževalna simulacija za srednješolce. Dvojica uporablja en računalnik in isti brskalnik, brez registracije in zunanjih spletnih orodij. Vmesnik igralca nagovarja v ednini tudi pri delu v paru; ta vodič opisuje izvedbo delavnice z dvojicami. Igralca sta preiskovalca dogodka na šoli Most. Že na začetku vesta, da iščeta kodno ime projekta, ki mu pripada preneseni načrt `/zaupno/nacrt.pdf`. Osem ugank vodi do imena **ISKRA**.
+Delavnica je izmišljena izobraževalna simulacija za srednješolce. Dvojica uporablja en računalnik in isti brskalnik, brez registracije in zunanjih spletnih orodij. Vmesnik igralca nagovarja v ednini tudi pri delu v paru; ta vodič opisuje izvedbo delavnice z dvojicami. Igralca sta preiskovalca dogodka na šoli Piramida. Že na začetku vesta, da iščeta kodno ime projekta, ki mu pripada preneseni načrt `/zaupno/nacrt.pdf`. Osem ugank vodi do imena **BRUCOVANJE**.
 
 ## Rdeča nit zgodbe
 
-Cezarjeva koda **MOST** odpre prvo mapo, dvojno kodirano obvestilo pa razkrije **Luko Kovača** kot prijavitelja in kodo mape **SOVA**. Njegova prijava sumljive pošte utemelji pregled predala. Osebni nagovor v lažnem sporočilu vodi k javnemu profilu in hipotetično šibkemu geslu. Luka nato pove, da je uporabljal skupni šolski računalnik in ob odhodu fotografiral hodnik. Čas fotografije usmeri pregled okoliških omrežnih dogodkov. Uspešen prenos poveže račun **ucenec17** z računalnikom **10.0.0.17**, njegova zavarovana zgodovina pa vsebuje isto lažno povezavo kot pošta. Ko je ponarejena prijava prepoznana, skrbnik v pravem arhivu po računu, času in poti najde ustrezno različico načrta. Izvoz njene oznake v ASCII razkrije **ISKRA**.
+Cezarjeva koda **PIRAMIDA** odpre prvo mapo, dvojno kodirano obvestilo pa razkrije **Luko Kovača** kot prijavitelja in kodo mape **SOVA**. Njegova prijava sumljive pošte utemelji pregled predala. Osebni nagovor v lažnem sporočilu vodi k javnemu profilu in hipotetično šibkemu geslu. Luka nato pove, da je uporabljal skupni šolski računalnik in ob odhodu fotografiral hodnik. Čas fotografije usmeri pregled okoliških omrežnih dogodkov. Uspešen prenos poveže račun **ucenec17** z računalnikom **10.0.0.17**, njegova zavarovana zgodovina pa vsebuje isto lažno povezavo kot pošta. Ko je ponarejena prijava prepoznana, skrbnik v pravem arhivu po računu, času in poti najde ustrezno različico načrta. Izvoz njene oznake v ASCII razkrije **BRUCOVANJE**.
 
 Časovne sledi z dne 20. 11. 2026 so:
 
@@ -44,9 +44,9 @@ Vsako nalogo uvede kratka zgodba, ki dokaze poveže s preiskavo. Pri nalogah 3�
 
 ## 1. Razbij skrivno sporočilo
 
-**Dokaz:** `NRGD MH PRVW`, iz datoteke `sporocilo.txt`. Skrbnik je s Cezarjevo šifro skril kodo prvega dela preiskovalne mape, v kateri je zbral sledi prenosa. Nad pripomočkom je zgodbeni odstavek. Par naj ga prebere: opis prejemnika vsebuje namig **»tri mesta nazaj«**, ki neposredno usmeri dešifriranje v levo. Kratko navodilo premika ne ponovi.
+**Dokaz:** `NRGD MH SLUDPLGD`, iz datoteke `sporocilo.txt`. Skrbnik je s Cezarjevo šifro skril kodo prvega dela preiskovalne mape, v kateri je zbral sledi prenosa. Nad pripomočkom je zgodbeni odstavek. Par naj ga prebere: opis prejemnika vsebuje namig **»tri mesta nazaj«**, ki neposredno usmeri dešifriranje v levo. Kratko navodilo premika ne ponovi.
 
-**Potek reševanja:** uporabljata abecedo A–Z brez šumnikov. V ročnem pripomočku premikata abecedo v obe smeri, nastavita ustrezno preslikavo in po črkah razbereta sporočilo. Samodejnega dešifriranja ni. Razkrito sporočilo je `KODA JE MOST`; v edino polje za odgovor zgoraj desno vneseta samo kodo **`MOST`**. Strežniško preverjanje zaradi združljivosti še naprej sprejme tudi celoten stavek, ne glede na velikost črk in odvečne presledke.
+**Potek reševanja:** uporabljata abecedo A–Z brez šumnikov. V ročnem pripomočku premikata abecedo v obe smeri, nastavita ustrezno preslikavo in po črkah razbereta sporočilo. Samodejnega dešifriranja ni. Razkrito sporočilo je `KODA JE PIRAMIDA`; v edino polje za odgovor zgoraj desno vneseta samo kodo **`PIRAMIDA`**. Strežniško preverjanje zaradi združljivosti še naprej sprejme tudi celoten stavek, ne glede na velikost črk in odvečne presledke.
 
 **Opomba za izvajalko:** ime datoteke ni koda; presledki in vrstni red omogočajo preverjanje smiselnosti treh besed. Če dobita drug rezultat, naj primerjata smer šifriranja s smerjo dešifriranja. Številke in ločila se ne spreminjajo.
 
@@ -85,7 +85,7 @@ Zgodba predstavi datoteko `obvestilo.dat`, skrbnikov izvoz prve prijave nenavadn
 
 ## 3. Poišči phishing sporočilo
 
-Šolska domena v učnem primeru je `most.si`. Obvestilo iz druge naloge pripelje do **Luke Kovača**, ki je skrbniku še pred opozorilom o prenosu prijavil sumljivo pošto in mu predal kopijo predala **`luka.kovac@most.si`**. Zato sledi pregled njegove pošte. To je izmišljeni lastnik predala; aplikacija ne bere prave pošte ali navezuje stikov. Vseh sedem sporočil je naslovljenih nanj.
+Šolska domena v učnem primeru je `piramida.si`. Obvestilo iz druge naloge pripelje do **Luke Kovača**, ki je skrbniku še pred opozorilom o prenosu prijavil sumljivo pošto in mu predal kopijo predala **`luka.kovac@piramida.si`**. Zato sledi pregled njegove pošte. To je izmišljeni lastnik predala; aplikacija ne bere prave pošte ali navezuje stikov. Vseh sedem sporočil je naslovljenih nanj.
 
 Začetni vrstni red je **A, C, D, B, E, F, G**: knjižnični opomnik, mentorsko obvestilo, načrtovano IT-vzdrževanje, lažna IT-zahteva, pomembna sprememba učilnice, pričakovana priponka fotografskega krožka in jedilnik. Phishing sporočilo je torej **četrto**, njegov stabilni identifikator **B** pa ostaja nespremenjen. Vrstni red je ureditev dokazne zbirke, ne časovno razvrščanje.
 
@@ -93,21 +93,21 @@ Odpiranje sporočila označi njegovo prebranost in prikaže dejanskega pošiljat
 
 Pravilen izbor je **sporočilo B** in **najmanj dva** od teh opozorilnih znakov, brez napačnih:
 
-- Domena pošiljatelja se ne ujema s šolsko domeno: `podpora@most-preverjanje.example`.
-- Povezava vodi na drugo domeno: `https://most.si.arhiv-nacrtov.example/prijava`. Isti URL se pojavi kot tretji zapis zgodovine v sedmi nalogi.
+- Domena pošiljatelja se ne ujema s šolsko domeno: `podpora@piramida-preverjanje.example`.
+- Povezava vodi na drugo domeno: `https://piramida.si.arhiv-nacrtov.example/prijava`. Isti URL se pojavi kot tretji zapis zgodovine v sedmi nalogi.
 - Sporočilo pritiska z nujnostjo in grožnjo blokade čez 10 minut.
 - Zahteva geslo in enkratno prijavno kodo na nepričakovani strani.
 
 »Sporočilo vsebuje pozdrav« in »Sporočilo uporablja HTTPS« sta **napačna razloga**. Izbor B z enim razlogom ne zadostuje; prav tako ne zadostujeta dva pravilna razloga, če je označen še napačen.
 
-- Namig 1: »Primerjaj dejanski naslov pošiljatelja in cilj povezave z domeno most.si. Ime, ki ga prepoznaš, samo po sebi še ni dokaz pristnosti.«
+- Namig 1: »Primerjaj dejanski naslov pošiljatelja in cilj povezave z domeno piramida.si. Ime, ki ga prepoznaš, samo po sebi še ni dokaz pristnosti.«
 - Namig 2: »Primerjaj zahteve sporočil: eno združuje tuji domeni, grožnjo takojšnje blokade in zahtevo po geslu ter enkratni kodi.«
 
 **Učni cilj:** pregledati dejanskega pošiljatelja, cilj povezave, zahteve in okoliščine. Prikazno ime ni dokaz pristnosti. HTTPS šifrira povezavo, vendar sam ne potrjuje legitimnosti spletnega mesta. V tem pripravljenem primeru je samo B phishing. Pomembno obvestilo E in pričakovana priponka F sama po sebi nista opozorilo; tudi ujemajoča se domena pa v resničnem svetu ne jamči varnosti.
 
 ## 4. Ugotovi predvidljivo geslo
 
-Javni profil Luke Kovača (`@luka.kovac`) nadaljuje zgodbo njegovega poštnega predala. Ima profilno fotografijo, opis z letnikom **2009** in **tri fotografske objave**: psičko **Luno**, smučanje in gorsko pot. Podatek o imenu psičke je v pripisu prve objave. Opis je »🎂 2009. 🏫 Šola Most. Najraje zunaj, na snegu ⛷️ ali na poti v hribe. 🏔️«. Pod kartico profila je privzeto zaprt razdelek »Pogosta slaba gesla« s šestimi vzorci: zaporedje številk, ime hišnega ljubljenčka, zaporedje tipk na tipkovnici, beseda »geslo« ali »password«, letnica rojstva ter ponavljanje istega znaka. Ime ljubljenčka in letnica sta ločena. Vse slike so ustvarjene za učno zgodbo in se nalagajo lokalno; poti in pozivi so v [zapisu slik](docs/profile-assets.json).
+Javni profil Luke Kovača (`@luka.kovac`) nadaljuje zgodbo njegovega poštnega predala. Ima profilno fotografijo, opis z letnikom **2009** in **tri fotografske objave**: psičko **Luno**, smučanje in gorsko pot. Podatek o imenu psičke je v pripisu prve objave. Opis je »🎂 2009. 🏫 Šola Piramida. Najraje zunaj, na snegu ⛷️ ali na poti v hribe. 🏔️«. Pod kartico profila je privzeto zaprt razdelek »Pogosta slaba gesla« s šestimi vzorci: zaporedje številk, ime hišnega ljubljenčka, zaporedje tipk na tipkovnici, beseda »geslo« ali »password«, letnica rojstva ter ponavljanje istega znaka. Ime ljubljenčka in letnica sta ločena. Vse slike so ustvarjene za učno zgodbo in se nalagajo lokalno; poti in pozivi so v [zapisu slik](docs/profile-assets.json).
 
 Naloga ima dva zaporedna dela:
 
@@ -163,33 +163,33 @@ Primerjaj tri pogoje hkrati: prenos, prava datoteka in uspeh. `ucenec12` je imel
 
 ## 7. Najdi ponarejeno spletno stran
 
-Zapis uspešnega prenosa poveže račun `ucenec17` z računalnikom `10.0.0.17`. Skrbnik odpre njegovo zavarovano zgodovino: med šestimi naslovi je tudi lažna povezava iz Lukove pošte, tretji zapis oziroma izbira C. Pri vsakem je podoba portala enaka; spreminja se naslovna vrstica. Pred iskanjem načrta je treba ločiti šolske naslove od tujih. Uvod pojasni URL, pri teh primerih prepoznavanje gostitelja za `https://` in pred prvo naslednjo poševnico ter pomen poti in parametrov. Potrjena šolska gostitelja sta `most.si` in `ucilnica.most.si`.
+Zapis uspešnega prenosa poveže račun `ucenec17` z računalnikom `10.0.0.17`. Skrbnik odpre njegovo zavarovano zgodovino: med šestimi naslovi je tudi lažna povezava iz Lukove pošte, tretji zapis oziroma izbira C. Pri vsakem je podoba portala enaka; spreminja se naslovna vrstica. Pred iskanjem načrta je treba ločiti šolske naslove od tujih. Uvod pojasni URL, pri teh primerih prepoznavanje gostitelja za `https://` in pred prvo naslednjo poševnico ter pomen poti in parametrov. Potrjena šolska gostitelja sta `piramida.si` in `ucilnica.piramida.si`.
 
 | Zapis | Naslov | Presoja |
 | --- | --- | --- |
-| 1 | `https://most.si/prijava` | Pravi šolski naslov. |
-| 2 | `https://ucilnica.most.si/prijava` | Prava šolska učilnica. |
-| 3 | `https://most.si.arhiv-nacrtov.example/prijava` | Ponaredek: `most.si` je poddomena tuje domene `arhiv-nacrtov.example`. |
-| 4 | `https://most-si.example/prijava` | Ponaredek: podobno ime pripada drugi domeni. |
-| 5 | `https://prijava.example/most.si/prijava` | Ponaredek: `most.si` je samo del poti na gostitelju `prijava.example`. |
-| 6 | `https://most.si/prijava?jezik=sl` | Pravi šolski naslov; parameter ne spremeni gostitelja. |
+| 1 | `https://piramida.si/prijava` | Pravi šolski naslov. |
+| 2 | `https://ucilnica.piramida.si/prijava` | Prava šolska učilnica. |
+| 3 | `https://piramida.si.arhiv-nacrtov.example/prijava` | Ponaredek: `piramida.si` je poddomena tuje domene `arhiv-nacrtov.example`. |
+| 4 | `https://piramida-si.example/prijava` | Ponaredek: podobno ime pripada drugi domeni. |
+| 5 | `https://prijava.example/piramida.si/prijava` | Ponaredek: `piramida.si` je samo del poti na gostitelju `prijava.example`. |
+| 6 | `https://piramida.si/prijava?jezik=sl` | Pravi šolski naslov; parameter ne spremeni gostitelja. |
 
 Navodilo se glasi: »V zgodovini izberi eno ponarejeno povezavo. Kateri tuji domeni pripada? Vpiši samo domeno, brez https:// in poti.« Par izbere **eno** ponarejeno povezavo in v polje **Tuja domena** vpiše pripadajoči odgovor:
 
 - Tretja povezava: **`arhiv-nacrtov.example`**.
-- Četrta povezava: **`most-si.example`**.
+- Četrta povezava: **`piramida-si.example`**.
 - Peta povezava: **`prijava.example`**.
 
 Izbrana povezava in vnesena domena se morata ujemati. Celoten URL, šolska domena ali tuja domena druge povezave ne zadostujejo. Prva, druga in šesta povezava so prave, zato z njimi naloge ni mogoče rešiti. Zadostuje ena pravilno utemeljena izbira. Naslovi ostanejo lokalno učno gradivo, brez odpiranja zunanjih strani ali prijavnih poskusov.
 
-- Namig 1: »Preberi celotnega gostitelja med https:// in prvo naslednjo poševnico ter ga primerjaj s potrjenima šolskima gostiteljema. Sam pojav imena most.si še ne potrjuje pripadnosti šoli.«
-- Namig 2: »Če je most.si na začetku daljšega gostitelja, preveri, katere tuje domene je poddomena. Če je za poševnico, je del poti. Vnesi tujo domeno izbranega ponaredka, brez poddomene most.si ali poti.«
+- Namig 1: »Preberi celotnega gostitelja med https:// in prvo naslednjo poševnico ter ga primerjaj s potrjenima šolskima gostiteljema. Sam pojav imena piramida.si še ne potrjuje pripadnosti šoli.«
+- Namig 2: »Če je piramida.si na začetku daljšega gostitelja, preveri, katere tuje domene je poddomena. Če je za poševnico, je del poti. Vnesi tujo domeno izbranega ponaredka, brez poddomene piramida.si ali poti.«
 
 **Učni cilj:** brati celoten gostitelj, ločiti domeno od poddomene, poti in parametrov ter odločitev o ponaredku utemeljiti z njegovo domeno. Kopirana podoba in HTTPS ne potrjujeta pripadnosti šoli. Šolsko ime kjerkoli v URL-ju ni dovolj. Ne učimo pravila, da je registrirana domena vedno sestavljena iz zadnjih dveh delov; razlaga velja za konkretne prikazane naslove. Pri drugih URL-jih se lahko pojavijo še vrata, uporabniški podatki ali drugačna zgradba.
 
 ## 8. Računalnik govori v ničlah in enicah
 
-**Dokaz:** `01001001 01010011 01001011 01010010 01000001`. Po prepoznani ponarejeni prijavi skrbnik v pravem arhivu po računu, času in poti prenosa najde ustrezno različico načrta. Dokaz je njegov izvoz oznake projekta: pet bajtov v zapisu ASCII. Presledki ločujejo skupine in niso del končnega sporočila. Vrstni red skupin se ohrani.
+**Dokaz:** `01000010 01010010 01010101 01000011 01001111 01010110 01000001 01001110 01001010 01000101`. Po prepoznani ponarejeni prijavi skrbnik v pravem arhivu po računu, času in poti prenosa najde ustrezno različico načrta. Dokaz je njegov izvoz oznake projekta: deset bajtov v zapisu ASCII. Presledki ločujejo skupine in niso del končnega sporočila. Vrstni red skupin se ohrani.
 
 **Potek reševanja:** par izbere eno skupino in prebere osem bitov od leve proti desni. Mesta imajo uteži **128, 64, 32, 16, 8, 4, 2, 1**. Pri bitu **1** prišteje utež mesta, pri bitu **0** jo preskoči. Dobljeno decimalno število poišče v zložljivem pregledu ASCII s pari števil in črk A–Z ter si zapiše črko. Primer takoj pod tremi koraki navodil pokaže postopek: `01000001` je `64 + 1 = 65` in predstavlja črko `A`.
 
@@ -197,22 +197,27 @@ Pripomoček omogoča pregled posameznega bita in njegovega prispevka, ne izraču
 
 | Skupina | Prištete uteži | Decimalno število | Znak ASCII |
 | --- | --- | --- | --- |
-| `01001001` | 64 + 8 + 1 | 73 | I |
-| `01010011` | 64 + 16 + 2 + 1 | 83 | S |
-| `01001011` | 64 + 8 + 2 + 1 | 75 | K |
+| `01000010` | 64 + 2 | 66 | B |
 | `01010010` | 64 + 16 + 2 | 82 | R |
+| `01010101` | 64 + 16 + 4 + 1 | 85 | U |
+| `01000011` | 64 + 2 + 1 | 67 | C |
+| `01001111` | 64 + 8 + 4 + 2 + 1 | 79 | O |
+| `01010110` | 64 + 16 + 4 + 2 | 86 | V |
 | `01000001` | 64 + 1 | 65 | A |
+| `01001110` | 64 + 8 + 4 + 2 | 78 | N |
+| `01001010` | 64 + 8 + 2 | 74 | J |
+| `01000101` | 64 + 4 + 1 | 69 | E |
 
-V edino polje za odgovor v sekciji **ODGOVOR** zgoraj desno par vpiše kodno ime projekta **`ISKRA`**, ne glede na velikost črk in robne presledke. Na ozkem zaslonu je sekcija pod pripomočkom. Posameznih vsot ali črk ni treba oddajati.
+V edino polje za odgovor v sekciji **ODGOVOR** zgoraj desno par vpiše kodno ime projekta **`BRUCOVANJE`**, ne glede na velikost črk in robne presledke. Na ozkem zaslonu je sekcija pod pripomočkom. Posameznih vsot ali črk ni treba oddajati.
 
 - Namig 1: »Uteži mest od leve proti desni so 128, 64, 32, 16, 8, 4, 2 in 1. Seštej samo uteži mest z enico; ničle ne prispevajo ničesar. Vsota enega bajta določi eno črko v tabeli ASCII.«
-- Namig 2: »Pri prvem bajtu 01001001 so enice na mestih z utežmi 64, 8 in 1. Vsota je 73, v tabeli ASCII pa to pomeni I. Enako obdelaj preostale štiri bajte in ohrani njihov vrstni red.«
+- Namig 2: »Pri prvem bajtu 01000010 sta enici na mestih z utežmi 64 in 2. Vsota je 66, v tabeli ASCII pa to pomeni B. Enako obdelaj preostalih devet bajtov in ohrani njihov vrstni red.«
 
 **Učni cilj:** povezati mesta v binarnem zapisu s potencami števila dve, ročno izračunati decimalno vrednost bajta ter po dogovorjenem kodiranju ASCII razbrati črko. Vsota dobi pomen znaka šele s tem dogovorom; ta primer ni šifriranje. Pravilen odgovor odpre finale; devete uganke ni. Večnamenski pretvornik ostaja pripomoček druge naloge.
 
 ## Zaključek in pogovor
 
-»Odkril si projekt ISKRA.« potrdi cilj, zastavljen na začetku. Zaključek pokaže tri statistike: osem rešenih stopenj, čas in uporabljene namige. Pod njimi je vodoravna vrstica osmih obravnavanih tem; na ozkem zaslonu se pomika. Spodnja vprašanja in omejitve dokazov so gradivo za pogovor z izvajalko.
+»Odkril si projekt BRUCOVANJE.« potrdi cilj, zastavljen na začetku. Zaključek pokaže tri statistike: osem rešenih stopenj, čas in uporabljene namige. Pod njimi je vodoravna vrstica osmih obravnavanih tem; na ozkem zaslonu se pomika. Spodnja vprašanja in omejitve dokazov so gradivo za pogovor z izvajalko.
 
 Na ločeni javni lestvici `/lestvica` se ekipe razvrstijo najprej po več rešenih izzivih, nato po manj uporabljenih namigih in nazadnje po krajšem času. Ob enakih treh vrednostih si delijo mesto. Podatki se med ogledom osvežujejo vsakih pet sekund; za ogled ni potreben začetek igre. Čas teče od začetka igre in se ustavi po rešitvi vseh osmih izzivov. Pri nedokončanem rezultatu teče tudi po ponastavitvi ali izteku seje. Ponoven ogled istega namiga števila ne poveča; tudi namig, prvič odprt po rešitvi njegove stopnje, ne poslabša rezultata. Zaključen rezultat ostane nespremenjen.
 

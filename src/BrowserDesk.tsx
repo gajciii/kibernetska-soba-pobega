@@ -56,7 +56,7 @@ export function BrowserDesk({ choices, selectedId, onSelect, disabled }: Browser
     }
   }}>
     <div className="link-browser-tabbar">
-      <div className="link-browser-tab"><span className="link-browser-favicon" aria-hidden="true">M</span><span>Šola Most</span><span className="link-browser-tab-close" aria-hidden="true">×</span></div>
+      <div className="link-browser-tab"><span className="link-browser-favicon" aria-hidden="true">P</span><span>Šola Piramida</span><span className="link-browser-tab-close" aria-hidden="true">×</span></div>
     </div>
     <div className="link-browser-toolbar">
       <div className="link-browser-navigation">
@@ -83,11 +83,11 @@ export function BrowserDesk({ choices, selectedId, onSelect, disabled }: Browser
 }
 
 function CapturedSchoolPage() {
-  return <div className="link-browser-page" aria-label="Zajeta stran šole Most">
+  return <div className="link-browser-page" aria-label="Zajeta stran šole Piramida">
     <div className="link-browser-page-top"><span>Učilnica</span><span>Obvestila</span><BrowserIcon name="grid"/></div>
     <div className="link-browser-page-main">
-      <h3 className="link-browser-wordmark">MOST<span aria-hidden="true">.</span></h3>
-      <p>Šola Most</p>
+      <h3 className="link-browser-wordmark">PIRAMIDA<span aria-hidden="true">.</span></h3>
+      <p>Šola Piramida</p>
       <div className="link-browser-search-capture"><BrowserIcon name="search"/><span>Poišči po šoli</span></div>
       <ul className="link-browser-shortcuts"><li><span><BrowserIcon name="book"/></span>Učilnica</li><li><span><BrowserIcon name="bell"/></span>Obvestila</li><li><span><BrowserIcon name="calendar"/></span>Urnik</li></ul>
     </div>

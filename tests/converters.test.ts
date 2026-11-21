@@ -7,7 +7,7 @@ import type { ConversionDirection, EncodingMethod } from '../shared/converters.j
 
 describe('Cezarjeva šifra', () => {
   it('dešifrira obvezno gradivo', () => {
-    expect(caesarDecrypt('NRGD MH PRVW', 3)).toBe('KODA JE MOST');
+    expect(caesarDecrypt('NRGD MH SLUDPLGD', 3)).toBe('KODA JE PIRAMIDA');
   });
   it('pretvori drug vnos z ovijanjem abecede ter ohrani ločila in male črke', () => {
     expect(caesarDecrypt('Khoor, Zruog! 123', 3)).toBe('Hello, World! 123');
@@ -49,7 +49,7 @@ describe('Base64', () => {
 
 describe('binarni zapis', () => {
   it('pretvori obvezne skupine', () => {
-    expect(binaryToText('01001011 01001100 01001010 01010101 01000011')).toBe('KLJUC');
+    expect(binaryToText('01000010 01010010 01010101 01000011 01001111 01010110 01000001 01001110 01001010 01000101')).toBe('BRUCOVANJE');
   });
   it('pretvori drug vnos, presledke, nove vrstice in ločila', () => {
     expect(binaryToText(' 01000001\n01000010\t01000011 ')).toBe('ABC');
@@ -94,7 +94,7 @@ describe('odstotkovno kodiranje URL', () => {
     expect(encodeUrlText('A+B /č?')).toBe('A%2BB%20%2F%C4%8D%3F');
     expect(decodeUrlText('A%2bB%20%2f%c4%8d%3f')).toBe('A+B /č?');
     expect(decodeUrlText('a+b')).toBe('a+b');
-    expect(decodeUrlText('http%3A%2F%2Fmost.si%2Fucilnica')).toBe('http://most.si/ucilnica');
+    expect(decodeUrlText('http%3A%2F%2Fpiramida.si%2Fucilnica')).toBe('http://piramida.si/ucilnica');
   });
   it('presledkov in običajnega besedila ob dekodiranju ne odstrani', () => {
     expect(decodeUrlText('  primer č  ')).toBe('  primer č  ');
