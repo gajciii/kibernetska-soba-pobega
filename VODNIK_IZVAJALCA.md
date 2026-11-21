@@ -112,7 +112,7 @@ Javni profil Luke Kralja (`@luka.kralj`) nadaljuje zgodbo njegovega poštnega pr
 Naloga ima dva zaporedna dela:
 
 1. Par ročno vnese **`luna2009`** ali **`2009luna`**. Velikost črk in robni presledki niso pomembni; sprejet je tudi en končni klicaj. Ponujenih gesel ni. Pravilen vnos odpre priporočila, vendar še ne reši stopnje in ne odklene pete naloge.
-2. Par med šestimi možnostmi označi **vsa štiri ustrezna priporočila**, brez napačnih: dolga, naključna gesla oziroma fraze iz nepovezanih besed; drugačno geslo za vsak račun; upravljalnik gesel; večfaktorska prijava. Ponovna uporaba istega gesla in kombinacija osebnih podatkov s klicajem sta napačni možnosti. Šele pravilen izbor zaključi stopnjo.
+2. Par med šestimi možnostmi označi **vsa štiri ustrezna priporočila**, brez napačnih: dolga, naključna gesla; drugačno geslo za vsak račun; upravljalnik gesel; večfaktorska prijava. Ponovna uporaba istega gesla in kombinacija osebnih podatkov s klicajem sta napačni možnosti. Šele pravilen izbor zaključi stopnjo.
 
 Potrditev prvega dela se shrani v sejo in preživi osvežitev ali ponovni zagon strežnika. Po vrnitvi par nadaljuje pri priporočilih; vneseno geslo se na strežniku ne hrani. Vsaka oddaja v obeh delih šteje kot poskus. Ponovna oddaja že rešene stopnje števila ne poveča.
 
@@ -163,7 +163,7 @@ Primerjaj tri pogoje hkrati: prenos, prava datoteka in uspeh. `ucenec12` je imel
 
 ## 7. Najdi ponarejeno spletno stran
 
-Zapis uspešnega prenosa poveže račun `ucenec17` z računalnikom `10.0.0.17`. Skrbnik odpre njegovo zavarovano zgodovino: med šestimi naslovi je tudi lažna povezava iz Lukove pošte, tretji zapis oziroma izbira C. Pri vsakem je podoba portala enaka; spreminja se naslovna vrstica. Pred iskanjem načrta je treba ločiti šolske naslove od tujih. Uvod pojasni URL, pri teh primerih prepoznavanje gostitelja za `https://` in pred prvo naslednjo poševnico ter pomen poti in parametrov. Potrjena šolska gostitelja sta `piramida.si` in `ucilnica.piramida.si`.
+Zapis uspešnega prenosa poveže račun `ucenec17` z računalnikom `10.0.0.17`. Skrbnik odpre njegovo zavarovano zgodovino: med petimi naslovi je tudi lažna povezava iz Lukove pošte, tretji zapis oziroma izbira C. Pri vsakem je podoba portala enaka; spreminja se naslovna vrstica. Pred iskanjem načrta je treba ločiti šolske naslove od tujih. Uvod pojasni URL, pri teh primerih prepoznavanje gostitelja za `https://` in pred prvo naslednjo poševnico ter pomen poti in parametrov. Potrjena šolska gostitelja sta `piramida.si` in `ucilnica.piramida.si`.
 
 | Zapis | Naslov | Presoja |
 | --- | --- | --- |
@@ -171,19 +171,17 @@ Zapis uspešnega prenosa poveže račun `ucenec17` z računalnikom `10.0.0.17`. 
 | 2 | `https://ucilnica.piramida.si/prijava` | Prava šolska učilnica. |
 | 3 | `https://piramida.si.piramiida.si/prijava` | Ponaredek: `piramida.si` je poddomena tuje domene `piramiida.si`. |
 | 4 | `https://pirameda.si/prijava` | Ponaredek: podobno ime pripada drugi domeni. |
-| 5 | `https://piramida-prijava.si/piramida.si/prijava` | Ponaredek: `piramida.si` je samo del poti na gostitelju `piramida-prijava.si`. |
-| 6 | `https://piramida.si/prijava?jezik=sl` | Pravi šolski naslov; parameter ne spremeni gostitelja. |
+| 5 | `https://piramida.si/prijava?jezik=sl` | Pravi šolski naslov; parameter ne spremeni gostitelja. |
 
 Navodilo se glasi: »V zgodovini izberi eno ponarejeno povezavo. Kateri tuji domeni pripada? Vpiši samo domeno, brez https:// in poti.« Par izbere **eno** ponarejeno povezavo in v polje **Tuja domena** vpiše pripadajoči odgovor:
 
 - Tretja povezava: **`piramiida.si`**.
 - Četrta povezava: **`pirameda.si`**.
-- Peta povezava: **`piramida-prijava.si`**.
 
-Izbrana povezava in vnesena domena se morata ujemati. Celoten URL, šolska domena ali tuja domena druge povezave ne zadostujejo. Prva, druga in šesta povezava so prave, zato z njimi naloge ni mogoče rešiti. Zadostuje ena pravilno utemeljena izbira. Naslovi ostanejo lokalno učno gradivo, brez odpiranja zunanjih strani ali prijavnih poskusov.
+Izbrana povezava in vnesena domena se morata ujemati. Celoten URL, šolska domena ali tuja domena druge povezave ne zadostujejo. Prva, druga in peta povezava so prave, zato z njimi naloge ni mogoče rešiti. Zadostuje ena pravilno utemeljena izbira. Naslovi ostanejo lokalno učno gradivo, brez odpiranja zunanjih strani ali prijavnih poskusov.
 
 - Namig 1: »Preberi celotnega gostitelja med https:// in prvo naslednjo poševnico ter ga primerjaj s potrjenima šolskima gostiteljema. Sam pojav imena piramida.si še ne potrjuje pripadnosti šoli.«
-- Namig 2: »Če je piramida.si na začetku daljšega gostitelja, preveri, katere tuje domene je poddomena. Če je za poševnico, je del poti. Vnesi tujo domeno izbranega ponaredka, brez poddomene piramida.si ali poti.«
+- Namig 2: »Če je piramida.si na začetku daljšega gostitelja, preveri, katere tuje domene je poddomena. Vnesi tujo domeno izbranega ponaredka, brez poddomene piramida.si ali poti.«
 
 **Učni cilj:** brati celoten gostitelj, ločiti domeno od poddomene, poti in parametrov ter odločitev o ponaredku utemeljiti z njegovo domeno. Kopirana podoba in HTTPS ne potrjujeta pripadnosti šoli. Šolsko ime kjerkoli v URL-ju ni dovolj. Ne učimo pravila, da je registrirana domena vedno sestavljena iz zadnjih dveh delov; razlaga velja za konkretne prikazane naslove. Pri drugih URL-jih se lahko pojavijo še vrata, uporabniški podatki ali drugačna zgradba.
 
