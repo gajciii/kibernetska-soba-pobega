@@ -24,6 +24,10 @@ async function next(page: Page) {
   await expect(page.locator('main[aria-busy]')).toHaveAttribute('aria-busy', 'false');
   await expect(page.getByTestId('dark-entry')).toHaveCount(0);
   await checkLayout(page);
+  await expect(page.locator('.stage-intro')).toBeVisible();
+  const story = await page.locator('.stage-intro').boundingBox();
+  const workbench = await page.locator('.desktop-window').boundingBox();
+  expect(story!.y + story!.height).toBeLessThanOrEqual(workbench!.y);
 }
 
 test('vseh osem stopenj, lokalni pripomočki, nadaljevanje in zaključek', async ({ page }, testInfo) => {

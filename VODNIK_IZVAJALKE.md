@@ -10,7 +10,7 @@ Odpri aplikacijo na računalnikih in preveri dostop do strežnika. Vsaka dvojica
 
 Preizkusi en celoten prehod. Nastavitev `APP_ORIGIN`, varen piškotek in HTTPS morajo ustrezati dejanskemu naslovu. Aplikacija potrebuje povezavo s svojim strežnikom, vsi dokazi in pripomočki pa ostanejo na istem spletnem mestu. Ne zahteva resničnega gesla, fotografije ali osebnih podatkov dijakov. Ime ekipe je neobvezno; priporočene so izmišljene oznake. Predstavitev dokazov je razširjena z izbiranjem sporočil, datotek in paketov. Odgovori so ostali enaki, zato obstoječe shranjene seje ostajajo veljavne.
 
-Vsaka naloga ima eno kratko navodilo in delovni pripomoček. Polje oziroma izbira odgovora je zgoraj desno, namigi in razlaga pa so dostopni v stranskem panelu. Na ozkem zaslonu se elementi zložijo navpično. Dodatni dokazni zapiski niso več prikazani v glavnem delu; spodnje opombe so pomoč izvajalki pri pogovoru.
+Vsako nalogo uvede kratka zgodba, ki dokaze poveže s preiskavo. Pri nalogah 3–8 navodilo opredeli iskani podatek ali odločitev; konkretni postopki so v namigih. Druga naloga nima ločene sekcije NAVODILO. Polje oziroma izbira odgovora je zgoraj desno, namigi in razlaga pa so dostopni v stranskem panelu. Na ozkem zaslonu se elementi zložijo navpično. Dodatni dokazni zapiski niso prikazani v glavnem delu; spodnje opombe so pomoč izvajalki pri pogovoru.
 
 ## Predlog poteka: 45–60 minut
 

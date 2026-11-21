@@ -188,7 +188,7 @@ function Stage({ data, csrf, busy, setBusy, onSession, onData, onNext, onFinale,
         <div className="stage-breadcrumb"><span>IZZIV {String(stage.id).padStart(2, '0')} / 08</span><span>{stage.topic}</span>{data.solved && <span className="solved-badge"><Icon name="check" size={14}/>Rešeno</span>}</div>
         <h1 ref={headingRef} tabIndex={-1}>{stage.title}</h1>
       </div>
-      {['caesar', 'encoding'].includes(stage.kind) && <p className={`stage-intro ${stage.kind}-story`}>{stage.intro}</p>}
+      <p className={`stage-intro ${stage.kind}-story`}>{stage.intro}</p>
       {stage.kind === 'encoding' && stage.evidence && <div className="source-evidence story-evidence"><span>DOKAZ · obvestilo.dat</span><code>{stage.evidence}</code></div>}
       {stage.kind !== 'encoding' && <section className="task-instruction" aria-labelledby="instruction-heading"><h2 id="instruction-heading">NAVODILO</h2><p>{stage.question}</p></section>}
       <a className="mobile-answer-link" href="#answer-panel">Vnesi odgovor</a>
