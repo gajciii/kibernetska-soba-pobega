@@ -101,8 +101,6 @@ textarea { resize: vertical; }
 [data-stage="caesar"] .source-evidence { padding: 1.25rem 1.5rem; }
 [data-stage="caesar"] .source-evidence > code { font-size: clamp(1.15rem, 1.65vw, 1.5rem); letter-spacing: .1em; }
 .window-status { display: flex; justify-content: space-between; align-items: center; gap: 1rem; padding: .45rem 1rem; border-top: 1px solid var(--line); background: #0e192b; color: var(--quiet); font-size: .7rem; }
-.window-status > span:first-child { display: flex; align-items: center; gap: .45rem; }
-.window-status i { width: 5px; height: 5px; border-radius: 50%; background: var(--success); }
 .sidebar { position: sticky; top: 1rem; align-self: start; display: flex; flex-direction: column; min-width: 0; max-height: calc(100dvh - 2rem); padding: 0 3px 3px; }
 .sidebar > .answer-panel, .sidebar > .hints-panel { flex-shrink: 0; }
 .answer-panel { padding: 1.2rem; background: #15243b; border: 1px solid #3d5b7b; border-radius: 5px; scroll-margin: 1rem; }

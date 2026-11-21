@@ -127,7 +127,7 @@ export default function App() {
       : <div className="workspace finale-workspace"><main id="main" className="investigation-main" aria-busy={busy}>
         {finale && session && <FinaleView finale={finale} session={session} stages={boot.stages} time={elapsed(session, now)} headingRef={headingRef} onReview={() => void openStage(1)} onReset={() => setResetOpen(true)}/>}
         </main><aside className="sidebar"><Sidebar stages={boot.stages} session={session!} busy={busy} onSelect={openStage} onFinale={openFinale} onReset={() => setResetOpen(true)}/></aside></div>}
-    <footer className="footer"><span><strong>FERI</strong><span className="footer-divider">/</span> Kibernetska soba pobega</span><span>Šola Most · izmišljena učna simulacija</span></footer>
+    <footer className="footer"><span><strong>FERI</strong><span className="footer-divider">/</span> Kibernetska soba pobega</span></footer>
     {resetOpen && <ResetDialog busy={busy} onCancel={() => setResetOpen(false)} onReset={reset}/>}
   </div>;
 }
@@ -203,7 +203,7 @@ function Stage({ data, csrf, busy, setBusy, onSession, onData, onNext, onFinale,
           {stage.kind === 'logs' && <TrafficViewer packets={stage.packets ?? []} logs={stage.logs ?? []}/>}
           {stage.kind === 'domains' && <BrowserDesk choices={stage.choices ?? []} answer={answer} onAnswer={setAnswer} disabled={data.solved || busy}/>}
         </div>
-        <div className="window-status"><span><i aria-hidden="true"/>Učna simulacija</span><span>{stage.kind === 'logs' ? '32 paketov / lokalna zbirka' : stage.kind === 'phishing' ? '7 sporočil / neaktivne povezave' : 'Šola Most'}</span></div>
+        {(stage.kind === 'logs' || stage.kind === 'phishing') && <div className="window-status">{stage.kind === 'logs' ? '32 paketov / lokalna zbirka' : '7 sporočil / neaktivne povezave'}</div>}
       </section>
     </main>
     <aside className="sidebar" aria-label="Odgovor in napredek">
