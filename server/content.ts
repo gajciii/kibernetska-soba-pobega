@@ -188,7 +188,7 @@ const stages: StageContent[] = [
     title: 'Kdo je dostopal do skrivne datoteke?',
     topic: 'Dnevniki',
     kind: 'logs',
-    intro: 'Nenavadni prenos je pustil več sledi, vendar niso vse enako zgovorne. Med omrežnimi dogodki in ločenimi strežniškimi zapisi se prepletajo prijave, ogledi ter prenosi različnih dokumentov. Ekipo zanima uspešen prenos datoteke /zaupno/nacrt.pdf. V evidenci je ostala oznaka uporabljenega računa, identiteta osebe za njim pa ostaja odprto vprašanje.',
+    intro: 'V računalniški učilnici je pouk tekel kot običajno, v ozadju pa je nekdo prenesel dokument /zaupno/nacrt.pdf. Med odpiranjem spletnih strani, prijavami in prenosi nastaja omrežni promet: izmenjava podatkov med napravami v majhnih delih, imenovanih paketi. Šolski skrbnik je shranil del tega prometa in pripadajoče strežniške dnevnike. Med številnimi vrsticami se skriva sled uporabljenega računa. Iskalnik v pregledovalniku vama lahko pomaga zožiti izbor; ime datoteke je dobro izhodišče.',
     question: 'Kateri uporabniški račun je bil uporabljen za uspešen prenos iskane datoteke?',
     note: 'Simulacija • 20. 11. 2026, lokalni časi. Paketni pregled je pripravljen izbor dogodkov, ne celoten zajem. Šifriran promet TLS sam ne razkrije uporabniškega računa ali poti datoteke. Povezave do ločenega aplikacijskega dnevnika so vnaprej pripravljena učna korelacija; aplikacija ne zajema prometa in ne pošilja pravih zahtev. DOWNLOAD = prenos, VIEW = ogled, SUCCESS = uspešno, DENIED = zavrnjeno, LOGIN = prijava, LOGOUT = odjava.',
     logs: [
@@ -293,7 +293,7 @@ const hints: Record<number, [string, string]> = {
   3: ['Primerjaj dejanski naslov pošiljatelja in cilj povezave z domeno most.si. Ime, ki ga prepoznaš, samo po sebi še ni dokaz pristnosti.', 'Primerjaj zahteve sporočil: eno združuje tuji domeni, grožnjo takojšnje blokade in zahtevo po geslu ter enkratni kodi.'],
   4: ['Katera javna podatka bi si lastnik zlahka zapomnil in ju združil? Pri priporočilih razmisli tudi o ponavljanju gesel med računi.', 'Poveži ime psičke in letnico v opisu profila v eno besedo. Nato izberi priporočila za dolžino, različna gesla, upravljalnik in dodatno zaščito prijave.'],
   5: ['Med slikami poišči hodnik z rdečim nahrbtnikom in odpri njegove metapodatke. Čas poznejše spremembe ni nujno čas fotografiranja.', 'Pri datoteki hodnik.jpg primerjaj polji Čas nastanka posnetka in Čas spremembe. V odgovor prepiši uro in minute iz prvega.'],
-  6: ['Odpri povezani aplikacijski zapis pri paketu TLS. Šifriran paket sam ne pove računa. Iščeš uspešen prenos točno določene datoteke, ne njen ogled.', 'V ločenem aplikacijskem dnevniku poišči vrstico, v kateri so hkrati DOWNLOAD, /zaupno/nacrt.pdf in SUCCESS.'],
+  6: ['V iskalnik »Besedilni filter« vnesita ime iskane datoteke. Pri preostalih paketih primerjajta povezane strežniške zapise: uspešen prenos ni isto kot ogled ali zavrnjen poskus.', 'V ločenem aplikacijskem dnevniku poišči vrstico, v kateri so hkrati DOWNLOAD, /zaupno/nacrt.pdf in SUCCESS.'],
   7: ['Ime šole se lahko pojavi tudi v poddomeni druge domene.', 'Pri enem naslovu se za most.si pojavi še .prijava-varno.example.'],
   8: ['Vsaka skupina osmih bitov predstavlja en znak ASCII. Pretvori vseh pet skupin v istem vrstnem redu.', 'Prva skupina 01001011 predstavlja črko K. Preostale skupine pretvori v istem vrstnem redu.'],
 };
