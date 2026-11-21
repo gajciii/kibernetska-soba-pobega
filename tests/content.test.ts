@@ -7,7 +7,7 @@ const stage2Intermediate = 'UFJFTk9TIFpBQkVMRVpFTi4gS09EQSBOQVNMRUROSkUgTUFQRTog
 describe('strežniško preverjanje osmih stopenj', () => {
   const correct: [number, unknown][] = [
     [1, 'MOST'], [2, 'SOVA'], [3, { message: 'B', reasons: ['domain', 'link'] }],
-    [4, { recommendations: ['long', 'unique', 'manager', 'mfa'] }], [5, '10:42'], [6, 'ucenec17'], [7, { sourceId: 'C', url: 'https://most.si/prijava' }], [8, 'KLJUC'],
+    [4, { recommendations: ['long', 'unique', 'manager', 'mfa'] }], [5, '10:42'], [6, 'ucenec17'], [7, { sourceId: 'C', domain: 'arhiv-nacrtov.example' }], [8, 'KLJUC'],
   ];
 
   it.each(correct)('sprejme pravilen odgovor stopnje %i', (id, answer) => {
@@ -32,7 +32,7 @@ describe('strežniško preverjanje osmih stopenj', () => {
     expect(validateAnswer(8, 'KL JUČ')).toBe(false);
   });
 
-  it('ločuje ročni vnos gesla od priporočil in zahteva celoten popravek URL', () => {
+  it('ločuje ročni vnos gesla od priporočil in zahteva tujo domeno', () => {
     expect(validateAnswer(4, 'a')).toBe(false);
     expect(validateAnswer(4, 'B')).toBe(false);
     expect(validateAnswer(4, 'C')).toBe(false);
@@ -159,15 +159,17 @@ describe('razširjeni dokazi ostanejo skladni z obstoječimi rešitvami', () => 
     expect(JSON.stringify(stage)).not.toMatch(/luna2009|2009luna|correctAnswer|isCorrect/iu);
   });
 
-  it('zahteva ponarejen izvor in ročno popravljen naslov med šestimi zbranimi povezavami', () => {
+  it('zahteva tujo domeno, ki ustreza izbrani ponarejeni povezavi', () => {
     const choices = getStage(7)!.choices!;
     expect(choices).toHaveLength(6);
     expect(choices.map(choice => choice.id)).toEqual(['A', 'B', 'C', 'D', 'E', 'F']);
-    expect(choices.map(choice => validateAnswer(7, { sourceId: choice.id, url: 'https://most.si/prijava' })))
-      .toEqual([false, false, true, true, true, false]);
-    for (const sourceId of ['C', 'D', 'E']) {
-      for (const url of ['https://most.si/prijava', 'https://ucilnica.most.si/prijava', ' https://MOST.SI/prijava ', 'https://UCILNICA.MOST.SI/prijava?jezik=sl']) {
-        expect(validateAnswer(7, { sourceId, url })).toBe(true);
+    expect(choices[2].label).toBe('https://most.si.arhiv-nacrtov.example/prijava');
+    const domains = { C: 'arhiv-nacrtov.example', D: 'most-si.example', E: 'prijava.example' };
+    for (const [sourceId, domain] of Object.entries(domains)) {
+      expect(validateAnswer(7, { sourceId, domain })).toBe(true);
+      expect(validateAnswer(7, { sourceId, domain: `  ${domain.toUpperCase()}  ` })).toBe(true);
+      for (const other of Object.values(domains).filter(value => value !== domain)) {
+        expect(validateAnswer(7, { sourceId, domain: other })).toBe(false);
       }
     }
     for (const choice of choices) {
@@ -176,24 +178,19 @@ describe('razširjeni dokazi ostanejo skladni z obstoječimi rešitvami', () => 
     }
   });
 
-  it('zavrne zavajajoče, nepopolne in normalizirane URL-je ter napačne izvore', () => {
-    for (const url of [
-      'most.si', 'most.si/prijava', 'http://most.si/prijava', 'https://most.si',
-      'https://most.si.prijava-varno.example/prijava', 'https://most-si.example/prijava',
-      'https://prijava.example/most.si/prijava', 'https://most.si@prijava.example/prijava',
-      'https://user@most.si/prijava', 'https://@most.si/prijava', 'https://most.si:443/prijava',
-      'https://most.si:8443/prijava', 'https://most.si./prijava', 'https://%6dost.si/prijava',
-      'https://most.si/x/../prijava', 'https://most.si/%2e/prijava', 'https://most.si/PRIJAVA',
-      'https://most.si/prijava/extra', 'https://most.si/prijava?', 'https://most.si/prijava#',
-      'https://most.si/prijava?next=https://prijava.example', 'https://most.si/prijava#most.si',
-      'https://most.si/prijava?jezik=sl&next=evil', 'https://most.si/prijava?jezik=en',
-      'https://mo\tst.si/prijava', 'https://most.si\n/prijava', 'https://most.si\\prijava',
-      '//most.si/prijava', 'javascript:alert(1)', '', null, 42, {}, [],
-    ]) expect(validateAnswer(7, { sourceId: 'C', url })).toBe(false);
+  it('zavrne šolsko domeno, celoten URL, pot, nepopolno domeno in stare odgovore', () => {
+    for (const domain of [
+      'most.si', 'ucilnica.most.si', 'most.si.arhiv-nacrtov.example',
+      'https://arhiv-nacrtov.example', 'https://most.si.arhiv-nacrtov.example/prijava',
+      'arhiv-nacrtov.example/prijava', 'arhiv-nacrtov.example?jezik=sl',
+      'arhiv-nacrtov', '.example', 'example', 'arhiv-nacrtov.example.',
+      'www.arhiv-nacrtov.example', 'arhiv-nacrtov.example:443',
+      'arhiv-nacrtov .example', '', null, 42, {}, [],
+    ]) expect(validateAnswer(7, { sourceId: 'C', domain })).toBe(false);
     for (const sourceId of ['A', 'B', 'F', 'c', 'Z', '', null, 7, ['C']]) {
-      expect(validateAnswer(7, { sourceId, url: 'https://most.si/prijava' })).toBe(false);
+      expect(validateAnswer(7, { sourceId, domain: 'arhiv-nacrtov.example' })).toBe(false);
     }
-    for (const answer of ['C', 'https://most.si/prijava', { sourceId: 'C' }, { url: 'https://most.si/prijava' }, [{ sourceId: 'C', url: 'https://most.si/prijava' }]]) {
+    for (const answer of ['C', 'arhiv-nacrtov.example', { sourceId: 'C' }, { domain: 'arhiv-nacrtov.example' }, { sourceId: 'C', url: 'https://most.si/prijava' }, [{ sourceId: 'C', domain: 'arhiv-nacrtov.example' }]]) {
       expect(validateAnswer(7, answer)).toBe(false);
     }
   });

@@ -254,13 +254,13 @@ const stages: StageContent[] = [
     title: 'Najdi ponarejeno spletno stran',
     topic: 'Domene',
     kind: 'domains',
-    intro: 'Po sumljivem prenosu je skrbnik v zgodovini našel šest obiskov šolske prijave. Povsod isti logotip in enak zaslon, a nekatere povezave so vodile na tuje strežnike. Sled se skriva v URL-ju, spletnem naslovu: pri teh primerih je gostitelj del za https:// in pred naslednjo poševnico. Šola uporablja most.si in ucilnica.most.si. Ponaredki lahko njeno ime postavijo v tujo domeno ali pot, dodatek za vprašajem pa je parameter. Ena popravljena povezava bo preiskavo vrnila na pravo sled.',
-    question: 'V zgodovini izberita eno ponarejeno povezavo in jo ročno popravita v naslov šolske prijave.',
+    intro: 'Po prenosu datoteke nacrt.pdf je skrbnik med šestimi obiski šolske prijave našel tudi povezavo do domnevnega arhiva šolskih načrtov. Povsod isti logotip in enak zaslon, a videz lahko zavede. Sled se skriva v URL-ju, spletnem naslovu: pri teh primerih je gostitelj del za https:// in pred naslednjo poševnico. Šola uporablja most.si in ucilnica.most.si. Ponaredki lahko njeno ime postavijo v tujo poddomeno ali pot, dodatek za vprašajem pa je parameter. Katera tuja domena se skriva za eno od teh povezav?',
+    question: 'V zgodovini izberita eno ponarejeno povezavo. Kateri tuji domeni pripada? Vpišita samo domeno, brez https:// in poti.',
     note: 'Zgodovina vsebuje šest pripravljenih naslovov. Prikaz prijavne strani ostane enak; spreminja se naslovna vrstica. Noben naslov se ne odpre v omrežju in obrazec ne zbira prijavnih podatkov.',
     choices: [
       { id: 'A', label: 'https://most.si/prijava' },
       { id: 'B', label: 'https://ucilnica.most.si/prijava' },
-      { id: 'C', label: 'https://most.si.prijava-varno.example/prijava' },
+      { id: 'C', label: 'https://most.si.arhiv-nacrtov.example/prijava' },
       { id: 'D', label: 'https://most-si.example/prijava' },
       { id: 'E', label: 'https://prijava.example/most.si/prijava' },
       { id: 'F', label: 'https://most.si/prijava?jezik=sl' },
@@ -300,7 +300,7 @@ const hints: Record<number, [string, string]> = {
   4: ['Katera javna podatka bi si lastnik zlahka zapomnil in ju združil? Pri priporočilih razmisli tudi o ponavljanju gesel med računi.', 'Poveži ime psičke in letnico v opisu profila v eno besedo. Nato izberi priporočila za dolžino, različna gesla, upravljalnik in dodatno zaščito prijave.'],
   5: ['Med slikami poišči hodnik z rdečim nahrbtnikom in odpri njegove metapodatke. Čas poznejše spremembe ni nujno čas fotografiranja.', 'Pri datoteki hodnik.jpg primerjaj polji Čas nastanka posnetka in Čas spremembe. V odgovor prepiši uro in minute iz prvega.'],
   6: ['V iskalnik »Besedilni filter« vnesita ime iskane datoteke. Pri preostalih paketih primerjajta povezane strežniške zapise: uspešen prenos ni isto kot ogled ali zavrnjen poskus.', 'V ločenem aplikacijskem dnevniku poišči vrstico, v kateri so hkrati DOWNLOAD, /zaupno/nacrt.pdf in SUCCESS.'],
-  7: ['Primerjajta celotno domeno med https:// in prvo naslednjo poševnico s potrjenima šolskima gostiteljema. Šolsko ime se lahko pojavi tudi v tuji poddomeni ali poti.', 'Izberita naslov z drugo domeno in ga ročno popravita. Šolska prijava je na poti /prijava pri most.si ali ucilnica.most.si. Dodatek ?jezik=sl samo določa jezik.'],
+  7: ['Preberita celotnega gostitelja med https:// in prvo naslednjo poševnico ter ga primerjajta s potrjenima šolskima gostiteljema. Sam pojav imena most.si še ne potrjuje pripadnosti šoli.', 'Če je most.si na začetku daljšega gostitelja, preverita, katere tuje domene je poddomena. Če je za poševnico, je del poti. Vnesita tujo domeno izbranega ponaredka, brez poddomene most.si ali poti.'],
   8: ['Vsaka skupina osmih bitov predstavlja en znak ASCII. Pretvori vseh pet skupin v istem vrstnem redu.', 'Prva skupina 01001011 predstavlja črko K. Preostale skupine pretvori v istem vrstnem redu.'],
 };
 
@@ -311,7 +311,7 @@ const explanations: Record<number, string> = {
   4: 'Ime ljubljenčka in rojstna letnica sta javna in predvidljiva gradnika. Dodan klicaj ali preprosta zamenjava črke z znakom tega ne odpravita. Boljša izbira so dolga, naključna in za vsak račun različna gesla; pri ustvarjanju ter shranjevanju pomaga upravljalnik gesel. Večfaktorska prijava doda zaščito računa, ne spremeni pa šibkega gesla v močno. Ta vaja ne razkriva Lukovega pravega gesla in ne dokazuje, kaj je bilo uporabljeno pri incidentu.',
   5: 'Rdeč nahrbtnik na hodniku je pomagal prepoznati pravo fotografijo med drugimi slikami. Polje Čas nastanka posnetka beleži 10:42:17, polje Čas spremembe pa 11:15:00. Poznejše urejanje ali ponovno shranjevanje lahko spremeni čas datoteke, zato 11:15 ne pomeni nujno časa fotografiranja. Sam zapis spremembe ne pove, kaj je bilo spremenjeno. Metapodatki lahko manjkajo ali so spremenjeni; so sled za preverjanje, ne nezmotljiv dokaz.',
   6: 'Paketni pregled in aplikacijski dnevnik sta različna vira. Šifrirani TLS-paketi ne razkrijejo računa ali poti; tukaj je njuna povezava pripravljena učna korelacija. Ločen dnevniški zapis ob 10:45:12 potrjuje uspešen prenos /zaupno/nacrt.pdf z računom ucenec17. Zavrnjen prenos, uspešen ogled, prenos druge datoteke in TCP ACK niso enak dokaz. Zapis potrjuje uporabo računa, sam pa ne dokazuje, katera oseba je bila za tipkovnico.',
-  7: 'V naslovu most.si.prijava-varno.example je most.si le del poddomene tuje domene prijava-varno.example. Podobno ime most-si.example pripada drugi domeni, pri prijava.example/most.si/prijava pa je šolsko ime samo del poti. Potrjena gostitelja sta most.si in ucilnica.most.si, prijava pa je na poti /prijava. Dodatek ?jezik=sl spremeni parameter, ne gostitelja. Kopirana podoba in HTTPS sama ne potrjujeta pripadnosti šoli. Razčlenitev velja za te naslove; registrirana domena ni vedno sestavljena iz zadnjih dveh delov.',
+  7: 'Domnevni arhiv na most.si.arhiv-nacrtov.example pripada tuji domeni arhiv-nacrtov.example; most.si je le njena zavajajoča poddomena. Podobno zapisani most-si.example je druga tuja domena. Pri prijava.example/most.si/prijava pa je tuja domena prijava.example, šolsko ime je samo del poti. Potrjena gostitelja sta most.si in ucilnica.most.si; dodatek ?jezik=sl ne spremeni gostitelja. Izbiro ponaredka sta utemeljila z njegovo tujo domeno. Kopirana podoba in HTTPS sama ne potrjujeta pripadnosti šoli. Razčlenitev velja za te naslove; registrirana domena ni vedno sestavljena iz zadnjih dveh delov.',
   8: 'Binarni zapis je način predstavitve podatkov. V tem primeru pet bajtov predstavlja pet znakov ASCII. Šele ta dogovor daje številom pomen črk; druga kodiranja lahko iste bajte razložijo drugače. Ta primer ni šifriranje. Odprla sta končno preiskovalno mapo.',
 };
 
@@ -322,7 +322,7 @@ const feedback: Record<number, string> = {
   4: 'Izbor priporočil še ni pravilen. Preveri, ali izbrani ukrepi zmanjšajo predvidljivost in ponovno uporabo gesel ter bolje zaščitijo račun.',
   5: 'Še ni pravilno. Preveri fotografijo hodnika z rdečim nahrbtnikom in loči nastanek posnetka od poznejše spremembe datoteke. Odgovori v obliki HH:MM.',
   6: 'Še ni pravilno. Podatke poišči v povezanem aplikacijskem zapisu. Hkrati preveri dejanje, natančno pot datoteke in rezultat; ogled ter zavrnjen prenos ne zadostujeta.',
-  7: 'Še ni pravilno. Izbrati morata ponarejeno povezavo in vnesti popravljen naslov. Preverita celotno domeno, https:// in pot do prijave; šolsko ime drugje v naslovu ne zadostuje.',
+  7: 'Še ni pravilno. Izberita ponarejeno povezavo in vnesita tujo domeno, ki ji pripada. Ne prepisujta celotnega URL-ja, zavajajoče poddomene most.si ali poti.',
   8: 'Še ni pravilno. Preveri vseh pet osembitnih skupin in vrstni red črk v rezultatu pretvorbe.',
 };
 
@@ -379,12 +379,12 @@ export function validateAnswer(id: number, answer: unknown): boolean {
       return words(answer) === 'UCENEC17';
     case 7: {
       if (!answer || typeof answer !== 'object' || Array.isArray(answer)) return false;
-      const { sourceId, url } = answer as { sourceId?: unknown; url?: unknown };
-      if (typeof sourceId !== 'string' || !['C', 'D', 'E'].includes(sourceId) || typeof url !== 'string') return false;
-      // Match the original spelling before URL normalization can hide credentials,
-      // control characters, encoded hostnames, ports or dot segments in the path.
-      const match = /^https:\/\/([A-Za-z.-]+)\/prijava(?:\?jezik=sl)?$/u.exec(url.trim());
-      return !!match && ['most.si', 'ucilnica.most.si'].includes(match[1].toLowerCase());
+      const { sourceId, domain } = answer as { sourceId?: unknown; domain?: unknown };
+      if (typeof sourceId !== 'string' || typeof domain !== 'string') return false;
+      const foreignDomains = new Map([
+        ['C', 'arhiv-nacrtov.example'], ['D', 'most-si.example'], ['E', 'prijava.example'],
+      ]);
+      return domain.trim().toLowerCase() === foreignDomains.get(sourceId);
     }
     case 8:
       return typeof answer === 'string' && ['KLJUC', 'KLJUČ'].includes(answer.trim().toUpperCase());

@@ -51,7 +51,7 @@ async function start(client = team, teamName?: string): Promise<SessionView> {
 const correctAnswers: unknown[] = [
   'MOST', 'SOVA', { message: 'B', reasons: ['domain', 'link'] },
   { recommendations: ['long', 'unique', 'manager', 'mfa'] }, '10:42', 'ucenec17',
-  { sourceId: 'C', url: 'https://most.si/prijava' }, 'KLJUC',
+  { sourceId: 'C', domain: 'arhiv-nacrtov.example' }, 'KLJUC',
 ];
 
 async function solveThrough(end: number, client = team) {
@@ -269,14 +269,17 @@ describe('potek igre, namigi in shranjevanje', () => {
     expect(transfer.body.correct).toBe(true);
   });
 
-  it('odklene osmo stopnjo šele po izbiri ponarejenega izvora in pravilnem ročnem popravku URL-ja', async () => {
+  it('odklene osmo stopnjo šele po izbiri ponarejene povezave in njene tuje domene', async () => {
     await start();
     await solveThrough(6);
     const failures: unknown[] = [
-      ...['A', 'B', 'F'].map(sourceId => ({ sourceId, url: 'https://most.si/prijava' })),
-      { sourceId: 'C', url: 'http://most.si/prijava' },
-      { sourceId: 'D', url: 'https://most.si.prijava-varno.example/prijava' },
-      { sourceId: 'E', url: 'https://ucilnica.most.si/druga-pot' },
+      ...['A', 'B', 'F'].map(sourceId => ({ sourceId, domain: 'arhiv-nacrtov.example' })),
+      { sourceId: 'C', domain: 'most-si.example' },
+      { sourceId: 'D', domain: 'prijava.example' },
+      { sourceId: 'E', domain: 'arhiv-nacrtov.example' },
+      { sourceId: 'C', domain: 'https://arhiv-nacrtov.example' },
+      { sourceId: 'E', domain: 'prijava.example/most.si/prijava' },
+      { sourceId: 'C', url: 'https://most.si/prijava' },
       'C',
     ];
     for (const answer of failures) {
@@ -292,21 +295,21 @@ describe('potek igre, namigi in shranjevanje', () => {
     expect(unsolved.body.solved).toBe(false);
     expect(unsolved.body.explanation).toBeUndefined();
 
-    const repaired = await post(team, '/api/stages/7/answer', {
-      answer: { sourceId: 'D', url: ' https://UCILNICA.MOST.SI/prijava?jezik=sl ' },
+    const identified = await post(team, '/api/stages/7/answer', {
+      answer: { sourceId: 'D', domain: '  MOST-SI.EXAMPLE  ' },
     }).expect(200);
-    expect(repaired.body.correct).toBe(true);
-    expect(repaired.body.explanation).toBeTruthy();
-    expect(repaired.body.session.solved).toEqual([1, 2, 3, 4, 5, 6, 7]);
-    expect(repaired.body.session.currentStage).toBe(8);
-    expect(repaired.body.session.attempts[7]).toBe(failures.length + 1);
-    expect(repaired.body.session.completedAt).toBeNull();
+    expect(identified.body.correct).toBe(true);
+    expect(identified.body.explanation).toBeTruthy();
+    expect(identified.body.session.solved).toEqual([1, 2, 3, 4, 5, 6, 7]);
+    expect(identified.body.session.currentStage).toBe(8);
+    expect(identified.body.session.attempts[7]).toBe(failures.length + 1);
+    expect(identified.body.session.completedAt).toBeNull();
     await team.agent.get('/api/stages/8').expect(200);
     const reload = await team.agent.get('/api/stages/7').expect(200);
     expect(reload.body.solved).toBe(true);
-    expect(reload.body.explanation).toBe(repaired.body.explanation);
+    expect(reload.body.explanation).toBe(identified.body.explanation);
     const persisted = await team.agent.get('/api/session').expect(200);
-    expect(persisted.body.session).toEqual(repaired.body.session);
+    expect(persisted.body.session).toEqual(identified.body.session);
   });
 
   it('ohrani sedmo stopnjo, rešeno s starim odgovorom, brez ponovnega preverjanja ali štetja poskusa', async () => {
@@ -325,7 +328,7 @@ describe('potek igre, namigi in shranjevanje', () => {
     const stage = await team.agent.get('/api/stages/7').expect(200);
     expect(stage.body.solved).toBe(true);
     expect(stage.body.explanation).toBeTruthy();
-    for (const answer of ['C', { sourceId: 'A', url: 'ni-url' }]) {
+    for (const answer of ['C', { sourceId: 'C', url: 'https://most.si/prijava' }, correctAnswers[6]]) {
       const repeated = await post(team, '/api/stages/7/answer', { answer }).expect(200);
       expect(repeated.body.correct).toBe(true);
       expect(repeated.body.explanation).toBe(stage.body.explanation);
