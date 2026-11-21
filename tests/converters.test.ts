@@ -94,7 +94,7 @@ describe('odstotkovno kodiranje URL', () => {
     expect(encodeUrlText('A+B /č?')).toBe('A%2BB%20%2F%C4%8D%3F');
     expect(decodeUrlText('A%2bB%20%2f%c4%8d%3f')).toBe('A+B /č?');
     expect(decodeUrlText('a+b')).toBe('a+b');
-    expect(decodeUrlText('http%3A%2F%2Fsola.example%2Fucilnica')).toBe('http://sola.example/ucilnica');
+    expect(decodeUrlText('http%3A%2F%2Fmost.si%2Fucilnica')).toBe('http://most.si/ucilnica');
   });
   it('presledkov in običajnega besedila ob dekodiranju ne odstrani', () => {
     expect(decodeUrlText('  primer č  ')).toBe('  primer č  ');

@@ -68,18 +68,22 @@ Zgodba predstavi datoteko `obvestilo.dat` in nepopoln skrbnikov zapis o **dveh p
 
 ## 3. Poišči phishing sporočilo
 
-Šolska domena v učnem primeru je `sola.example`. Predal vsebuje **sedem sporočil A–G**: knjižnični opomnik, lažno IT-zahtevo, mentorsko obvestilo, načrtovano IT-vzdrževanje, pomembno spremembo učilnice, pričakovano priponko fotografskega krožka in jedilnik. Izbira sporočila odpre podrobnosti s prejemnikom, časom, dejanskim pošiljateljem in morebitnimi dodatnimi naslovi ali priponko. Povezave in priponke so elementi simulacije.
+Šolska domena v učnem primeru je `most.si`. Zgodba predstavi zavarovani predal **Luke Kovača**, z naslovom **`luka.kovac@most.si`**. To je izmišljeni lastnik predala; aplikacija ne bere prave pošte ali navezuje stikov. Vseh sedem sporočil je naslovljenih nanj.
+
+Začetni vrstni red je **A, C, D, B, E, F, G**: knjižnični opomnik, mentorsko obvestilo, načrtovano IT-vzdrževanje, lažna IT-zahteva, pomembna sprememba učilnice, pričakovana priponka fotografskega krožka in jedilnik. Phishing sporočilo je torej **četrto**, njegov stabilni identifikator **B** pa ostaja nespremenjen. Vrstni red je ureditev dokazne zbirke, ne časovno razvrščanje.
+
+Odpiranje sporočila označi njegovo prebranost in prikaže dejanskega pošiljatelja, prejemnika ter vsebino brez dodatnega podvojenega razdelka z glavami. Dejanski cilj povezave je viden ob lebdenju z miško, fokusu s tipkovnico ali dotiku. Naslov se prikaže znotraj predala in se ne odpre na drugi strani. Zelene oznake varnega in rdeče oznake sumljivega sporočila so **lastna presoja ekipe**, ne vnaprej razkrite rešitve; stanje je razvidno tudi iz besedila. Prebranost in izbira odgovora sta ločeni. Kot odgovor je izbrano eno sumljivo sporočilo; ob izbiri drugega se prejšnja sumljiva oznaka odstrani. Oznake »V redu« pri drugih sporočilih ostanejo. Če izbrano sumljivo sporočilo označita kot »V redu«, se polje za odgovor počisti.
 
 Pravilen izbor je **sporočilo B** in **najmanj dva** od teh opozorilnih znakov, brez napačnih:
 
-- Domena pošiljatelja se ne ujema s šolsko domeno: `podpora@sola-preverjanje.example`.
-- Povezava vodi na drugo domeno: `https://sola.example.preveri-racun.example/prijava`.
+- Domena pošiljatelja se ne ujema s šolsko domeno: `podpora@most-preverjanje.example`.
+- Povezava vodi na drugo domeno: `https://most.si.preveri-racun.example/prijava`.
 - Sporočilo pritiska z nujnostjo in grožnjo blokade čez 10 minut.
 - Zahteva geslo in enkratno prijavno kodo na nepričakovani strani.
 
 »Sporočilo vsebuje pozdrav« in »Sporočilo uporablja HTTPS« sta **napačna razloga**. Izbor B z enim razlogom ne zadostuje; prav tako ne zadostujeta dva pravilna razloga, če je označen še napačen.
 
-- Namig 1: »Odpri podrobnosti sporočil. Primerjaj dejanski naslov pošiljatelja in povezave z domeno sola.example.«
+- Namig 1: »Primerjaj dejanski naslov pošiljatelja in cilj povezave z domeno most.si. Ime, ki ga prepoznaš, samo po sebi še ni dokaz pristnosti.«
 - Namig 2: »Primerjaj zahteve sporočil: eno združuje tuji domeni, grožnjo takojšnje blokade in zahtevo po geslu ter enkratni kodi.«
 
 **Učni cilj:** pregledati dejanskega pošiljatelja, cilj povezave, zahteve in okoliščine. Prikazno ime ni dokaz pristnosti. HTTPS šifrira povezavo, vendar sam ne potrjuje legitimnosti spletnega mesta. V tem pripravljenem primeru je samo B phishing. Pomembno obvestilo E in pričakovana priponka F sama po sebi nista opozorilo; tudi ujemajoča se domena pa v resničnem svetu ne jamči varnosti.
@@ -128,16 +132,16 @@ Primerjaj tri pogoje hkrati: prenos, prava datoteka in uspeh. `ucenec12` je imel
 
 ## 7. Najdi ponarejeno spletno stran
 
-Potrjena domena šole v tem primeru je `sola.example`. Pregledovalnik vsebuje tri simulirane zavihke. Par preklaplja med njimi, razčleni protokol, gostitelja in pot ter posebej označi izbrani naslov. Povezave ostanejo neaktivne. Pravilen izbor je **C**:
+Potrjena domena šole v tem primeru je `most.si`. Pregledovalnik vsebuje tri simulirane zavihke. Par preklaplja med njimi, razčleni protokol, gostitelja in pot ter posebej označi izbrani naslov. Povezave ostanejo neaktivne. Pravilen izbor je **C**:
 
 ```text
-https://sola.example.prijava-varno.example/prijava
+https://most.si.prijava-varno.example/prijava
 ```
 
-Po rešitvi razčleni konkretni naslov: protokol `https`, gostitelj `sola.example.prijava-varno.example`, pot `/prijava`. Naslov pripada domeni **`prijava-varno.example`**; `sola.example` je tukaj le zavajajoči del pred njo. A uporablja šolsko domeno, B (`ucilnica.sola.example`) pa njeno poddomeno.
+Po rešitvi razčleni konkretni naslov: protokol `https`, gostitelj `most.si.prijava-varno.example`, pot `/prijava`. Naslov pripada domeni **`prijava-varno.example`**; `most.si` je tukaj le zavajajoči del pred njo. A uporablja šolsko domeno, B (`ucilnica.most.si`) pa njeno poddomeno.
 
 - Namig 1: »Ime šole se lahko pojavi tudi v poddomeni druge domene.«
-- Namig 2: »Pri enem naslovu se za sola.example pojavi še .prijava-varno.example.«
+- Namig 2: »Pri enem naslovu se za most.si pojavi še .prijava-varno.example.«
 
 **Učni cilj:** brati celoten gostitelj in razlikovati domeno od poddomene ter poti. HTTPS ne naredi strani samodejno zaupanja vredne. Ne učimo pravila, da je registrirana domena vedno sestavljena iz zadnjih dveh delov: domena in javne pripone se v resničnih primerih razlikujejo. Obravnavaj konkretne prikazane učne naslove.
 

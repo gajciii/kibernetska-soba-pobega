@@ -10,7 +10,50 @@ function senderName(sender: string): string {
   return sender.replace(/\s*<[^>]+>\s*$/u, '').trim();
 }
 
-/** Lokalni učni predal: branje dokazov in izbira odgovora sta ločeni dejanji. */
+function MailIcon({ kind }: { kind: 'search' | 'close' | 'safe' | 'suspect' }) {
+  return <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.7" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+    {kind === 'search' ? <><circle cx="10.5" cy="10.5" r="6.5"/><path d="m16 16 5 5"/></> : kind === 'close' ? <path d="m6 6 12 12M18 6 6 18"/> : kind === 'safe' ? <path d="m5 12 4 4L19 6"/> : <><path d="m12 3 9 17H3L12 3Z"/><path d="M12 9v4m0 3v.2"/></>}
+  </svg>;
+}
+
+/** Izpis cilja je namerno neaktiven; klik samo odpre isti podatek kot hover ali fokus. */
+function MailDestination({ label, url }: { label: string; url: string }) {
+  const id = useId();
+  const container = useRef<HTMLDivElement>(null);
+  const [hovered, setHovered] = useState(false);
+  const [focused, setFocused] = useState(false);
+  const [pinned, setPinned] = useState(false);
+  const [dismissed, setDismissed] = useState(false);
+  const visible = !dismissed && (hovered || focused || pinned);
+
+  useEffect(() => {
+    if (!visible) return;
+    const dismiss = () => { setDismissed(true); setPinned(false); };
+    const key = (event: globalThis.KeyboardEvent) => {
+      if (event.key === 'Escape') { event.preventDefault(); dismiss(); }
+    };
+    const outside = (event: globalThis.PointerEvent) => {
+      if (!container.current?.contains(event.target as Node)) dismiss();
+    };
+    document.addEventListener('keydown', key);
+    document.addEventListener('pointerdown', outside);
+    return () => {
+      document.removeEventListener('keydown', key);
+      document.removeEventListener('pointerdown', outside);
+    };
+  }, [visible]);
+
+  return <div className="iv-mail-link-wrap" ref={container} onPointerLeave={() => setHovered(false)}>
+    <button type="button" className="iv-mail-link" aria-label={`${label} — pokaži dejanski naslov`} aria-expanded={visible} aria-describedby={visible ? id : undefined}
+      onPointerEnter={event => { if (event.pointerType !== 'touch') { setHovered(true); setDismissed(false); } }}
+      onFocus={() => { setFocused(true); setDismissed(false); }}
+      onBlur={() => { setFocused(false); setPinned(false); }}
+      onClick={() => { setPinned(true); setDismissed(false); }}>{label}</button>
+    {visible && <div className="iv-mail-link-tooltip" role="tooltip" id={id}><small>Dejanski naslov povezave</small><code>{url}</code><span>Neaktivna povezava</span></div>}
+  </div>;
+}
+
+/** Branje, oznaka V redu in en sam sumljiv izbor ostanejo med seboj ločeni. */
 export function Mailbox({ mails, answer, onAnswer, disabled }: {
   mails: Mail[];
   answer: string;
@@ -22,6 +65,7 @@ export function Mailbox({ mails, answer, onAnswer, disabled }: {
   const [openedId, setOpenedId] = useState<string | null>(null);
   const readerHeading = useRef<HTMLHeadingElement>(null);
   const [readIds, setReadIds] = useState<Set<string>>(() => new Set());
+  const [safeIds, setSafeIds] = useState<Set<string>>(() => new Set());
   const needle = searchable(query.trim());
   const visible = mails.filter(mail => searchable([
     mail.id, mail.sender, mail.recipient, mail.subject, mail.body, mail.preview,
@@ -30,6 +74,10 @@ export function Mailbox({ mails, answer, onAnswer, disabled }: {
   const opened = mails.find(mail => mail.id === openedId);
   const chosen = mails.find(mail => mail.id === answer);
   const unreadCount = mails.filter(mail => !readIds.has(mail.id)).length;
+  const recipient = mails[0]?.recipient ?? '';
+  const ownerEmail = recipient.match(/<([^>]+)>/u)?.[1] ?? recipient;
+  const ownerName = senderName(recipient) || 'Poštni predal';
+  const initials = ownerName.split(/\s+/u).slice(0, 2).map(part => part.charAt(0)).join('').toLocaleUpperCase('sl-SI');
 
   useEffect(() => {
     if (openedId && window.matchMedia('(max-width: 760px)').matches) {
@@ -43,49 +91,51 @@ export function Mailbox({ mails, answer, onAnswer, disabled }: {
     setReadIds(previous => new Set([...previous, mail.id]));
   }
 
+  function markSafe(mailId: string) {
+    setSafeIds(previous => new Set([...previous, mailId]));
+    if (answer === mailId) onAnswer('');
+  }
+
+  function markSuspicious(mailId: string) {
+    setSafeIds(previous => { const next = new Set(previous); next.delete(mailId); return next; });
+    onAnswer(mailId);
+  }
+
+  const openedStatus = opened && answer === opened.id ? 'suspicious' : opened && safeIds.has(opened.id) ? 'safe' : undefined;
+
   return <section className="iv-mailbox" aria-label="Simuliran e-poštni predal">
-    <div className="iv-app-toolbar">
-      <span className="iv-app-count">{mails.length} sporočil · {unreadCount} neprebranih</span>
-    </div>
-    <div className="iv-inbox-search">
-      <label htmlFor={`${id}-mail-search`}>Išči po poštnem predalu</label>
-      <div className="iv-search-line"><input id={`${id}-mail-search`} type="search" value={query} onChange={event => setQuery(event.target.value)} placeholder="Pošiljatelj, zadeva ali besedilo" autoComplete="off"/><button type="button" className="iv-text-control" onClick={() => setQuery('')} disabled={!query}>Počisti iskanje</button></div>
+    <div className="iv-mail-topbar">
+      <div className="iv-mail-owner"><span className="iv-owner-avatar" aria-hidden="true">{initials}</span><div><strong>{ownerName}</strong><span>{ownerEmail}</span></div></div>
+      <div className="iv-mail-search"><label className="sr-only" htmlFor={`${id}-mail-search`}>Išči po poštnem predalu</label><span className="iv-search-icon"><MailIcon kind="search"/></span><input id={`${id}-mail-search`} type="search" value={query} onChange={event => setQuery(event.target.value)} placeholder="Išči po poštnem predalu" autoComplete="off"/><button type="button" className="iv-search-clear" aria-label="Počisti iskanje" onClick={() => setQuery('')} disabled={!query}><MailIcon kind="close"/></button></div>
     </div>
     <div className="iv-inbox-layout">
       <div className="iv-mail-list-pane">
-        <div className="iv-list-caption"><span>PREJETO</span><span role="status">{visible.length} od {mails.length}</span></div>
+        <div className="iv-list-caption"><span>Prejeto</span><span>{unreadCount} neprebranih</span><span role="status">{visible.length} od {mails.length}</span></div>
         {visible.length ? <ul className="iv-mail-list" aria-label="Sporočila v predalu">{visible.map(mail => {
           const read = readIds.has(mail.id);
           const active = openedId === mail.id;
-          const marked = answer === mail.id;
-          return <li key={mail.id}><button type="button" className={`iv-mail-item${active ? ' is-open' : ''}${read ? '' : ' is-unread'}`} onClick={() => open(mail)} aria-label={`Odpri sporočilo ${mail.id}: ${mail.subject}`} aria-pressed={active} aria-controls={`${id}-mail-reader`}>
-            <span className="iv-mail-row-top"><span className="iv-mail-id">{mail.id}</span><span>{read ? 'Prebrano' : 'Neprebrano'}</span><time>{mail.time}</time></span>
+          const status = answer === mail.id ? 'suspicious' : safeIds.has(mail.id) ? 'safe' : undefined;
+          return <li key={mail.id}><button type="button" className={`iv-mail-item${active ? ' is-open' : ''}${read ? '' : ' is-unread'}${status ? ` is-${status}` : ''}`} onClick={() => open(mail)} aria-label={`Odpri sporočilo ${mail.id}: ${mail.subject}`} aria-describedby={`${id}-read-${mail.id}${status ? ` ${id}-mark-${mail.id}` : ''}`} aria-pressed={active} aria-controls={`${id}-mail-reader`}>
+            <span className="iv-mail-row-top"><span className="iv-mail-id">{mail.id}</span><span className="iv-read-state" id={`${id}-read-${mail.id}`}>{read ? 'Prebrano' : 'Neprebrano'}</span><time>{mail.time}</time></span>
             <span className="iv-mail-list-sender">{senderName(mail.sender)}</span>
             <strong className="iv-mail-list-subject">{mail.subject}</strong>
             <span className="iv-mail-preview">{mail.preview}</span>
-            {marked && <span className="iv-mail-marked">Označeno kot sumljivo</span>}
+            {status && <span className={`iv-mail-mark iv-mark-${status}`} id={`${id}-mark-${mail.id}`}>{status === 'safe' ? <><MailIcon kind="safe"/>V redu</> : <><MailIcon kind="suspect"/>Sumljivo</>}</span>}
           </button></li>;
         })}</ul> : <div className="iv-empty-search"><p>Nobeno sporočilo ne ustreza iskanju.</p><button type="button" className="iv-text-control" onClick={() => setQuery('')}>Prikaži vsa sporočila</button></div>}
       </div>
       <div className="iv-mail-reader" id={`${id}-mail-reader`}>
         {opened ? <article key={opened.id} aria-labelledby={`${id}-mail-subject`}>
           <div className="iv-reader-caption"><span>SPOROČILO {opened.id}</span><span>{opened.time}</span></div>
-          <h3 id={`${id}-mail-subject`} ref={readerHeading} tabIndex={-1}>{opened.subject}</h3>
+          <h3 id={`${id}-mail-subject`} ref={readerHeading} tabIndex={-1} className={openedStatus ? `iv-subject-${openedStatus}` : undefined}>{opened.subject}</h3>
           <dl className="iv-mail-addresses"><div><dt>Od</dt><dd>{opened.sender}</dd></div><div><dt>Za</dt><dd>{opened.recipient}</dd></div></dl>
-          <details className="iv-mail-headers"><summary>Glave in podatki sporočila</summary><dl>
-            <div><dt>Pošiljatelj</dt><dd><code>{opened.sender}</code></dd></div>
-            <div><dt>Prejemnik</dt><dd><code>{opened.recipient}</code></dd></div>
-            <div><dt>Čas</dt><dd>{opened.time}</dd></div>
-            <div><dt>Odgovori na</dt><dd><code>{opened.replyTo || opened.sender}</code></dd></div>
-            {opened.attachment && <div><dt>Priponka</dt><dd>{opened.attachment} <span className="iv-muted">· učni zapis, neaktivno</span></dd></div>}
-          </dl></details>
-          <div className="iv-mail-body"><p>{opened.body}</p>{opened.linkUrl && <div className="iv-mail-url"><span>{opened.linkLabel || 'Povezava v sporočilu'}</span><small>Dejanski naslov povezave · neaktivno</small><code>{opened.linkUrl}</code></div>}</div>
+          <div className="iv-mail-body"><p>{opened.body}</p>{opened.linkUrl && <MailDestination label={opened.linkLabel || 'Povezava v sporočilu'} url={opened.linkUrl}/>}</div>
           {opened.attachment && <p className="iv-mail-attachment"><span>Priloženo</span><code>{opened.attachment}</code></p>}
-          <div className="iv-mail-action"><button type="button" className="secondary" disabled={disabled} aria-pressed={answer === opened.id} onClick={() => onAnswer(opened.id)}>Označi sporočilo {opened.id} kot sumljivo</button></div>
+          <div className="iv-mail-action"><button type="button" className="iv-mark-safe" disabled={disabled} aria-label={`Označi sporočilo ${opened.id} kot v redu`} aria-pressed={openedStatus === 'safe'} onClick={() => markSafe(opened.id)}><MailIcon kind="safe"/>V redu</button><button type="button" className="iv-mark-suspicious" disabled={disabled} aria-label={`Označi sporočilo ${opened.id} kot sumljivo`} aria-pressed={openedStatus === 'suspicious'} onClick={() => markSuspicious(opened.id)}><MailIcon kind="suspect"/>Sumljivo</button></div>
         </article> : <div className="iv-reader-empty"><p>Izberita sporočilo.</p></div>}
       </div>
     </div>
-    <div className="iv-viewer-status"><span role="status">{chosen ? `Izbrano kot sumljivo: sporočilo ${chosen.id}` : 'Brez označenega sporočila'}</span></div>
+    <div className="iv-viewer-status"><span role="status">{chosen ? `Izbrano kot sumljivo: sporočilo ${chosen.id}` : 'Brez označenega sumljivega sporočila'}</span></div>
   </section>;
 }
 

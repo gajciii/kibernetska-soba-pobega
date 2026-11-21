@@ -36,7 +36,7 @@ export function BrowserDesk({ choices, answer, onAnswer, disabled }: { choices: 
   const choice = choices.find(item => item.id === active);
   if (!choice) return null;
   const url = new URL(choice.label);
-  return <div className="browser-desk"><div className="browser-domain">Potrjena domena šole: <code>sola.example</code></div>
+  return <div className="browser-desk"><div className="browser-domain">Potrjena domena šole: <code>most.si</code></div>
     <nav className="browser-tabs" aria-label="Zavarovani spletni naslovi">{choices.map(item => <button key={item.id} aria-pressed={active === item.id} onClick={() => { setActive(item.id); setInspect(false); }}><span>Naslov {item.id}</span><small>Šolski portal</small></button>)}</nav>
     <div className="browser-address"><span className="connection-mark" aria-hidden="true">https</span><code>{choice.label}</code><button aria-expanded={inspect} aria-controls="url-inspector" onClick={() => setInspect(previous => !previous)}>{inspect ? 'Zapri podatke' : 'Razčleni naslov'}</button></div>
     {inspect && <div id="url-inspector" className="url-inspector"><dl><div><dt>Protokol</dt><dd><code>{url.protocol}//</code></dd></div><div><dt>Celoten gostitelj</dt><dd><code>{url.hostname}</code></dd></div><div><dt>Pot</dt><dd><code>{url.pathname}</code></dd></div></dl><p>HTTPS šifrira povezavo; ne potrjuje upravljavca strani.</p></div>}

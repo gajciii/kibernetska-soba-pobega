@@ -3,11 +3,7 @@
 .iv-app-count, .iv-muted { color: var(--muted); font-size: .8rem; }
 .iv-text-control { display: inline-flex; align-items: center; min-height: 38px; padding: 6px 8px; border: 0; border-radius: var(--button-radius); background: transparent; color: var(--accent); font: inherit; font-size: .875rem; text-align: left; }
 .iv-text-control:hover:not(:disabled) { background: color-mix(in srgb, var(--accent) 8%, transparent); }
-.iv-inbox-search { padding: 10px 16px 14px; border-bottom: 1px solid var(--line); }
-.iv-inbox-search label, .iv-traffic-filter label { color: var(--muted); font-size: .875rem; margin-bottom: 6px; }
-.iv-search-line { display: flex; align-items: center; gap: 10px; }
-.iv-search-line > input { flex: 1; min-width: 0; }
-.iv-search-line > button { flex-shrink: 0; }
+.iv-traffic-filter label { color: var(--muted); font-size: .875rem; margin-bottom: 6px; }
 .iv-inbox-layout { display: grid; grid-template-columns: minmax(210px, .72fr) minmax(0, 1.4fr); min-height: 420px; }
 .iv-mail-list-pane { min-width: 0; border-right: 1px solid var(--line); }
 .iv-list-caption { display: flex; justify-content: space-between; gap: 12px; padding: 10px 14px; color: var(--muted); font-size: .75rem; border-bottom: 1px solid var(--line); }
@@ -24,29 +20,18 @@
 .iv-mail-list-subject { display: block; margin-bottom: 5px; color: var(--muted); font-size: .875rem; font-weight: 400; line-height: 1.45; }
 .iv-mail-item.is-unread .iv-mail-list-subject { color: var(--text); font-weight: 600; }
 .iv-mail-preview { display: -webkit-box; overflow: hidden; -webkit-line-clamp: 2; -webkit-box-orient: vertical; color: var(--muted); font-size: .8rem; line-height: 1.5; }
-.iv-mail-marked { display: block; margin-top: 6px; color: var(--warning); font-size: .8rem; }
 .iv-mail-reader { min-width: 0; min-height: 420px; padding: 16px 18px; }
 .iv-reader-caption { display: flex; align-items: baseline; justify-content: space-between; flex-wrap: wrap; gap: 10px; margin-bottom: 12px; color: var(--muted); font-size: .8rem; }
 .iv-mail-reader h3 { margin: 0 0 16px; font-size: 1.1rem; font-weight: 600; line-height: 1.45; overflow-wrap: anywhere; }
-.iv-mail-addresses, .iv-mail-headers dl, .iv-packet-fields, .iv-log-fields { margin: 0; }
-.iv-mail-addresses > div, .iv-mail-headers dl > div { display: grid; grid-template-columns: 30px minmax(0, 1fr); gap: 10px; margin-bottom: 6px; font-size: .875rem; line-height: 1.55; }
-.iv-mail-addresses dt, .iv-mail-headers dt, .iv-packet-fields dt, .iv-log-fields dt { color: var(--muted); }
-.iv-mail-addresses dd, .iv-mail-headers dd, .iv-packet-fields dd, .iv-log-fields dd { min-width: 0; margin: 0; overflow-wrap: anywhere; }
-.iv-mail-headers { margin-top: 8px; }
-.iv-mail-headers summary, .iv-protocol-legend summary { width: fit-content; max-width: 100%; padding: 6px 0; color: var(--muted); font-size: .875rem; cursor: pointer; }
-.iv-mail-headers dl { padding: 8px 0; }
-.iv-mail-headers dl > div { grid-template-columns: 85px minmax(0, 1fr); }
+.iv-mail-addresses, .iv-packet-fields, .iv-log-fields { margin: 0; }
+.iv-mail-addresses > div { display: grid; grid-template-columns: 30px minmax(0, 1fr); gap: 10px; margin-bottom: 6px; font-size: .875rem; line-height: 1.55; }
+.iv-mail-addresses dt, .iv-packet-fields dt, .iv-log-fields dt { color: var(--muted); }
+.iv-mail-addresses dd, .iv-packet-fields dd, .iv-log-fields dd { min-width: 0; margin: 0; overflow-wrap: anywhere; }
+.iv-protocol-legend summary { width: fit-content; max-width: 100%; padding: 6px 0; color: var(--muted); font-size: .875rem; cursor: pointer; }
 .iv-mail-body { padding: 16px 0; margin-top: 10px; border-top: 1px solid var(--line); color: var(--text); font-size: 1rem; line-height: 1.65; }
 .iv-mail-body > p { margin: 0; white-space: pre-wrap; overflow-wrap: anywhere; }
-.iv-mail-url { margin-top: 14px; padding: 12px; border: 1px solid var(--line); border-radius: var(--control-radius); background: var(--bg); }
-.iv-mail-url > span { display: block; color: var(--accent); text-decoration: underline; text-underline-offset: 3px; }
-.iv-mail-url small { display: block; margin: 10px 0 6px; color: var(--muted); font-size: .8rem; }
-.iv-mail-url code { display: block; color: var(--text); font-size: .875rem; line-height: 1.6; overflow-wrap: anywhere; }
 .iv-mail-attachment { display: flex; flex-wrap: wrap; gap: 6px 12px; margin-bottom: 14px; font-size: .875rem; color: var(--text); }
 .iv-mail-attachment > span { color: var(--muted); }
-.iv-mail-action { padding-top: 8px; }
-.iv-mail-action > button { text-align: left; justify-content: flex-start; }
-.iv-mail-action > button[aria-pressed="true"] { color: var(--warning); }
 .iv-reader-empty { display: grid; place-content: center; min-height: 380px; padding: 16px; color: var(--muted); }
 .iv-reader-empty p { margin: 0; font-size: .875rem; }
 .iv-empty-search { padding: 16px; color: var(--muted); font-size: .875rem; }
@@ -103,10 +88,149 @@
 }
 @media (max-width: 600px) {
   .iv-mailbox, .iv-traffic { min-height: 0; }
-  .iv-search-line { flex-wrap: wrap; gap: 4px; }
-  .iv-search-line > input { flex-basis: 100%; }
   .iv-traffic-filter { gap: 10px; }
   .iv-packet-search { flex-basis: 100%; }
   .iv-packet-scroll { border-radius: var(--control-radius); max-height: 250px; }
   .iv-mail-body { font-size: 1rem; }
+}
+
+/* Poštni predal: identiteta prejemnika, branje in ročne oznake sporočil. */
+.iv-mail-topbar {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 16px 24px;
+  padding: 18px;
+  border-bottom: 1px solid var(--line);
+  background: #142137;
+}
+.iv-mail-owner {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  flex: 0 1 auto;
+  min-width: 0;
+}
+.iv-owner-avatar {
+  display: grid;
+  place-items: center;
+  flex-shrink: 0;
+  width: 42px;
+  height: 42px;
+  border: 1px solid #476384;
+  border-radius: 50%;
+  background: #223953;
+  color: #d9ecff;
+  font-size: .875rem;
+  font-weight: 600;
+}
+.iv-mail-owner > div { min-width: 0; }
+.iv-mail-owner strong { display: block; color: var(--text); font-size: .9375rem; font-weight: 600; line-height: 1.5; }
+.iv-mail-owner > div > span { display: block; color: var(--muted); font-size: .875rem; overflow-wrap: anywhere; }
+.iv-mail-search { position: relative; flex: 1 1 260px; min-width: 0; }
+.iv-mailbox .iv-mail-topbar .iv-mail-search > input[type="search"] {
+  min-height: 44px;
+  padding: 10px 46px 10px 40px;
+  border: 1px solid #354b69;
+  border-radius: var(--control-radius, 12px);
+  background: #0d192c;
+  font-size: .875rem;
+}
+.iv-mail-search > input::-webkit-search-cancel-button { display: none; }
+.iv-search-icon { position: absolute; left: 13px; top: 13px; display: flex; color: var(--muted); pointer-events: none; }
+.iv-search-clear {
+  position: absolute;
+  right: 5px;
+  top: 5px;
+  display: grid;
+  place-items: center;
+  width: 34px;
+  height: 34px;
+  padding: 5px;
+  border: 0;
+  border-radius: var(--button-radius, 12px);
+  color: var(--muted);
+  background: transparent;
+}
+.iv-search-clear:hover:not(:disabled) { color: var(--text); background: #23364f; }
+.iv-mailbox .iv-list-caption { gap: 8px; flex-wrap: wrap; font-size: .875rem; }
+.iv-mailbox .iv-list-caption > span:first-child { color: var(--text); font-weight: 500; }
+.iv-mailbox .iv-list-caption > span:last-child { margin-left: auto; }
+.iv-mail-item .iv-mail-list-sender,
+.iv-mail-item .iv-mail-list-subject { color: #c7d4e7; font-weight: 400; }
+.iv-mail-item.is-unread .iv-mail-list-sender,
+.iv-mail-item.is-unread .iv-mail-list-subject { color: var(--text); font-weight: 600; }
+.iv-mail-item.is-safe .iv-mail-list-subject,
+.iv-mail-reader .iv-subject-safe { color: #8ed9b2; }
+.iv-mail-item.is-suspicious .iv-mail-list-subject,
+.iv-mail-reader .iv-subject-suspicious { color: #ffaaa9; }
+.iv-read-state { display: inline-flex; align-items: center; gap: 5px; }
+.iv-mail-item.is-unread .iv-read-state::before { content: ''; width: 5px; height: 5px; border-radius: 50%; background: var(--accent); }
+.iv-mail-mark { display: flex; align-items: center; gap: 6px; margin-top: 8px; font-size: .875rem; }
+.iv-mail-mark > svg { width: 15px; height: 15px; }
+.iv-mail-mark.iv-mark-safe { color: #8ed9b2; }
+.iv-mail-mark.iv-mark-suspicious { color: #ffaaa9; }
+.iv-mail-action { display: flex; flex-wrap: wrap; gap: 10px; padding-top: 12px; }
+.iv-mail-action > button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 7px;
+  min-height: 42px;
+  padding: 9px 14px;
+  border: 1px solid #405574;
+  border-radius: var(--button-radius, 12px);
+  background: #192940;
+  color: var(--text);
+  font-size: .875rem;
+}
+.iv-mail-action > button:hover:not(:disabled) { background: #233851; }
+.iv-mail-action .iv-mark-safe[aria-pressed='true'] { border-color: #528772; background: #1a3a32; color: #a4e8c5; }
+.iv-mail-action .iv-mark-suspicious[aria-pressed='true'] { border-color: #ab646c; background: #432a36; color: #ffb9ba; }
+
+/* Cilj povezave je v tooltipu; noben element ne odpira zunanje strani. */
+.iv-mail-link-wrap { position: relative; width: 100%; margin-top: 18px; }
+.iv-mail-link {
+  max-width: 100%;
+  padding: 5px 2px;
+  border: 0;
+  border-radius: var(--button-radius, 12px);
+  background: transparent;
+  color: var(--accent);
+  font-size: 1rem;
+  line-height: 1.6;
+  text-align: left;
+  text-decoration: underline;
+  text-underline-offset: 4px;
+  overflow-wrap: anywhere;
+}
+.iv-mail-link:hover { color: #c9ebff; }
+.iv-mail-link-tooltip {
+  position: absolute;
+  z-index: 5;
+  bottom: 100%;
+  left: 0;
+  width: min(100%, 460px);
+  padding: 13px 14px;
+  border: 1px solid #526c8d;
+  border-radius: var(--control-radius, 12px);
+  background: #0b1628;
+  box-shadow: 0 8px 28px #0006;
+  color: var(--text);
+  line-height: 1.65;
+}
+.iv-mail-link-tooltip small { display: block; margin-bottom: 6px; color: #b1c1d8; font-size: .875rem; }
+.iv-mail-link-tooltip code { display: block; font-size: .875rem; line-height: 1.75; overflow-wrap: anywhere; white-space: normal; }
+.iv-mail-link-tooltip > span { display: block; margin-top: 7px; color: var(--quiet); font-size: .75rem; }
+@container viewer (max-width: 600px) {
+  .iv-mail-topbar { gap: 14px; padding: 16px; }
+  .iv-mail-owner { flex-basis: 100%; }
+  .iv-mail-search { flex-basis: 100%; }
+  .iv-mail-reader { padding-bottom: 24px; }
+}
+@media (forced-colors: active) {
+  .iv-mail-item.is-safe .iv-mail-list-subject,
+  .iv-mail-item.is-suspicious .iv-mail-list-subject { text-decoration: underline; }
+  .iv-mail-action > button[aria-pressed='true'] { outline: 2px solid Highlight; outline-offset: -3px; }
+  .iv-mail-link-tooltip { background: Canvas; border-color: CanvasText; }
 }

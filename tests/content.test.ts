@@ -90,25 +90,28 @@ describe('strežniško preverjanje osmih stopenj', () => {
 
 describe('razširjeni dokazi ostanejo skladni z obstoječimi rešitvami', () => {
   it('ponudi sedem različnih sporočil, vendar samo B izpolni pogoj za phishing', () => {
-    const mails = getStage(3)!.mails!;
-    expect(mails.map(mail => mail.id)).toEqual(['A', 'B', 'C', 'D', 'E', 'F', 'G']);
+    const stage = getStage(3)!;
+    const mails = stage.mails!;
+    expect(stage.intro).toMatch(/Luk[ae] Kovača?/u);
+    expect(stage.intro).toContain('most.si');
+    expect(mails.map(mail => mail.id)).toEqual(['A', 'C', 'D', 'B', 'E', 'F', 'G']);
     expect(new Set(mails.map(mail => mail.subject)).size).toBe(7);
     for (const mail of mails) {
-      expect(mail.recipient).toBeTruthy();
+      expect(mail.recipient).toBe('Luka Kovač <luka.kovac@most.si>');
       expect(mail.preview).toBeTruthy();
       expect(mail.time).toMatch(/^\d{2}:\d{2}$/u);
       expect(mail.sender).toContain('@');
       expect(validateAnswer(3, { message: mail.id, reasons: ['domain', 'link'] })).toBe(mail.id === 'B');
       if (mail.id !== 'B') {
-        expect(mail.sender).toMatch(/@sola\.example>$/u);
+        expect(mail.sender).toMatch(/@most\.si>$/u);
         if (mail.linkUrl) {
           const host = new URL(mail.linkUrl).hostname;
-          expect(host === 'sola.example' || host === 'ucilnica.sola.example').toBe(true);
+          expect(host === 'most.si' || host === 'ucilnica.most.si').toBe(true);
         }
       }
     }
-    expect(mails.find(mail => mail.id === 'B')!.linkUrl).toBe('https://sola.example.preveri-racun.example/prijava');
-    expect(mails.find(mail => mail.id === 'D')!.sender).toBe('Šolska IT podpora <podpora@sola.example>');
+    expect(mails.find(mail => mail.id === 'B')!.linkUrl).toBe('https://most.si.preveri-racun.example/prijava');
+    expect(mails.find(mail => mail.id === 'D')!.sender).toBe('Šolska IT podpora <podpora@most.si>');
     expect(mails.find(mail => mail.id === 'F')!.attachment).toBeTruthy();
     expect(getExplanation(3)).toContain('ujemajoča se domena sama ne jamči varnosti');
   });
