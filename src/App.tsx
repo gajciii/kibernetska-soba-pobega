@@ -38,6 +38,13 @@ function Icon({ name, size = 20 }: { name: IconName; size?: number }) {
 function Explanation({ text }: { text: string }) {
   return <>{text.split(/(\b[a-z0-9-]+(?:\.[a-z0-9-]+)+\b)/gi).map((part, index) => index % 2 === 1 ? <strong className="explanation-domain" key={index}>{part}</strong> : part)}</>;
 }
+function TheoryText({ text, highlights }: { text: string; highlights: string[] }) {
+  const pattern = new RegExp(`(${highlights.map(term => term.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')).join('|')})`, 'g');
+  return <>{text.split(pattern).map((part, index) => {
+    const highlight = highlights.indexOf(part);
+    return highlight >= 0 ? <strong className="theory-emphasis" data-tone={highlight % 4} key={index}>{part}</strong> : part;
+  })}</>;
+}
 const applications: Record<StageContent['kind'], { name: string; icon: IconName }> = { caesar: { name: 'Šifrirnik', icon: 'key' }, encoding: { name: 'Pretvornik', icon: 'terminal' }, phishing: { name: 'Pošta', icon: 'mail' }, password: { name: 'Javni profil', icon: 'shield' }, metadata: { name: 'Datoteke', icon: 'folder' }, logs: { name: 'Omrežni promet', icon: 'terminal' }, domains: { name: 'Brskalnik', icon: 'globe' }, binary: { name: 'Bitna konzola', icon: 'terminal' } };
 const base = import.meta.env.BASE_URL;
 type PageView = 'intro' | 'stage' | 'finale' | 'leaderboard' | 'not-found';
@@ -256,7 +263,7 @@ function Stage({ data, csrf, busy, setBusy, onSession, onData, onNext, onFinale,
       </div>
       <p className={`stage-intro ${stage.kind}-story`}>{stage.intro}</p>
       {stage.kind === 'domains' && <UrlGuide/>}
-      {stage.theory && <Disclosure className="theory-guide" title={stage.theory.title}><div className="theory-guide-content"><p>{stage.theory.text}</p></div></Disclosure>}
+      {stage.theory && <Disclosure className="theory-guide" title={stage.theory.title}><div className="theory-guide-content"><p><TheoryText text={stage.theory.text} highlights={stage.theory.highlights}/></p></div></Disclosure>}
       {stage.kind === 'encoding' && stage.evidence && <div className="source-evidence story-evidence"><div className="story-evidence-heading"><span>DOKAZ · obvestilo.dat</span><CopyButton text={stage.evidence} label="Kopiraj dokaz"/></div><code>{stage.evidence}</code></div>}
       <section className="task-instruction" aria-labelledby="instruction-heading"><h2 id="instruction-heading">NAVODILO</h2><p>{stage.question}</p></section>
       <a className="mobile-answer-link" href="#answer-panel">Vnesi odgovor</a>
@@ -294,7 +301,7 @@ function Stage({ data, csrf, busy, setBusy, onSession, onData, onNext, onFinale,
           {passwordVerified && !data.solved && <>
             <p className="password-confirmation" role="status"><Icon name="check" size={16}/>Geslo prepoznano.</p>
             <fieldset className="reasons password-recommendations" ref={recommendationsRef} tabIndex={-1}>
-              <legend>Priporočila za varnejši račun</legend>
+              <legend>Priporočila za bolj varen račun</legend>
               <p>Označi dobre prakse.</p>
               {stage.recommendations?.map(recommendation => <label className="reason" key={recommendation.id}><input type="checkbox" value={recommendation.id} checked={recommendations.includes(recommendation.id)} onChange={event => setRecommendations(previous => event.target.checked ? [...previous, recommendation.id] : previous.filter(id => id !== recommendation.id))} disabled={busy}/><span>{recommendation.label}</span></label>)}
             </fieldset>

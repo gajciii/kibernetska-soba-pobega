@@ -109,7 +109,7 @@ export function createApp(pool: pg.Pool, config: AppConfig, now: () => number = 
         return {
           correct: false,
           passwordVerified,
-          message: passwordVerified ? 'Predvidljivo geslo je prepoznano. Zdaj izberi priporočila za varnejšo uporabo gesel in zaščito računa.' : 'Geslo še ni prepoznano. Preveri javni profil in poskusi znova.',
+          message: passwordVerified ? 'Predvidljivo geslo je prepoznano. Zdaj izberi priporočila za bolj varno uporabo gesel in zaščito računa.' : 'Geslo še ni prepoznano. Preveri javni profil in poskusi znova.',
           session,
         };
       }
