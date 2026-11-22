@@ -1,6 +1,6 @@
 # Operacija 404: Odkrij ogroženi projekt
 
-V arhivu šole Piramida so zaznali sumljiv prenos datoteke nacrt.pdf. Njeno ime ne razkriva vsebine. Poveži digitalne sledi in odkrij, kateri skrivni šolski projekt je ogrožen. Preiskava poteka skozi osem izzivov.
+V arhivu šole Piramida so zaznali sumljiv prenos datoteke nacrt.pdf. Poveži digitalne sledi in odkrij, kateri skrivni šolski projekt je ogrožen. Preiskava poteka skozi osem izzivov.
 
 ## Namen
 
