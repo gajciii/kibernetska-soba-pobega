@@ -15,7 +15,7 @@ type LandingProps = {
 };
 
 function TitleLines() {
-  return <><span className="landing-title-main">Operacija <span>404.</span></span><span className="landing-title-sub">Vsaka skrivnost pusti sled.</span></>;
+  return <span className="landing-title-main">Operacija <span>404.</span></span>;
 }
 
 export default function Landing({ session, nextStartAt, now, busy, onStart, onContinue, onReset, headingRef }: LandingProps) {
@@ -62,7 +62,7 @@ export default function Landing({ session, nextStartAt, now, busy, onStart, onCo
         <span className="sr-only" role="status" aria-live="polite" aria-atomic="true">{!session && nextStartAt ? cooldownActive ? 'Začetek nove preiskave je začasno onemogočen. Odštevalnik je prikazan ob gumbu.' : 'Zdaj lahko začneš novo preiskavo.' : ''}</span>
         <p className="landing-save-note" id="landing-name-note">Ime skupine bo prikazano na lestvici.</p>
       </form>}
-      <ul className="landing-facts" aria-label="O delavnici"><li><strong>8</strong> izzivov</li><li>Delo v paru</li><li><strong>45–60</strong> minut</li></ul>
+      <ul className="landing-facts" aria-label="O delavnici"><li><strong>8</strong> izzivov</li><li><strong>45–60</strong> minut</li></ul>
     </div>
   </main>;
 }

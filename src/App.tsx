@@ -191,7 +191,7 @@ export default function App() {
       : <main id="main" className="finale-page" aria-busy={busy}>
         {session && finale && <FinaleView finale={finale} session={session} stages={boot.stages} time={elapsed(session, now)} headingRef={headingRef} onReset={() => setResetOpen(true)} onLeaderboard={() => changeView('leaderboard')}/>}
         </main>}
-    <footer className="footer"><span><strong>FERI</strong><span className="footer-divider">/</span> Kibernetska soba pobega</span><span className="footer-credit"><a href={`${base}license.txt`} target="_blank" rel="noopener noreferrer">Licenca MIT</a></span></footer>
+    <footer className="footer"><strong>FERI</strong><a href={`${base}license.txt`} target="_blank" rel="noopener noreferrer">Licenca MIT</a></footer>
     {resetOpen && <ResetDialog busy={busy} onCancel={() => setResetOpen(false)} onReset={reset}/>}
   </div>;
 }
