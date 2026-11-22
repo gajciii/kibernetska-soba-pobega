@@ -6,7 +6,7 @@ Delavnica je izmišljena izobraževalna simulacija. Dvojica uporablja en računa
 
 ## Rdeča nit zgodbe
 
-Cezarjeva koda **PIRAMIDA** odpre prvo mapo, dvojno kodirano obvestilo pa razkrije **Luko Kralja** kot prijavitelja in kodo mape **PREDAL**. Njegova prijava sumljive pošte utemelji pregled predala. Osebni nagovor v lažnem sporočilu vodi k javnemu profilu in hipotetično šibkemu geslu. Luka nato pove, da je uporabljal skupni šolski računalnik in ob odhodu fotografiral hodnik. Čas fotografije usmeri pregled okoliških omrežnih dogodkov. Uspešen prenos poveže račun **ucenec17** z računalnikom **10.0.0.17**, njegova zavarovana zgodovina pa vsebuje isto lažno povezavo kot pošta. Ko je ponarejena prijava prepoznana, skrbnik v pravem arhivu po računu, času in poti najde ustrezno različico načrta. Izvoz njene oznake v ASCII razkrije **BRUCOVANJE**.
+Cezarjeva koda **PIRAMIDA** odpre prvo mapo, dvojno kodirano obvestilo pa razkrije **Luko Kralja** kot prijavitelja in kodo mape **PREDAL**. Njegova prijava sumljive pošte utemelji pregled predala. Osebni nagovor v lažnem sporočilu vodi k javnemu profilu in hipotetično šibkemu geslu. Luka nato pove, da je uporabljal skupni šolski računalnik in ob odhodu fotografiral hodnik. Čas fotografije usmeri pregled okoliških omrežnih dogodkov. Uspešen prenos poveže račun **ucenec17** z računalnikom **10.0.0.17**, njegova zavarovana zgodovina pa vsebuje isto lažno povezavo kot pošta. Ko je ponarejena prijava prepoznana, detektiv v pravem arhivu po računu, času in poti najde ustrezno različico načrta. Izvoz njene oznake v ASCII razkrije **BRUCOVANJE**.
 
 Časovne sledi z dne 20. 11. 2026 so:
 
@@ -44,7 +44,7 @@ Vsako nalogo uvede kratka zgodba, ki dokaze poveže s preiskavo. Pri nalogah 3�
 
 ## 1. Razbij skrivno sporočilo
 
-**Dokaz:** `NRGD MH SLUDPLGD`, iz datoteke `sporocilo.txt`. Skrbnik je s Cezarjevo šifro skril kodo prvega dela preiskovalne mape, v kateri je zbral sledi prenosa. Nad pripomočkom je zgodbeni odstavek. Par naj ga prebere: uvod razloži namen kode, zamenjavo črk in premik **»tri mesta nazaj«** s primerom D → A. Navodilo poimenuje gumb »Nazaj«, izbiro črke v zgornji vrstici ter odgovor zgoraj desno.
+**Dokaz:** `NRGD MH SLUDPLGD`, iz datoteke `sporocilo.txt`. Detektiv je s Cezarjevo šifro skril kodo prvega dela preiskovalne mape, v kateri je zbral sledi prenosa. Nad pripomočkom je zgodbeni odstavek. Par naj ga prebere: uvod razloži namen kode, zamenjavo črk in premik **»tri mesta nazaj«** s primerom D → A. Navodilo poimenuje gumb »Nazaj«, izbiro črke v zgornji vrstici ter odgovor zgoraj desno.
 
 **Potek reševanja:** uporabljata abecedo A–Z brez šumnikov. V ročnem pripomočku premikata abecedo v obe smeri, nastavita ustrezno preslikavo in po črkah razbereta sporočilo. Samodejnega dešifriranja ni. Razkrito sporočilo je `KODA JE PIRAMIDA`; v edino polje za odgovor zgoraj desno vneseta samo kodo **`PIRAMIDA`**. Strežniško preverjanje zaradi združljivosti še naprej sprejme tudi celoten stavek, ne glede na velikost črk in odvečne presledke.
 
@@ -65,7 +65,7 @@ Vsako nalogo uvede kratka zgodba, ki dokaze poveže s preiskavo. Pri nalogah 3�
 55 46 4A 4A 53 6B 46 57 53 56 52 46 54 45 6F 36 49 45 78 56 53 30 45 67 53 31 4A 42 54 45 6F 75 49 45 74 50 52 45 45 67 54 55 46 51 52 54 6F 67 55 46 4A 46 52 45 46 4D 4C 67 3D 3D
 ```
 
-Zgodba predstavi datoteko `obvestilo.dat`, skrbnikov izvoz prve prijave nenavadnega dogajanja. V njem sta prijaviteljevo ime in koda naslednje mape. Nepopolni pripis govori o **dveh preoblekah**: zunanja pozna **šestnajst znakov**, pod njo pa je abeceda **štiriinšestdesetih**. Besedi »zunanja« in »pod njo« namigujeta na vrstni red. Uvod ne našteva dovoljenih znakov, ne razloži dopolnila in ne pove korakov pretvorbe; neposrednejša pomoč je v namigih. Reševanje poteka brez samodejnega prenosa rezultatov:
+Zgodba predstavi datoteko `obvestilo.dat`, detektivov izvoz prve prijave nenavadnega dogajanja. V njem sta prijaviteljevo ime in koda naslednje mape. Nepopolni pripis govori o **dveh preoblekah**: zunanja pozna **šestnajst znakov**, pod njo pa je abeceda **štiriinšestdesetih**. Besedi »zunanja« in »pod njo« namigujeta na vrstni red. Uvod ne našteva dovoljenih znakov, ne razloži dopolnila in ne pove korakov pretvorbe; neposrednejša pomoč je v namigih. Reševanje poteka brez samodejnega prenosa rezultatov:
 
 1. Izbereta **Šestnajstiško (HEX)** in dekodiranje. Prvi rezultat je še vedno kodiran zapis:
 
@@ -85,7 +85,7 @@ Zgodba predstavi datoteko `obvestilo.dat`, skrbnikov izvoz prve prijave nenavadn
 
 ## 3. Poišči phishing sporočilo
 
-Šolska domena v učnem primeru je `piramida.si`. Obvestilo iz druge naloge pripelje do **Luke Kralja**, ki je skrbniku še pred opozorilom o prenosu prijavil sumljivo pošto in mu predal kopijo predala **`luka.kralj@piramida.si`**. Zato sledi pregled njegove pošte. To je izmišljeni lastnik predala; aplikacija ne bere prave pošte ali navezuje stikov. Vseh sedem sporočil je naslovljenih nanj.
+Šolska domena v učnem primeru je `piramida.si`. Obvestilo iz druge naloge pripelje do **Luke Kralja**, ki je detektivu še pred opozorilom o prenosu prijavil sumljivo pošto in mu predal kopijo predala **`luka.kralj@piramida.si`**. Zato sledi pregled njegove pošte. To je izmišljeni lastnik predala; aplikacija ne bere prave pošte ali navezuje stikov. Vseh sedem sporočil je naslovljenih nanj.
 
 Začetni vrstni red je **A, C, D, B, E, F, G**: knjižnični opomnik, mentorsko obvestilo, načrtovano IT-vzdrževanje, lažna IT-zahteva, pomembna sprememba učilnice, pričakovana priponka fotografskega krožka in jedilnik. Phishing sporočilo je torej **četrto**, njegov stabilni identifikator **B** pa ostaja nespremenjen. Vrstni red je ureditev dokazne zbirke, ne časovno razvrščanje.
 
@@ -125,7 +125,7 @@ Dijaki sestavijo hipotetično predvidljivo geslo za ta učni primer. Ne iščejo
 
 ## 5. Fotografija skriva namig
 
-Luka pove, da je uporabljal skupni šolski računalnik in ob odhodu fotografiral hodnik pred računalniško učilnico z rdečim nahrbtnikom. Trdi, da je bilo to ob **11:15**, in skrbniku pošlje mapo šolskih in osebnih slik. Posnetek je sled za časovno umestitev odhoda. Uvod na kratko pojasni, da so metapodatki podatki, ki spremljajo datoteko, na primer ime, velikost in zapisani časi. Navodilo se glasi: »Ob kateri uri je bila fotografija dejansko posneta? Odgovori v obliki HH:MM.« Imena datoteke in pravilnega polja uvod ne razkrije; par fotografijo najprej prepozna po opisu.
+Luka pove, da je uporabljal skupni šolski računalnik in ob odhodu fotografiral hodnik pred računalniško učilnico z rdečim nahrbtnikom. Trdi, da je bilo to ob **11:15**, in detektivu pošlje mapo šolskih in osebnih slik. Posnetek je sled za časovno umestitev odhoda. Uvod na kratko pojasni, da so metapodatki podatki, ki spremljajo datoteko, na primer ime, velikost in zapisani časi. Navodilo se glasi: »Ob kateri uri je bila fotografija dejansko posneta? Odgovori v obliki HH:MM.« Imena datoteke in pravilnega polja uvod ne razkrije; par fotografijo najprej prepozna po opisu.
 
 Pregledovalnik vsebuje **12 datotek** v tem vrstnem redu: `ucilnica.jpg`, `dvorisce.jpg`, `knjiznica.jpg`, `telovadnica.jpg`, `projekt.jpg`, `stopnisce.jpg`, `obvestilo.png`, `gore.jpg`, `jedilnica.jpg`, `vhod.jpg`, **`hodnik.jpg`**, `tabla.jpg`. Iskana fotografija je enajsta, torej predzadnja. Pri njenem pregledu so na voljo slovensko poimenovani metapodatki:
 
@@ -148,7 +148,7 @@ Vsaka datoteka ima svoj pripravljeni izpis. `ucilnica.jpg` ohrani nastanek ob 08
 
 ## 6. Kateri račun je bil uporabljen za prenos?
 
-Čas fotografije **10:42** usmeri pregled v dogajanje okoli Lukovega odhoda iz učilnice. Skrbnik pripravi promet in strežniške dnevnike iz tega časovnega okvira. Uvod pojasni omrežni promet kot izmenjavo podatkov med napravami v majhnih delih, imenovanih paketi. Ime `/zaupno/nacrt.pdf` pomaga pri iskanju uspešnega prenosa; račun v zapisu še ne določi osebe za skupnim računalnikom.
+Čas fotografije **10:42** usmeri pregled v dogajanje okoli Lukovega odhoda iz učilnice. Detektiv pripravi promet in strežniške dnevnike iz tega časovnega okvira. Uvod pojasni omrežni promet kot izmenjavo podatkov med napravami v majhnih delih, imenovanih paketi. Ime `/zaupno/nacrt.pdf` pomaga pri iskanju uspešnega prenosa; račun v zapisu še ne določi osebe za skupnim računalnikom.
 
 Forenzični pregledovalnik vsebuje **32 simuliranih paketov** in **16 ločenih zapisov aplikacijskega dnevnika**. Vsi dogodki so z dne 20. 11. 2026; časi so lokalni. Paketni izbor vključuje ARP, DNS, TCP, TLS in HTTP ter ni celoten zajem povezav. Par filtrira prikaz, izbere paket ter odpre njegove podrobnosti in morebitno povezavo z aplikacijskim zapisom.
 
@@ -163,7 +163,7 @@ Primerjaj tri pogoje hkrati: prenos, prava datoteka in uspeh. `ucenec12` je imel
 
 ## 7. Najdi ponarejeno spletno stran
 
-Zapis uspešnega prenosa poveže račun `ucenec17` z računalnikom `10.0.0.17`. Skrbnik odpre njegovo zavarovano zgodovino: med petimi naslovi je tudi lažna povezava iz Lukove pošte, tretji zapis oziroma izbira C. Pri vsakem je podoba portala enaka; spreminja se naslovna vrstica. Pred iskanjem načrta je treba ločiti šolske naslove od tujih. Uvod pojasni URL, pri teh primerih prepoznavanje gostitelja za `https://` in pred prvo naslednjo poševnico ter pomen poti in parametrov. Potrjena šolska gostitelja sta `piramida.si` in `ucilnica.piramida.si`.
+Zapis uspešnega prenosa poveže račun `ucenec17` z računalnikom `10.0.0.17`. Detektiv odpre njegovo zavarovano zgodovino: med petimi naslovi je tudi lažna povezava iz Lukove pošte, tretji zapis oziroma izbira C. Pri vsakem je podoba portala enaka; spreminja se naslovna vrstica. Pred iskanjem načrta je treba ločiti šolske naslove od tujih. Uvod pojasni URL, pri teh primerih prepoznavanje gostitelja za `https://` in pred prvo naslednjo poševnico ter pomen poti in parametrov. Potrjena šolska gostitelja sta `piramida.si` in `ucilnica.piramida.si`.
 
 | Zapis | Naslov | Presoja |
 | --- | --- | --- |
@@ -187,7 +187,7 @@ Izbrana povezava in vnesena domena se morata ujemati. Celoten URL, šolska domen
 
 ## 8. Računalnik govori v ničlah in enicah
 
-**Dokaz:** `01000010 01010010 01010101 01000011 01001111 01010110 01000001 01001110 01001010 01000101`. Po prepoznani ponarejeni prijavi skrbnik v pravem arhivu po računu, času in poti prenosa najde ustrezno različico načrta. Dokaz je njegov izvoz oznake projekta: deset bajtov v zapisu ASCII. Presledki ločujejo skupine in niso del končnega sporočila. Vrstni red skupin se ohrani.
+**Dokaz:** `01000010 01010010 01010101 01000011 01001111 01010110 01000001 01001110 01001010 01000101`. Po prepoznani ponarejeni prijavi detektiv v pravem arhivu po računu, času in poti prenosa najde ustrezno različico načrta. Dokaz je njegov izvoz oznake projekta: deset bajtov v zapisu ASCII. Presledki ločujejo skupine in niso del končnega sporočila. Vrstni red skupin se ohrani.
 
 **Potek reševanja:** par izbere eno skupino in prebere osem bitov od leve proti desni. Mesta imajo uteži **128, 64, 32, 16, 8, 4, 2, 1**. Pri bitu **1** prišteje utež mesta, pri bitu **0** jo preskoči. Dobljeno decimalno število poišče v zložljivem pregledu ASCII s pari števil in črk A–Z ter si zapiše črko. Primer takoj pod tremi koraki navodil pokaže postopek: `01000001` je `64 + 1 = 65` in predstavlja črko `A`.
 

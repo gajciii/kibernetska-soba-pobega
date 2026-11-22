@@ -9,7 +9,7 @@ const stages: StageContent[] = [
     title: 'Razbij skrivno sporočilo',
     topic: 'Cezarjeva šifra',
     kind: 'caesar',
-    intro: 'Na šoli Piramida je nekdo prenesel zaupni načrt. Tvoja naloga je odkriti, kateremu projektu pripada. Skrbnik ti je pripravil mapo z dokazi, za vstop vanjo pa potrebuješ kodo. Skrita je v spodnjem sporočilu iz datoteke sporocilo.txt. Zapis uporablja šifro, poimenovano po Juliju Cezarju: vsako črko zamenja druga črka abecede. Sporočilo prebereš tako, da se pri vsaki črki premakneš za tri mesta nazaj — D tako postane A. Če prideš pred A, nadaljuj pri Z.',
+    intro: 'Na šoli Piramida je nekdo prenesel zaupni načrt. Tvoja naloga je odkriti, kateremu projektu pripada. Detektiv ti je pripravil mapo z dokazi, za vstop vanjo pa potrebuješ kodo. Skrita je v spodnjem sporočilu iz datoteke sporocilo.txt. Zapis uporablja šifro, poimenovano po Juliju Cezarju: vsako črko zamenja druga črka abecede. Sporočilo prebereš tako, da se pri vsaki črki premakneš za tri mesta nazaj — D tako postane A. Če prideš pred A, nadaljuj pri Z.',
     question: 'Z gumbom »Nazaj« nastavi premik iz zgodbe. V zgornji vrstici izberi črko sporočila in pod njo preberi razkrito črko. Tako sestavi celoten zapis, nato v polje »Odgovor« vnesi samo kodo.',
     evidence: 'NRGD MH SLUDPLGD',
     note: 'Uporabljaj abecedo A–Z brez šumnikov. Premik in smer razberi iz zgodbe, nato črke primerjaj s pomočjo abecednega pripomočka. Presledke in ločila ohrani.',
@@ -24,12 +24,12 @@ const stages: StageContent[] = [
     title: 'Kaj se skriva za čudnimi znaki?',
     topic: 'Kodiranja',
     kind: 'encoding',
-    intro: 'V odprti mapi najdeš obvestilo.dat, skrbnikov izvoz prve prijave nenavadnega dogajanja. V njem se skriva ime osebe, pri kateri se je preiskava začela, in oznaka mape z njeno prijavo ter shranjeno e-pošto. Ob datoteki je pripis: »Kar gre skozi moj sistem, nosi dve preobleki. Zunanja pozna šestnajst znakov, pod njo pa se skriva abeceda štiriinšestdesetih.« Preostanek zapiska manjka.',
+    intro: 'V odprti mapi najdeš obvestilo.dat, detektivov izvoz prve prijave nenavadnega dogajanja. V njem se skriva ime osebe, pri kateri se je preiskava začela, in oznaka mape z njeno prijavo ter shranjeno e-pošto. Ob datoteki je pripis: »Kar gre skozi moj sistem, nosi dve preobleki. Zunanja pozna šestnajst znakov, pod njo pa se skriva abeceda štiriinšestdesetih.« Preostanek zapiska manjka.',
     question: 'Prekopiraj dokaz v pretvornik in odkrij sporočilo. Vnesi samo kodo naslednje mape.',
     evidence: '55 46 4A 4A 53 6B 46 57 53 56 52 46 54 45 6F 36 49 45 78 56 53 30 45 67 53 31 4A 42 54 45 6F 75 49 45 74 50 52 45 45 67 54 55 46 51 52 54 6F 67 55 46 4A 46 52 45 46 4D 4C 67 3D 3D',
     note: 'Najprej dekodiraj zunanji zapis. Celoten vmesni rezultat ročno prekopiraj v vhod, nato izberi kodiranje notranjega zapisa in znova dekodiraj. Poskusi v pretvorniku ne štejejo kot oddaje odgovora.',
     investigations: [
-      { id: 'ovojnica', title: 'Izvoz: obvestilo.dat', text: 'Skrbnikov izvoz prve prijave je bil kodiran dvakrat. Pri branju najprej odstrani zunanjo, nato notranjo plast; končnica .dat postopka ne določa.' },
+      { id: 'ovojnica', title: 'Izvoz: obvestilo.dat', text: 'Detektivov izvoz prve prijave je bil kodiran dvakrat. Pri branju najprej odstrani zunanjo, nato notranjo plast; končnica .dat postopka ne določa.' },
       { id: 'nabor', title: 'Zunanji in notranji zapis', text: 'Zunanji zapis sestavljajo pari znakov 0–9 in A–F. Notranji uporablja večji nabor črk in števk ter lahko vsebuje +, / in končno dopolnilo =.' },
       { id: 'rezultat', title: 'Pričakovani rezultat', text: 'Po prvem koraku pričakuj drug kodiran zapis. Šele drugi korak razkrije kratko obvestilo s kodo naslednje mape.' },
     ],
@@ -39,7 +39,7 @@ const stages: StageContent[] = [
     title: 'Poišči phishing sporočilo',
     topic: 'Phishing',
     kind: 'phishing',
-    intro: 'Razkrito obvestilo te pripelje do dijaka Luke Kralja. Še pred opozorilom o prenosu je skrbniku prijavil nenavadno e-pošto in mu predal kopijo svojega predala. Med običajnimi šolskimi sporočili iščeš tisto, ki bi lahko pojasnilo poskus dostopa do računa. Lukin naslov je luka.kralj@piramida.si, šola uporablja domeno piramida.si. Preglej sedem sporočil in označi sumljivega, da napreduješ.',
+    intro: 'Razkrito obvestilo te pripelje do dijaka Luke Kralja. Še pred opozorilom o prenosu je detektivu prijavil nenavadno e-pošto in mu predal kopijo svojega predala. Med običajnimi šolskimi sporočili iščeš tisto, ki bi lahko pojasnilo poskus dostopa do računa. Lukin naslov je luka.kralj@piramida.si, šola uporablja domeno piramida.si. Preglej sedem sporočil in označi sumljivega, da napreduješ.',
     question: 'Katero sporočilo je phishing? Utemelji izbiro.',
     note: 'Izmišljena šola uporablja domeno piramida.si. Vsa sporočila so z dne 20. 11. 2026, časi so lokalni. Predal, priponke in povezave so neaktivna učna simulacija. Prikazno ime, nujnost ali sama prisotnost priponke še ne zadoščajo za sklep.',
     mails: [
@@ -135,7 +135,7 @@ const stages: StageContent[] = [
     title: 'Ugotovi predvidljivo geslo',
     topic: 'Predvidljiva gesla',
     kind: 'password',
-    intro: 'Lažna podpora je Luko nagovorila z imenom in priimkom. Koliko bi neznanec o njem lahko izvedel že brez dostopa do predala? Luka skrbniku pokaže svoj javni profil: izlete, psičko in nekaj vrstic o sebi. Ob pregledu se zamisli — podatki, iz katerih bi si sestavil nekaj lahko zapomnljivega, so ves čas na očeh vsem. Pred nadaljevanjem preiskave mu pomagaj prepoznati šibko izbiro in bolje zaščititi račun.',
+    intro: 'Lažna podpora je Luko nagovorila z imenom in priimkom. Koliko bi neznanec o njem lahko izvedel že brez dostopa do predala? Luka detektivu pokaže svoj javni profil: izlete, psičko in nekaj vrstic o sebi. Ob pregledu se zamisli — podatki, iz katerih bi si sestavil nekaj lahko zapomnljivega, so ves čas na očeh vsem. Pred nadaljevanjem preiskave mu pomagaj prepoznati šibko izbiro in bolje zaščititi račun.',
     question: 'Iz javnih podatkov sestavi primer predvidljivega gesla, nato izberi priporočila za varnejšo uporabo gesel in zaščito računa.',
     note: 'Vnos se preveri samo v učni igri in se ne uporabi za prijavo. Potrditev predvidljivega gesla odpre drugi del naloge; naslednjo stopnjo odklene šele pravilen izbor priporočil.',
     profile: {
@@ -164,7 +164,7 @@ const stages: StageContent[] = [
     title: 'Fotografija skriva namig',
     topic: 'Metapodatki',
     kind: 'metadata',
-    intro: "Pri pogovoru o računu se Luka spomni, da je tisti dan uporabljal skupni računalnik v šoli. Ob odhodu je fotografiral hodnik pred računalniško učilnico z rdečim nahrbtnikom. Trdi, da je bilo to ob 11:15, in skrbniku pošlje mapo fotografij. Posnetek bi lahko pomagal časovno umestiti njegov odhod. Toda sliko je mogoče pozneje urediti ali znova shraniti. Spremljajo jo metapodatki — podatki o datoteki, kot so ime, velikost in zapisani časi.",
+    intro: "Pri pogovoru o računu se Luka spomni, da je tisti dan uporabljal skupni računalnik v šoli. Ob odhodu je fotografiral hodnik pred računalniško učilnico z rdečim nahrbtnikom. Trdi, da je bilo to ob 11:15, in detektivu pošlje mapo fotografij. Posnetek bi lahko pomagal časovno umestiti njegov odhod. Toda sliko je mogoče pozneje urediti ali znova shraniti. Spremljajo jo metapodatki — podatki o datoteki, kot so ime, velikost in zapisani časi.",
     question: "Ob kateri uri je bila fotografija dejansko posneta? Odgovori v obliki HH:MM.",
     note: "Pripravljeni učni izpisi spremljajo lokalne slike in niso prebrani iz njihovih datotek. Vsi prikazani časi uporabljajo časovni pas UTC+01:00.",
     metadata: "Ime datoteke: hodnik.jpg\nVelikost: 2,4 MB\nČas nastanka posnetka: 20. 11. 2026 10:42:17\nČas spremembe: 20. 11. 2026 11:15:00\nČasovni pas: UTC+01:00",
@@ -188,7 +188,7 @@ const stages: StageContent[] = [
     title: 'Kateri račun je bil uporabljen za prenos?',
     topic: 'Dnevniki',
     kind: 'logs',
-    intro: 'Čas fotografije usmeri pregled v dogajanje okoli Lukovega odhoda iz učilnice. Skrbnik je iz tega časovnega okvira pripravil omrežni promet in strežniške dnevnike. Omrežni promet je izmenjava podatkov med napravami v majhnih delih, imenovanih paketi; nastaja ob prijavah, odpiranju strani in prenosih. Med običajnimi dogodki iščeš uspešen prenos /zaupno/nacrt.pdf. Iskalnik ti lahko pomaga zožiti izbor. Račun v zapisu je sled, sam pa še ne pove, kdo je sedel za skupnim računalnikom.',
+    intro: 'Čas fotografije usmeri pregled v dogajanje okoli Lukovega odhoda iz učilnice. Detektiv je iz tega časovnega okvira pripravil omrežni promet in strežniške dnevnike. Omrežni promet je izmenjava podatkov med napravami v majhnih delih, imenovanih paketi; nastaja ob prijavah, odpiranju strani in prenosih. Med običajnimi dogodki iščeš uspešen prenos /zaupno/nacrt.pdf. Iskalnik ti lahko pomaga zožiti izbor. Račun v zapisu je sled, sam pa še ne pove, kdo je sedel za skupnim računalnikom.',
     question: 'Kateri uporabniški račun je bil uporabljen za uspešen prenos iskane datoteke?',
     note: 'Simulacija • 20. 11. 2026, lokalni časi. Paketni pregled je pripravljen izbor dogodkov, ne celoten zajem. Šifriran promet TLS sam ne razkrije uporabniškega računa ali poti datoteke. Povezave do ločenega aplikacijskega dnevnika so vnaprej pripravljena učna korelacija; aplikacija ne zajema prometa in ne pošilja pravih zahtev. DOWNLOAD = prenos, VIEW = ogled, SUCCESS = uspešno, DENIED = zavrnjeno, LOGIN = prijava, LOGOUT = odjava.',
     logs: [
@@ -254,7 +254,7 @@ const stages: StageContent[] = [
     title: 'Najdi ponarejeno spletno stran',
     topic: 'Domene',
     kind: 'domains',
-    intro: 'Dnevnik je pokazal račun in naslov IP računalnika, s katerega je bil sprožen prenos načrta. Skrbnik zdaj odpre zavarovano zgodovino tega računalnika. Med petimi naslovi je tudi povezava iz Lukove sumljive pošte. Prijavne strani so videti enako, zato preveri URL: gostitelj je del za https:// in pred naslednjo poševnico. Šola uporablja piramida.si in ucilnica.piramida.si. Ponaredek lahko spremeni eno črko, jo podvoji ali šolsko ime skrije v poddomeno tuje strani; dodatek za vprašajem je parameter. Pred iskanjem načrta loči šolski arhiv od tujih strani.',
+    intro: 'Dnevnik je pokazal račun in naslov IP računalnika, s katerega je bil sprožen prenos načrta. Detektiv zdaj odpre zavarovano zgodovino tega računalnika. Med petimi naslovi je tudi povezava iz Lukove sumljive pošte. Prijavne strani so videti enako, zato preveri URL: gostitelj je del za https:// in pred naslednjo poševnico. Šola uporablja piramida.si in ucilnica.piramida.si. Ponaredek lahko spremeni eno črko, jo podvoji ali šolsko ime skrije v poddomeno tuje strani; dodatek za vprašajem je parameter. Pred iskanjem načrta loči šolski arhiv od tujih strani.',
     question: 'V zgodovini izberi eno ponarejeno povezavo. Kateri tuji domeni pripada? Vpiši samo domeno, brez https:// in poti.',
     note: 'Zgodovina vsebuje pet pripravljenih naslovov. Prikaz prijavne strani ostane enak; spreminja se naslovna vrstica. Noben naslov se ne odpre v omrežju in obrazec ne zbira prijavnih podatkov.',
     choices: [
@@ -265,7 +265,7 @@ const stages: StageContent[] = [
       { id: 'F', label: 'https://piramida.si/prijava?jezik=sl' },
     ],
     investigations: [
-      { id: 'zgodovina', title: 'Izpis zgodovine', text: 'Skrbnik je zavaroval pet zapisov obiskov. Njihov vrstni red ni ocena varnosti in ne pove, kdo je posamezno stran odprl.' },
+      { id: 'zgodovina', title: 'Izpis zgodovine', text: 'Detektiv je zavaroval pet zapisov obiskov. Njihov vrstni red ni ocena varnosti in ne pove, kdo je posamezno stran odprl.' },
       { id: 'imenik', title: 'Izsek iz šolskega imenika', text: 'Šola uporablja domeno piramida.si. Njena spletna učilnica je na gostitelju ucilnica.piramida.si.' },
       { id: 'videz', title: 'Primerjava videza', text: 'Pri vseh petih zapisih se pokaže ista podoba prijavne strani. Logotip, barve in besedilo obrazca lahko kopira tudi druga stran.' },
       { id: 'sifrirana-povezava', title: 'Podatek o povezavi', text: 'Vsi prikazani naslovi se začnejo s https://. To opisuje zaščito prenosa, ne potrjuje pa pripadnosti šoli.' },
@@ -278,7 +278,7 @@ const stages: StageContent[] = [
     title: 'Računalnik govori v ničlah in enicah',
     topic: 'Binarni zapis',
     kind: 'binary',
-    intro: 'Prepoznal si ponarejeno prijavo. Skrbnik je v pravem arhivu po računu, času in poti prenosa našel ustrezno različico načrta. Iz njegove oznake projekta je pripravil izvoz desetih bajtov ASCII in pripisal: »Vsaka enica nekaj šteje. Njeno mesto pove, koliko.« V teh desetih skupinah je kodno ime projekta, ki ga iščeš od začetka. Ko ga razbereš, bo jasno, kateri načrt je bil ogrožen.',
+    intro: 'Prepoznal si ponarejeno prijavo. Detektiv je v pravem arhivu po računu, času in poti prenosa našel ustrezno različico načrta. Iz njegove oznake projekta je pripravil izvoz desetih bajtov ASCII in pripisal: »Vsaka enica nekaj šteje. Njeno mesto pove, koliko.« V teh desetih skupinah je kodno ime projekta, ki ga iščeš od začetka. Ko ga razbereš, bo jasno, kateri načrt je bil ogrožen.',
     question: 'Za vsak bajt seštej uteži mest z enico. Vsoto poišči v tabeli ASCII in sestavi kodno ime projekta. Vpiši ga v polje za odgovor.',
     evidence: '01000010 01010010 01010101 01000011 01001111 01010110 01000001 01001110 01001010 01000101',
     note: 'Uteži osmih mest od leve proti desni so 128, 64, 32, 16, 8, 4, 2 in 1. Enica prispeva utež svojega mesta, ničla pa nič. Za vsak bajt posebej seštej prispevke in decimalno vsoto poišči v tabeli ASCII za črke A–Z.',
@@ -304,7 +304,7 @@ const hints: Record<number, [string, string]> = {
 };
 
 const explanations: Record<number, string> = {
-  1: 'Koda PIRAMIDA odpre mapo s skrbnikovim izvozom prve prijave. Cezarjeva šifra zamenja črke s stalnim premikom po abecedi. V tem primeru je šifriranje premaknilo črke za tri mesta naprej, dešifriranje pa jih je vrnilo nazaj. Zgodba je razkrila premik, primerjava abeced pa preslikavo posameznih črk. Presledki in vrstni red so pomagali preveriti smiselnost sporočila. Takšna šifra je primerna za razumevanje osnov, ne za sodobno varovanje podatkov.',
+  1: 'Koda PIRAMIDA odpre mapo z detektivovim izvozom prve prijave. Cezarjeva šifra zamenja črke s stalnim premikom po abecedi. V tem primeru je šifriranje premaknilo črke za tri mesta naprej, dešifriranje pa jih je vrnilo nazaj. Zgodba je razkrila premik, primerjava abeced pa preslikavo posameznih črk. Presledki in vrstni red so pomagali preveriti smiselnost sporočila. Takšna šifra je primerna za razumevanje osnov, ne za sodobno varovanje podatkov.',
   2: 'Obvestilo razkrije prijavitelja Luko Kralja in kodo PREDAL: ta odpre mapo z njegovo prijavo ter kopijo poštnega predala, ki jo pregledaš v naslednjem koraku. Zapis je vseboval dve plasti: dekodiranje HEX je razkrilo zapis Base64, šele njegovo dekodiranje pa besedilo. Vrstni red je pomemben, ker mora biti rezultat prvega postopka veljaven vhod za drugega. HEX in Base64 sta kodiranji, ne šifriranje; tudi njuna kombinacija ne zagotavlja zaupnosti. Besedilo obvestila samo po sebi še ne pojasni celotnega poteka incidenta.',
   3: 'Phishing skuša uporabnika zavesti v razkritje podatkov ali nevarno dejanje. Sporočilo B združuje tuji domeni pošiljatelja in povezave, grožnjo blokade ter zahtevo po prijavnih podatkih. Nujno obvestilo o učilnici in pričakovana priponka v drugih sporočilih sama po sebi nista phishing. V tem pripravljenem primeru ostalih šest sporočil ni zlonamernih; v resničnem svetu tudi ujemajoča se domena sama ne jamči varnosti. HTTPS šifrira povezavo, vendar sam ne potrjuje legitimnosti strani.',
   4: 'Ime ljubljenčka in rojstna letnica sta javna in predvidljiva gradnika. Dodan klicaj ali preprosta zamenjava črke z znakom tega ne odpravita. Boljša izbira so dolga, naključna in za vsak račun različna gesla; pri ustvarjanju ter shranjevanju pomaga upravljalnik gesel. Večfaktorska prijava doda zaščito računa, ne spremeni pa šibkega gesla v močno. Ta vaja ne razkriva Lukovega pravega gesla in ne dokazuje, kaj je bilo uporabljeno pri incidentu.',

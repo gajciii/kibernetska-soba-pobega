@@ -1,6 +1,6 @@
 # Operacija 404: Odkrij ogroženi projekt
 
-Iz šolskega arhiva je bil prenesen zaupni načrt. Skrbnik ima nenavadno sporočilo, fotografijo in dnevnike, ne ve pa, kateremu projektu načrt pripada. Sledi poveži v osmih izzivih in odkrij njegovo kodno ime.
+Iz šolskega arhiva je bil prenesen zaupni načrt. Detektiv ima nenavadno sporočilo, fotografijo in dnevnike, ne ve pa, kateremu projektu načrt pripada. Sledi poveži v osmih izzivih in odkrij njegovo kodno ime.
 
 ## Namen
 
