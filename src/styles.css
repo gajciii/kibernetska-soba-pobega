@@ -117,7 +117,7 @@ textarea { resize: vertical; }
 .answer-panel-heading h2 { margin: 0; color: var(--accent); font-family: var(--code); font-size: .8rem; letter-spacing: .1em; }
 .answer-panel-heading > span { color: var(--quiet); font-family: var(--code); font-size: .7rem; }
 .answer-panel label { font-size: .875rem; }
-.answer-source { margin: .35rem 0 .6rem; color: var(--muted); font-size: .875rem; line-height: 1.5; }
+.domain-answers { display: grid; gap: 1rem; }
 .answer-panel input.answer-input { background: #091424; border: 1px solid #577595; font-family: var(--code); font-size: .9rem; padding: .85rem .75rem; }
 .answer-panel input.answer-input:read-only { border-style: dashed; color: var(--warning); }
 .answer-panel .check-button { width: 100%; margin-top: .9rem; }

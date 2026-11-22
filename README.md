@@ -57,7 +57,7 @@ Express streže aplikacijo in API v enem procesu. [Navodila za vzpostavitev](doc
 | 4. Predvidljivo geslo | `luna2009` ali `2009luna`, nato vsa štiri priporočila: dolgo naključno geslo, drugačno geslo za vsak račun, upravljalnik gesel in večfaktorska prijava. |
 | 5. Fotografija | `10:42`: čas nastanka posnetka `hodnik.jpg`. |
 | 6. Prenos datoteke | `ucenec17`: uspešen prenos `/zaupno/nacrt.pdf`. |
-| 7. Tuja domena | Eden od pravilnih parov: **C / 3. povezava** → `piramiida.si`; **D / 4.** → `pirameda.si`. |
+| 7. Tuji domeni | **Obe:** `piramida-prijava.si` in `pirameda.si`, vsaka v svoje polje; vrstni red ni pomemben. |
 | 8. Binarni zapis | `BRUCOVANJE`: deset vrednosti ASCII: 66, 82, 85, 67, 79, 86, 65, 78, 74, 69. |
 
 </details>

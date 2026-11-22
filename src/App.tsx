@@ -213,8 +213,7 @@ function Stage({ data, csrf, busy, setBusy, onSession, onData, onNext, onFinale,
   const stage = data.stage;
   const [answer, setAnswer] = useState('');
   const [browserSource, setBrowserSource] = useState(stage.choices?.[0]?.id ?? '');
-  const [domainDrafts, setDomainDrafts] = useState<Record<string, string>>({});
-  const domainAnswer = domainDrafts[browserSource] ?? '';
+  const [domainAnswers, setDomainAnswers] = useState<[string, string]>(['', '']);
   const [reasons, setReasons] = useState<string[]>([]);
   const [recommendations, setRecommendations] = useState<string[]>([]);
   const recommendationsRef = useRef<HTMLFieldSetElement>(null);
@@ -227,7 +226,7 @@ function Stage({ data, csrf, busy, setBusy, onSession, onData, onNext, onFinale,
   async function submit(e: FormEvent) {
     e.preventDefault(); setBusy(true); setFeedback(null);
     try {
-      const result = await request<AnswerResponse>(`/stages/${stage.id}/answer`, csrf, { answer: stage.kind === 'phishing' ? { message: answer, reasons } : stage.kind === 'domains' ? { sourceId: browserSource, domain: domainAnswer } : passwordVerified ? { recommendations } : answer });
+      const result = await request<AnswerResponse>(`/stages/${stage.id}/answer`, csrf, { answer: stage.kind === 'phishing' ? { message: answer, reasons } : stage.kind === 'domains' ? { domains: domainAnswers } : passwordVerified ? { recommendations } : answer });
       onSession(result.session); setFeedback({ text: result.message, success: result.correct || (!passwordVerified && !!result.passwordVerified) });
       if (result.passwordVerified) onData({ ...data, passwordVerified: true });
       if (result.correct) {
@@ -279,9 +278,15 @@ function Stage({ data, csrf, busy, setBusy, onSession, onData, onNext, onFinale,
       <section className="answer-panel" id="answer-panel" aria-labelledby="answer-heading" tabIndex={-1}>
         <div className="answer-panel-heading"><h2 id="answer-heading">ODGOVOR</h2><span>{String(stage.id).padStart(2, '0')} / 08</span></div>
         <form onSubmit={submit}>
-          <label htmlFor="stage-answer">{isChoice ? 'Izbrani odgovor' : stage.kind === 'domains' ? 'Tuja domena' : stage.kind === 'password' ? 'Predvidljivo geslo' : stage.kind === 'metadata' ? 'Čas posnetka' : stage.kind === 'logs' ? 'Uporabniški račun' : 'Odgovor'}</label>
-          {stage.kind === 'domains' && <p className="answer-source" id="domain-answer-source">Izbrana povezava {(stage.choices?.findIndex(choice => choice.id === browserSource) ?? 0) + 1} od {stage.choices?.length ?? 0}</p>}
-          <input id="stage-answer" className="answer-input" autoComplete="off" autoCapitalize="none" spellCheck={false} inputMode={stage.kind === 'domains' ? 'url' : 'text'} aria-describedby={stage.kind === 'domains' ? 'domain-answer-source' : undefined} maxLength={300} value={isChoice ? selectedLabel ?? '' : stage.kind === 'domains' ? domainAnswer : answer} onChange={e => stage.kind === 'domains' ? setDomainDrafts(previous => ({ ...previous, [browserSource]: e.target.value })) : setAnswer(e.target.value)} readOnly={isChoice || passwordVerified} placeholder={data.solved ? 'Odgovor potrjen' : passwordVerified ? 'Geslo prepoznano' : stage.kind === 'domains' ? 'Vnesi tujo domeno' : stage.kind === 'password' ? 'Vnesi sestavljeno geslo' : isChoice ? 'Izberi v delovnem oknu' : stage.kind === 'metadata' ? 'HH:MM' : stage.kind === 'logs' ? 'npr. ucenec01' : 'Vnesi kodo'} disabled={data.solved || busy}/>
+          {stage.kind === 'domains' ? <div className="domain-answers">
+            {domainAnswers.map((value, index) => <div key={index}>
+              <label htmlFor={`domain-answer-${index}`}>{index === 0 ? 'Prva tuja domena' : 'Druga tuja domena'}</label>
+              <input id={`domain-answer-${index}`} className="answer-input" autoComplete="off" autoCapitalize="none" spellCheck={false} inputMode="url" maxLength={253} value={value} onChange={event => setDomainAnswers(previous => index === 0 ? [event.target.value, previous[1]] : [previous[0], event.target.value])} placeholder={data.solved ? 'Odgovor potrjen' : 'Vnesi tujo domeno'} disabled={data.solved || busy}/>
+            </div>)}
+          </div> : <>
+            <label htmlFor="stage-answer">{isChoice ? 'Izbrani odgovor' : stage.kind === 'password' ? 'Predvidljivo geslo' : stage.kind === 'metadata' ? 'Čas posnetka' : stage.kind === 'logs' ? 'Uporabniški račun' : 'Odgovor'}</label>
+            <input id="stage-answer" className="answer-input" autoComplete="off" autoCapitalize="none" spellCheck={false} maxLength={300} value={isChoice ? selectedLabel ?? '' : answer} onChange={e => setAnswer(e.target.value)} readOnly={isChoice || passwordVerified} placeholder={data.solved ? 'Odgovor potrjen' : passwordVerified ? 'Geslo prepoznano' : stage.kind === 'password' ? 'Vnesi sestavljeno geslo' : isChoice ? 'Izberi v delovnem oknu' : stage.kind === 'metadata' ? 'HH:MM' : stage.kind === 'logs' ? 'npr. ucenec01' : 'Vnesi kodo'} disabled={data.solved || busy}/>
+          </>}
           {stage.kind === 'phishing' && <fieldset className="reasons"><legend>Vsaj dva opozorilna znaka</legend>{stage.reasons?.map(reason => <label className="reason" key={reason.id}><input type="checkbox" checked={reasons.includes(reason.id)} onChange={e => setReasons(previous => e.target.checked ? [...previous, reason.id] : previous.filter(id => id !== reason.id))} disabled={data.solved || busy}/><span>{reason.label}</span></label>)}</fieldset>}
           {passwordVerified && !data.solved && <>
             <p className="password-confirmation" role="status"><Icon name="check" size={16}/>Geslo prepoznano.</p>
@@ -291,7 +296,7 @@ function Stage({ data, csrf, busy, setBusy, onSession, onData, onNext, onFinale,
               {stage.recommendations?.map(recommendation => <label className="reason" key={recommendation.id}><input type="checkbox" value={recommendation.id} checked={recommendations.includes(recommendation.id)} onChange={event => setRecommendations(previous => event.target.checked ? [...previous, recommendation.id] : previous.filter(id => id !== recommendation.id))} disabled={busy}/><span>{recommendation.label}</span></label>)}
             </fieldset>
           </>}
-          {!data.solved && <button className="primary check-button" disabled={busy || (passwordVerified ? !recommendations.length : !(stage.kind === 'domains' ? domainAnswer : answer).trim())}>{busy ? 'Preverjanje …' : passwordVerified ? 'Potrdi priporočila' : stage.kind === 'domains' ? 'Preveri domeno' : stage.kind === 'password' ? 'Preveri geslo' : 'Preveri odgovor'}</button>}
+          {!data.solved && <button className="primary check-button" disabled={busy || (passwordVerified ? !recommendations.length : stage.kind === 'domains' ? domainAnswers.some(value => !value.trim()) : !answer.trim())}>{busy ? 'Preverjanje …' : passwordVerified ? 'Potrdi priporočila' : stage.kind === 'domains' ? 'Preveri domeni' : stage.kind === 'password' ? 'Preveri geslo' : 'Preveri odgovor'}</button>}
         </form>
         {feedback && !feedback.success && <div className="feedback error" role="alert">{feedback.text}</div>}
         <div className="answer-status" role="status">{data.solved ? 'Izziv opravljen' : ''}</div>

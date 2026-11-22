@@ -77,15 +77,15 @@ const stages: StageContent[] = [
       },
       {
         id: 'B',
-        sender: 'Šolska IT podpora <podpora@piramiida.si>',
+        sender: 'Šolska IT podpora <podpora@piramida-prijava.si>',
         recipient: 'Luka Kralj <luka.kralj@piramida.si>',
         time: '09:57',
         preview: 'Zaznali smo težavo s tvojim računom. Odzovi se v 10 minutah.',
-        replyTo: 'podpora@piramiida.si',
+        replyTo: 'podpora@piramida-prijava.si',
         subject: 'NUJNO: tvoj račun bo čez 10 minut blokiran',
         body: 'Pozdravljen, Luka Kralj, zaznali smo težavo s tvojim šolskim računom. V naslednjih 10 minutah odpri spodnjo povezavo ter vnesi geslo in enkratno prijavno kodo, sicer bo račun blokiran.',
         linkLabel: 'Preveri šolski račun',
-        linkUrl: 'https://piramida.si.piramiida.si/prijava',
+        linkUrl: 'https://piramida-prijava.si/prijava',
       },
       {
         id: 'E',
@@ -251,16 +251,16 @@ const stages: StageContent[] = [
   },
   {
     id: 7,
-    title: 'Najdi ponarejeno spletno stran',
+    title: 'Najdi ponarejeni spletni strani',
     topic: 'Domene',
     kind: 'domains',
-    intro: 'Dnevnik je pokazal račun in naslov IP računalnika, s katerega je bil sprožen prenos načrta. Detektiv zdaj odpre zavarovano zgodovino tega računalnika. Med petimi naslovi je tudi povezava iz Lukove sumljive pošte. Prijavne strani so videti enako, zato preveri URL: gostitelj je del za https:// in pred naslednjo poševnico. Šola uporablja piramida.si in ucilnica.piramida.si. Ponaredek lahko spremeni eno črko, jo podvoji ali šolsko ime skrije v poddomeno tuje strani; dodatek za vprašajem je parameter. Pred iskanjem načrta loči šolski arhiv od tujih strani.',
-    question: 'V zgodovini izberi eno ponarejeno povezavo. Kateri tuji domeni pripada? Vpiši samo domeno, brez https:// in poti.',
+    intro: 'Dnevnik je pokazal račun in naslov IP računalnika, s katerega je bil sprožen prenos načrta. Detektiv zdaj odpre zavarovano zgodovino tega računalnika. Med petimi naslovi je tudi povezava iz Lukine sumljive pošte. Prijavne strani so videti enako, zato preveri URL: gostitelj je del za https:// in pred naslednjo poševnico. Šola uporablja piramida.si in ucilnica.piramida.si. Podobno ime ali dodana beseda še ne pomenita, da domena pripada šoli; dodatek za vprašajem je parameter. Pred iskanjem načrta loči šolski arhiv od tujih strani.',
+    question: 'V zgodovini poišči obe ponarejeni povezavi. V polji za odgovor vpiši njuni tuji domeni, brez https:// in poti. Vrstni red ni pomemben.',
     note: 'Zgodovina vsebuje pet pripravljenih naslovov. Prikaz prijavne strani ostane enak; spreminja se naslovna vrstica. Noben naslov se ne odpre v omrežju in obrazec ne zbira prijavnih podatkov.',
     choices: [
       { id: 'A', label: 'https://piramida.si/prijava' },
       { id: 'B', label: 'https://ucilnica.piramida.si/prijava' },
-      { id: 'C', label: 'https://piramida.si.piramiida.si/prijava' },
+      { id: 'C', label: 'https://piramida-prijava.si/prijava' },
       { id: 'D', label: 'https://pirameda.si/prijava' },
       { id: 'F', label: 'https://piramida.si/prijava?jezik=sl' },
     ],
@@ -278,7 +278,7 @@ const stages: StageContent[] = [
     title: 'Računalnik govori v ničlah in enicah',
     topic: 'Binarni zapis',
     kind: 'binary',
-    intro: 'Prepoznal si ponarejeno prijavo. Detektiv je v pravem arhivu po računu, času in poti prenosa našel ustrezno različico načrta. Iz njegove oznake projekta je pripravil izvoz desetih bajtov ASCII in pripisal: »Vsaka enica nekaj šteje. Njeno mesto pove, koliko.« V teh desetih skupinah je kodno ime projekta, ki ga iščeš od začetka. Ko ga razbereš, bo jasno, kateri načrt je bil ogrožen.',
+    intro: 'Prepoznal si obe ponarejeni prijavni strani. Detektiv je v pravem arhivu po računu, času in poti prenosa našel ustrezno različico načrta. Iz njegove oznake projekta je pripravil izvoz desetih bajtov ASCII in pripisal: »Vsaka enica nekaj šteje. Njeno mesto pove, koliko.« V teh desetih skupinah je kodno ime projekta, ki ga iščeš od začetka. Ko ga razbereš, bo jasno, kateri načrt je bil ogrožen.',
     question: 'Za vsak bajt seštej uteži mest z enico. Vsoto poišči v tabeli ASCII in sestavi kodno ime projekta. Vpiši ga v polje za odgovor.',
     evidence: '01000010 01010010 01010101 01000011 01001111 01010110 01000001 01001110 01001010 01000101',
     note: 'Uteži osmih mest od leve proti desni so 128, 64, 32, 16, 8, 4, 2 in 1. Enica prispeva utež svojega mesta, ničla pa nič. Za vsak bajt posebej seštej prispevke in decimalno vsoto poišči v tabeli ASCII za črke A–Z.',
@@ -299,7 +299,7 @@ const hints: Record<number, [string, string]> = {
   4: ['Katera javna podatka bi si lastnik zlahka zapomnil in ju združil? Pri priporočilih razmisli tudi o ponavljanju gesel med računi.', 'Poveži ime psičke in letnico v opisu profila v eno besedo. Nato izberi priporočila za dolžino, različna gesla, upravljalnik in dodatno zaščito prijave.'],
   5: ['Med slikami poišči hodnik z rdečim nahrbtnikom in odpri njegove metapodatke. Čas poznejše spremembe ni nujno čas fotografiranja.', 'Pri datoteki hodnik.jpg primerjaj polji Čas nastanka posnetka in Čas spremembe. V odgovor prepiši uro in minute iz prvega.'],
   6: ['V iskalnik »Besedilni filter« vnesi ime iskane datoteke. Pri preostalih paketih primerjaj povezane strežniške zapise: uspešen prenos ni isto kot ogled ali zavrnjen poskus.', 'V ločenem aplikacijskem dnevniku poišči vrstico, v kateri so hkrati DOWNLOAD, /zaupno/nacrt.pdf in SUCCESS.'],
-  7: ['Preberi celotnega gostitelja med https:// in prvo naslednjo poševnico ter ga primerjaj s potrjenima šolskima gostiteljema. Sam pojav imena piramida.si še ne potrjuje pripadnosti šoli.', 'Če je piramida.si na začetku daljšega gostitelja, preveri, katere tuje domene je poddomena. Vnesi tujo domeno izbranega ponaredka, brez poddomene piramida.si ali poti.'],
+  7: ['Preberi celotnega gostitelja med https:// in prvo naslednjo poševnico ter ga primerjaj s potrjenima šolskima gostiteljema. Sam pojav imena piramida.si še ne potrjuje pripadnosti šoli.', 'Pri enem ponaredku je imenu šole z vezajem dodana beseda, pri drugem je zamenjana ena črka. Vpiši obe tuji domeni skupaj s končnico .si, vsako v svoje polje.'],
   8: ['Uteži mest od leve proti desni so 128, 64, 32, 16, 8, 4, 2 in 1. Seštej samo uteži mest z enico; ničle ne prispevajo ničesar. Vsota enega bajta določi eno črko v tabeli ASCII.', 'Pri prvem bajtu 01000010 sta enici na mestih z utežmi 64 in 2. Vsota je 66, v tabeli ASCII pa to pomeni B. Enako obdelaj preostalih devet bajtov in ohrani njihov vrstni red.'],
 };
 
@@ -310,7 +310,7 @@ const explanations: Record<number, string> = {
   4: 'Ime ljubljenčka in rojstna letnica sta javna in predvidljiva gradnika. Dodan klicaj ali preprosta zamenjava črke z znakom tega ne odpravita. Boljša izbira so dolga, naključna in za vsak račun različna gesla; pri ustvarjanju ter shranjevanju pomaga upravljalnik gesel. Večfaktorska prijava doda zaščito računa, ne spremeni pa šibkega gesla v močno. Ta vaja ne razkriva Lukovega pravega gesla in ne dokazuje, kaj je bilo uporabljeno pri incidentu.',
   5: 'Čas 10:42 usmeri naslednji pregled na dogodke okoli domnevnega Lukinega odhoda iz učilnice; ne dokazuje, kdo je ostal za računalnikom. Rdeč nahrbtnik na hodniku je pomagal prepoznati pravo fotografijo med drugimi slikami. Polje Čas nastanka posnetka beleži 10:42:17, polje Čas spremembe pa 11:15:00. Poznejše urejanje ali ponovno shranjevanje lahko spremeni čas datoteke, zato 11:15 ne pomeni nujno časa fotografiranja. Sam zapis spremembe ne pove, kaj je bilo spremenjeno. Metapodatki lahko manjkajo ali so spremenjeni; so sled za preverjanje, ne nezmotljiv dokaz.',
   6: 'Paketni pregled in aplikacijski dnevnik sta različna vira. Šifrirani TLS-paketi ne razkrijejo računa ali poti; tukaj je njuna povezava pripravljena učna korelacija. Ločen dnevniški zapis ob 10:45:12 potrjuje uspešen prenos /zaupno/nacrt.pdf z računom ucenec17. Zavrnjen prenos, uspešen ogled, prenos druge datoteke in TCP ACK niso enak dokaz. Naslov IP 10.0.0.17 poveže dogodek z računalnikom, katerega zgodovino pregledaš v naslednjem koraku. Zapis potrjuje uporabo računa, sam pa ne dokazuje, katera oseba je bila za tipkovnico.',
-  7: 'Povezava iz Lukove pošte se pojavi tudi v zavarovani zgodovini; to še ne dokazuje, kdo jo je odprl oziroma ali je kdo vnesel geslo. Domnevni arhiv na piramida.si.piramiida.si pripada tuji domeni piramiida.si; piramida.si je le njena zavajajoča poddomena. Domena piramiida.si ima podvojen i, pirameda.si pa namesto drugega i uporablja e; nobena ni šolska piramida.si. Potrjena gostitelja sta piramida.si in ucilnica.piramida.si; dodatek ?jezik=sl ne spremeni gostitelja. Izbira ponaredka je utemeljena z njegovo tujo domeno. Kopirana podoba in HTTPS sama ne potrjujeta pripadnosti šoli. Razčlenitev velja za te naslove; registrirana domena ni vedno sestavljena iz zadnjih dveh delov.',
+  7: 'Povezava iz Lukine pošte se pojavi tudi v zavarovani zgodovini; to še ne dokazuje, kdo jo je odprl oziroma ali je kdo vnesel geslo. V tej zgodbi sta ponaredka piramida-prijava.si in pirameda.si. Prva je samostojna domena z dodano besedo prijava, ne podstran šolske domene. Druga ima namesto drugega i črko e. Šolska prijava je na piramida.si/prijava: del za poševnico je pot, vezaj v piramida-prijava.si pa je del druge domene. Potrjena gostitelja sta piramida.si in ucilnica.piramida.si; dodatek ?jezik=sl ne spremeni gostitelja. Vezaj sam po sebi ni znak prevare; tu je odločilno neujemanje s potrjeno šolsko domeno. Kopirana podoba in HTTPS sama ne potrjujeta pripadnosti šoli.',
   8: 'Mesta v bajtu imajo uteži 128, 64, 32, 16, 8, 4, 2 in 1. Enica prispeva pripadajočo utež, ničla pa nič; seštevek je decimalna vrednost bajta. Tabela ASCII to vrednost poveže z znakom. Deset bajtov da besedo BRUCOVANJE: kodno ime projekta, ki mu pripada preneseni načrt. S tem si našel podatek, zaradi katerega si odprl preiskavo. Gre za predstavitev podatkov, ne za šifriranje; druga znakovna kodiranja lahko iste bajte razložijo drugače. Preiskava je zaključena.',
 };
 
@@ -321,7 +321,7 @@ const feedback: Record<number, string> = {
   4: 'Izbor priporočil še ni pravilen. Preveri, ali izbrani ukrepi zmanjšajo predvidljivost in ponovno uporabo gesel ter bolje zaščitijo račun.',
   5: 'Še ni pravilno. Preveri fotografijo hodnika z rdečim nahrbtnikom in loči nastanek posnetka od poznejše spremembe datoteke. Odgovori v obliki HH:MM.',
   6: 'Še ni pravilno. Podatke poišči v povezanem aplikacijskem zapisu. Hkrati preveri dejanje, natančno pot datoteke in rezultat; ogled ter zavrnjen prenos ne zadostujeta.',
-  7: 'Še ni pravilno. Izberi ponarejeno povezavo in vnesi tujo domeno, ki ji pripada. Ne prepisuj celotnega URL-ja, zavajajoče poddomene piramida.si ali poti.',
+  7: 'Še ni pravilno. Poišči obe ponarejeni povezavi in vnesi dve različni tuji domeni, vsako v svoje polje. Izpusti https:// in pot za poševnico.',
   8: 'Še ni pravilno. Pri vsakem bajtu prištej samo uteži mest z enico, nato preveri decimalno vsoto v tabeli ASCII. Vpiši deset črk v vrstnem redu bajtov, brez vmesnih presledkov.',
 };
 
@@ -378,12 +378,10 @@ export function validateAnswer(id: number, answer: unknown): boolean {
       return words(answer) === 'UCENEC17';
     case 7: {
       if (!answer || typeof answer !== 'object' || Array.isArray(answer)) return false;
-      const { sourceId, domain } = answer as { sourceId?: unknown; domain?: unknown };
-      if (typeof sourceId !== 'string' || typeof domain !== 'string') return false;
-      const foreignDomains = new Map([
-        ['C', 'piramiida.si'], ['D', 'pirameda.si'],
-      ]);
-      return domain.trim().toLowerCase() === foreignDomains.get(sourceId);
+      const { domains } = answer as { domains?: unknown };
+      if (!Array.isArray(domains) || domains.length !== 2 || !domains.every(value => typeof value === 'string')) return false;
+      const submitted = new Set(domains.map(value => value.trim().toLowerCase()));
+      return submitted.size === 2 && submitted.has('piramida-prijava.si') && submitted.has('pirameda.si');
     }
     case 8:
       return typeof answer === 'string' && answer.trim().toUpperCase() === 'BRUCOVANJE';

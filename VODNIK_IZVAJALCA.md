@@ -6,7 +6,7 @@ Delavnica je izmišljena izobraževalna simulacija. Dvojica uporablja en računa
 
 ## Rdeča nit zgodbe
 
-Cezarjeva koda **PIRAMIDA** odpre prvo mapo, dvojno kodirano obvestilo pa razkrije **Luko Kralja** kot prijavitelja in kodo mape **PREDAL**. Njegova prijava sumljive pošte utemelji pregled predala. Osebni nagovor v lažnem sporočilu vodi k javnemu profilu in hipotetično šibkemu geslu. Luka nato pove, da je uporabljal skupni šolski računalnik in ob odhodu fotografiral hodnik. Čas fotografije usmeri pregled okoliških omrežnih dogodkov. Uspešen prenos poveže račun **ucenec17** z računalnikom **10.0.0.17**, njegova zavarovana zgodovina pa vsebuje isto lažno povezavo kot pošta. Ko je ponarejena prijava prepoznana, detektiv v pravem arhivu po računu, času in poti najde ustrezno različico načrta. Izvoz njene oznake v ASCII razkrije **BRUCOVANJE**.
+Cezarjeva koda **PIRAMIDA** odpre prvo mapo, dvojno kodirano obvestilo pa razkrije **Luko Kralja** kot prijavitelja in kodo mape **PREDAL**. Njegova prijava sumljive pošte utemelji pregled predala. Pregled sumljive pošte vodi k preverjanju zaščite računa, javnemu profilu in hipotetično šibkemu geslu. Luka nato pove, da je uporabljal skupni šolski računalnik in ob odhodu fotografiral hodnik. Čas fotografije usmeri pregled okoliških omrežnih dogodkov. Uspešen prenos poveže račun **ucenec17** z računalnikom **10.0.0.17**, njegova zavarovana zgodovina pa vsebuje isto lažno povezavo kot pošta. Ko sta obe ponarejeni prijavni strani prepoznani, detektiv v pravem arhivu po računu, času in poti najde ustrezno različico načrta. Izvoz njene oznake v ASCII razkrije **BRUCOVANJE**.
 
 Časovne sledi z dne 20. 11. 2026 so:
 
@@ -93,8 +93,8 @@ Odpiranje sporočila označi njegovo prebranost in prikaže dejanskega pošiljat
 
 Pravilen izbor je **sporočilo B** in **najmanj dva** od teh opozorilnih znakov, brez napačnih:
 
-- Domena pošiljatelja se ne ujema s šolsko domeno: `podpora@piramiida.si`.
-- Povezava vodi na drugo domeno: `https://piramida.si.piramiida.si/prijava`. Isti URL se pojavi kot tretji zapis zgodovine v sedmi nalogi.
+- Domena pošiljatelja se ne ujema s šolsko domeno: `podpora@piramida-prijava.si`.
+- Povezava vodi na drugo domeno: `https://piramida-prijava.si/prijava`. Isti URL se pojavi kot tretji zapis zgodovine v sedmi nalogi.
 - Sporočilo pritiska z nujnostjo in grožnjo blokade čez 10 minut.
 - Zahteva geslo in enkratno prijavno kodo na nepričakovani strani.
 
@@ -161,7 +161,7 @@ Primerjaj tri pogoje hkrati: prenos, prava datoteka in uspeh. `ucenec12` je imel
 
 **Učni cilj:** povezovati več virov in pogojev ter razlikovati omrežni prenos od aplikacijskega dogodka. Šifriran promet TLS sam ne razkrije računa ali poti datoteke. Povezavo med paketom in dnevnikom je vnaprej pripravila učna preiskovalna ekipa; v resnični preiskavi samo ujemanje časa ne bi nujno zadostovalo. ACK potrjuje prejem na ravni TCP, ne dovoljenja aplikacije; HTTP 200 v tem izboru se nanaša na javni `/status`, ne na zaupni dokument. ARP uporablja strojne naslove, vključno z oddajnim `ff:ff:ff:ff:ff:ff`. Aplikacija ne zajema dejanskega prometa in ne pošilja učnih zahtev v omrežje. Dnevnik potrjuje uporabo računa, ne identitete osebe za tipkovnico.
 
-## 7. Najdi ponarejeno spletno stran
+## 7. Najdi ponarejeni spletni strani
 
 Zapis uspešnega prenosa poveže račun `ucenec17` z računalnikom `10.0.0.17`. Detektiv odpre njegovo zavarovano zgodovino: med petimi naslovi je tudi lažna povezava iz Lukove pošte, tretji zapis oziroma izbira C. Pri vsakem je podoba portala enaka; spreminja se naslovna vrstica. Pred iskanjem načrta je treba ločiti šolske naslove od tujih. Uvod pojasni URL, pri teh primerih prepoznavanje gostitelja za `https://` in pred prvo naslednjo poševnico ter pomen poti in parametrov. Potrjena šolska gostitelja sta `piramida.si` in `ucilnica.piramida.si`.
 
@@ -169,25 +169,25 @@ Zapis uspešnega prenosa poveže račun `ucenec17` z računalnikom `10.0.0.17`. 
 | --- | --- | --- |
 | 1 | `https://piramida.si/prijava` | Pravi šolski naslov. |
 | 2 | `https://ucilnica.piramida.si/prijava` | Prava šolska učilnica. |
-| 3 | `https://piramida.si.piramiida.si/prijava` | Ponaredek: `piramida.si` je poddomena tuje domene `piramiida.si`. |
+| 3 | `https://piramida-prijava.si/prijava` | Ponaredek: `piramida-prijava.si` je samostojna domena, ne pot na `piramida.si`. |
 | 4 | `https://pirameda.si/prijava` | Ponaredek: podobno ime pripada drugi domeni. |
 | 5 | `https://piramida.si/prijava?jezik=sl` | Pravi šolski naslov; parameter ne spremeni gostitelja. |
 
-Navodilo se glasi: »V zgodovini izberi eno ponarejeno povezavo. Kateri tuji domeni pripada? Vpiši samo domeno, brez https:// in poti.« Par izbere **eno** ponarejeno povezavo in v polje **Tuja domena** vpiše pripadajoči odgovor:
+Navodilo se glasi: »V zgodovini poišči obe ponarejeni povezavi. V polji za odgovor vpiši njuni tuji domeni, brez https:// in poti. Vrstni red ni pomemben.« Par v polji **Prva tuja domena** in **Druga tuja domena** vpiše **obe** domeni:
 
-- Tretja povezava: **`piramiida.si`**.
-- Četrta povezava: **`pirameda.si`**.
+- **`piramida-prijava.si`** (tretja povezava).
+- **`pirameda.si`** (četrta povezava).
 
-Izbrana povezava in vnesena domena se morata ujemati. Celoten URL, šolska domena ali tuja domena druge povezave ne zadostujejo. Prva, druga in peta povezava so prave, zato z njimi naloge ni mogoče rešiti. Zadostuje ena pravilno utemeljena izbira. Naslovi ostanejo lokalno učno gradivo, brez odpiranja zunanjih strani ali prijavnih poskusov.
+Vrstni red ni pomemben; velikost črk in robni presledki se prezrejo. En odgovor, ponovljena domena, celoten URL ali šolska domena ne zadostujejo. Preklapljanje med povezavami ne spreminja vnosov. Preverjanje poteka za obe domeni skupaj in ne razkrije, katera od njiju je pravilna. Prva, druga in peta povezava so prave. Naslovi ostanejo lokalno učno gradivo, brez odpiranja zunanjih strani ali prijavnih poskusov.
 
 - Namig 1: »Preberi celotnega gostitelja med https:// in prvo naslednjo poševnico ter ga primerjaj s potrjenima šolskima gostiteljema. Sam pojav imena piramida.si še ne potrjuje pripadnosti šoli.«
-- Namig 2: »Če je piramida.si na začetku daljšega gostitelja, preveri, katere tuje domene je poddomena. Vnesi tujo domeno izbranega ponaredka, brez poddomene piramida.si ali poti.«
+- Namig 2: »Pri enem ponaredku je imenu šole z vezajem dodana beseda, pri drugem je zamenjana ena črka. Vpiši obe tuji domeni skupaj s končnico .si, vsako v svoje polje.«
 
-**Učni cilj:** brati celoten gostitelj, ločiti domeno od poddomene, poti in parametrov ter odločitev o ponaredku utemeljiti z njegovo domeno. Kopirana podoba in HTTPS ne potrjujeta pripadnosti šoli. Šolsko ime kjerkoli v URL-ju ni dovolj. Ne učimo pravila, da je registrirana domena vedno sestavljena iz zadnjih dveh delov; razlaga velja za konkretne prikazane naslove. Pri drugih URL-jih se lahko pojavijo še vrata, uporabniški podatki ali drugačna zgradba.
+**Učni cilj:** brati celoten gostitelj, ločiti domeno od poddomene, poti in parametrov ter prepoznati obe odstopanji od potrjene šolske domene. Vezaj sam po sebi ni dokaz prevare; `piramida-prijava.si` je ponaredek v zgodbi, ker ni potrjena šolska domena. Kopirana podoba in HTTPS ne potrjujeta pripadnosti šoli. Šolsko ime kjerkoli v URL-ju ni dovolj. Ne učimo pravila, da je registrirana domena vedno sestavljena iz zadnjih dveh delov; razlaga velja za konkretne prikazane naslove. Pri drugih URL-jih se lahko pojavijo še vrata, uporabniški podatki ali drugačna zgradba.
 
 ## 8. Računalnik govori v ničlah in enicah
 
-**Dokaz:** `01000010 01010010 01010101 01000011 01001111 01010110 01000001 01001110 01001010 01000101`. Po prepoznani ponarejeni prijavi detektiv v pravem arhivu po računu, času in poti prenosa najde ustrezno različico načrta. Dokaz je njegov izvoz oznake projekta: deset bajtov v zapisu ASCII. Presledki ločujejo skupine in niso del končnega sporočila. Vrstni red skupin se ohrani.
+**Dokaz:** `01000010 01010010 01010101 01000011 01001111 01010110 01000001 01001110 01001010 01000101`. Po prepoznanih ponarejenih prijavnih straneh detektiv v pravem arhivu po računu, času in poti prenosa najde ustrezno različico načrta. Dokaz je njegov izvoz oznake projekta: deset bajtov v zapisu ASCII. Presledki ločujejo skupine in niso del končnega sporočila. Vrstni red skupin se ohrani.
 
 **Potek reševanja:** par izbere eno skupino in prebere osem bitov od leve proti desni. Mesta imajo uteži **128, 64, 32, 16, 8, 4, 2, 1**. Pri bitu **1** prišteje utež mesta, pri bitu **0** jo preskoči. Dobljeno decimalno število poišče v zložljivem pregledu ASCII s pari števil in črk A–Z ter si zapiše črko. Primer takoj pod tremi koraki navodil pokaže postopek: `01000001` je `64 + 1 = 65` in predstavlja črko `A`.
 
