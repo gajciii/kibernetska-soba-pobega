@@ -9,8 +9,8 @@ const stages: StageContent[] = [
     title: 'Razbij skrivno sporočilo',
     topic: 'Cezarjeva šifra',
     kind: 'caesar',
-    intro: 'Na šoli Piramida je nekdo prenesel zaupni načrt. Tvoja naloga je odkriti, kateremu projektu pripada. Detektiv ti je pripravil mapo z dokazi, za vstop vanjo pa potrebuješ kodo. Skrita je v spodnjem sporočilu iz datoteke sporocilo.txt. Zapis uporablja šifro, poimenovano po Juliju Cezarju: vsako črko zamenja druga črka abecede. Sporočilo prebereš tako, da se pri vsaki črki premakneš za tri mesta nazaj — D tako postane A. Če prideš pred A, nadaljuj pri Z.',
-    question: 'Z gumbom »Nazaj« nastavi premik iz zgodbe. V zgornji vrstici izberi črko sporočila in pod njo preberi razkrito črko. Tako sestavi celoten zapis, nato v polje »Odgovor« vnesi samo kodo.',
+    intro: 'Na šoli Piramida je nekdo prenesel zaupni načrt. Tvoja naloga je odkriti, kateremu projektu pripada. Detektiv ti je pripravil mapo z dokazi, za vstop vanjo pa potrebuješ kodo. Skrita je v spodnjem sporočilu iz datoteke sporocilo.txt. Zapis uporablja šifro, poimenovano po Juliju Cezarju: vsako črko zamenja druga črka abecede. Cezar je zaupna sporočila prikrival s premikom za tri mesta po abecedi: namesto A je zapisal D. Prejemnik je moral črke vrniti na njihova prvotna mesta.',
+    question: 'Razberi sporočilo in v polje »Odgovor« vnesi kodo za odpiranje mape.',
     evidence: 'NRGD MH SLUDPLGD',
     note: 'Uporabljaj abecedo A–Z brez šumnikov. Premik in smer razberi iz zgodbe, nato črke primerjaj s pomočjo abecednega pripomočka. Presledke in ločila ohrani.',
     investigations: [
@@ -293,7 +293,7 @@ const stages: StageContent[] = [
 export const stageSummaries: StageSummary[] = stages.map(({ id, title, topic }) => ({ id, title, topic }));
 
 const hints: Record<number, [string, string]> = {
-  1: ['V zgodbi poišči, za koliko mest in v katero smer se premakneš. Z gumbom »Nazaj« nastavi ta premik, nato izberi prvo črko sporočila.', 'Pri dešifriranju se premakni za tri mesta nazaj: N postane K. Isto preslikavo uporabi za vse črke.'],
+  1: ['Cezar je črke premaknil, prejemnik pa jih mora vrniti. Primerjaj A in D ter razmisli, v katero smer boš bral sporočilo.', 'Pri dešifriranju se premakni za tri mesta nazaj: N postane K. Isto preslikavo uporabi za vse črke.'],
   2: ['Upoštevaj vrstni red: najprej zunanji zapis s šestnajstimi znaki v parih, nato notranji z naborom štiriinšestdesetih znakov.', 'Najprej dekodiraj Šestnajstiško (HEX). Celoten rezultat ročno prekopiraj v vhod, izberi Base64 in ponovno dekodiraj. Odgovor je samo koda naslednje mape.'],
   3: ['Primerjaj dejanski naslov pošiljatelja in cilj povezave z domeno piramida.si. Ime, ki ga prepoznaš, samo po sebi še ni dokaz pristnosti.', 'Primerjaj zahteve sporočil: eno združuje tuji domeni, grožnjo takojšnje blokade in zahtevo po geslu ter enkratni kodi.'],
   4: ['Katera javna podatka bi si lastnik zlahka zapomnil in ju združil? Pri priporočilih razmisli tudi o ponavljanju gesel med računi.', 'Poveži ime psičke in letnico v opisu profila v eno besedo. Nato izberi priporočila za dolžino, različna gesla, upravljalnik in dodatno zaščito prijave.'],

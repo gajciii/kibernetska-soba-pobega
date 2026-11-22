@@ -44,13 +44,13 @@ Vsako nalogo uvede kratka zgodba, ki dokaze poveže s preiskavo. Pri nalogah 3�
 
 ## 1. Razbij skrivno sporočilo
 
-**Dokaz:** `NRGD MH SLUDPLGD`, iz datoteke `sporocilo.txt`. Detektiv je s Cezarjevo šifro skril kodo prvega dela preiskovalne mape, v kateri je zbral sledi prenosa. Nad pripomočkom je zgodbeni odstavek. Par naj ga prebere: uvod razloži namen kode, zamenjavo črk in premik **»tri mesta nazaj«** s primerom D → A. Navodilo poimenuje gumb »Nazaj«, izbiro črke v zgornji vrstici ter odgovor zgoraj desno.
+**Dokaz:** `NRGD MH SLUDPLGD`, iz datoteke `sporocilo.txt`. Detektiv je s Cezarjevo šifro skril kodo prvega dela preiskovalne mape, v kateri je zbral sledi prenosa. Nad pripomočkom je zgodbeni odstavek. Par naj ga prebere: uvod pojasni namen kode ter zgodovinski premik za **tri mesta** s primerom A → D. Iz omembe vračanja črk na prvotna mesta mora sklepati na obratno smer pri dešifriranju. Navodilo zahteva samo razbiranje sporočila in vnos kode; ne pove smeri premika ali zaporedja klikov.
 
 **Potek reševanja:** uporabljata abecedo A–Z brez šumnikov. V ročnem pripomočku premikata abecedo v obe smeri, nastavita ustrezno preslikavo in po črkah razbereta sporočilo. Samodejnega dešifriranja ni. Razkrito sporočilo je `KODA JE PIRAMIDA`; v edino polje za odgovor zgoraj desno vneseta samo kodo **`PIRAMIDA`**. Strežniško preverjanje zaradi združljivosti še naprej sprejme tudi celoten stavek, ne glede na velikost črk in odvečne presledke.
 
 **Opomba za izvajalca:** ime datoteke ni koda; presledki in vrstni red omogočajo preverjanje smiselnosti treh besed. Če dobita drug rezultat, naj primerjata smer šifriranja s smerjo dešifriranja. Številke in ločila se ne spreminjajo.
 
-- Namig 1: »V zgodbi poišči, za koliko mest in v katero smer se premakneš. Z gumbom »Nazaj« nastavi ta premik, nato izberi prvo črko sporočila.«
+- Namig 1: »Cezar je črke premaknil, prejemnik pa jih mora vrniti. Primerjaj A in D ter razmisli, v katero smer boš bral sporočilo.«
 - Namig 2: »Pri dešifriranju se premakni za tri mesta nazaj: N postane K. Isto preslikavo uporabi za vse črke.«
 
 **Učni cilj:** iz zgodbe izluščiti podatek, ročno povezati šifrirane in izvirne črke ter razumeti stalni premik in obratno smer. Takšna šifra je primerna za osnove, ne za sodobno varovanje podatkov.
