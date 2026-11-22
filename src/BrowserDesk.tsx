@@ -17,6 +17,7 @@ const urlParts = [
 ];
 
 export function UrlGuide() {
+  const id = useId();
   const [open, setOpen] = useState(false);
   const diagramRef = useRef<HTMLDivElement>(null);
   const [connectors, setConnectors] = useState<{ line: string; head: string }[]>([]);
@@ -57,9 +58,13 @@ export function UrlGuide() {
     return () => { observer.disconnect(); cancelAnimationFrame(frame); };
   }, [open]);
 
-  return <details className="url-guide" onToggle={event => setOpen(event.currentTarget.open)}>
-    <summary>Kaj pomenijo deli spletnega naslova?</summary>
-    <div className="url-guide-content">
+  return <div className="url-guide" data-open={open}>
+    <button type="button" className="url-guide-toggle" id={`${id}-toggle`} aria-expanded={open} aria-controls={`${id}-content`} onClick={() => setOpen(previous => !previous)}>
+      Kaj pomenijo deli spletnega naslova?
+      <svg className="url-guide-toggle-icon" width="18" height="18" viewBox="0 0 18 18" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" aria-hidden="true"><path d="M4 9h10"/><path className="url-guide-toggle-vertical" d="M9 4v10"/></svg>
+    </button>
+    <div className="url-guide-panel" id={`${id}-content`} role="region" aria-labelledby={`${id}-toggle`} aria-hidden={!open} inert={!open}>
+    <div className="url-guide-clip"><div className="url-guide-content">
       <p className="url-guide-caption">Primer pravilnega šolskega naslova</p>
       <div className="url-guide-diagram" ref={diagramRef}>
         <code className="url-guide-address">{urlParts.map((part, index) => <span className={`url-part-${index}`} key={part.title}>{part.code}</span>)}</code>
@@ -75,8 +80,9 @@ export function UrlGuide() {
         <p><code>ucilnica</code> je poddomena, <code>piramida.si</code> pa osnovna domena šole. Poddomena je dodatni del pred osnovno domeno, ločen s piko. Z njo lahko ločimo posamezne dele spletnega mesta, na primer spletno učilnico.</p>
       </div>
       <p className="url-guide-note">Več parametrov loči znak <code>&amp;</code>, na primer <code>?jezik=sl&amp;tema=temna</code>. Pot in parametri ne spremenijo domene.</p>
+    </div></div>
     </div>
-  </details>;
+  </div>;
 }
 
 type IconName = 'back' | 'forward' | 'history' | 'search' | 'settings' | 'grid' | 'book' | 'bell' | 'calendar';
