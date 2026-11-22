@@ -103,6 +103,12 @@ textarea { resize: vertical; }
 [data-stage="caesar"] .source-evidence > code { font-size: clamp(1.15rem, 1.65vw, 1.5rem); letter-spacing: .1em; }
 .story-evidence { flex-direction: column; align-items: start; gap: .65rem; margin: 0 0 1.25rem; padding: 1.1rem 1.25rem; border: 1px solid var(--line); border-radius: var(--panel-radius); }
 .story-evidence > code { line-height: 1.8; user-select: text; overflow-wrap: anywhere; }
+.story-evidence-heading { display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: .5rem 1rem; width: 100%; }
+.story-evidence-heading > span { font-family: var(--code); font-size: .8rem; color: var(--quiet); letter-spacing: .06em; }
+.copy-control { display: inline-flex; align-items: center; flex-wrap: wrap; gap: .5rem; min-width: 0; }
+.copy-button { display: inline-flex; align-items: center; justify-content: center; gap: .4rem; min-height: 40px; padding: .4rem .7rem; border: 1px solid var(--line-strong); border-radius: var(--button-radius); background: transparent; color: var(--muted); font-size: .875rem; }
+.copy-button:hover:not(:disabled) { background: #1a2941; color: var(--text); }
+.copy-error { flex-basis: 100%; max-width: 32ch; color: var(--warning); font-size: .875rem; line-height: 1.5; }
 .window-status { display: flex; justify-content: space-between; align-items: center; gap: 1rem; padding: .45rem 1rem; border-top: 1px solid var(--line); background: #0e192b; color: var(--quiet); font-size: .7rem; }
 .sidebar { position: sticky; top: 1rem; align-self: start; display: flex; flex-direction: column; min-width: 0; max-height: calc(100dvh - 2rem); padding: 0 3px 3px; }
 .sidebar > .answer-panel, .sidebar > .hints-panel { flex-shrink: 0; }

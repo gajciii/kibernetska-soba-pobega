@@ -25,7 +25,7 @@ const stages: StageContent[] = [
     topic: 'Kodiranja',
     kind: 'encoding',
     intro: 'V odprti mapi najdeš obvestilo.dat, detektivov izvoz prve prijave nenavadnega dogajanja. V njem se skriva ime osebe, pri kateri se je preiskava začela, in oznaka mape z njeno prijavo ter shranjeno e-pošto. Ob datoteki je pripis: »Kar gre skozi moj sistem, nosi dve preobleki. Zunanja pozna šestnajst znakov, pod njo pa se skriva abeceda štiriinšestdesetih.« Preostanek zapiska manjka.',
-    question: 'Prekopiraj dokaz v pretvornik in odkrij sporočilo. Vnesi samo kodo naslednje mape.',
+    question: 'Uporabi pretvornik, da razbereš sporočilo iz dokaza. Dobljeno kodo na koncu vpiši v polje »Odgovor«.',
     evidence: '55 46 4A 4A 53 6B 46 57 53 56 52 46 54 45 6F 36 49 45 78 56 53 30 45 67 53 31 4A 42 54 45 6F 75 49 45 74 50 52 45 45 67 54 55 46 51 52 54 6F 67 55 46 4A 46 52 45 46 4D 4C 67 3D 3D',
     note: 'Najprej dekodiraj zunanji zapis. Celoten vmesni rezultat ročno prekopiraj v vhod, nato izberi kodiranje notranjega zapisa in znova dekodiraj. Poskusi v pretvorniku ne štejejo kot oddaje odgovora.',
     investigations: [

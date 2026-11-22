@@ -92,6 +92,8 @@
   font-size: .875rem;
 }
 
+.workbench-result-actions { display: flex; align-items: center; flex-wrap: wrap; gap: .5rem 1rem; min-width: 0; color: var(--muted); font-size: .875rem; }
+
 .converter-workbench textarea,
 .workbench-output {
   display: block;

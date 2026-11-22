@@ -27,7 +27,7 @@ Med začetkoma dveh iger v istem brskalniku mora preteči 60 sekund od prejšnje
 
 Preizkusi en celoten prehod. Nastavitev `APP_ORIGIN`, varen piškotek in HTTPS morajo ustrezati dejanskemu naslovu. Aplikacija potrebuje povezavo s svojim strežnikom, vsi dokazi in pripomočki pa ostanejo na istem spletnem mestu. Ne zahteva resničnega gesla, fotografije ali osebnih podatkov dijakov. Ime skupine je obvezno in javno na lestvici; par naj izbere izmišljeno oznako z 1–60 znaki. Robni presledki se odstranijo, samo presledki ali nevidni znaki niso veljavno ime. Predstavitev dokazov vključuje izbiranje sporočil, datotek in paketov. Četrta naloga zahteva ročni vnos predvidljivega gesla in nato priporočila; prej že rešene stopnje ostanejo rešene.
 
-Vsako nalogo uvede kratka zgodba, ki dokaze poveže s preiskavo. Pri nalogah 3–8 navodilo opredeli iskani podatek ali odločitev; konkretni postopki so v namigih. Druga naloga nima ločene sekcije NAVODILO. Polje oziroma izbira odgovora je zgoraj desno, namigi in razlaga pa so dostopni v stranskem panelu. Na ozkem zaslonu se elementi zložijo navpično. Dodatni dokazni zapiski niso prikazani v glavnem delu; spodnje opombe so pomoč izvajalcu pri pogovoru.
+Vsako nalogo uvede kratka zgodba, ki dokaze poveže s preiskavo. Pri nalogah 3–8 navodilo opredeli iskani podatek ali odločitev; konkretni postopki so v namigih. Pri drugi nalogi kratko navodilo usmeri v uporabo pretvornika in oddajo dobljene kode. Polje oziroma izbira odgovora je zgoraj desno, namigi in razlaga pa so dostopni v stranskem panelu. Na ozkem zaslonu se elementi zložijo navpično. Dodatni dokazni zapiski niso prikazani v glavnem delu; spodnje opombe so pomoč izvajalcu pri pogovoru.
 
 ## Predlog poteka: 45–60 minut
 
@@ -59,7 +59,7 @@ Vsako nalogo uvede kratka zgodba, ki dokaze poveže s preiskavo. Pri nalogah 3�
 
 ## 2. Kaj se skriva za čudnimi znaki?
 
-**Dokaz:** pod zgodbenim odstavkom je naslednji zapis. Par ga mora sam prekopirati v prazni vhod pretvornika; v delovnem oknu ni dodatne kopije dokaza.
+**Dokaz:** pod zgodbenim odstavkom je naslednji zapis. Par ga lahko kopira z gumbom »Kopiraj« ob dokazu in prilepi v prazni vhod pretvornika; v delovnem oknu ni dodatne kopije dokaza.
 
 ```text
 55 46 4A 4A 53 6B 46 57 53 56 52 46 54 45 6F 36 49 45 78 56 53 30 45 67 53 31 4A 42 54 45 6F 75 49 45 74 50 52 45 45 67 54 55 46 51 52 54 6F 67 55 46 4A 46 52 45 46 4D 4C 67 3D 3D
@@ -73,7 +73,7 @@ Zgodba predstavi datoteko `obvestilo.dat`, detektivov izvoz prve prijave nenavad
    UFJJSkFWSVRFTEo6IExVS0EgS1JBTEouIEtPREEgTUFQRTogUFJFREFMLg==
    ```
 
-2. Celoten vmesni rezultat **ročno prekopirata v vhod**, izbereta **Base64** in ponovno dekodirata. Končno besedilo je **`PRIJAVITELJ: LUKA KRALJ. KODA MAPE: PREDAL.`**
+2. Celoten vmesni rezultat kopirata z gumbom **»Kopiraj« ob rezultatu** in ga **prilepita v vhod**, izbereta **Base64** in ponovno dekodirata. Končno besedilo je **`PRIJAVITELJ: LUKA KRALJ. KODA MAPE: PREDAL.`**
 3. V polje za odgovor zgoraj desno vneseta samo **`PREDAL`**. Celotno obvestilo ni odgovor; sprejet je tudi vnos `KODA: PREDAL`. Velikost črk in odvečni presledki niso pomembni.
 
 - Namig 1: »Upoštevaj vrstni red: najprej zunanji zapis s šestnajstimi znaki v parih, nato notranji z naborom štiriinšestdesetih znakov.«
