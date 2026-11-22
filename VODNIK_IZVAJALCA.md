@@ -148,7 +148,7 @@ Vsaka datoteka ima svoj pripravljeni izpis. `ucilnica.jpg` ohrani nastanek ob 08
 
 ## 6. Kateri račun je bil uporabljen za prenos?
 
-Čas fotografije **10:42** usmeri pregled v dogajanje okoli Lukovega odhoda iz učilnice. Detektiv pripravi promet in strežniške dnevnike iz tega časovnega okvira. Uvod pojasni omrežni promet kot izmenjavo podatkov med napravami v majhnih delih, imenovanih paketi. Ime `/zaupno/nacrt.pdf` pomaga pri iskanju uspešnega prenosa; račun v zapisu še ne določi osebe za skupnim računalnikom.
+Čas fotografije **10:42** se ne ujema z Lukinim spominom na odhod ob **11:15**, zato se preiskava nadaljuje s pregledom dogajanja v šolskem omrežju okoli Lukinega odhoda iz učilnice. Detektiv pripravi promet in strežniške dnevnike iz tega časovnega okvira. Uvod pojasni omrežni promet kot izmenjavo podatkov med napravami v majhnih delih, imenovanih paketi. Ime `/zaupno/nacrt.pdf` pomaga pri iskanju uspešnega prenosa; račun v zapisu še ne določi osebe za skupnim računalnikom.
 
 Forenzični pregledovalnik vsebuje **32 simuliranih paketov** in **16 ločenih zapisov aplikacijskega dnevnika**. Vsi dogodki so z dne 20. 11. 2026; časi so lokalni. Paketni izbor vključuje ARP, DNS, TCP, TLS in HTTP ter ni celoten zajem povezav. Par filtrira prikaz, izbere paket ter odpre njegove podrobnosti in morebitno povezavo z aplikacijskim zapisom.
 
