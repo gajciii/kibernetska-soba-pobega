@@ -85,7 +85,7 @@ Zgodba predstavi datoteko `obvestilo.dat`, detektivov izvoz prve prijave nenavad
 
 ## 3. Poišči phishing sporočilo
 
-Šolska domena v učnem primeru je `piramida.si`. Obvestilo iz druge naloge pripelje do **Luke Kralja**, ki je detektivu še pred opozorilom o prenosu prijavil sumljivo pošto in mu predal kopijo predala **`luka.kralj@piramida.si`**. Zato sledi pregled njegove pošte. To je izmišljeni lastnik predala; aplikacija ne bere prave pošte ali navezuje stikov. Vseh sedem sporočil je naslovljenih nanj.
+Šolska domena v učnem primeru je `piramida.si`. Obvestilo iz druge naloge pripelje do **Luke Kralja**, ki je na dan sumljivega prenosa prejel nenavadno e-pošto in jo prijavil detektivu. Ta je z Lukovim dovoljenjem zbral sporočila iz predala **`luka.kralj@piramida.si`**, da bi preveril morebiten poskus pridobitve prijavnih podatkov. Zato sledi pregled njegove pošte. To je izmišljeni lastnik predala; aplikacija ne bere prave pošte ali navezuje stikov. Vseh sedem sporočil je naslovljenih nanj.
 
 Začetni vrstni red je **A, C, D, B, E, F, G**: knjižnični opomnik, mentorsko obvestilo, načrtovano IT-vzdrževanje, lažna IT-zahteva, pomembna sprememba učilnice, pričakovana priponka fotografskega krožka in jedilnik. Phishing sporočilo je torej **četrto**, njegov stabilni identifikator **B** pa ostaja nespremenjen. Vrstni red je ureditev dokazne zbirke, ne časovno razvrščanje.
 

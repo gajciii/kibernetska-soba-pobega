@@ -39,7 +39,7 @@ const stages: StageContent[] = [
     title: 'Poišči phishing sporočilo',
     topic: 'Phishing',
     kind: 'phishing',
-    intro: 'Razkrito obvestilo te pripelje do dijaka Luke Kralja. Še pred opozorilom o prenosu je detektivu prijavil nenavadno e-pošto in mu predal kopijo svojega predala. Med običajnimi šolskimi sporočili iščeš tisto, ki bi lahko pojasnilo poskus dostopa do računa. Lukin naslov je luka.kralj@piramida.si, šola uporablja domeno piramida.si. Preglej sedem sporočil in označi sumljivega, da napreduješ.',
+    intro: 'Razkrito obvestilo te pripelje do dijaka Luke Kralja. Na dan sumljivega prenosa je prejel nenavadno e-pošto in jo prijavil detektivu. Ta je z Lukovim dovoljenjem zbral sporočila iz njegovega šolskega predala, da bi preveril, ali je kdo poskušal pridobiti njegove prijavne podatke. Lukin naslov je luka.kralj@piramida.si, šola uporablja domeno piramida.si. Preglej sedem sporočil in označi sumljivega, da napreduješ.',
     question: 'Katero sporočilo je phishing? Utemelji izbiro.',
     note: 'Izmišljena šola uporablja domeno piramida.si. Vsa sporočila so z dne 20. 11. 2026, časi so lokalni. Predal, priponke in povezave so neaktivna učna simulacija. Prikazno ime, nujnost ali sama prisotnost priponke še ne zadoščajo za sklep.',
     mails: [
