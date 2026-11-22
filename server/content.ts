@@ -164,7 +164,7 @@ const stages: StageContent[] = [
     title: 'Fotografija skriva namig',
     topic: 'Metapodatki',
     kind: 'metadata',
-    intro: "Pri pogovoru o računu se Luka spomni, da je tisti dan uporabljal skupni računalnik v šoli. Ob odhodu je fotografiral hodnik pred računalniško učilnico z rdečim nahrbtnikom. Trdi, da je bilo to ob 11:15, in detektivu pošlje mapo fotografij. Posnetek bi lahko pomagal časovno umestiti njegov odhod. Toda sliko je mogoče pozneje urediti ali znova shraniti. Spremljajo jo metapodatki, podatki o datoteki, kot so ime, velikost in zapisani časi.",
+    intro: "Ko z Luko pregledata, kako bi lahko nekdo prišel do njegovega računa, omeni še skupni računalnik v šoli. Na njem je delal na dan sumljivega prenosa. Detektiv želi njegov odhod primerjati s časom prenosa datoteke. Luka se spomni, da je ob odhodu fotografiral svoj rdeči nahrbtnik na hodniku pred računalniško učilnico. »Takrat je bila ura 11:15,« zatrdi in ti pošlje mapo fotografij. Toda fotografije je mogoče naknadno urediti ali znova shraniti, zato vsi zapisani časi ne pomenijo trenutka fotografiranja. Pri preverjanju pomagajo metapodatki. To so podatki o datoteki, kot so njeno ime, velikost ter čas nastanka in spremembe.",
     question: "Ob kateri uri je bila fotografija dejansko posneta? Odgovori v obliki HH:MM.",
     note: "Pripravljeni učni izpisi spremljajo lokalne slike in niso prebrani iz njihovih datotek. Vsi prikazani časi uporabljajo časovni pas UTC+01:00.",
     metadata: "Ime datoteke: hodnik.jpg\nVelikost: 2,4 MB\nČas nastanka posnetka: 20. 11. 2026 10:42:17\nČas spremembe: 20. 11. 2026 11:15:00\nČasovni pas: UTC+01:00",
