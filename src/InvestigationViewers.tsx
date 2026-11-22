@@ -1,3 +1,5 @@
+import Disclosure from './Disclosure';
+import AnimatedSelect from './AnimatedSelect';
 import { useEffect, useId, useRef, useState } from 'react';
 import type { LogRow, Mail, TrafficPacket } from '../shared/types';
 import './investigation-viewers.css';
@@ -183,7 +185,7 @@ export function TrafficViewer({ packets, logs }: { packets: TrafficPacket[]; log
     <div className="iv-app-toolbar"><span className="iv-app-count">20. 11. 2026 · lokalni časi</span></div>
     <div className="iv-traffic-filter">
       <div className="iv-packet-search"><label htmlFor={`${id}-packet-search`}>Besedilni filter</label><input id={`${id}-packet-search`} aria-label="Išči po prometu in povezanih dnevnikih" type="search" value={query} onChange={event => applyFilters(event.target.value, protocol)} placeholder="IP, protokol, račun, datoteka ali dejanje" autoComplete="off"/></div>
-      <div className="iv-protocol-filter"><label htmlFor={`${id}-protocol`}>Protokol</label><select id={`${id}-protocol`} value={protocol} onChange={event => applyFilters(query, event.target.value)}><option value="">Vsi protokoli</option>{protocols.map(value => <option key={value} value={value}>{value}</option>)}</select></div>
+      <div className="iv-protocol-filter"><label htmlFor={`${id}-protocol`}>Protokol</label><AnimatedSelect id={`${id}-protocol`} value={protocol} onChange={value => applyFilters(query, value)} options={[{ value: '', label: 'Vsi protokoli' }, ...protocols.map(value => ({ value, label: value }))]}/></div>
       <button type="button" className="iv-text-control" disabled={!query && !protocol} onClick={() => applyFilters('', '')}>Počisti filtre</button>
     </div>
     <div className="iv-packet-scroll" role="region" aria-label="Paketi, pomična tabela" tabIndex={0}>
@@ -200,6 +202,6 @@ export function TrafficViewer({ packets, logs }: { packets: TrafficPacket[]; log
       </> : <div className="iv-inspector-empty"><p>Izberi paket za podrobnosti.</p></div>}
     </div>
     <div className="iv-traffic-legend"><span>DOWNLOAD = prenos datoteke</span><span>VIEW = ogled</span><span>SUCCESS = uspešno</span><span>DENIED = zavrnjeno</span><span>LOGIN / LOGOUT = prijava / odjava</span></div>
-    <details className="iv-protocol-legend"><summary>Legenda omrežnih protokolov</summary><dl><div><dt>ARP</dt><dd>iskanje strojnega naslova (MAC) naprave v lokalnem omrežju</dd></div><div><dt>DNS</dt><dd>pretvorba imena gostitelja v omrežni naslov</dd></div><div><dt>TCP</dt><dd>vzpostavitev in prenos podatkov po povezavi</dd></div><div><dt>TLS</dt><dd>šifrirana povezava; vsebina ni prikazana</dd></div><div><dt>HTTP</dt><dd>spletni zahtevek v tem učnem zajemu</dd></div></dl></details>
+    <Disclosure className="iv-protocol-legend" title="Legenda omrežnih protokolov"><dl><div><dt>ARP</dt><dd>iskanje strojnega naslova (MAC) naprave v lokalnem omrežju</dd></div><div><dt>DNS</dt><dd>pretvorba imena gostitelja v omrežni naslov</dd></div><div><dt>TCP</dt><dd>vzpostavitev in prenos podatkov po povezavi</dd></div><div><dt>TLS</dt><dd>šifrirana povezava; vsebina ni prikazana</dd></div><div><dt>HTTP</dt><dd>spletni zahtevek v tem učnem zajemu</dd></div></dl></Disclosure>
   </section>;
 }

@@ -1,5 +1,6 @@
 import { useEffect, useId, useLayoutEffect, useRef, useState } from 'react';
 import type { Choice } from '../shared/types';
+import Disclosure from './Disclosure';
 import './browser-desk.css';
 
 type BrowserDeskProps = {
@@ -17,7 +18,6 @@ const urlParts = [
 ];
 
 export function UrlGuide() {
-  const id = useId();
   const [open, setOpen] = useState(false);
   const diagramRef = useRef<HTMLDivElement>(null);
   const [connectors, setConnectors] = useState<{ line: string; head: string }[]>([]);
@@ -58,13 +58,8 @@ export function UrlGuide() {
     return () => { observer.disconnect(); cancelAnimationFrame(frame); };
   }, [open]);
 
-  return <div className="url-guide" data-open={open}>
-    <button type="button" className="url-guide-toggle" id={`${id}-toggle`} aria-expanded={open} aria-controls={`${id}-content`} onClick={() => setOpen(previous => !previous)}>
-      Kaj pomenijo deli spletnega naslova?
-      <svg className="url-guide-toggle-icon" width="18" height="18" viewBox="0 0 18 18" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" aria-hidden="true"><path d="M4 9h10"/><path className="url-guide-toggle-vertical" d="M9 4v10"/></svg>
-    </button>
-    <div className="url-guide-panel" id={`${id}-content`} role="region" aria-labelledby={`${id}-toggle`} aria-hidden={!open} inert={!open}>
-    <div className="url-guide-clip"><div className="url-guide-content">
+  return <Disclosure className="url-guide" title="Kaj pomenijo deli spletnega naslova?" open={open} onOpenChange={setOpen}>
+    <div className="url-guide-content">
       <p className="url-guide-caption">Primer pravilnega šolskega naslova</p>
       <div className="url-guide-diagram" ref={diagramRef}>
         <code className="url-guide-address">{urlParts.map((part, index) => <span className={`url-part-${index}`} key={part.title}>{part.code}</span>)}</code>
@@ -80,9 +75,8 @@ export function UrlGuide() {
         <p><code>ucilnica</code> je poddomena, <code>piramida.si</code> pa osnovna domena šole. Poddomena je dodatni del pred osnovno domeno, ločen s piko. Z njo lahko ločimo posamezne dele spletnega mesta, na primer spletno učilnico.</p>
       </div>
       <p className="url-guide-note">Več parametrov loči znak <code>&amp;</code>, na primer <code>?jezik=sl&amp;tema=temna</code>. Pot in parametri ne spremenijo domene.</p>
-    </div></div>
     </div>
-  </div>;
+  </Disclosure>;
 }
 
 type IconName = 'back' | 'forward' | 'history' | 'search' | 'settings' | 'grid' | 'book' | 'bell' | 'calendar';
@@ -95,8 +89,9 @@ function BrowserIcon({ name }: { name: IconName }) {
 
 export function BrowserDesk({ choices, selectedId, onSelect, disabled }: BrowserDeskProps) {
   const id = useId();
-  const historyRef = useRef<HTMLDetailsElement>(null);
-  const summaryRef = useRef<HTMLElement>(null);
+  const historyRef = useRef<HTMLDivElement>(null);
+  const [historyOpen, setHistoryOpen] = useState(false);
+  const summaryRef = useRef<HTMLButtonElement>(null);
   const addressRef = useRef<HTMLDivElement>(null);
   const selectedIndex = Math.max(0, choices.findIndex(choice => choice.id === selectedId));
   const selected = choices[selectedIndex];
@@ -108,11 +103,11 @@ export function BrowserDesk({ choices, selectedId, onSelect, disabled }: Browser
 
   useEffect(() => {
     function dismissOutside(event: PointerEvent) {
-      if (historyRef.current?.open && event.target instanceof Node && !historyRef.current.contains(event.target)) historyRef.current.open = false;
+      if (historyOpen && historyRef.current && event.target instanceof Node && !historyRef.current.contains(event.target)) setHistoryOpen(false);
     }
     document.addEventListener('pointerdown', dismissOutside);
     return () => document.removeEventListener('pointerdown', dismissOutside);
-  }, []);
+  }, [historyOpen]);
 
   if (!selected) return null;
 
@@ -120,17 +115,11 @@ export function BrowserDesk({ choices, selectedId, onSelect, disabled }: Browser
     if (disabled) return;
     setViewedIds(previous => new Set([...previous, choice.id]));
     onSelect(choice.id);
-    if (historyRef.current) historyRef.current.open = false;
+    if (historyRef.current) setHistoryOpen(false);
     if (fromHistory) summaryRef.current?.focus();
   }
 
-  return <section className="link-browser" aria-label="Pregledovalnik zbranih povezav" onKeyDown={event => {
-    if (event.key === 'Escape' && historyRef.current?.open) {
-      event.preventDefault();
-      historyRef.current.open = false;
-      summaryRef.current?.focus();
-    }
-  }}>
+  return <section className="link-browser" aria-label="Pregledovalnik zbranih povezav">
     <div className="link-browser-tabbar">
       <div className="link-browser-tab"><span className="link-browser-favicon" aria-hidden="true">P</span><span>Šola Piramida</span><span className="link-browser-tab-close" aria-hidden="true">×</span></div>
     </div>
@@ -140,8 +129,7 @@ export function BrowserDesk({ choices, selectedId, onSelect, disabled }: Browser
         <button type="button" aria-label="Naslednja povezava" title="Naslednja povezava" disabled={disabled || selectedIndex === choices.length - 1} onClick={() => select(choices[selectedIndex + 1])}><BrowserIcon name="forward"/></button>
       </div>
       <div className="link-browser-address"><BrowserIcon name="settings"/><div className="link-browser-address-scroll" ref={addressRef} role="region" aria-label="Trenutni spletni naslov" tabIndex={0}><code>{selected.label}</code></div></div>
-      <details className="link-browser-history" ref={historyRef}>
-        <summary ref={summaryRef}><BrowserIcon name="history"/><span>Zgodovina</span></summary>
+      <Disclosure className="link-browser-history" rootRef={historyRef} triggerRef={summaryRef} open={historyOpen} onOpenChange={setHistoryOpen} panelClassName="link-browser-history-dropdown" title={<><BrowserIcon name="history"/><span>Zgodovina</span></>} onEscape={() => { setHistoryOpen(false); summaryRef.current?.focus(); }}>
         <div className="link-browser-history-panel">
           <ol>{choices.map((choice, index) => {
             const active = choice.id === selected.id;
@@ -151,7 +139,7 @@ export function BrowserDesk({ choices, selectedId, onSelect, disabled }: Browser
             </button></li>;
           })}</ol>
         </div>
-      </details>
+      </Disclosure>
     </div>
     <CapturedSchoolPage/>
     <div className="link-browser-status" role="status">Povezava {selectedIndex + 1} od {choices.length}</div>

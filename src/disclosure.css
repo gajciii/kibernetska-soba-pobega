@@ -1,0 +1,20 @@
+.disclosure { min-width: 0; border-radius: var(--panel-radius); }
+.disclosure-trigger {
+  display: flex; align-items: center; justify-content: space-between; gap: 1rem;
+  width: 100%; min-height: 44px; padding: .75rem 1rem; border: 0;
+  border-radius: var(--panel-radius); background: transparent; color: var(--muted);
+  text-align: left; font-size: .875rem; cursor: pointer;
+  transition: background-color 180ms ease;
+}
+.disclosure-trigger:hover { background: #192a42; border-radius: var(--panel-radius); }
+.disclosure-trigger:focus-visible { outline-offset: -3px; }
+.disclosure-label { display: flex; align-items: center; flex: 1; gap: .5rem; min-width: 0; }
+.disclosure-icon { flex-shrink: 0; color: var(--accent); }
+.disclosure-icon-vertical { transform-origin: 9px 9px; transition: transform 260ms ease; }
+.disclosure[data-open="true"] > .disclosure-trigger .disclosure-icon-vertical { transform: scaleY(0); }
+.animated-panel { display: grid; grid-template-rows: 0fr; opacity: 0; transition: grid-template-rows 340ms cubic-bezier(.22, 1, .36, 1), opacity 220ms ease; }
+.animated-panel[data-open="true"] { grid-template-rows: 1fr; opacity: 1; }
+.animated-panel-clip { min-height: 0; overflow: hidden; border-radius: inherit; }
+@media (prefers-reduced-motion: reduce) {
+  .animated-panel, .disclosure-icon-vertical, .disclosure-trigger { transition: none; }
+}

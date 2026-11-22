@@ -1,3 +1,4 @@
+import Disclosure from './Disclosure';
 import { useId, useState } from 'react';
 import './binary-workbench.css';
 
@@ -47,6 +48,6 @@ export default function BinaryWorkbench({ evidence }: { evidence: string }) {
       <p className="binary-bit-explanation" data-testid="binary-bit-explanation" role="status" aria-live="polite" aria-atomic="true">{selectedBit === null ? 'Izberi bit za razlago njegovega mesta.' : group[selectedBit] === '1' ? `1: prištej ${placeValues[selectedBit]}.` : '0: te vrednosti ne prištej.'}</p>
     </section>
 
-    <details className="binary-ascii"><summary>Tabela ASCII · decimalno → črka</summary><p className="binary-ascii-note">Poišči seštevek, ob njem preberi črko.</p><dl className="binary-ascii-grid" aria-label="Decimalne vrednosti ASCII za črke A do Z">{asciiLetters.map((letter, index) => <div key={letter}><dt>{65 + index}</dt><dd>{letter}</dd></div>)}</dl></details>
+    <Disclosure className="binary-ascii" title="Tabela ASCII · decimalno → črka"><p className="binary-ascii-note">Poišči seštevek, ob njem preberi črko.</p><dl className="binary-ascii-grid" aria-label="Decimalne vrednosti ASCII za črke A do Z">{asciiLetters.map((letter, index) => <div key={letter}><dt>{65 + index}</dt><dd>{letter}</dd></div>)}</dl></Disclosure>
   </section>;
 }

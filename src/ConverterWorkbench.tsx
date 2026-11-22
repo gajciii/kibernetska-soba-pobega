@@ -4,6 +4,7 @@ import { convertText } from '../shared/converters';
 import type { ConversionDirection, EncodingMethod } from '../shared/converters';
 import type { StageContent } from '../shared/types';
 import CopyButton from './CopyButton';
+import AnimatedSelect from './AnimatedSelect';
 import './converter-workbench.css';
 
 const methods: { id: EncodingMethod; label: string }[] = [
@@ -25,9 +26,9 @@ export default function ConverterWorkbench({ stage }: { stage: StageContent }) {
   const [conversionNotice, setConversionNotice] = useState('');
   const [toolError, setToolError] = useState('');
   const [fieldErrors, setFieldErrors] = useState<FieldErrors>({});
-  const methodRef = useRef<HTMLSelectElement>(null);
+  const methodRef = useRef<HTMLButtonElement>(null);
   const inputRef = useRef<HTMLTextAreaElement>(null);
-  const directionRef = useRef<HTMLSelectElement>(null);
+  const directionRef = useRef<HTMLButtonElement>(null);
 
   function invalidate(field: keyof FieldErrors) {
     setResult(null);
@@ -68,9 +69,7 @@ export default function ConverterWorkbench({ stage }: { stage: StageContent }) {
     <form className="workbench-form" onSubmit={submit} noValidate>
       <div className="workbench-field">
         <label htmlFor={`${uid}-encoding`}>Kodiranje</label>
-        <div className="workbench-select-wrap"><select id={`${uid}-encoding`} ref={methodRef} value={method} aria-invalid={!!fieldErrors.method} aria-describedby={fieldErrors.method ? `${uid}-method-error` : undefined} onChange={event => { setMethod(event.target.value as EncodingMethod | ''); invalidate('method'); }}>
-          <option value="">Izberi kodiranje</option>{methods.map(item => <option value={item.id} key={item.id}>{item.label}</option>)}
-        </select></div>
+        <AnimatedSelect id={`${uid}-encoding`} triggerRef={methodRef} value={method} invalid={!!fieldErrors.method} describedBy={fieldErrors.method ? `${uid}-method-error` : undefined} onChange={value => { setMethod(value as EncodingMethod | ''); invalidate('method'); }} options={[{ value: '', label: 'Izberi kodiranje' }, ...methods.map(item => ({ value: item.id, label: item.label }))]}/>
         {fieldErrors.method && <p id={`${uid}-method-error`} className="workbench-field-error" role="alert">{fieldErrors.method}</p>}
       </div>
       <div className="workbench-input">
@@ -80,9 +79,7 @@ export default function ConverterWorkbench({ stage }: { stage: StageContent }) {
       </div>
       <div className="workbench-field">
         <label htmlFor={`${uid}-direction`}>Smer pretvorbe</label>
-        <div className="workbench-select-wrap"><select id={`${uid}-direction`} ref={directionRef} value={direction} aria-invalid={!!fieldErrors.direction} aria-describedby={fieldErrors.direction ? `${uid}-direction-error` : undefined} onChange={event => { setDirection(event.target.value as ConversionDirection | ''); invalidate('direction'); }}>
-          <option value="">Izberi smer pretvorbe</option><option value="encode">Kodiranje – besedilo v zapis</option><option value="decode">Dekodiranje – zapis v besedilo</option>
-        </select></div>
+        <AnimatedSelect id={`${uid}-direction`} triggerRef={directionRef} value={direction} invalid={!!fieldErrors.direction} describedBy={fieldErrors.direction ? `${uid}-direction-error` : undefined} onChange={value => { setDirection(value as ConversionDirection | ''); invalidate('direction'); }} options={[{ value: '', label: 'Izberi smer pretvorbe' }, { value: 'encode', label: 'Kodiranje – besedilo v zapis' }, { value: 'decode', label: 'Dekodiranje – zapis v besedilo' }]}/>
         {fieldErrors.direction && <p id={`${uid}-direction-error`} className="workbench-field-error" role="alert">{fieldErrors.direction}</p>}
       </div>
       <div className="workbench-result">

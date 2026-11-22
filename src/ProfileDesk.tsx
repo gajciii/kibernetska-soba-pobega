@@ -1,3 +1,4 @@
+import Disclosure from './Disclosure';
 import { useEffect, useId, useRef, useState } from 'react';
 import type { StageContent } from '../shared/types';
 import './profile-desk.css';
@@ -44,8 +45,7 @@ export function ProfileDesk({ profile }: { profile: Profile }) {
 }
 
 export function PasswordPatterns() {
-  return <details className="password-patterns">
-    <summary>Pogosta slaba gesla</summary>
+  return <Disclosure className="password-patterns" title="Pogosta slaba gesla">
     <ol>
       <li>Zaporedje številk</li>
       <li>Ime hišnega ljubljenčka</li>
@@ -54,7 +54,7 @@ export function PasswordPatterns() {
       <li>Letnica rojstva</li>
       <li>Ponavljanje istega znaka</li>
     </ol>
-  </details>;
+  </Disclosure>;
 }
 
 function PostDialog({ profile, post, number, returnFocus, onClose }: {

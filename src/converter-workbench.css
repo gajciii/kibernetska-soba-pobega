@@ -29,44 +29,9 @@
   font-size: .875rem;
 }
 
-.workbench-select-wrap {
-  position: relative;
-}
-
-.workbench-select-wrap::after {
-  content: '';
-  position: absolute;
-  right: 16px;
-  top: 18px;
-  width: 7px;
-  height: 7px;
-  border-right: 1px solid var(--muted);
-  border-bottom: 1px solid var(--muted);
-  transform: rotate(45deg);
-  pointer-events: none;
-}
-
-.workbench-select-wrap select {
-  width: 100%;
-  min-width: 0;
-  min-height: 46px;
-  padding: 10px 38px 10px 14px;
-  appearance: none;
-  border: 1px solid var(--line-strong);
-  border-radius: var(--control-radius, 12px);
-  color: var(--text);
-  background: var(--bg);
-  font: inherit;
-  font-size: .875rem;
-  line-height: 1.5;
-  cursor: pointer;
-}
-
-.workbench-select-wrap select:focus-visible,
 .converter-workbench button:focus-visible,
 .converter-workbench textarea:focus-visible,
-.workbench-output:focus-visible,
-.converter-workbench summary:focus-visible {
+.workbench-output:focus-visible {
   outline: 2px solid var(--accent);
   outline-offset: 3px;
 }

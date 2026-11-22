@@ -27,7 +27,7 @@
 .iv-mail-addresses > div { display: grid; grid-template-columns: 30px minmax(0, 1fr); gap: 10px; margin-bottom: 6px; font-size: .875rem; line-height: 1.55; }
 .iv-mail-addresses dt, .iv-packet-fields dt, .iv-log-fields dt { color: var(--muted); }
 .iv-mail-addresses dd, .iv-packet-fields dd, .iv-log-fields dd { min-width: 0; margin: 0; overflow-wrap: anywhere; }
-.iv-protocol-legend summary { width: fit-content; max-width: 100%; padding: 6px 0; color: var(--muted); font-size: .875rem; cursor: pointer; }
+.iv-protocol-legend > .disclosure-trigger { width: fit-content; max-width: 100%; padding: 6px 0; color: var(--muted); font-size: .875rem; cursor: pointer; }
 .iv-mail-body { padding: 16px 0; margin-top: 10px; border-top: 1px solid var(--line); color: var(--text); font-size: 1rem; line-height: 1.65; }
 .iv-mail-body > p { margin: 0; white-space: pre-wrap; overflow-wrap: anywhere; }
 .iv-mail-attachment { display: flex; flex-wrap: wrap; gap: 6px 12px; margin-bottom: 14px; font-size: .875rem; color: var(--text); }

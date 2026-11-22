@@ -131,14 +131,12 @@ textarea { resize: vertical; }
 .answer-status { color: var(--success); font-size: .875rem; }
 .answer-status:not(:empty) { margin-top: .8rem; }
 .answer-explanation { margin-top: .9rem; font-size: .8rem; }
-.answer-explanation summary { cursor: pointer; color: var(--muted); padding: .2rem 0; }
+.answer-explanation > .disclosure-trigger { cursor: pointer; color: var(--muted); padding: .2rem 0; }
 .answer-explanation p { margin: .7rem 0 0; color: var(--muted); }
 .explanation-domain { color: var(--text); font-weight: 500; overflow-wrap: anywhere; }
 .hints-panel { margin: .6rem 0 1.4rem; border-bottom: 1px solid var(--line); }
-.hints-panel > summary { display: flex; justify-content: space-between; align-items: center; gap: 1rem; padding: .65rem .25rem; cursor: pointer; color: var(--muted); font-size: .875rem; }
-.hints-panel > summary::after { content: '+'; margin-left: auto; color: var(--accent); }
-.hints-panel[open] > summary::after { content: '−'; }
-.hints-panel summary > span { margin-left: auto; font-family: var(--code); font-size: .75rem; }
+.hints-panel > .disclosure-trigger { display: flex; justify-content: space-between; align-items: center; gap: 1rem; padding: .65rem .25rem; cursor: pointer; color: var(--muted); font-size: .875rem; }
+.hints-panel .disclosure-label > span { margin-left: auto; font-family: var(--code); font-size: .75rem; }
 .hints-content { padding: 0 .25rem .75rem; }
 .hint-button { display: block; width: 100%; min-height: 36px; padding: .45rem 0; background: none; border: 0; text-align: left; color: var(--accent); font-size: .875rem; }
 .hint { margin: .5rem 0 .8rem; font-size: .875rem; }

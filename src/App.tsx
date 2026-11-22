@@ -7,6 +7,7 @@ import BinaryWorkbench from './BinaryWorkbench';
 import FinaleView from './FinaleView';
 import { Mailbox, TrafficViewer } from './InvestigationViewers';
 import { MetadataDesk } from './EvidenceDesks';
+import Disclosure from './Disclosure';
 import { BrowserDesk, UrlGuide } from './BrowserDesk';
 import { PasswordPatterns, ProfileDesk } from './ProfileDesk';
 import Landing from './Landing';
@@ -301,12 +302,12 @@ function Stage({ data, csrf, busy, setBusy, onSession, onData, onNext, onFinale,
         </form>
         {feedback && !feedback.success && <div className="feedback error" role="alert">{feedback.text}</div>}
         <div className="answer-status" role="status">{data.solved ? 'Izziv opravljen' : ''}</div>
-        {data.solved && <div className="solved-result"><button className="primary check-button" onClick={onNext} disabled={busy}>{stage.id === 8 ? 'Poglej rezultat' : 'Nadaljuj'}</button><details className="answer-explanation"><summary>Razlaga rešitve</summary><p><Explanation text={data.explanation ?? ''}/></p></details></div>}
+        {data.solved && <div className="solved-result"><button className="primary check-button" onClick={onNext} disabled={busy}>{stage.id === 8 ? 'Poglej rezultat' : 'Nadaljuj'}</button><Disclosure className="answer-explanation" title="Razlaga rešitve"><p><Explanation text={data.explanation ?? ''}/></p></Disclosure></div>}
       </section>
-      <details className="hints-panel"><summary>Namigi <span>{data.hints.length} / 2</span></summary><div className="hints-content">{[1, 2].map(index => {
+      <Disclosure className="hints-panel" title={<>Namigi <span>{data.hints.length} / 2</span></>}><div className="hints-content">{[1, 2].map(index => {
         const revealed = data.hints.find(h => h.index === index);
         return revealed ? <div className="hint" key={index}><strong>Namig {index}</strong><p>{revealed.text}</p></div> : <button className="hint-button" key={index} onClick={() => void revealHint(index)} disabled={busy || (index === 2 && !data.hints.some(h => h.index === 1))}>Razkrij namig {index}</button>;
-      })}{hintError && <p className="error-text" role="alert">{hintError}</p>}</div></details>
+      })}{hintError && <p className="error-text" role="alert">{hintError}</p>}</div></Disclosure>
       {navigation}
     </aside>
   </div>;
