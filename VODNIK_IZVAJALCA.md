@@ -6,7 +6,7 @@ Delavnica je izmišljena izobraževalna simulacija. Dvojica uporablja en računa
 
 ## Rdeča nit zgodbe
 
-Cezarjeva koda **PIRAMIDA** odpre prvo mapo, dvojno kodirano obvestilo pa razkrije **Luko Kralja** kot prijavitelja in kodo mape **PREDAL**. Njegova prijava sumljive pošte utemelji pregled predala. Pregled sumljive pošte vodi k preverjanju zaščite računa, javnemu profilu in hipotetično šibkemu geslu. Luka nato pove, da je uporabljal skupni šolski računalnik in ob odhodu fotografiral hodnik. Čas fotografije usmeri pregled okoliških omrežnih dogodkov. Uspešen prenos poveže račun **ucenec17** z računalnikom **10.0.0.17**, njegova zavarovana zgodovina pa vsebuje isto lažno povezavo kot pošta. Ko sta obe ponarejeni prijavni strani prepoznani, detektiv v pravem arhivu po računu, času in poti najde ustrezno različico načrta. Izvoz njene oznake v ASCII razkrije **BRUCOVANJE**.
+Cezarjeva koda **PIRAMIDA** odpre prvo mapo, dvojno kodirano obvestilo pa razkrije **Luko Kralja** kot prijavitelja in kodo mape **PREDAL**. Njegova prijava sumljive pošte utemelji pregled predala. Pregled sumljive pošte vodi k preverjanju zaščite računa, javnemu profilu in hipotetično šibkemu geslu. Luka nato pove, da je uporabljal skupni šolski računalnik in ob odhodu fotografiral hodnik. Čas fotografije usmeri pregled okoliških omrežnih dogodkov. Uspešen prenos poveže račun **ucenec17** z računalnikom **10.0.0.17**, njegova zavarovana zgodovina pa vsebuje isto lažno povezavo kot pošta. Ko sta obe ponarejeni prijavni strani prepoznani, detektiv v pravem arhivu po računu, času in poti najde ustrezno različico načrta. Arhivski izpis njene oznake v ASCII razkrije **BRUCOVANJE**.
 
 Časovne sledi z dne 20. 11. 2026 so:
 
@@ -187,7 +187,7 @@ Vrstni red ni pomemben; velikost črk in robni presledki se prezrejo. En odgovor
 
 ## 8. Računalnik govori v ničlah in enicah
 
-**Dokaz:** `01000010 01010010 01010101 01000011 01001111 01010110 01000001 01001110 01001010 01000101`. Po prepoznanih ponarejenih prijavnih straneh detektiv v pravem arhivu po računu, času in poti prenosa najde ustrezno različico načrta. Dokaz je njegov izvoz oznake projekta: deset bajtov v zapisu ASCII. Presledki ločujejo skupine in niso del končnega sporočila. Vrstni red skupin se ohrani.
+**Dokaz:** `01000010 01010010 01010101 01000011 01001111 01010110 01000001 01001110 01001010 01000101`. Po prepoznanih ponarejenih prijavnih straneh detektiv v pravem arhivu po računu, času in poti prenosa najde ustrezno različico načrta. Dokaz je arhivski izpis kodnega imena projekta: deset skupin ničel in enic predstavlja deset črk v zapisu ASCII. Detektiv izpisu doda namig o vrednosti mest z enico. Presledki ločujejo skupine in niso del končnega sporočila. Vrstni red skupin se ohrani.
 
 **Potek reševanja:** par izbere eno skupino in prebere osem bitov od leve proti desni. Mesta imajo uteži **128, 64, 32, 16, 8, 4, 2, 1**. Pri bitu **1** prišteje utež mesta, pri bitu **0** jo preskoči. Dobljeno decimalno število poišče v zložljivem pregledu ASCII s pari števil in črk A–Z ter si zapiše črko. Primer takoj pod tremi koraki navodil pokaže postopek: `01000001` je `64 + 1 = 65` in predstavlja črko `A`.
 
