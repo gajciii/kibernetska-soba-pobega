@@ -105,7 +105,7 @@ const stages: StageContent[] = [
         preview: 'V priponki je že napovedani razpored fotografiranja razredov.',
         subject: 'Razpored fotografiranja za prihodnji teden',
         body: 'Živjo, Luka, pošiljamo razpored, ki smo ga dogovorili na srečanju krožka. Enak seznam je na oglasni deski pri knjižnici. Če opaziš napako v terminu svojega razreda, odgovori mentorici. Dokument ne vsebuje obrazca za prijavo.',
-        attachment: 'razpored_fotografiranja.pdf · 84 KB · simulirana priponka',
+        attachment: 'razpored_fotografiranja.pdf · 84 KB',
         replyTo: 'foto@piramida.si',
       },
       {
