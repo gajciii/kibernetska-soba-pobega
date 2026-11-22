@@ -96,6 +96,14 @@
   letter-spacing: .05em;
 }
 
+.social-profile-hint {
+  margin: 0 16px 16px;
+  color: var(--muted);
+  font-size: .875rem;
+  line-height: 1.5;
+  text-align: center;
+}
+
 .social-profile-gallery {
   display: grid;
   grid-template-columns: repeat(3, minmax(0, 1fr));

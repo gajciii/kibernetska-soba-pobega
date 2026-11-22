@@ -35,6 +35,7 @@ export function ProfileDesk({ profile }: { profile: Profile }) {
       </div>
     </header>
     <div className="social-profile-section"><ProfileIcon name="grid"/><h4>Objave</h4></div>
+    <p className="social-profile-hint">Klikni fotografijo in preberi opis objave.</p>
     <div className="social-profile-gallery">{profile.posts.map((post, index) => <button type="button" className="social-profile-tile" key={post.id} aria-label={`Odpri objavo ${index + 1}`} aria-haspopup="dialog" onClick={event => { opener.current = event.currentTarget; setOpenedId(post.id); }}>
       <img src={assetUrl(post.image)} alt={post.alt}/><span className="social-tile-open" aria-hidden="true"><ProfileIcon name="expand"/></span>
     </button>)}</div>
