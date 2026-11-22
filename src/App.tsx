@@ -7,7 +7,7 @@ import BinaryWorkbench from './BinaryWorkbench';
 import FinaleView from './FinaleView';
 import { Mailbox, TrafficViewer } from './InvestigationViewers';
 import { MetadataDesk } from './EvidenceDesks';
-import { BrowserDesk } from './BrowserDesk';
+import { BrowserDesk, UrlGuide } from './BrowserDesk';
 import { PasswordPatterns, ProfileDesk } from './ProfileDesk';
 import Landing from './Landing';
 import AmbientBackground from './AmbientBackground';
@@ -254,6 +254,7 @@ function Stage({ data, csrf, busy, setBusy, onSession, onData, onNext, onFinale,
         <h1 ref={headingRef} tabIndex={-1}>{stage.title}</h1>
       </div>
       <p className={`stage-intro ${stage.kind}-story`}>{stage.intro}</p>
+      {stage.kind === 'domains' && <UrlGuide/>}
       {stage.kind === 'encoding' && stage.evidence && <div className="source-evidence story-evidence"><div className="story-evidence-heading"><span>DOKAZ · obvestilo.dat</span><CopyButton text={stage.evidence} label="Kopiraj dokaz"/></div><code>{stage.evidence}</code></div>}
       <section className="task-instruction" aria-labelledby="instruction-heading"><h2 id="instruction-heading">NAVODILO</h2><p>{stage.question}</p></section>
       <a className="mobile-answer-link" href="#answer-panel">Vnesi odgovor</a>

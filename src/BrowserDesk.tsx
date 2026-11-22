@@ -9,6 +9,28 @@ type BrowserDeskProps = {
   disabled: boolean;
 };
 
+const urlParts = [
+  { code: 'https://', title: 'HTTPS', description: 'Povezava je šifrirana. To samo po sebi še ne pomeni, da strani lahko zaupaš.' },
+  { code: 'piramida.si', title: 'Domena', description: 'Ime spletnega mesta. Primerjaj ga s potrjeno šolsko domeno, črko za črko.' },
+  { code: '/prijava', title: 'Pot', description: 'Poševnica začne pot do strani na tem spletnem mestu. Tukaj vodi do prijave.' },
+  { code: '?jezik=sl', title: 'Parameter', description: 'Vprašaj začne dodatne podatke. Znak = poveže ime in vrednost: jezik=sl tukaj izbere slovenščino.' },
+];
+
+export function UrlGuide() {
+  return <details className="url-guide">
+    <summary>Kaj pomenijo deli spletnega naslova?</summary>
+    <div className="url-guide-content">
+      <p className="url-guide-caption">Primer pravilnega šolskega naslova</p>
+      <code className="url-guide-address">{urlParts.map((part, index) => <span className={`url-part-${index}`} key={part.title}>{part.code}</span>)}</code>
+      <dl className="url-guide-parts">{urlParts.map((part, index) => <div className={`url-part-${index}`} key={part.title}>
+        <dt><span className="url-guide-arrow" aria-hidden="true">↑</span><code>{part.code}</code><strong>{part.title}</strong></dt>
+        <dd>{part.description}</dd>
+      </div>)}</dl>
+      <p className="url-guide-note">Več parametrov loči znak <code>&amp;</code>, na primer <code>?jezik=sl&amp;tema=temna</code>. Pot in parametri ne spremenijo domene.</p>
+    </div>
+  </details>;
+}
+
 type IconName = 'back' | 'forward' | 'history' | 'search' | 'settings' | 'grid' | 'book' | 'bell' | 'calendar';
 
 function BrowserIcon({ name }: { name: IconName }) {

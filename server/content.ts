@@ -254,7 +254,7 @@ const stages: StageContent[] = [
     title: 'Najdi ponarejeni spletni strani',
     topic: 'Domene',
     kind: 'domains',
-    intro: 'Dnevnik je pokazal račun in naslov IP računalnika, s katerega je bil sprožen prenos načrta. Detektiv zdaj odpre zavarovano zgodovino tega računalnika. Med petimi naslovi je tudi povezava iz Lukine sumljive pošte. Prijavne strani so videti enako, zato preveri URL: gostitelj je del za https:// in pred naslednjo poševnico. Šola uporablja piramida.si in ucilnica.piramida.si. Podobno ime ali dodana beseda še ne pomenita, da domena pripada šoli; dodatek za vprašajem je parameter. Pred iskanjem načrta loči šolski arhiv od tujih strani.',
+    intro: 'Dnevnik je pokazal račun in naslov IP računalnika, s katerega je bil sprožen prenos načrta. Detektiv zdaj odpre zavarovano zgodovino tega računalnika. Med petimi naslovi je tudi povezava iz Lukine sumljive pošte. URL je spletni naslov, ki brskalniku pove, katero stran naj odpre. Videz strani je mogoče kopirati, zato s pregledom naslova preveriš, ali si res na pričakovani domeni, preden vpišeš geslo. Šola uporablja piramida.si in ucilnica.piramida.si. Podobno ime ali dodana beseda še ne pomenita, da domena pripada šoli. Pred iskanjem načrta loči šolski arhiv od tujih strani.',
     question: 'V zgodovini poišči obe ponarejeni povezavi. V polji za odgovor vpiši njuni tuji domeni, brez https:// in poti. Vrstni red ni pomemben.',
     note: 'Zgodovina vsebuje pet pripravljenih naslovov. Prikaz prijavne strani ostane enak; spreminja se naslovna vrstica. Noben naslov se ne odpre v omrežju in obrazec ne zbira prijavnih podatkov.',
     choices: [
