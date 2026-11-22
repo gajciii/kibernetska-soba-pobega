@@ -77,6 +77,7 @@ export interface PublicProfile {
 export interface StageContent extends StageSummary {
   intro: string;
   question: string;
+  theory?: { title: string; text: string };
   kind: 'caesar' | 'encoding' | 'phishing' | 'password' | 'metadata' | 'logs' | 'domains' | 'binary';
   evidence?: string;
   note?: string;

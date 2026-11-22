@@ -1,11 +1,6 @@
 .url-guide {
   container: url-guide / inline-size;
-  margin: 0 0 1.25rem;
-  border-radius: var(--panel-radius);
-  background: #111f34;
-  overflow: hidden;
 }
-.url-guide > .disclosure-trigger { min-height: 52px; padding: .9rem 1.15rem; color: #c9d9ec; font-size: .9rem; }
 .url-guide-content { padding: .3rem 1.15rem 1.15rem; }
 .url-guide-caption { margin: 0 0 .65rem; color: var(--muted); font-size: .8rem; }
 .url-guide-address {

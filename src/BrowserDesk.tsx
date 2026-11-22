@@ -58,7 +58,7 @@ export function UrlGuide() {
     return () => { observer.disconnect(); cancelAnimationFrame(frame); };
   }, [open]);
 
-  return <Disclosure className="url-guide" title="Kaj pomenijo deli spletnega naslova?" open={open} onOpenChange={setOpen}>
+  return <Disclosure className="theory-guide url-guide" title="Kaj pomenijo deli spletnega naslova?" open={open} onOpenChange={setOpen}>
     <div className="url-guide-content">
       <p className="url-guide-caption">Primer pravilnega šolskega naslova</p>
       <div className="url-guide-diagram" ref={diagramRef}>

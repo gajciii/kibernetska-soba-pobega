@@ -256,6 +256,7 @@ function Stage({ data, csrf, busy, setBusy, onSession, onData, onNext, onFinale,
       </div>
       <p className={`stage-intro ${stage.kind}-story`}>{stage.intro}</p>
       {stage.kind === 'domains' && <UrlGuide/>}
+      {stage.theory && <Disclosure className="theory-guide" title={stage.theory.title}><div className="theory-guide-content"><p>{stage.theory.text}</p></div></Disclosure>}
       {stage.kind === 'encoding' && stage.evidence && <div className="source-evidence story-evidence"><div className="story-evidence-heading"><span>DOKAZ · obvestilo.dat</span><CopyButton text={stage.evidence} label="Kopiraj dokaz"/></div><code>{stage.evidence}</code></div>}
       <section className="task-instruction" aria-labelledby="instruction-heading"><h2 id="instruction-heading">NAVODILO</h2><p>{stage.question}</p></section>
       <a className="mobile-answer-link" href="#answer-panel">Vnesi odgovor</a>

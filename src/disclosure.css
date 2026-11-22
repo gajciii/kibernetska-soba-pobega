@@ -15,6 +15,10 @@
 .animated-panel { display: grid; grid-template-rows: 0fr; opacity: 0; transition: grid-template-rows 340ms cubic-bezier(.22, 1, .36, 1), opacity 220ms ease; }
 .animated-panel[data-open="true"] { grid-template-rows: 1fr; opacity: 1; }
 .animated-panel-clip { min-height: 0; overflow: hidden; border-radius: inherit; }
+.theory-guide { margin: 0 0 1.25rem; background: #111f34; overflow: hidden; }
+.theory-guide > .disclosure-trigger { min-height: 52px; padding: .9rem 1.15rem; color: #c9d9ec; font-size: .9rem; }
+.theory-guide-content { padding: .3rem 1.15rem 1.15rem; }
+.theory-guide-content p { max-width: 82ch; margin: 0; color: #c0cce0; font-size: .9rem; line-height: 1.75; }
 @media (prefers-reduced-motion: reduce) {
   .animated-panel, .disclosure-icon-vertical, .disclosure-trigger { transition: none; }
 }
