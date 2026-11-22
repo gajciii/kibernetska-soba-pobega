@@ -55,7 +55,7 @@ Vsako nalogo uvede kratka zgodba, ki dokaze poveže s preiskavo. Pri nalogah 3�
 
 **Učni cilj:** iz zgodbe izluščiti podatek, ročno povezati šifrirane in izvirne črke ter razumeti stalni premik in obratno smer. Takšna šifra je primerna za osnove, ne za sodobno varovanje podatkov.
 
-**Zgodovinski vir:** Svetonij v *Življenju Julija Cezarja*, 56.6, opisuje prikrivanje zaupnih sporočil s premaknjenimi črkami in povezavo A–D. Prikazana abeceda A–Z in šolska datoteka sta sodoben učni primer. [Svetonij, Julij Cezar 56.6 — izvirni vir v angleškem prevodu](https://penelope.uchicago.edu/Thayer/E/Roman/Texts/Suetonius/12Caesars/Julius%2A.html#56.6). Vir je namenjen izvajalcu; za reševanje ni treba odpreti zunanje strani.
+**Zgodovinski vir:** Svetonij v *Življenju Julija Cezarja*, 56.6, opisuje prikrivanje zaupnih sporočil s premaknjenimi črkami in povezavo A–D. Prikazana abeceda A–Z in šolska datoteka sta sodoben učni primer. [Svetonij, Julij Cezar 56.6: izvirni vir v angleškem prevodu](https://penelope.uchicago.edu/Thayer/E/Roman/Texts/Suetonius/12Caesars/Julius%2A.html#56.6). Vir je namenjen izvajalcu; za reševanje ni treba odpreti zunanje strani.
 
 ## 2. Kaj se skriva za čudnimi znaki?
 
@@ -107,7 +107,7 @@ Pravilen izbor je **sporočilo B** in **najmanj dva** od teh opozorilnih znakov,
 
 ## 4. Ugotovi predvidljivo geslo
 
-Javni profil Luke Kralja (`@luka.kralj`) nadaljuje zgodbo njegovega poštnega predala. Ima profilno fotografijo, opis z letnikom **2009** in **tri fotografske objave**: psičko **Luno**, smučanje in gorsko pot. Podatek o imenu psičke je v pripisu prve objave. Opis je »🎂 2009. 🏫 Šola Piramida. Najraje zunaj, na snegu ⛷️ ali na poti v hribe. 🏔️«. Pod kartico profila je privzeto zaprt razdelek »Pogosta slaba gesla« s šestimi vzorci: zaporedje številk, ime hišnega ljubljenčka, zaporedje tipk na tipkovnici, beseda »geslo« ali »password«, letnica rojstva ter ponavljanje istega znaka. Ime ljubljenčka in letnica sta ločena. Vse slike so ustvarjene za učno zgodbo in se nalagajo lokalno.
+Po pregledu sumljive pošte detektiv preveri še, ali bi bilo mogoče Lukino geslo uganiti iz javno dostopnih podatkov. Zato Luka pokaže svoj javni profil (`@luka.kralj`). Ima profilno fotografijo, opis z letnikom **2009** in **tri fotografske objave**: psičko **Luno**, smučanje in gorsko pot. Podatek o imenu psičke je v pripisu prve objave. Opis je »🎂 2009. 🏫 Šola Piramida. Najraje zunaj, na snegu ⛷️ ali na poti v hribe. 🏔️«. Pod kartico profila je privzeto zaprt razdelek »Pogosta slaba gesla« s šestimi vzorci: zaporedje številk, ime hišnega ljubljenčka, zaporedje tipk na tipkovnici, beseda »geslo« ali »password«, letnica rojstva ter ponavljanje istega znaka. Ime ljubljenčka in letnica sta ločena. Vse slike so ustvarjene za učno zgodbo in se nalagajo lokalno.
 
 Naloga ima dva zaporedna dela:
 

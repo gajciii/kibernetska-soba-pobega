@@ -44,7 +44,7 @@ function MailDestination({ label, url }: { label: string; url: string }) {
   }, [visible]);
 
   return <div className="iv-mail-link-wrap" ref={container} onPointerLeave={() => setHovered(false)}>
-    <button type="button" className="iv-mail-link" aria-label={`${label} — pokaži dejanski naslov`} aria-expanded={visible} aria-describedby={visible ? id : undefined}
+    <button type="button" className="iv-mail-link" aria-label={`${label}: pokaži dejanski naslov`} aria-expanded={visible} aria-describedby={visible ? id : undefined}
       onPointerEnter={event => { if (event.pointerType !== 'touch') { setHovered(true); setDismissed(false); } }}
       onFocus={() => { setFocused(true); setDismissed(false); }}
       onBlur={() => { setFocused(false); setPinned(false); }}

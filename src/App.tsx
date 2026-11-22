@@ -258,7 +258,7 @@ function Stage({ data, csrf, busy, setBusy, onSession, onData, onNext, onFinale,
       {stage.kind === 'encoding' && stage.evidence && <div className="source-evidence story-evidence"><div className="story-evidence-heading"><span>DOKAZ · obvestilo.dat</span><CopyButton text={stage.evidence} label="Kopiraj dokaz"/></div><code>{stage.evidence}</code></div>}
       <section className="task-instruction" aria-labelledby="instruction-heading"><h2 id="instruction-heading">NAVODILO</h2><p>{stage.question}</p></section>
       <a className="mobile-answer-link" href="#answer-panel">Vnesi odgovor</a>
-      <section className="desktop-window" aria-label={`${app.name} — delovno okno`}>
+      <section className="desktop-window" aria-label={`${app.name}: delovno okno`}>
         <header className="window-toolbar"><div className="window-app"><Icon name={app.icon} size={17}/><strong>{app.name}</strong></div><span className="window-file">PRIMER 404 / {String(stage.id).padStart(2, '0')}</span><span className="window-controls" aria-hidden="true"><i/><i/><i/></span></header>
         <div className="window-body">
           {stage.kind !== 'encoding' && stage.kind !== 'binary' && stage.evidence && <div className="source-evidence"><span>DOKAZ</span><code>{stage.evidence}</code></div>}

@@ -47,17 +47,17 @@ Express streže aplikacijo in API v enem procesu. [Navodila za vzpostavitev](doc
 ## Rešitve
 
 <details>
-<summary><strong>POZOR: rešitve vseh izzivov — odpri le po igranju ali za pripravo delavnice.</strong></summary>
+<summary><strong>POZOR: rešitve vseh izzivov: odpri le po igranju ali za pripravo delavnice.</strong></summary>
 
 | Izziv | Rešitev |
 | --- | --- |
-| 1. Cezarjeva šifra | `PIRAMIDA` — premik za tri mesta nazaj. |
-| 2. Kodirano obvestilo | `PREDAL` — najprej HEX, nato Base64; koda odpre mapo z Lukovo prijavo in e-pošto. |
+| 1. Cezarjeva šifra | `PIRAMIDA`: premik za tri mesta nazaj. |
+| 2. Kodirano obvestilo | `PREDAL`: najprej HEX, nato Base64; koda odpre mapo z Lukovo prijavo in e-pošto. |
 | 3. Phishing | Sporočilo **B**, četrto na seznamu, in vsaj dva pravilna razloga: tuja domena pošiljatelja, tuja domena povezave, grožnja/nujnost, zahteva po geslu in enkratni kodi. Brez napačnih razlogov. |
 | 4. Predvidljivo geslo | `luna2009` ali `2009luna`, nato vsa štiri priporočila: dolgo naključno geslo, drugačno geslo za vsak račun, upravljalnik gesel in večfaktorska prijava. |
-| 5. Fotografija | `10:42` — čas nastanka posnetka `hodnik.jpg`. |
-| 6. Prenos datoteke | `ucenec17` — uspešen prenos `/zaupno/nacrt.pdf`. |
+| 5. Fotografija | `10:42`: čas nastanka posnetka `hodnik.jpg`. |
+| 6. Prenos datoteke | `ucenec17`: uspešen prenos `/zaupno/nacrt.pdf`. |
 | 7. Tuja domena | Eden od pravilnih parov: **C / 3. povezava** → `piramiida.si`; **D / 4.** → `pirameda.si`. |
-| 8. Binarni zapis | `BRUCOVANJE` — deset vrednosti ASCII: 66, 82, 85, 67, 79, 86, 65, 78, 74, 69. |
+| 8. Binarni zapis | `BRUCOVANJE`: deset vrednosti ASCII: 66, 82, 85, 67, 79, 86, 65, 78, 74, 69. |
 
 </details>

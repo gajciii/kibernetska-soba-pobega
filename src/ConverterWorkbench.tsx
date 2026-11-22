@@ -87,7 +87,7 @@ export default function ConverterWorkbench({ stage }: { stage: StageContent }) {
       </div>
       <div className="workbench-result">
         <div className="workbench-editor-heading"><span id={`${uid}-output-label`} className="workbench-output-label">Rezultat</span><div className="workbench-result-actions"><span>{result === null ? '' : `${Array.from(result).length} znakov`}</span><CopyButton text={result} label="Kopiraj rezultat"/></div></div>
-        <output className={`workbench-output${result === null ? ' empty' : ''}${conversionNotice ? ' conversion-notice' : ''}`} aria-labelledby={`${uid}-output-label`} role="status" aria-live="polite" aria-atomic="true" tabIndex={0}>{result ?? (conversionNotice || '—')}</output>
+        <output className={`workbench-output${result === null ? ' empty' : ''}${conversionNotice ? ' conversion-notice' : ''}`} aria-labelledby={`${uid}-output-label`} role="status" aria-live="polite" aria-atomic="true" tabIndex={0}>{result ?? (conversionNotice || '…')}</output>
         {toolError && <p className="workbench-error" role="alert">{toolError}</p>}
       </div>
       <div className="workbench-actions"><button className="primary" type="submit">Pretvori</button></div>
