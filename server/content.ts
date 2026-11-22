@@ -9,7 +9,7 @@ const stages: StageContent[] = [
     title: 'Razbij skrivno sporočilo',
     topic: 'Cezarjeva šifra',
     kind: 'caesar',
-    intro: 'Na šoli Piramida je nekdo prenesel zaupni načrt. Tvoja naloga je odkriti, kateremu projektu pripada. Detektiv ti je pripravil mapo z dokazi, za vstop vanjo pa potrebuješ kodo. Skrita je v spodnjem sporočilu iz datoteke sporocilo.txt. Zapis uporablja šifro, poimenovano po Juliju Cezarju: vsako črko zamenja druga črka abecede. Cezar je zaupna sporočila prikrival s premikom za tri mesta po abecedi: namesto A je zapisal D. Prejemnik je moral črke vrniti na njihova prvotna mesta.',
+    intro: 'Na šoli Piramida so zaznali sumljiv prenos datoteke nacrt.pdf. Iz njenega imena ni razvidno, kateremu projektu pripada. Tvoja naloga je povezati dokaze in odkriti, kateri projekt je ogrožen. Detektiv ti je pripravil mapo z dokazi, za vstop vanjo pa potrebuješ kodo. Skrita je v spodnjem sporočilu iz datoteke sporocilo.txt. Zapis uporablja šifro, poimenovano po Juliju Cezarju: vsako črko zamenja druga črka abecede. Cezar je zaupna sporočila prikrival s premikom za tri mesta po abecedi: namesto A je zapisal D. Prejemnik je moral črke vrniti na njihova prvotna mesta.',
     question: 'Razberi sporočilo in v polje »Odgovor« vnesi kodo za odpiranje mape.',
     evidence: 'NRGD MH SLUDPLGD',
     note: 'Uporabljaj abecedo A–Z brez šumnikov. Premik in smer razberi iz zgodbe, nato črke primerjaj s pomočjo abecednega pripomočka. Presledke in ločila ohrani.',

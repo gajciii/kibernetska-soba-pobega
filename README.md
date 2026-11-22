@@ -1,6 +1,6 @@
 # Operacija 404: Odkrij ogroženi projekt
 
-Iz šolskega arhiva je bil prenesen zaupni načrt. Detektiv ima nenavadno sporočilo, fotografijo in dnevnike, ne ve pa, kateremu projektu načrt pripada. Sledi poveži v osmih izzivih in odkrij njegovo kodno ime.
+V arhivu šole Piramida so zaznali sumljiv prenos datoteke nacrt.pdf. Njeno ime ne razkriva vsebine. Poveži digitalne sledi in odkrij, kateri skrivni šolski projekt je ogrožen. Preiskava poteka skozi osem izzivov.
 
 ## Namen
 
