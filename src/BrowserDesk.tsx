@@ -65,6 +65,11 @@ export function UrlGuide() {
           <dd>{part.description}</dd>
         </div>)}</dl>
       </div>
+      <div className="url-guide-subdomain">
+        <h4>Kaj je poddomena?</h4>
+        <code className="url-guide-subdomain-example"><span>ucilnica</span>.<strong>piramida.si</strong></code>
+        <p><code>ucilnica</code> je poddomena, <code>piramida.si</code> pa osnovna domena šole. Poddomena je dodatni del pred osnovno domeno, ločen s piko. Z njo lahko ločimo posamezne dele spletnega mesta, na primer spletno učilnico.</p>
+      </div>
       <p className="url-guide-note">Več parametrov loči znak <code>&amp;</code>, na primer <code>?jezik=sl&amp;tema=temna</code>. Pot in parametri ne spremenijo domene.</p>
     </div>
   </details>;

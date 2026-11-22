@@ -51,6 +51,13 @@
 .url-guide-parts dd { margin: 0; color: #c0cce0; font-size: .85rem; line-height: 1.6; }
 .url-guide-note { margin: 0; color: var(--muted); font-size: .85rem; line-height: 1.7; }
 .url-guide-note code { color: #dce7f8; overflow-wrap: anywhere; }
+.url-guide-subdomain { margin: 0 0 1rem; padding: 1rem; border-radius: var(--control-radius); background: #091424; }
+.url-guide-subdomain h4 { margin: 0 0 .65rem; color: #dce7f8; font-size: .9rem; font-weight: 600; }
+.url-guide-subdomain-example { display: block; margin-bottom: .65rem; font-size: 1rem; overflow-wrap: anywhere; }
+.url-guide-subdomain-example > span { color: #c6b3f3; }
+.url-guide-subdomain-example > strong { color: #95e2ba; font-weight: 500; }
+.url-guide-subdomain p { margin: 0; color: #c0cce0; font-size: .85rem; line-height: 1.7; }
+.url-guide-subdomain p code { color: #dce7f8; overflow-wrap: anywhere; }
 @container url-guide (max-width: 650px) {
   .url-guide-connectors { display: none; }
   .url-guide-parts { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 1rem; padding-top: 1rem; }
