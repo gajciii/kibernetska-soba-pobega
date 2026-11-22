@@ -42,6 +42,7 @@
 .url-guide-address > span { display: inline-block; color: var(--url-color); }
 .url-guide-connectors { position: absolute; inset: 0; width: 100%; height: 100%; overflow: visible; pointer-events: none; }
 .url-guide-connectors path { fill: none; stroke: var(--url-color); stroke-width: 1.5; stroke-linecap: round; stroke-linejoin: round; }
+.url-guide-connectors .url-guide-arrowhead { fill: var(--url-color); stroke: none; }
 .url-guide-parts { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 1rem; margin: 0 0 1.1rem; padding-top: 3.5rem; }
 .url-guide-parts > div { min-width: 0; }
 .url-guide-parts dt { display: flex; flex-direction: column; align-items: center; color: var(--url-color); text-align: center; }

@@ -37,10 +37,14 @@ export function UrlGuide() {
         const y1 = from.top - bounds.top - 8;
         const x2 = to.left + to.width / 2 - bounds.left;
         const y2 = to.bottom - bounds.top + 5;
-        const middle = (y1 + y2) / 2;
+        const length = Math.hypot(x2 - x1, y2 - y1) || 1;
+        const dx = (x2 - x1) / length;
+        const dy = (y2 - y1) / length;
+        const baseX = x2 - dx * 7;
+        const baseY = y2 - dy * 7;
         return {
-          line: `M ${x1} ${y1} C ${x1} ${middle}, ${x2} ${middle}, ${x2} ${y2}`,
-          head: `M ${x2 - 4} ${y2 + 6} L ${x2} ${y2} L ${x2 + 4} ${y2 + 6}`,
+          line: `M ${x1} ${y1} L ${baseX} ${baseY}`,
+          head: `M ${x2} ${y2} L ${baseX - dy * 3} ${baseY + dx * 3} L ${baseX + dy * 3} ${baseY - dx * 3} Z`,
         };
       }));
     }
@@ -59,7 +63,7 @@ export function UrlGuide() {
       <p className="url-guide-caption">Primer pravilnega šolskega naslova</p>
       <div className="url-guide-diagram" ref={diagramRef}>
         <code className="url-guide-address">{urlParts.map((part, index) => <span className={`url-part-${index}`} key={part.title}>{part.code}</span>)}</code>
-        <svg className="url-guide-connectors" aria-hidden="true" focusable="false">{connectors.map((connector, index) => <g className={`url-part-${index}`} key={index}><path d={connector.line}/><path d={connector.head}/></g>)}</svg>
+        <svg className="url-guide-connectors" aria-hidden="true" focusable="false">{connectors.map((connector, index) => <g className={`url-part-${index}`} key={index}><path d={connector.line}/><path className="url-guide-arrowhead" d={connector.head}/></g>)}</svg>
         <dl className="url-guide-parts">{urlParts.map((part, index) => <div className={`url-part-${index}`} key={part.title}>
           <dt><span className="url-guide-arrow" aria-hidden="true">→</span><code>{part.code}</code><strong>{part.title}</strong></dt>
           <dd>{part.description}</dd>
