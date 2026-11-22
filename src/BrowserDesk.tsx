@@ -1,4 +1,4 @@
-import { useEffect, useId, useRef, useState } from 'react';
+import { useEffect, useId, useLayoutEffect, useRef, useState } from 'react';
 import type { Choice } from '../shared/types';
 import './browser-desk.css';
 
@@ -17,15 +17,54 @@ const urlParts = [
 ];
 
 export function UrlGuide() {
-  return <details className="url-guide">
+  const [open, setOpen] = useState(false);
+  const diagramRef = useRef<HTMLDivElement>(null);
+  const [connectors, setConnectors] = useState<{ line: string; head: string }[]>([]);
+
+  useLayoutEffect(() => {
+    const diagram = diagramRef.current;
+    if (!open || !diagram) return;
+    const targets = Array.from(diagram.querySelectorAll('.url-guide-address > span'));
+    const sources = Array.from(diagram.querySelectorAll('.url-guide-parts dt > code'));
+    let frame = 0;
+    function measure() {
+      if (!diagram) return;
+      const bounds = diagram.getBoundingClientRect();
+      setConnectors(targets.map((target, index) => {
+        const to = target.getBoundingClientRect();
+        const from = sources[index].getBoundingClientRect();
+        const x1 = from.left + from.width / 2 - bounds.left;
+        const y1 = from.top - bounds.top - 8;
+        const x2 = to.left + to.width / 2 - bounds.left;
+        const y2 = to.bottom - bounds.top + 5;
+        const middle = (y1 + y2) / 2;
+        return {
+          line: `M ${x1} ${y1} C ${x1} ${middle}, ${x2} ${middle}, ${x2} ${y2}`,
+          head: `M ${x2 - 4} ${y2 + 6} L ${x2} ${y2} L ${x2 + 4} ${y2 + 6}`,
+        };
+      }));
+    }
+    const observer = new ResizeObserver(() => {
+      cancelAnimationFrame(frame);
+      frame = requestAnimationFrame(measure);
+    });
+    [diagram, ...targets, ...sources].forEach(element => observer.observe(element));
+    measure();
+    return () => { observer.disconnect(); cancelAnimationFrame(frame); };
+  }, [open]);
+
+  return <details className="url-guide" onToggle={event => setOpen(event.currentTarget.open)}>
     <summary>Kaj pomenijo deli spletnega naslova?</summary>
     <div className="url-guide-content">
       <p className="url-guide-caption">Primer pravilnega šolskega naslova</p>
-      <code className="url-guide-address">{urlParts.map((part, index) => <span className={`url-part-${index}`} key={part.title}>{part.code}</span>)}</code>
-      <dl className="url-guide-parts">{urlParts.map((part, index) => <div className={`url-part-${index}`} key={part.title}>
-        <dt><span className="url-guide-arrow" aria-hidden="true">↑</span><code>{part.code}</code><strong>{part.title}</strong></dt>
-        <dd>{part.description}</dd>
-      </div>)}</dl>
+      <div className="url-guide-diagram" ref={diagramRef}>
+        <code className="url-guide-address">{urlParts.map((part, index) => <span className={`url-part-${index}`} key={part.title}>{part.code}</span>)}</code>
+        <svg className="url-guide-connectors" aria-hidden="true" focusable="false">{connectors.map((connector, index) => <g className={`url-part-${index}`} key={index}><path d={connector.line}/><path d={connector.head}/></g>)}</svg>
+        <dl className="url-guide-parts">{urlParts.map((part, index) => <div className={`url-part-${index}`} key={part.title}>
+          <dt><span className="url-guide-arrow" aria-hidden="true">→</span><code>{part.code}</code><strong>{part.title}</strong></dt>
+          <dd>{part.description}</dd>
+        </div>)}</dl>
+      </div>
       <p className="url-guide-note">Več parametrov loči znak <code>&amp;</code>, na primer <code>?jezik=sl&amp;tema=temna</code>. Pot in parametri ne spremenijo domene.</p>
     </div>
   </details>;
