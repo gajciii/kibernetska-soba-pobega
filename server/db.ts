@@ -40,7 +40,7 @@ export async function openDatabase(connectionString: string, schema?: string) {
     await client.query('CREATE TABLE IF NOT EXISTS schema_version (version integer PRIMARY KEY, applied_at timestamptz NOT NULL DEFAULT now())');
     const versions = await client.query<{ version: number }>('SELECT version FROM schema_version ORDER BY version DESC LIMIT 1');
     const version = versions.rows[0]?.version ?? 0;
-    if (version > 4) throw new Error('Baza zahteva novejšo različico aplikacije.');
+    if (version > 5) throw new Error('Baza zahteva novejšo različico aplikacije.');
     if (version < 1) {
       await client.query(`CREATE TABLE game_sessions (
         token_hash char(64) PRIMARY KEY, csrf char(64) NOT NULL,
@@ -84,6 +84,10 @@ export async function openDatabase(connectionString: string, schema?: string) {
         WHERE r.completed_at IS NULL AND NOT EXISTS (SELECT 1 FROM game_sessions s WHERE s.run_id=r.id)`);
       await client.query('INSERT INTO schema_version(version) VALUES (4)');
     }
+    if (version < 5) {
+      await client.query('ALTER TABLE leaderboard_runs ADD COLUMN active_elapsed_ms integer');
+      await client.query('INSERT INTO schema_version(version) VALUES (5)');
+    }
     await client.query(`UPDATE leaderboard_runs r SET stopped_at=GREATEST(r.started_at,s.expires_at)
       FROM game_sessions s WHERE s.run_id=r.id AND s.expires_at<now()
       AND r.completed_at IS NULL AND r.stopped_at IS NULL`);
@@ -94,15 +98,21 @@ export async function openDatabase(connectionString: string, schema?: string) {
   return pool;
 }
 
-export async function changeSession<T>(pool: pg.Pool, hash: string, change: (row: SessionRow, client: pg.PoolClient) => T | Promise<T>): Promise<T> {
+export async function changeSession<T>(pool: pg.Pool, hash: string, change: (row: SessionRow, client: pg.PoolClient) => T | Promise<T>, { syncScore = true } = {}): Promise<T> {
   const client = await pool.connect();
   try {
     await client.query('BEGIN');
     const result = await client.query<SessionRow>('SELECT * FROM game_sessions WHERE token_hash=$1 AND expires_at > now() FOR UPDATE', [hash]);
     const row = result.rows[0];
     if (!row) throw new SessionUnavailableError();
+    const wasCompleted = row.progress?.completedAt;
     const response = await change(row, client);
-    await syncLeaderboard(client, row);
+    if (syncScore) {
+      await syncLeaderboard(client, row);
+      if (!wasCompleted && row.progress?.completedAt && row.progress.playClock) {
+        await client.query('UPDATE leaderboard_runs SET active_elapsed_ms=$1 WHERE id=$2', [row.progress.playClock.elapsedMs, row.run_id]);
+      }
+    }
     await client.query('UPDATE game_sessions SET progress=$1,run_id=$2,next_start_at=$3 WHERE token_hash=$4', [row.progress ? JSON.stringify(row.progress) : null, row.run_id, row.next_start_at, hash]);
     await client.query('COMMIT');
     return response;
@@ -145,19 +155,18 @@ export async function resetSession(pool: pg.Pool, hash: string, replacement: Ses
 
 interface RankedRun {
   id: string; team_name: string; solved_count: number; hint_count: number;
-  elapsed_seconds: number; completed: boolean; stopped: boolean; is_current: boolean;
+  elapsed_seconds: number; is_current: boolean;
   rank: number; position: number; total: number;
 }
 
 export async function readLeaderboard(pool: pg.Pool, tokenHash?: string): Promise<LeaderboardResponse> {
   const updatedAt = new Date().toISOString();
   const result = await pool.query<RankedRun>(`WITH scores AS (
-      SELECT r.id,r.team_name,r.solved_count,r.hint_count,r.started_at,r.completed_at IS NOT NULL AS completed,
-        (r.completed_at IS NULL AND (r.stopped_at IS NOT NULL OR s.run_id IS NULL OR s.expires_at<=$1::timestamptz)) AS stopped,
-        GREATEST(0,FLOOR(EXTRACT(EPOCH FROM (COALESCE(r.completed_at,r.stopped_at,
-          CASE WHEN s.run_id IS NULL THEN r.updated_at ELSE LEAST(s.expires_at,$1::timestamptz) END)-r.started_at))))::integer AS elapsed_seconds,
+      SELECT r.id,r.team_name,r.solved_count,r.hint_count,r.started_at,
+        GREATEST(0,FLOOR(COALESCE(r.active_elapsed_ms / 1000.0,EXTRACT(EPOCH FROM (r.completed_at-r.started_at)))))::integer AS elapsed_seconds,
         COALESCE(s.token_hash=$2 AND s.expires_at>$1::timestamptz,false) AS is_current
       FROM leaderboard_runs r LEFT JOIN game_sessions s ON s.run_id=r.id
+      WHERE r.completed_at IS NOT NULL AND r.solved_count=8
     ), ranked AS (
       SELECT *, RANK() OVER (ORDER BY solved_count DESC,hint_count,elapsed_seconds)::integer AS rank,
         ROW_NUMBER() OVER (ORDER BY solved_count DESC,hint_count,elapsed_seconds,started_at,id)::integer AS position,
@@ -166,7 +175,7 @@ export async function readLeaderboard(pool: pg.Pool, tokenHash?: string): Promis
     ) SELECT * FROM ranked WHERE position<=100 OR is_current ORDER BY position`, [updatedAt, tokenHash ?? null]);
   const entry = (row: RankedRun): LeaderboardEntry => ({
     id: row.id, rank: row.rank, teamName: row.team_name, solvedCount: row.solved_count,
-    hintCount: row.hint_count, elapsedSeconds: row.elapsed_seconds, completed: row.completed, stopped: row.stopped, isCurrent: row.is_current,
+    hintCount: row.hint_count, elapsedSeconds: row.elapsed_seconds, isCurrent: row.is_current,
   });
   return {
     entries: result.rows.filter(row => row.position <= 100).map(entry),

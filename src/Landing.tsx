@@ -5,6 +5,7 @@ import './landing.css';
 
 type LandingProps = {
   session: SessionView | null;
+  expired: boolean;
   nextStartAt: string | null;
   now: number;
   busy: boolean;
@@ -18,7 +19,7 @@ function TitleLines() {
   return <span className="landing-title-main">Operacija <span>404.</span></span>;
 }
 
-export default function Landing({ session, nextStartAt, now, busy, onStart, onContinue, onReset, headingRef }: LandingProps) {
+export default function Landing({ session, expired, nextStartAt, now, busy, onStart, onContinue, onReset, headingRef }: LandingProps) {
   const [name, setName] = useState('');
   const [nameError, setNameError] = useState('');
   const nameRef = useRef<HTMLInputElement>(null);
@@ -50,7 +51,10 @@ export default function Landing({ session, nextStartAt, now, busy, onStart, onCo
         <div className="landing-title ambient-heading-light" aria-hidden="true"><TitleLines/></div>
       </div>
       <p className="landing-story">V arhivu šole Piramida so zaznali sumljiv prenos datoteke nacrt.pdf. Poveži digitalne sledi in odkrij, kateri skrivni šolski projekt je ogrožen.</p>
-      {session && namedSession ? <div className="landing-resume">
+      {expired ? <div className="landing-resume">
+        <p>Seja je po dveh urah potekla.</p>
+        <button type="button" className="landing-start-button" disabled={busy} onClick={onReset}>Začni novo preiskavo</button>
+      </div> : session && namedSession ? <div className="landing-resume">
         <p><strong>{session.teamName}</strong> · Shranjena preiskava</p>
         <button type="button" className="landing-start-button" disabled={busy} onClick={onContinue}>{busy ? 'Odpiranje …' : session.completedAt ? 'Odpri zaključeno preiskavo' : 'Nadaljuj preiskavo'}</button>
         <button type="button" className="landing-reset-button" disabled={busy} onClick={onReset}>Začni novo preiskavo</button>

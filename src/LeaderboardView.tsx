@@ -13,7 +13,7 @@ function duration(seconds: number) {
 function ScoreRow({ entry }: { entry: LeaderboardEntry }) {
   return <li className={`board-entry${entry.rank <= 3 ? ` board-rank-${entry.rank}` : ''}${entry.isCurrent ? ' is-current' : ''}`} data-entry-id={entry.id}>
     <span className="board-rank" aria-label={`Mesto ${entry.rank}`}>{String(entry.rank).padStart(2, '0')}</span>
-    <div className="board-team"><h2>{entry.teamName}</h2><span className="board-team-state">{entry.completed ? 'Zaključeno' : entry.stopped ? 'Prekinjeno' : 'V teku'}{entry.isCurrent && <strong>Tvoja skupina</strong>}</span></div>
+    <div className="board-team"><h2>{entry.teamName}</h2><span className="board-team-state">Zaključeno{entry.isCurrent && <strong>Tvoja skupina</strong>}</span></div>
     <dl className="board-metrics"><div><dt>Rešeno</dt><dd>{entry.solvedCount}<span> / 8</span></dd></div><div><dt>Namigi</dt><dd>{entry.hintCount}</dd></div><div><dt>Čas</dt><dd>{duration(entry.elapsedSeconds)}</dd></div></dl>
   </li>;
 }
@@ -54,7 +54,7 @@ export default function LeaderboardView({ headingRef, onBack }: { headingRef: Re
 
   const currentOutsideList = data?.currentEntry && !data.entries.some(entry => entry.id === data.currentEntry?.id) ? data.currentEntry : null;
   return <main className="leaderboard-page" id="main">
-    <header className="board-heading"><span className="board-eyebrow">OPERACIJA 404</span><div className="board-title-wrap ambient-heading" data-ambient-heading><h1 className="board-title" ref={headingRef} tabIndex={-1}>Lestvica skupin.</h1><div className="board-title ambient-heading-light" aria-hidden="true">Lestvica skupin.</div></div><p>Več rešenih nalog, manj namigov, krajši čas.</p></header>
+    <header className="board-heading"><span className="board-eyebrow">OPERACIJA 404</span><div className="board-title-wrap ambient-heading" data-ambient-heading><h1 className="board-title" ref={headingRef} tabIndex={-1}>Lestvica skupin.</h1><div className="board-title ambient-heading-light" aria-hidden="true">Lestvica skupin.</div></div><p>Samo zaključene preiskave. Manj namigov, nato krajši čas.</p></header>
     <div className="board-toolbar"><span className={`board-live${error ? ' is-offline' : ''}`}><span aria-hidden="true"/>{error ? 'Povezava prekinjena' : 'Osveževanje vsakih 5 s'}</span><button className="board-refresh" type="button" disabled={refreshing} onClick={() => setRevision(value => value + 1)}>{refreshing ? 'Osveževanje …' : 'Osveži lestvico'}</button></div>
     {error && <p className="board-error" role="alert">{error}{data && ' Zadnji podatki ostajajo prikazani.'}</p>}
     {!data ? <p className="board-empty" role="status">{error ? 'Lestvica še ni naložena.' : 'Nalaganje lestvice …'}</p> : data.entries.length === 0 ? <p className="board-empty">Lestvica je še prazna.</p> : <>

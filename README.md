@@ -6,7 +6,7 @@ V arhivu šole Piramida so zaznali sumljiv prenos datoteke nacrt.pdf. Poveži di
 
 Slovenska izobraževalna soba pobega, predvidoma **45–60 minut v paru**. Obravnava Cezarjevo šifro, kodiranja, phishing, gesla, metapodatke, omrežne dnevnike, domene in binarni zapis. Šola Piramida, osebe in dokazi so izmišljeni; igra ne izvaja pravih vdorov ali prijav v tuje račune.
 
-Registracija ni potrebna. Obvezno je ime skupine, ki je javno na lestvici, zato izberi izmišljeno oznako. Napredek se shranjuje v PostgreSQL in nadaljuje v istem brskalniku. Lestvica primerja rešene izzive, nato manj namigov in krajši čas; prejšnji rezultati ostanejo tudi po ponastavitvi, njihov čas pa se ustavi.
+Registracija ni potrebna. Obvezno je ime skupine, ki je javno na lestvici, zato izberi izmišljeno oznako. Napredek se shranjuje v PostgreSQL in nadaljuje v istem brskalniku. Na lestvici so skupine, ki so rešile vseh osem izzivov. Prednost imajo skupine z manj namigi, ob izenačenju pa tiste s krajšim časom igranja. Čas teče, ko je igra odprta v vidnem zavihku. Nedokončana seja se izteče dve uri po začetku.
 
 ## Kje lahko igram?
 

@@ -8,6 +8,7 @@ import { changeSession, createAnonymousSession, normalizeTeamName, readLeaderboa
 import { checkStartCooldown, consumeIpLimit, NEW_GAME_INTERVAL_MS, RateLimitError } from './rate-limit.js';
 import { stageSummaries, getStage, getHint, getExplanation, validateAnswer, validateProfilePassword, getFeedback, finale } from './content.js';
 import type { SessionView } from '../shared/types.js';
+import { playDeadline, playElapsed, recordPresence } from '../shared/play-clock.js';
 
 const hashToken = (token: string) => createHash('sha256').update(token).digest('hex');
 class HttpError extends Error { constructor(public status: number, message: string) { super(message); } }
@@ -16,8 +17,12 @@ const started = (row: SessionRow): SessionView => {
   if (!normalizeTeamName(row.progress.teamName)) throw new HttpError(409, 'Za nadaljevanje vnesi ime skupine.');
   return row.progress;
 };
-function allowed(row: SessionRow, id: number) {
+function checkDeadline(session: SessionView, now: number) {
+  if (!session.completedAt && now >= playDeadline(session)) throw new HttpError(410, 'Seja je po dveh urah potekla. Začni novo preiskavo.');
+}
+function allowed(row: SessionRow, id: number, now: number) {
   const session = started(row);
+  checkDeadline(session, now);
   if (!getStage(id)) throw new HttpError(404, 'Ta stopnja ne obstaja.');
   if (id > session.currentStage) throw new HttpError(403, 'Stopnja je zaklenjena. Najprej reši prejšnjo nalogo.');
   return session;
@@ -87,33 +92,49 @@ export function createApp(pool: pg.Pool, config: AppConfig, now: () => number = 
         row.progress = { teamName: name, startedAt: new Date(currentTime).toISOString(), completedAt: null, solved: [], attempts: {}, hints: {}, currentStage: 1, hintCount: 0 };
         row.next_start_at = new Date(currentTime + NEW_GAME_INTERVAL_MS);
       }
+      checkDeadline(row.progress, now());
       if (!normalizeTeamName(row.progress.teamName)) row.progress.teamName = name;
       return bootstrap(row);
     });
     res.json(result);
   });
+  app.post('/api/presence', async (req, res) => {
+    const { tab, active } = req.body ?? {};
+    if (typeof tab !== 'string' || !/^[a-f0-9]{32}$/u.test(tab) || typeof active !== 'boolean') {
+      throw new HttpError(400, 'Podatki o prisotnosti niso veljavni.');
+    }
+    const session = await changeSession(pool, res.locals.row.token_hash, row => {
+      const progress = started(row);
+      const time = now();
+      checkDeadline(progress, time);
+      if (!progress.completedAt) recordPresence(progress, time, tab, active);
+      return progress;
+    }, { syncScore: false });
+    res.json({ playClock: session.playClock, completedAt: session.completedAt });
+  });
   app.get('/api/stages/:id', async (req, res) => {
     const id = Number(req.params.id);
     const row: SessionRow = res.locals.row;
-    let session = allowed(row, id);
-    if (session.stageOpenedAt?.[id] === undefined && req.method === 'GET') {
+    let session = allowed(row, id, now());
+    if (session.stageOpenedAtPlayMs?.[id] === undefined && req.method === 'GET') {
       session = await changeSession(pool, row.token_hash, lockedRow => {
-        const progress = allowed(lockedRow, id);
-        progress.stageOpenedAt ??= {};
-        progress.stageOpenedAt[id] ??= now();
+        const time = now();
+        const progress = allowed(lockedRow, id, time);
+        progress.stageOpenedAtPlayMs ??= {};
+        progress.stageOpenedAtPlayMs[id] ??= playElapsed(progress, time);
         return progress;
-      });
+      }, { syncScore: false });
     }
     const solved = session.solved.includes(id);
-    const currentTime = now();
-    const openedAt = session.stageOpenedAt?.[id] ?? currentTime;
-    const hintWaitMs = hintDelaysMs.map(delay => Math.max(0, openedAt + delay - currentTime));
-    res.json({ stage: getStage(id), solved, hints: hintsFor(session, id), hintWaitMs, ...(id === 4 ? { passwordVerified: solved || session.profilePasswordVerified === true } : {}), ...(solved ? { explanation: getExplanation(id) } : {}) });
+    const openedAt = session.stageOpenedAtPlayMs?.[id] ?? playElapsed(session, now());
+    const hintUnlockAtPlayMs = hintDelaysMs.map(delay => openedAt + delay);
+    res.json({ stage: getStage(id), solved, hints: hintsFor(session, id), hintUnlockAtPlayMs, ...(id === 4 ? { passwordVerified: solved || session.profilePasswordVerified === true } : {}), ...(solved ? { explanation: getExplanation(id) } : {}) });
   });
   app.post('/api/stages/:id/answer', async (req, res) => {
     const id = Number(req.params.id);
     const result = await changeSession(pool, res.locals.row.token_hash, row => {
-      const session = allowed(row, id);
+      const time = now();
+      const session = allowed(row, id, time);
       if (session.solved.includes(id)) return { correct: true, message: 'Ta stopnja je že rešena.', explanation: getExplanation(id), ...(id === 4 ? { passwordVerified: true } : {}), session };
       session.attempts[id] = (session.attempts[id] || 0) + 1;
       if (id === 4 && !session.profilePasswordVerified) {
@@ -130,7 +151,11 @@ export function createApp(pool: pg.Pool, config: AppConfig, now: () => number = 
       if (correct) {
         session.solved.push(id);
         session.currentStage = Math.min(id + 1, 8);
-        if (id === 8) session.completedAt = new Date(now()).toISOString();
+        if (id === 8) {
+          recordPresence(session, time);
+          session.playClock!.leases = {};
+          session.completedAt = new Date(time).toISOString();
+        }
       }
       return { correct, message: correct ? 'Dokaz potrjen. Stopnja je rešena.' : getFeedback(id), ...(id === 4 ? { passwordVerified: true } : {}), ...(correct ? { explanation: getExplanation(id) } : {}), session };
     });
@@ -141,12 +166,13 @@ export function createApp(pool: pg.Pool, config: AppConfig, now: () => number = 
     const index: unknown = req.body?.index;
     if (index !== 1 && index !== 2) throw new HttpError(400, 'Izberi prvi ali drugi namig.');
     const result = await changeSession(pool, res.locals.row.token_hash, row => {
-      const session = allowed(row, id);
+      const time = now();
+      const session = allowed(row, id, time);
       const seen = session.hints[id] ||= [];
       if (index === 2 && !seen.includes(1)) throw new HttpError(409, 'Najprej odpri prvi namig.');
       if (!seen.includes(index)) {
-        const openedAt = session.stageOpenedAt?.[id];
-        if (openedAt === undefined || now() < openedAt + hintDelaysMs[index - 1]) {
+        const openedAt = session.stageOpenedAtPlayMs?.[id];
+        if (openedAt === undefined || playElapsed(session, time) < openedAt + hintDelaysMs[index - 1]) {
           throw new HttpError(409, 'Namig še ni na voljo. Počakaj, da se odštevanje konča.');
         }
         seen.push(index);

@@ -1,6 +1,7 @@
 import { useCallback, useEffect, useRef, useState } from 'react';
 import type { FormEvent, ReactNode } from 'react';
 import type { AnswerResponse, Bootstrap, Finale, SessionView, StageContent, StageResponse, StageSummary } from '../shared/types';
+import { HEARTBEAT_MS, playDeadline, playElapsed, type PlayClock } from '../shared/play-clock';
 import ConverterWorkbench from './ConverterWorkbench';
 import CaesarWorkbench from './CaesarWorkbench';
 import BinaryWorkbench from './BinaryWorkbench';
@@ -61,15 +62,16 @@ class RequestError extends Error {
 }
 function elapsed(session: SessionView | null, now: number) {
   if (!session) return '00:00';
-  const seconds = Math.max(0, Math.floor(((session.completedAt ? Date.parse(session.completedAt) : now) - Date.parse(session.startedAt)) / 1000));
+  const seconds = Math.floor(playElapsed(session, now) / 1000);
   const hours = Math.floor(seconds / 3600);
   return `${hours ? `${hours}:` : ''}${String(Math.floor(seconds / 60) % 60).padStart(2, '0')}:${String(seconds % 60).padStart(2, '0')}`;
 }
-async function request<T>(path: string, csrf: string, body?: unknown): Promise<T> {
+async function request<T>(path: string, csrf: string, body?: unknown, keepalive = false): Promise<T> {
   let response: Response;
   try {
     response = await fetch(`${base}api${path}`, {
       credentials: 'same-origin',
+      keepalive,
       headers: body === undefined ? {} : { 'Content-Type': 'application/json', 'X-CSRF-Token': csrf },
       ...(body === undefined ? {} : { method: 'POST', body: JSON.stringify(body) }),
     });
@@ -84,18 +86,15 @@ async function request<T>(path: string, csrf: string, body?: unknown): Promise<T
   return data;
 }
 
-type LoadedStage = StageResponse & { receivedAt: number };
-
-async function requestStage(id: number, csrf: string): Promise<LoadedStage> {
-  const data = await request<StageResponse>(`/stages/${id}`, csrf);
-  return { ...data, receivedAt: Date.now() };
+function requestStage(id: number, csrf: string) {
+  return request<StageResponse>(`/stages/${id}`, csrf);
 }
 
 export default function App() {
   const [boot, setBoot] = useState<Bootstrap | null>(null);
   const [view, setView] = useState<PageView>(pathView);
   const gameView = useRef<'intro' | 'stage' | 'finale'>('intro');
-  const [stageData, setStageData] = useState<LoadedStage | null>(null);
+  const [stageData, setStageData] = useState<StageResponse | null>(null);
   const [finale, setFinale] = useState<Finale | null>(null);
   const [busy, setBusy] = useState(false);
   const [error, setError] = useState('');
@@ -104,6 +103,60 @@ export default function App() {
   const headingRef = useRef<HTMLHeadingElement>(null);
   const session = boot?.session ?? null;
   const csrf = boot?.csrfToken ?? '';
+  const sessionExpired = !!session && !session.completedAt && now >= playDeadline(session);
+  const timing = view === 'stage' && !!session?.teamName && !session.completedAt && !sessionExpired;
+  useEffect(() => {
+    if (!timing) return;
+    const tab = Array.from(crypto.getRandomValues(new Uint8Array(16)), byte => byte.toString(16).padStart(2, '0')).join('');
+    let pagePresent = true;
+    let stopped = false;
+    let activeSent = false;
+    let revision = 0;
+    async function send(active: boolean) {
+      if (!active && !activeSent) return;
+      activeSent = active;
+      const version = ++revision;
+      try {
+        const result = await request<{ playClock?: PlayClock }>('/presence', csrf, { tab, active }, !active);
+        if (stopped || version !== revision) return;
+        setBoot(previous => {
+          const current = previous?.session;
+          const clock = result.playClock;
+          if (!previous || !current || current.completedAt || !clock || previous.csrfToken !== csrf ||
+              clock.measuredAt < (current.playClock?.measuredAt ?? 0)) return previous;
+          return { ...previous, session: { ...current, playClock: clock } };
+        });
+      } catch {
+        // Naslednji signal obnovi povezavo, če se zahteva izgubi.
+      }
+    }
+    const report = () => void send(pagePresent && !document.hidden);
+    const hide = () => { pagePresent = false; report(); };
+    const show = () => { pagePresent = true; report(); };
+    report();
+    const timer = window.setInterval(() => {
+      if (pagePresent && !document.hidden) report();
+    }, HEARTBEAT_MS);
+    document.addEventListener('visibilitychange', report);
+    window.addEventListener('pagehide', hide);
+    window.addEventListener('pageshow', show);
+    return () => {
+      stopped = true;
+      void send(false);
+      window.clearInterval(timer);
+      document.removeEventListener('visibilitychange', report);
+      window.removeEventListener('pagehide', hide);
+      window.removeEventListener('pageshow', show);
+    };
+  }, [timing, csrf]);
+  useEffect(() => {
+    if (sessionExpired && view === 'stage') {
+      gameView.current = 'intro';
+      setResetOpen(false);
+      setView('intro');
+      window.scrollTo(0, 0);
+    }
+  }, [sessionExpired, view]);
   const bootstrap = useCallback(async () => {
     setBusy(true); setError('');
     try { setBoot(await request<Bootstrap>('/session', '')); }
@@ -127,7 +180,14 @@ export default function App() {
     setView(next);
     window.scrollTo({ top: 0, left: 0 });
   }
-  function updateSession(next: SessionView) { setBoot(previous => previous ? { ...previous, session: next } : previous); }
+  function updateSession(next: SessionView) {
+    setBoot(previous => {
+      if (!previous) return previous;
+      const clock = previous.session?.playClock;
+      const keepClock = !next.completedAt && clock && clock.measuredAt > (next.playClock?.measuredAt ?? 0);
+      return { ...previous, session: keepClock ? { ...next, playClock: clock } : next };
+    });
+  }
   async function openStage(id: number) {
     setBusy(true); setError('');
     try { setStageData(await requestStage(id, csrf)); changeView('stage'); }
@@ -168,7 +228,7 @@ export default function App() {
   }
   const continueInvestigation = () => !session?.teamName.trim() ? changeView('intro') : session.completedAt ? void openFinale() : void openStage(session.currentStage);
   const leaveLeaderboard = () => {
-    if (gameView.current === 'stage' && stageData) changeView('stage');
+    if (gameView.current === 'stage' && stageData && !sessionExpired) changeView('stage');
     else if (gameView.current === 'finale' && session?.completedAt) {
       if (finale) changeView('finale');
       else void openFinale();
@@ -191,9 +251,9 @@ export default function App() {
     </header>
     {error && view !== 'not-found' && <div className="global-error" role="alert"><span>{error}</span>{!boot ? <button onClick={() => void bootstrap()} disabled={busy}>Poskusi znova</button> : <button aria-label="Zapri obvestilo" onClick={() => setError('')}><Icon name="close"/></button>}</div>}
     {view === 'not-found' ? <NotFound headingRef={headingRef} onHome={() => changeView('intro')}/> : !boot ? <main id="main" className="loading-screen"><span className="loading-symbol"><Icon name="shield" size={36}/></span><h1>{busy ? 'Pripravljamo preiskovalno mapo …' : 'Povezava ni uspela'}</h1></main> : view === 'intro' ?
-      <Landing session={session} nextStartAt={boot.nextStartAt} now={now} busy={busy} onStart={start} onContinue={continueInvestigation} onReset={() => setResetOpen(true)} headingRef={headingRef}/>
+      <Landing session={session} expired={sessionExpired} nextStartAt={boot.nextStartAt} now={now} busy={busy} onStart={start} onContinue={continueInvestigation} onReset={sessionExpired ? () => void reset() : () => setResetOpen(true)} headingRef={headingRef}/>
       : view === 'leaderboard' ? <LeaderboardView headingRef={headingRef} onBack={leaveLeaderboard}/>
-      : view === 'stage' && stageData ? <Stage key={stageData.stage.id} data={stageData} now={now} csrf={csrf} busy={busy} setBusy={setBusy} onSession={updateSession} onData={setStageData} onNext={() => stageData.stage.id === 8 ? void openFinale() : void openStage(stageData.stage.id + 1)} onFinale={openFinale} headingRef={headingRef}
+      : view === 'stage' && stageData ? <Stage key={stageData.stage.id} data={stageData} elapsedMs={session ? playElapsed(session, now) : 0} completed={!!session?.completedAt} csrf={csrf} busy={busy} setBusy={setBusy} onSession={updateSession} onData={setStageData} onNext={() => stageData.stage.id === 8 ? void openFinale() : void openStage(stageData.stage.id + 1)} onFinale={openFinale} headingRef={headingRef}
         navigation={<Sidebar stages={boot.stages} session={session!} active={stageData.stage.id} busy={busy} onSelect={openStage} onFinale={openFinale} onReset={() => setResetOpen(true)}/>}/>
       : <main id="main" className="finale-page" aria-busy={busy}>
         {session && finale && <FinaleView finale={finale} session={session} stages={boot.stages} time={elapsed(session, now)} headingRef={headingRef} onReset={() => setResetOpen(true)} onLeaderboard={() => changeView('leaderboard')}/>}
@@ -222,8 +282,8 @@ function Sidebar({ stages, session, active, busy, onSelect, onFinale, onReset }:
   </section>;
 }
 
-function Stage({ data, now, csrf, busy, setBusy, onSession, onData, onNext, onFinale, headingRef, navigation }: {
-  data: LoadedStage; now: number; navigation: ReactNode; csrf: string; busy: boolean; setBusy: (busy: boolean) => void; onSession: (s: SessionView) => void; onData: (s: LoadedStage) => void; onNext: () => void; onFinale: () => Promise<void>; headingRef: React.RefObject<HTMLHeadingElement | null>;
+function Stage({ data, elapsedMs, completed, csrf, busy, setBusy, onSession, onData, onNext, onFinale, headingRef, navigation }: {
+  data: StageResponse; elapsedMs: number; completed: boolean; navigation: ReactNode; csrf: string; busy: boolean; setBusy: (busy: boolean) => void; onSession: (s: SessionView) => void; onData: (s: StageResponse) => void; onNext: () => void; onFinale: () => Promise<void>; headingRef: React.RefObject<HTMLHeadingElement | null>;
 }) {
   const stage = data.stage;
   const [answer, setAnswer] = useState('');
@@ -322,11 +382,12 @@ function Stage({ data, now, csrf, busy, setBusy, onSession, onData, onNext, onFi
       <Disclosure className="hints-panel" title={<>Namigi <span>{data.hints.length} / 2</span></>}><div className="hints-content">{[1, 2].map(index => {
         const revealed = data.hints.find(h => h.index === index);
         if (revealed) return <div className="hint" key={index}><strong>Namig {index}</strong><p>{revealed.text}</p></div>;
-        const elapsedSinceLoad = Math.max(0, now - data.receivedAt);
-        const seconds = Math.max(0, Math.ceil((data.hintWaitMs[index - 1] - elapsedSinceLoad) / 1000));
+        const seconds = Math.max(0, Math.ceil((data.hintUnlockAtPlayMs[index - 1] - elapsedMs) / 1000));
         const wait = `${Math.floor(seconds / 60)}:${String(seconds % 60).padStart(2, '0')}`;
         const needsFirst = index === 2 && !data.hints.some(h => h.index === 1);
-        const label = seconds > 0 ? `Namig ${index} čez ${wait}` : needsFirst ? 'Najprej razkrij namig 1' : `Razkrij namig ${index}`;
+        const label = seconds > 0
+          ? completed ? `Namig ${index} je ostal zaklenjen` : `Namig ${index} čez ${wait}`
+          : needsFirst ? 'Najprej razkrij namig 1' : `Razkrij namig ${index}`;
         return <button className="hint-button" key={index} onClick={() => void revealHint(index)} disabled={busy || seconds > 0 || needsFirst}>{label}</button>;
       })}{hintError && <p className="error-text" role="alert">{hintError}</p>}</div></Disclosure>
       {navigation}
@@ -348,5 +409,5 @@ function ResetDialog({ busy, onCancel, onReset }: { busy: boolean; onCancel: () 
       if (opener?.isConnected) opener.focus();
     };
   }, [opener]);
-  return <dialog className="reset-dialog" ref={ref} onCancel={e => { e.preventDefault(); if (!busy) onCancel(); }} aria-labelledby="reset-title" aria-describedby="reset-description"><span className="dialog-icon"><Icon name="reset" size={28}/></span><h2 id="reset-title">Želiš začeti novo preiskavo?</h2><p id="reset-description">Trenutni poskus se konča in njegov čas se ustavi. Rezultat ostane na lestvici. Novo preiskavo začneš od prve naloge.</p><div className="dialog-actions"><button className="secondary" onClick={onCancel} disabled={busy} autoFocus>Ohrani preiskavo</button><button className="danger" onClick={() => void onReset()} disabled={busy}>{busy ? 'Ponastavljanje …' : 'Začni nov poskus'}</button></div></dialog>;
+  return <dialog className="reset-dialog" ref={ref} onCancel={e => { e.preventDefault(); if (!busy) onCancel(); }} aria-labelledby="reset-title" aria-describedby="reset-description"><span className="dialog-icon"><Icon name="reset" size={28}/></span><h2 id="reset-title">Želiš začeti novo preiskavo?</h2><p id="reset-description">Trenutni poskus se konča in njegov čas se ustavi. Na lestvici ostanejo zaključeni rezultati. Novo preiskavo začneš od prve naloge.</p><div className="dialog-actions"><button className="secondary" onClick={onCancel} disabled={busy} autoFocus>Ohrani preiskavo</button><button className="danger" onClick={() => void onReset()} disabled={busy}>{busy ? 'Ponastavljanje …' : 'Začni nov poskus'}</button></div></dialog>;
 }

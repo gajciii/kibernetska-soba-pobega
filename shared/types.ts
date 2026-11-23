@@ -1,3 +1,5 @@
+import type { PlayClock } from './play-clock.js';
+
 export interface StageSummary { id: number; title: string; topic: string }
 export interface SessionView {
   teamName: string;
@@ -6,7 +8,8 @@ export interface SessionView {
   solved: number[];
   attempts: Record<string, number>;
   hints: Record<string, number[]>;
-  stageOpenedAt?: Record<string, number>;
+  stageOpenedAtPlayMs?: Record<string, number>;
+  playClock?: PlayClock;
   currentStage: number;
   hintCount: number;
   profilePasswordVerified?: boolean;
@@ -19,8 +22,6 @@ export interface LeaderboardEntry {
   solvedCount: number;
   hintCount: number;
   elapsedSeconds: number;
-  completed: boolean;
-  stopped: boolean;
   isCurrent: boolean;
 }
 export interface LeaderboardResponse {
@@ -97,7 +98,7 @@ export interface StageResponse {
   stage: StageContent;
   solved: boolean;
   hints: { index: number; text: string }[];
-  hintWaitMs: [number, number];
+  hintUnlockAtPlayMs: [number, number];
   explanation?: string;
   passwordVerified?: boolean;
 }
