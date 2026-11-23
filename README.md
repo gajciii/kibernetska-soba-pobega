@@ -53,7 +53,7 @@ Express streže aplikacijo in API v enem procesu. [Navodila za vzpostavitev](doc
 | --- | --- |
 | 1. Cezarjeva šifra | `PIRAMIDA`: premik za tri mesta nazaj. |
 | 2. Kodirano obvestilo | `PREDAL`: najprej HEX, nato Base64; koda odpre mapo z Lukovo prijavo in e-pošto. |
-| 3. Phishing | Sporočilo **B**, četrto na seznamu, in vsaj dva pravilna razloga: tuja domena pošiljatelja, tuja domena povezave, grožnja/nujnost, zahteva po geslu in enkratni kodi. Brez napačnih razlogov. |
+| 3. Phishing | Sporočilo **D**, četrto na seznamu, in vsaj dva pravilna razloga: tuja domena pošiljatelja, tuja domena povezave, grožnja/nujnost, zahteva po geslu in enkratni kodi. Brez napačnih razlogov. |
 | 4. Predvidljivo geslo | `luna2009` ali `2009luna`, nato vsa štiri priporočila: dolgo naključno geslo, drugačno geslo za vsak račun, upravljalnik gesel in večfaktorska prijava. |
 | 5. Fotografija | `10:42`: čas nastanka posnetka `hodnik.jpg`. |
 | 6. Prenos datoteke | `ucenec17`: uspešen prenos `/zaupno/nacrt.pdf`. |

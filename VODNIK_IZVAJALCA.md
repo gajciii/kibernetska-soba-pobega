@@ -89,18 +89,18 @@ Zgodba predstavi datoteko `obvestilo.dat`, detektivov izvoz prve prijave nenavad
 
 Šolska domena v učnem primeru je `piramida.si`. Obvestilo iz druge naloge pripelje do **Luke Kralja**, ki je na dan sumljivega prenosa prejel nenavadno e-pošto in jo prijavil detektivu. Detektiv je zbral sporočila iz Lukinega šolskega predala **`luka.kralj@piramida.si`**, da bi preveril morebiten poskus pridobitve prijavnih podatkov. Zato sledi pregled njegove pošte. To je izmišljeni lastnik predala; aplikacija ne bere prave pošte ali navezuje stikov. Vseh sedem sporočil je naslovljenih nanj.
 
-Začetni vrstni red je **A, C, D, B, E, F, G**: knjižnični opomnik, mentorsko obvestilo, načrtovano IT-vzdrževanje, lažna IT-zahteva, pomembna sprememba učilnice, pričakovana priponka fotografskega krožka in jedilnik. Phishing sporočilo je torej **četrto**, njegov stabilni identifikator **B** pa ostaja nespremenjen. Vrstni red je ureditev dokazne zbirke, ne časovno razvrščanje.
+Začetni vrstni red je **A, B, C, D, E, F, G**: knjižnični opomnik, mentorsko obvestilo, načrtovano IT-vzdrževanje, lažna IT-zahteva, pomembna sprememba učilnice, pričakovana priponka fotografskega krožka in jedilnik. Phishing sporočilo je **četrto** in ima oznako **D**. Vrstni red je ureditev dokazne zbirke, ne časovno razvrščanje.
 
 Odpiranje sporočila označi njegovo prebranost in prikaže dejanskega pošiljatelja, prejemnika ter vsebino brez dodatnega podvojenega razdelka z glavami. Dejanski cilj povezave je viden ob lebdenju z miško, fokusu s tipkovnico ali dotiku. Naslov se prikaže znotraj predala in se ne odpre na drugi strani. Zelene oznake varnega in rdeče oznake sumljivega sporočila so **lastna presoja ekipe**, ne vnaprej razkrite rešitve; stanje je razvidno tudi iz besedila. Prebranost in izbira odgovora sta ločeni. Kot odgovor je izbrano eno sumljivo sporočilo; ob izbiri drugega se prejšnja sumljiva oznaka odstrani. Oznake »V redu« pri drugih sporočilih ostanejo. Če izbrano sumljivo sporočilo označita kot »V redu«, se polje za odgovor počisti.
 
-Pravilen izbor je **sporočilo B** in **najmanj dva** od teh opozorilnih znakov, brez napačnih:
+Pravilen izbor je **sporočilo D** in **najmanj dva** od teh opozorilnih znakov, brez napačnih:
 
 - Domena pošiljatelja se ne ujema s šolsko domeno: `podpora@piramida-prijava.si`.
 - Povezava vodi na drugo domeno: `https://piramida-prijava.si/prijava`. Isti URL se pojavi kot tretji zapis zgodovine v sedmi nalogi.
 - Sporočilo pritiska z nujnostjo in grožnjo blokade čez 10 minut.
 - Zahteva geslo in enkratno prijavno kodo na nepričakovani strani.
 
-»Sporočilo vsebuje pozdrav« in »Sporočilo uporablja HTTPS« sta **napačna razloga**. Izbor B z enim razlogom ne zadostuje; prav tako ne zadostujeta dva pravilna razloga, če je označen še napačen.
+»Sporočilo vsebuje pozdrav« in »Sporočilo uporablja HTTPS« sta **napačna razloga**. Izbor D z enim razlogom ne zadostuje; prav tako ne zadostujeta dva pravilna razloga, če je označen še napačen.
 
 - Namig 1: »Primerjaj dejanski naslov pošiljatelja in cilj povezave z domeno piramida.si. Ime, ki ga prepoznaš, samo po sebi še ni dokaz pristnosti.«
 - Namig 2: »Primerjaj zahteve sporočil: eno združuje tuji domeni, grožnjo takojšnje blokade in zahtevo po geslu ter enkratni kodi.«

@@ -57,7 +57,7 @@ const stages: StageContent[] = [
         body: 'Pozdravljen, Luka, v petek poteče rok za vračilo tvoje izposojene knjige. Če si jo že vrnil, lahko opomnik prezreš. Lep pozdrav, šolska knjižnica.',
       },
       {
-        id: 'C',
+        id: 'B',
         sender: 'Mentorica <mentorica@piramida.si>',
         recipient: 'Luka Kralj <luka.kralj@piramida.si>',
         time: '08:44',
@@ -67,7 +67,7 @@ const stages: StageContent[] = [
         body: 'Pozdravljen, Luka, jutrišnja delavnica bo ob 10. uri v računalniški učilnici. Za delo potrebuješ le šolski računalnik. Se vidimo, mentorica.',
       },
       {
-        id: 'D',
+        id: 'C',
         sender: 'Šolska IT podpora <podpora@piramida.si>',
         recipient: 'Luka Kralj <luka.kralj@piramida.si>',
         time: '07:50',
@@ -79,7 +79,7 @@ const stages: StageContent[] = [
         replyTo: 'podpora@piramida.si',
       },
       {
-        id: 'B',
+        id: 'D',
         sender: 'Šolska IT podpora <podpora@piramida-prijava.si>',
         recipient: 'Luka Kralj <luka.kralj@piramida.si>',
         time: '09:57',
@@ -313,7 +313,7 @@ const hints: Record<number, [string, string]> = {
 const explanations: Record<number, string> = {
   1: 'Koda PIRAMIDA odpre mapo z detektivovim izvozom prve prijave. Cezarjeva šifra zamenja črke s stalnim premikom po abecedi. V tem primeru je šifriranje premaknilo črke za tri mesta naprej, dešifriranje pa jih je vrnilo nazaj. Zgodba je razkrila premik, primerjava abeced pa preslikavo posameznih črk. Presledki in vrstni red so pomagali preveriti smiselnost sporočila. Takšna šifra je primerna za razumevanje osnov, ne za sodobno varovanje podatkov.',
   2: 'Obvestilo razkrije prijavitelja Luko Kralja in kodo PREDAL: ta odpre mapo z njegovo prijavo ter kopijo poštnega predala, ki jo pregledaš v naslednjem koraku. Zapis je vseboval dve plasti: dekodiranje HEX je razkrilo zapis Base64, šele njegovo dekodiranje pa besedilo. Vrstni red je pomemben, ker mora biti rezultat prvega postopka veljaven vhod za drugega. HEX in Base64 sta kodiranji, ne šifriranje; tudi njuna kombinacija ne zagotavlja zaupnosti. Besedilo obvestila samo po sebi še ne pojasni celotnega poteka incidenta.',
-  3: 'Phishing skuša uporabnika zavesti v razkritje podatkov ali nevarno dejanje. Sporočilo B združuje tuji domeni pošiljatelja in povezave, grožnjo blokade ter zahtevo po prijavnih podatkih. Nujno obvestilo o učilnici in pričakovana priponka v drugih sporočilih sama po sebi nista phishing. V tem pripravljenem primeru ostalih šest sporočil ni zlonamernih; v resničnem svetu tudi ujemajoča se domena sama ne jamči varnosti. HTTPS šifrira povezavo, vendar sam ne potrjuje legitimnosti strani.',
+  3: 'Phishing skuša uporabnika zavesti v razkritje podatkov ali nevarno dejanje. Sporočilo D združuje tuji domeni pošiljatelja in povezave, grožnjo blokade ter zahtevo po prijavnih podatkih. Nujno obvestilo o učilnici in pričakovana priponka v drugih sporočilih sama po sebi nista phishing. V tem pripravljenem primeru ostalih šest sporočil ni zlonamernih; v resničnem svetu tudi ujemajoča se domena sama ne jamči varnosti. HTTPS šifrira povezavo, vendar sam ne potrjuje legitimnosti strani.',
   4: 'Ime ljubljenčka in rojstna letnica sta javna in predvidljiva gradnika. Dodan klicaj ali preprosta zamenjava črke z znakom tega ne odpravita. Boljša izbira so dolga, naključna in za vsak račun različna gesla; pri ustvarjanju ter shranjevanju pomaga upravljalnik gesel. Večfaktorska prijava doda zaščito računa, ne spremeni pa šibkega gesla v močno. Ta vaja ne razkriva Lukovega pravega gesla in ne dokazuje, kaj je bilo uporabljeno pri incidentu.',
   5: 'Čas 10:42 usmeri naslednji pregled na dogodke okoli domnevnega Lukinega odhoda iz učilnice; ne dokazuje, kdo je ostal za računalnikom. Rdeč nahrbtnik na hodniku je pomagal prepoznati pravo fotografijo med drugimi slikami. Polje Čas nastanka posnetka beleži 10:42:17, polje Čas spremembe pa 11:15:00. Poznejše urejanje ali ponovno shranjevanje lahko spremeni čas datoteke, zato 11:15 ne pomeni nujno časa fotografiranja. Sam zapis spremembe ne pove, kaj je bilo spremenjeno. Metapodatki lahko manjkajo ali so spremenjeni; so sled za preverjanje, ne nezmotljiv dokaz.',
   6: 'Paketni pregled in aplikacijski dnevnik sta različna vira. Šifrirani TLS-paketi ne razkrijejo računa ali poti; tukaj je njuna povezava pripravljena učna korelacija. Ločen dnevniški zapis ob 10:45:12 potrjuje uspešen prenos /zaupno/nacrt.pdf z računom ucenec17. Zavrnjen prenos, uspešen ogled, prenos druge datoteke in TCP ACK niso enak dokaz. Naslov IP 10.0.0.17 poveže dogodek z računalnikom, katerega zgodovino pregledaš v naslednjem koraku. Zapis potrjuje uporabo računa, sam pa ne dokazuje, katera oseba je bila za tipkovnico.',
@@ -368,7 +368,7 @@ export function validateAnswer(id: number, answer: unknown): boolean {
     case 3: {
       if (!answer || typeof answer !== 'object' || Array.isArray(answer)) return false;
       const { message, reasons } = answer as { message?: unknown; reasons?: unknown };
-      if (message !== 'B' || !Array.isArray(reasons) || reasons.length > 6) return false;
+      if (message !== 'D' || !Array.isArray(reasons) || reasons.length > 6) return false;
       const allowed = new Set(['domain', 'link', 'urgency', 'credentials']);
       return reasons.every((reason) => typeof reason === 'string' && allowed.has(reason)) && new Set(reasons).size >= 2;
     }
