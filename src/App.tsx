@@ -172,7 +172,6 @@ export default function App() {
   }, []);
   useEffect(() => { const timer = window.setInterval(() => setNow(Date.now()), 1000); return () => window.clearInterval(timer); }, []);
   useEffect(() => { headingRef.current?.focus(); }, [view, stageData?.stage.id, needsBootstrap]);
-  useEffect(() => { document.title = view === 'not-found' ? '404 · Stran ni najdena · Operacija 404' : 'Operacija 404 · Kibernetska soba pobega'; }, [view]);
   function changeView(next: Exclude<PageView, 'not-found'>) {
     const path = next === 'leaderboard' ? `${base}lestvica` : base;
     if (window.location.pathname !== path) window.history.pushState({}, '', path);
