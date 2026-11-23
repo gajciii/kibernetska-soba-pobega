@@ -84,11 +84,18 @@ async function request<T>(path: string, csrf: string, body?: unknown): Promise<T
   return data;
 }
 
+type LoadedStage = StageResponse & { receivedAt: number };
+
+async function requestStage(id: number, csrf: string): Promise<LoadedStage> {
+  const data = await request<StageResponse>(`/stages/${id}`, csrf);
+  return { ...data, receivedAt: Date.now() };
+}
+
 export default function App() {
   const [boot, setBoot] = useState<Bootstrap | null>(null);
   const [view, setView] = useState<PageView>(pathView);
   const gameView = useRef<'intro' | 'stage' | 'finale'>('intro');
-  const [stageData, setStageData] = useState<StageResponse | null>(null);
+  const [stageData, setStageData] = useState<LoadedStage | null>(null);
   const [finale, setFinale] = useState<Finale | null>(null);
   const [busy, setBusy] = useState(false);
   const [error, setError] = useState('');
@@ -123,7 +130,7 @@ export default function App() {
   function updateSession(next: SessionView) { setBoot(previous => previous ? { ...previous, session: next } : previous); }
   async function openStage(id: number) {
     setBusy(true); setError('');
-    try { setStageData(await request<StageResponse>(`/stages/${id}`, csrf)); changeView('stage'); }
+    try { setStageData(await requestStage(id, csrf)); changeView('stage'); }
     catch (e) { setError((e as Error).message); }
     finally { setBusy(false); }
   }
@@ -141,7 +148,7 @@ export default function App() {
       const next = await request<Bootstrap>('/session', csrf, { teamName });
       setBoot(next);
       if (next.session?.completedAt) await openFinale();
-      else { setStageData(await request<StageResponse>(`/stages/${next.session?.currentStage ?? 1}`, next.csrfToken)); changeView('stage'); }
+      else { setStageData(await requestStage(next.session?.currentStage ?? 1, next.csrfToken)); changeView('stage'); }
     } catch (e) {
       if (!session && e instanceof RequestError && e.status === 429 && e.retryAfterSeconds) {
         const receivedAt = Date.now();
@@ -186,7 +193,7 @@ export default function App() {
     {view === 'not-found' ? <NotFound headingRef={headingRef} onHome={() => changeView('intro')}/> : !boot ? <main id="main" className="loading-screen"><span className="loading-symbol"><Icon name="shield" size={36}/></span><h1>{busy ? 'Pripravljamo preiskovalno mapo …' : 'Povezava ni uspela'}</h1></main> : view === 'intro' ?
       <Landing session={session} nextStartAt={boot.nextStartAt} now={now} busy={busy} onStart={start} onContinue={continueInvestigation} onReset={() => setResetOpen(true)} headingRef={headingRef}/>
       : view === 'leaderboard' ? <LeaderboardView headingRef={headingRef} onBack={leaveLeaderboard}/>
-      : view === 'stage' && stageData ? <Stage key={stageData.stage.id} data={stageData} csrf={csrf} busy={busy} setBusy={setBusy} onSession={updateSession} onData={setStageData} onNext={() => stageData.stage.id === 8 ? void openFinale() : void openStage(stageData.stage.id + 1)} onFinale={openFinale} headingRef={headingRef}
+      : view === 'stage' && stageData ? <Stage key={stageData.stage.id} data={stageData} now={now} csrf={csrf} busy={busy} setBusy={setBusy} onSession={updateSession} onData={setStageData} onNext={() => stageData.stage.id === 8 ? void openFinale() : void openStage(stageData.stage.id + 1)} onFinale={openFinale} headingRef={headingRef}
         navigation={<Sidebar stages={boot.stages} session={session!} active={stageData.stage.id} busy={busy} onSelect={openStage} onFinale={openFinale} onReset={() => setResetOpen(true)}/>}/>
       : <main id="main" className="finale-page" aria-busy={busy}>
         {session && finale && <FinaleView finale={finale} session={session} stages={boot.stages} time={elapsed(session, now)} headingRef={headingRef} onReset={() => setResetOpen(true)} onLeaderboard={() => changeView('leaderboard')}/>}
@@ -215,8 +222,8 @@ function Sidebar({ stages, session, active, busy, onSelect, onFinale, onReset }:
   </section>;
 }
 
-function Stage({ data, csrf, busy, setBusy, onSession, onData, onNext, onFinale, headingRef, navigation }: {
-  data: StageResponse; navigation: ReactNode; csrf: string; busy: boolean; setBusy: (busy: boolean) => void; onSession: (s: SessionView) => void; onData: (s: StageResponse) => void; onNext: () => void; onFinale: () => Promise<void>; headingRef: React.RefObject<HTMLHeadingElement | null>;
+function Stage({ data, now, csrf, busy, setBusy, onSession, onData, onNext, onFinale, headingRef, navigation }: {
+  data: LoadedStage; now: number; navigation: ReactNode; csrf: string; busy: boolean; setBusy: (busy: boolean) => void; onSession: (s: SessionView) => void; onData: (s: LoadedStage) => void; onNext: () => void; onFinale: () => Promise<void>; headingRef: React.RefObject<HTMLHeadingElement | null>;
 }) {
   const stage = data.stage;
   const [answer, setAnswer] = useState('');
@@ -314,7 +321,13 @@ function Stage({ data, csrf, busy, setBusy, onSession, onData, onNext, onFinale,
       </section>
       <Disclosure className="hints-panel" title={<>Namigi <span>{data.hints.length} / 2</span></>}><div className="hints-content">{[1, 2].map(index => {
         const revealed = data.hints.find(h => h.index === index);
-        return revealed ? <div className="hint" key={index}><strong>Namig {index}</strong><p>{revealed.text}</p></div> : <button className="hint-button" key={index} onClick={() => void revealHint(index)} disabled={busy || (index === 2 && !data.hints.some(h => h.index === 1))}>Razkrij namig {index}</button>;
+        if (revealed) return <div className="hint" key={index}><strong>Namig {index}</strong><p>{revealed.text}</p></div>;
+        const elapsedSinceLoad = Math.max(0, now - data.receivedAt);
+        const seconds = Math.max(0, Math.ceil((data.hintWaitMs[index - 1] - elapsedSinceLoad) / 1000));
+        const wait = `${Math.floor(seconds / 60)}:${String(seconds % 60).padStart(2, '0')}`;
+        const needsFirst = index === 2 && !data.hints.some(h => h.index === 1);
+        const label = seconds > 0 ? `Namig ${index} čez ${wait}` : needsFirst ? 'Najprej razkrij namig 1' : `Razkrij namig ${index}`;
+        return <button className="hint-button" key={index} onClick={() => void revealHint(index)} disabled={busy || seconds > 0 || needsFirst}>{label}</button>;
       })}{hintError && <p className="error-text" role="alert">{hintError}</p>}</div></Disclosure>
       {navigation}
     </aside>

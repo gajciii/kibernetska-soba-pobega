@@ -6,6 +6,7 @@ export interface SessionView {
   solved: number[];
   attempts: Record<string, number>;
   hints: Record<string, number[]>;
+  stageOpenedAt?: Record<string, number>;
   currentStage: number;
   hintCount: number;
   profilePasswordVerified?: boolean;
@@ -96,6 +97,7 @@ export interface StageResponse {
   stage: StageContent;
   solved: boolean;
   hints: { index: number; text: string }[];
+  hintWaitMs: [number, number];
   explanation?: string;
   passwordVerified?: boolean;
 }

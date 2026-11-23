@@ -42,7 +42,7 @@ Vsako nalogo uvede kratka zgodba, ki dokaze poveže s preiskavo. Pri nalogah 3�
 | 37–47 min | Nalogi 7–8: domene in binarni zapis. |
 | 47–60 min | Zaključek igre, pogovor in prenos spoznanj v vsakodnevno rabo. |
 
-Časi so okvirni. Ura igre ne prekine, število poskusov ni omejeno. Namigi pomagajo pri učenju in vplivajo na razvrstitev na lestvici po spodaj opisanih pravilih. Eden lahko upravlja pripomočke, drugi bere dokaze; po četrti nalogi naj vlogi zamenjata. Če par obstane, naj najprej s svojimi besedami povzame vprašanje, nato uporabi prvi in po potrebi drugi namig. Po pravilnem odgovoru naj prebere razlago.
+Časi so okvirni. Ura igre ne prekine, število poskusov ni omejeno. Prvi namig se odklene 2 minuti po prvem odprtju izziva, drugi pa po 7 minutah od istega trenutka in po razkritju prvega. Odštevanje teče tudi po osvežitvi strani. Namigi pomagajo pri učenju in vplivajo na razvrstitev na lestvici po spodaj opisanih pravilih. Eden lahko upravlja pripomočke, drugi bere dokaze; po četrti nalogi naj vlogi zamenjata. Če par obstane, naj najprej s svojimi besedami povzame vprašanje, nato uporabi prvi in po potrebi drugi namig. Po pravilnem odgovoru naj prebere razlago.
 
 ## 1. Razbij skrivno sporočilo
 

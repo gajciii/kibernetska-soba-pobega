@@ -23,6 +23,7 @@ function allowed(row: SessionRow, id: number) {
   return session;
 }
 const hintsFor = (session: SessionView, id: number) => (session.hints[id] || []).map(index => ({ index, text: getHint(id, index)! }));
+const hintDelaysMs = [120_000, 420_000] as const;
 
 export function createApp(pool: pg.Pool, config: AppConfig, now: () => number = () => Date.now()) {
   const app = express();
@@ -91,11 +92,23 @@ export function createApp(pool: pg.Pool, config: AppConfig, now: () => number = 
     });
     res.json(result);
   });
-  app.get('/api/stages/:id', (req, res) => {
+  app.get('/api/stages/:id', async (req, res) => {
     const id = Number(req.params.id);
-    const session = allowed(res.locals.row, id);
+    const row: SessionRow = res.locals.row;
+    let session = allowed(row, id);
+    if (session.stageOpenedAt?.[id] === undefined && req.method === 'GET') {
+      session = await changeSession(pool, row.token_hash, lockedRow => {
+        const progress = allowed(lockedRow, id);
+        progress.stageOpenedAt ??= {};
+        progress.stageOpenedAt[id] ??= now();
+        return progress;
+      });
+    }
     const solved = session.solved.includes(id);
-    res.json({ stage: getStage(id), solved, hints: hintsFor(session, id), ...(id === 4 ? { passwordVerified: solved || session.profilePasswordVerified === true } : {}), ...(solved ? { explanation: getExplanation(id) } : {}) });
+    const currentTime = now();
+    const openedAt = session.stageOpenedAt?.[id] ?? currentTime;
+    const hintWaitMs = hintDelaysMs.map(delay => Math.max(0, openedAt + delay - currentTime));
+    res.json({ stage: getStage(id), solved, hints: hintsFor(session, id), hintWaitMs, ...(id === 4 ? { passwordVerified: solved || session.profilePasswordVerified === true } : {}), ...(solved ? { explanation: getExplanation(id) } : {}) });
   });
   app.post('/api/stages/:id/answer', async (req, res) => {
     const id = Number(req.params.id);
@@ -132,6 +145,10 @@ export function createApp(pool: pg.Pool, config: AppConfig, now: () => number = 
       const seen = session.hints[id] ||= [];
       if (index === 2 && !seen.includes(1)) throw new HttpError(409, 'Najprej odpri prvi namig.');
       if (!seen.includes(index)) {
+        const openedAt = session.stageOpenedAt?.[id];
+        if (openedAt === undefined || now() < openedAt + hintDelaysMs[index - 1]) {
+          throw new HttpError(409, 'Namig še ni na voljo. Počakaj, da se odštevanje konča.');
+        }
         seen.push(index);
         if (!session.solved.includes(id) && !session.completedAt) session.hintCount += 1;
       }
